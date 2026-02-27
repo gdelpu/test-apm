@@ -1,0 +1,40 @@
+name: Build brand docs
+on:
+  push:
+    paths: ["agents/brand-styler/**", ".github/**"]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pandoc & TeX (XeLaTeX)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex
+
+      - name: Setup Python (for DOCX template)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install python-docx
+
+      - name: Ensure reference.docx
+        run: python agents/brand-styler/tools/scripts/brandify-docx.py
+
+      - name: Build DOCX & PDF from Markdown
+        run: |
+          mkdir -p build
+          for f in agents/brand-styler/docs/*.md; do
+            base=$(basename "$f" .md)
+            pandoc "$f" -f gfm -o "build/${base}.docx" --reference-doc=agents/brand-styler/tools/templates/reference.docx
+            pandoc "$f" -f gfm -o "build/${base}.pdf"  --template agents/brand-styler/tools/pandoc/pdf.latex --pdf-engine=xelatex --css agents/brand-styler/tools/brandify-md.css
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: brand-docs
+          path: build/
