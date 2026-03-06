@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "skill-manifest.schema.json",
+  "title": "Skill Manifest",
+  "description": "JSON Schema for the YAML frontmatter of SKILL.md files in this workspace.",
+  "type": "object",
+  "required": ["name", "description", "triggers"],
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable name of the skill."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "What the skill does and when to use it. Must be at least 20 characters."
+    },
+    "triggers": {
+      "type": "array",
+      "description": "Natural-language phrases or keywords that should activate this skill.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "tools": {
+      "type": "array",
+      "description": "Optional list of tools this skill's instructions may reference.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "codebase",
+          "search",
+          "edit/editFiles",
+          "problems",
+          "runCommands",
+          "github",
+          "terminal",
+          "fetch",
+          "vscode"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "allowedFilePaths": {
+      "type": "array",
+      "description": "Required when tools includes file operations. Must NOT use '**' wildcards.",
+      "items": {
+        "type": "string",
+        "not": {
+          "pattern": "\\*\\*"
+        }
+      }
+    },
+    "allowedNetworkDomains": {
+      "type": "array",
+      "description": "Required when tools includes 'fetch'. Explicit list of permitted domains.",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!\\*).*$"
+      }
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Optional semver version string for the skill."
+    },
+    "author": {
+      "type": "string",
+      "description": "Optional GitHub handle or team name of the skill author."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+# .gitlab-ci.yml — Agent Factory Entry Point
+#
+# Triggers the Agent Factory security pipeline on every Merge Request.
+# The full pipeline definition lives in .gitlab/agent-factory.gitlab-ci.yml
+# (a GitLab CI adaptation of .github/workflows/agent-factory.yml).
+#
+# ─── Required CI/CD variable ────────────────────────────────────────────────
+#   GITLAB_TOKEN  — project or group access token with the scopes:
+#                   api + write_repository
+#                   Used by A6-gitlab-update to post MR notes and update labels.
+#                   Fallback: CI_JOB_TOKEN (available automatically, but has
+#                   limited permissions on some GitLab editions).
+# ────────────────────────────────────────────────────────────────────────────
+
+include:
+  - local: '.gitlab/agent-factory.gitlab-ci.yml'
