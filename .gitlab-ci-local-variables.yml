@@ -1,0 +1,31 @@
+﻿# Environment variables for local GitLab CI testing with gitlab-ci-local
+# Install: npm install -g gitlab-ci-local
+# Usage: gitlab-ci-local [job-name]
+
+# Trigger MR pipeline
+CI_PIPELINE_SOURCE: merge_request_event
+
+# MR Context (adjust these for your test scenario)
+CI_MERGE_REQUEST_IID: "1"
+CI_MERGE_REQUEST_SOURCE_BRANCH_NAME: "feature/test-agent"
+CI_MERGE_REQUEST_TARGET_BRANCH_NAME: "main"
+CI_MERGE_REQUEST_DIFF_BASE_SHA: "HEAD~1"
+
+# Project Context
+CI_PROJECT_PATH: "local/ai-sdlc-foundation"
+CI_PROJECT_ID: "1"
+CI_PROJECT_URL: "http://localhost/local/ai-sdlc-foundation"
+CI_API_V4_URL: "http://localhost/api/v4"
+
+# Pipeline Context
+CI_COMMIT_REF_NAME: "feature/test-agent"
+CI_COMMIT_SHA: "abc123"
+CI_PIPELINE_ID: "1"
+CI_JOB_TOKEN: "local-test-token"
+
+# Optional: Set this to test A6 label/comment updates (otherwise A6 will use CI_JOB_TOKEN)
+# GITLAB_TOKEN: "your-test-token-here"
+
+# Python settings (already in pipeline, but can override here)
+PIP_NO_COLOR: "1"
+PIP_QUIET: "1"

@@ -1,0 +1,14 @@
+﻿# gitlab-ci-local configuration for Windows/Podman
+# https://github.com/firecow/gitlab-ci-local
+
+home: .gitlab-ci-local
+
+# Use podman instead of docker
+containerExecutable: podman
+
+# Disable git ls-files check (causes issues on Windows)
+stateDir: .gitlab-ci-local-state
+
+# Enable shell executor fallback for git operations
+shellExecutorMapping:
+  "*": pwsh
