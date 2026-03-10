@@ -1,9 +1,10 @@
-# ------------------------------------------------
-# Agent Factory CI Pipeline
-# ------------------------------------------------
+# =====================================================
+# Agent Review Pipeline (Copilot + GitLab CI)
+# =====================================================
 
 variables:
   STATION_OUT: "station_out"
+  TOOL_DIR: "/opt/ci-tools"
   GIT_DEPTH: "0"
 
 stages:
@@ -23,9 +24,9 @@ cache:
   paths:
     - /opt/ci-tools/node_modules
 
-# ------------------------------------------------
-# Base Station Template
-# ------------------------------------------------
+# =====================================================
+# Base template used by all AI stations
+# =====================================================
 
 .station_base:
 
@@ -40,24 +41,21 @@ cache:
         git fetch --unshallow
       fi
 
-    # Dedicated tool directory
-    - export TOOL_DIR=/opt/ci-tools
-    - mkdir -p $TOOL_DIR
-
     # Install Copilot CLI deterministically
-    - npm install --prefix $TOOL_DIR @githubnext/github-copilot-cli
+    - mkdir -p ${TOOL_DIR}
+    - npm install --prefix ${TOOL_DIR} @github/copilot
 
-    # Create stable copilot command
+    # Create stable executable
     - |
       cat << 'EOF' > /usr/local/bin/copilot
       #!/usr/bin/env bash
-      node /opt/ci-tools/node_modules/@githubnext/github-copilot-cli/dist/index.js "$@"
+      node /opt/ci-tools/node_modules/@github/copilot/dist/index.js "$@"
       EOF
 
     - chmod +x /usr/local/bin/copilot
 
-    # verify installation
-    - copilot --version || true
+    # Verify CLI
+    - copilot --help || true
 
     - mkdir -p ${STATION_OUT}
 
@@ -65,29 +63,27 @@ cache:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: on_success
 
-# ------------------------------------------------
+# =====================================================
 # Setup
-# ------------------------------------------------
+# =====================================================
 
 setup:
-
   stage: setup
 
   script:
     - mkdir -p ${STATION_OUT}
-    - echo "Setup complete"
+    - echo "Pipeline setup complete"
 
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: on_success
 
   artifacts:
     paths:
       - ${STATION_OUT}
 
-# ------------------------------------------------
+# =====================================================
 # A0 Intake
-# ------------------------------------------------
+# =====================================================
 
 A0_intake:
 
@@ -105,33 +101,32 @@ A0_intake:
         git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA" > diff.txt
       else
         git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-        git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
+        git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
       fi
 
     - |
-      copilot chat -p "
-      Produce ONLY JSON.
+      copilot completion "
+      Produce JSON only.
 
-      Create work_order.json.
+      Create work_order.json describing required review tasks.
 
       MR: ${CI_MERGE_REQUEST_IID}
       TITLE: ${CI_MERGE_REQUEST_TITLE}
 
       FILES:
       $(cat diff.txt)
-      " > ${STATION_OUT}/work_raw.json
+      " > ${STATION_OUT}/raw.json
 
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/work_raw.json > ${STATION_OUT}/work_order.json
-
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/raw.json > ${STATION_OUT}/work_order.json
     - jq . ${STATION_OUT}/work_order.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/work_order.json
 
-# ------------------------------------------------
+# =====================================================
 # A1 Policy Validation
-# ------------------------------------------------
+# =====================================================
 
 A1_policy:
 
@@ -144,26 +139,25 @@ A1_policy:
   script:
 
     - |
-      copilot chat -p "
-      Validate agent manifests.
+      copilot completion "
+      Validate policy compliance.
 
-      Input:
+      INPUT:
       $(cat ${STATION_OUT}/work_order.json)
 
-      Output policy_report.json
+      OUTPUT JSON policy_report.json
       " > ${STATION_OUT}/policy_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/policy_raw.json > ${STATION_OUT}/policy_report.json
-
     - jq . ${STATION_OUT}/policy_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/policy_report.json
 
-# ------------------------------------------------
+# =====================================================
 # A2 Security Scan
-# ------------------------------------------------
+# =====================================================
 
 A2_security:
 
@@ -181,28 +175,28 @@ A2_security:
 
     - chmod +x /usr/local/bin/gitleaks
 
-    - gitleaks detect --source . --no-git --report-format json --report-path ${STATION_OUT}/gitleaks.json || true
+    - gitleaks detect --source . --no-git --report-format json \
+      --report-path ${STATION_OUT}/gitleaks.json || true
 
     - |
-      copilot chat -p "
-      Analyze security results.
+      copilot completion "
+      Analyze these security findings:
 
       $(cat ${STATION_OUT}/gitleaks.json)
 
-      Produce security_report.json
+      Output security_report.json
       " > ${STATION_OUT}/security_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/security_raw.json > ${STATION_OUT}/security_report.json
-
     - jq . ${STATION_OUT}/security_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/security_report.json
 
-# ------------------------------------------------
-# A3 Prompt Injection Check
-# ------------------------------------------------
+# =====================================================
+# A3 Prompt Injection Detection
+# =====================================================
 
 A3_prompt:
 
@@ -215,25 +209,25 @@ A3_prompt:
   script:
 
     - |
-      copilot chat -p "
+      copilot completion "
       Detect prompt injection risks.
 
+      INPUT:
       $(cat ${STATION_OUT}/work_order.json)
 
-      Output prompt_report.json
+      Produce prompt_report.json
       " > ${STATION_OUT}/prompt_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/prompt_raw.json > ${STATION_OUT}/prompt_report.json
-
     - jq . ${STATION_OUT}/prompt_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/prompt_report.json
 
-# ------------------------------------------------
-# A4 Sandbox Simulation
-# ------------------------------------------------
+# =====================================================
+# A4 Simulation
+# =====================================================
 
 A4_simulation:
 
@@ -248,23 +242,22 @@ A4_simulation:
   script:
 
     - |
-      copilot chat -p "
-      Simulate adversarial inputs.
+      copilot completion "
+      Simulate adversarial test cases.
 
-      Provide sim_report.json
+      Output sim_report.json
       " > ${STATION_OUT}/sim_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/sim_raw.json > ${STATION_OUT}/sim_report.json
-
     - jq . ${STATION_OUT}/sim_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/sim_report.json
 
-# ------------------------------------------------
+# =====================================================
 # A5 Gate Decision
-# ------------------------------------------------
+# =====================================================
 
 A5_gate:
 
@@ -280,10 +273,8 @@ A5_gate:
   script:
 
     - |
-      copilot chat -p "
-      Aggregate all reports.
-
-      Decide PASS or BLOCK.
+      copilot completion "
+      Aggregate reports and decide PASS or BLOCK.
 
       $(cat ${STATION_OUT}/*.json)
 
@@ -291,8 +282,6 @@ A5_gate:
       " > ${STATION_OUT}/gate_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/gate_raw.json > ${STATION_OUT}/gate_decision.json
-
-    - jq . ${STATION_OUT}/gate_decision.json
 
     - STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
 
@@ -302,9 +291,9 @@ A5_gate:
         exit 1
       fi
 
-# ------------------------------------------------
+# =====================================================
 # A6 Merge Request Update
-# ------------------------------------------------
+# =====================================================
 
 A6_update:
 
@@ -335,13 +324,13 @@ A6_update:
       BODY=$(jq -n \
         --arg status "$STATUS" \
         --arg url "$CI_PIPELINE_URL" \
-        '{body: ("Agent Factory result: " + $status + "\nPipeline: " + $url)}')
+        '{body: ("AI Review Result: " + $status + "\nPipeline: " + $url)}')
 
     - |
       if [ -n "$GITLAB_TOKEN" ]; then
         curl --request POST \
-        --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-        --header "Content-Type: application/json" \
-        --data "$BODY" \
-        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
+          --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+          --header "Content-Type: application/json" \
+          --data "$BODY" \
+          "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
       fi
