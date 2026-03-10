@@ -1,22 +1,10 @@
+# Agent Factory — Secure Station Pipeline
 
-# Agent Factory — Station-Gate Pipeline for GitLab CI/CD
-# Validates agent/skill changes through multi-stage security and policy gates
-
-# ============================================================================
-# CONFIGURATION
-# ============================================================================
 variables:
   STATION_OUT: "station_out"
-  COPILOT_VERSION: "latest"
-  # Override with specific version if needed: "v0.0.422"
+  GIT_DEPTH: "0"
+  NODE_ENV: "production"
 
-# Required GitLab CI/CD Variables (Settings > CI/CD > Variables):
-# - GH_TOKEN or GITHUB_TOKEN: GitHub PAT for Copilot CLI authentication
-# - GITLAB_TOKEN: GitLab token for MR commenting (optional for A6)
-
-# ============================================================================
-# STAGES
-# ============================================================================
 stages:
   - setup
   - intake
@@ -26,74 +14,40 @@ stages:
   - gate
   - update
 
-# ============================================================================
-# TEMPLATES
-# ============================================================================
-
-# Base template for all station jobs
-.station_base:
+default:
   image: debian:bookworm-slim
+  retry: 2
+
+cache:
+  paths:
+    - /root/.npm
+
+# ------------------------------------------------
+# Base template
+# ------------------------------------------------
+
+.station_base:
   before_script:
-    # --- System deps ---
     - apt-get update -qq
-    - apt-get install -y -qq curl git jq ca-certificates gnupg
-    # Ensure GH_TOKEN is set (fallback to GITHUB_TOKEN if present)
+    - apt-get install -y -qq curl git jq ca-certificates nodejs npm
+
+    # Ensure full git history
+    - git fetch --unshallow || true
+
+    # Token normalization
     - |
       if [ -n "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ]; then
         export GH_TOKEN="$GITHUB_TOKEN"
       fi
-    # --- Install Node.js 20 (required for Copilot CLI via npm) ---
+      export GITHUB_TOKEN="$GH_TOKEN"
+
     - |
-      if ! command -v node >/dev/null 2>&1; then
-        echo "📦 Installing Node.js (for GitHub Copilot CLI)..."
-        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-        apt-get install -y -qq nodejs
+      if ! command -v copilot >/dev/null; then
+        npm install -g @githubnext/github-copilot-cli
       fi
-    # --- Normalize npm global prefix & PATH ---
-    - |
-      if [ -z "$NPM_CONFIG_PREFIX" ]; then
-        export NPM_CONFIG_PREFIX="/usr/local"
-      fi
-      export PATH="/usr/local/bin:$(npm bin -g):$HOME/.local/bin:$PATH"
-      echo "🔎 PATH after setup: $PATH"
-      echo "🔎 npm prefix -g: $(npm prefix -g)"
-      echo "🔎 npm bin -g: $(npm bin -g)"
-    # --- Install GitHub Copilot CLI via npm (preferred, idempotent) ---
-    - |
-      if ! command -v copilot >/dev/null 2>&1; then
-        echo "📦 Installing GitHub Copilot CLI (npm)..."
-        npm i -g @githubnext/github-copilot-cli@${COPILOT_VERSION:-latest} || {
-          echo "⚠️ npm install failed; attempting curl installer as fallback..."
-          # Fallback installer installs to $HOME/.local/bin
-          curl -fsSL https://gh.io/copilot-install | bash
-          export PATH="$HOME/.local/bin:$PATH"
-        }
-      fi
-    # --- Last-resort: symlink copilot if npm installed it in a non-PATH dir ---
-    - |
-      if ! command -v copilot >/dev/null 2>&1; then
-        CANDIDATE="$(npm bin -g)/copilot"
-        if [ -x "$CANDIDATE" ]; then
-          echo "🔗 Linking $CANDIDATE to /usr/local/bin/copilot"
-          ln -sf "$CANDIDATE" /usr/local/bin/copilot
-        fi
-      fi
-    # --- Verification with diagnostics ---
-    - echo "🔎 which copilot: $(which copilot || echo 'not found')"
-    - bash -lc "ls -l /usr/local/bin | grep -E 'copilot|github|node|npm' || true"
-    - echo "🔎 node -v: $(node -v)"
-    - echo "🔎 npm -v: $(npm -v)"
-    - copilot --version || (echo "❌ Copilot CLI not installed (PATH issue). See diagnostics above." && exit 1)
-    # Token presence check (auth happens on first use)
-    - |
-      if [ -z "$GH_TOKEN" ]; then
-        echo "❌ Missing GH_TOKEN (or GITHUB_TOKEN) environment variable"
-        echo "   Configure in GitLab: Settings > CI/CD > Variables"
-        exit 1
-      fi
-    # Create output directory
+
     - mkdir -p ${STATION_OUT}
-  # Use rules exclusively (no 'only/except' mixed with rules)
+
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
@@ -101,575 +55,279 @@ stages:
         - "**/skills/**/SKILL.md"
         - "**/prompts/**/*.prompt.md"
         - "**/instructions/**/*.instructions.md"
+        - "station-workflows/**"
+        - ".gitlab-ci.yml"
       when: on_success
     - when: never
 
-# ============================================================================
-# JOBS
-# ============================================================================
 
-# ----------------------------------------------------------------------------
-# SETUP: Prepare Environment
-# ----------------------------------------------------------------------------
+# ------------------------------------------------
+# Setup
+# ------------------------------------------------
+
 setup:
   stage: setup
-  image: debian:bookworm-slim
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: on_success
   script:
     - mkdir -p ${STATION_OUT}
-    - echo "✅ Environment ready for station pipeline"
+    - echo "Environment ready"
   artifacts:
     paths:
       - ${STATION_OUT}/
-    expire_in: 2 hours
 
-# ----------------------------------------------------------------------------
-# A0: INTAKE STATION
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A0 Intake
+# ------------------------------------------------
+
 A0_intake:
   extends: .station_base
   stage: intake
   needs: ["setup"]
-  script:
-    - |
-      echo "🚀 Station A0 - Intake: Extracting MR context..."
 
-      # Optional: Precompute changed files to pass to LLM
-      if [ -n "${CI_MERGE_REQUEST_DIFF_BASE_SHA:-}" ]; then
-        CHANGED_FILES="$(git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA")"
+  script:
+
+    - |
+      if [ -n "${CI_MERGE_REQUEST_DIFF_BASE_SHA}" ]; then
+        git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA" > diff.txt
       else
         git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-        CHANGED_FILES="$(git diff --name-status "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" "$CI_COMMIT_SHA")"
+        git diff --name-status "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" "$CI_COMMIT_SHA" > diff.txt
       fi
 
+    - |
       copilot chat -p "
-      You are Station A0 - INTAKE for the Agent Factory SDLC pipeline.
+      Produce ONLY valid JSON.
 
-      GOAL: Extract merge request context and create work_order.json
+      Create work_order.json describing this MR.
 
-      CONTEXT:
-      MR Number: ${CI_MERGE_REQUEST_IID}
-      MR Title: ${CI_MERGE_REQUEST_TITLE}
-      Author: ${CI_MERGE_REQUEST_AUTHOR}
-      Source Branch: ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-      Target Branch: ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
+      MR: ${CI_MERGE_REQUEST_IID}
+      TITLE: ${CI_MERGE_REQUEST_TITLE}
 
-      Changed Files (name-status):
-      ${CHANGED_FILES}
+      CHANGED FILES:
+      $(cat diff.txt)
+      " > ${STATION_OUT}/work_order_raw.json
 
-      TASK:
-      1. Classify each file by type:
-         - **/agents/**/*.agent.md → 'agent'
-         - **/skills/**/SKILL.md → 'skill'
-         - **/prompts/**/*.prompt.md → 'prompt'
-         - **/instructions/**/*.instructions.md → 'instruction'
-         - .github/workflows/**/*.yml → 'workflow'
-         - other → 'other'
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/work_order_raw.json > ${STATION_OUT}/work_order.json
+    - jq . ${STATION_OUT}/work_order.json
 
-      2. Derive change type from name-status format (A/M/D).
-
-      3. Scan changed file contents/diffs for risk patterns and set risk_hints[]:
-         - 'exec-tool' if tools contains runCommands
-         - 'unconstrained-network' if allowedNetworkDomains is * or missing
-         - 'unconstrained-files' if allowedFilePaths is ** or missing
-         - 'shell-pipe' if diff contains curl|wget|bash with pipes
-         - 'eval-usage' if diff contains eval()
-         - 'agent-removed' if any .agent.md deleted
-
-      4. Determine scope:
-         - 'agent-change' if any agent/skill/prompt/instruction changed
-         - 'non-agent' otherwise
-
-      5. Output valid JSON ONLY (no markdown) with this shape:
-      {
-        \"station\": \"A0\",
-        \"pr_number\": ${CI_MERGE_REQUEST_IID},
-        \"pr_title\": \"${CI_MERGE_REQUEST_TITLE}\",
-        \"author\": \"${CI_MERGE_REQUEST_AUTHOR}\",
-        \"base_branch\": \"${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}\",
-        \"head_branch\": \"${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}\",
-        \"created_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"scope\": \"agent-change|non-agent\",
-        \"changed_files\": [
-          {\"path\": \"...\", \"type\": \"...\", \"change\": \"added|modified|deleted\"}
-        ],
-        \"risk_hints\": [...],
-        \"diff_summary\": \"<one-paragraph summary>\"
-      }
-      " > "${STATION_OUT}/work_order.json"
-
-      # Basic JSON sanity check
-      jq . "${STATION_OUT}/work_order.json" >/dev/null
   artifacts:
     paths:
       - ${STATION_OUT}/work_order.json
-    expire_in: 2 hours
 
-# ----------------------------------------------------------------------------
-# A1: POLICY VALIDATION STATION
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A1 Policy validation
+# ------------------------------------------------
+
 A1_policy:
   extends: .station_base
   stage: validation
   needs: ["A0_intake"]
+
   script:
+
     - |
-      echo "🔍 Station A1 - Policy Validation: Checking schemas..."
-
       copilot chat -p "
-      You are Station A1 - POLICY VALIDATION for the Agent Factory pipeline.
+      Output ONLY JSON.
 
-      GOAL: Validate agent/skill manifests against JSON schemas
+      Validate agent manifests referenced in:
 
-      TASK:
-      1. Read ${STATION_OUT}/work_order.json
+      ${STATION_OUT}/work_order.json
 
-      2. If scope is 'non-agent', output skipped report and exit:
-         {\"station\":\"A1\",\"status\":\"skipped\",\"findings\":[],\"summary\":\"No agent/skill files changed.\",\"files_checked\":0,\"critical_count\":0,\"high_count\":0}
+      Return policy_report.json
+      " > ${STATION_OUT}/policy_raw.json
 
-      3. For 'agent' files:
-         - Parse YAML frontmatter
-         - Validate against station-workflows/schemas/agent-manifest.schema.json
-         - Required: name, description, tools (array)
-         - Tools allowlist: [codebase, search, edit, problems, runCommands, github, terminal, fetch, vscode]
-         - If runCommands present, require allowedNetworkDomains and allowedFilePaths
-         - Severity: critical if schema fails; high if security fields missing
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/policy_raw.json > ${STATION_OUT}/policy_report.json
+    - jq . ${STATION_OUT}/policy_report.json
 
-      4. For 'skill' files:
-         - Parse YAML frontmatter
-         - Validate against station-workflows/schemas/skill-manifest.schema.json
-         - Required: name, description, triggers (non-empty array)
-         - Severity: critical if schema fails
-
-      5. Output valid JSON ONLY:
-      {
-        \"station\": \"A1\",
-        \"status\": \"pass|fail|partial|skipped\",
-        \"findings\": [
-          {\"rule\": \"P-01|P-02|...\",\"file\": \"path\",\"severity\": \"critical|high|medium|low\",\"message\": \"...\"}
-        ],
-        \"summary\": \"...\",
-        \"files_checked\": <count>,
-        \"critical_count\": <count>,
-        \"high_count\": <count>
-      }
-
-      CONSTRAINTS:
-      - Load schema files from disk if present
-      - Be explicit if validation is partial
-      - critical findings → status='fail'
-      " > "${STATION_OUT}/policy_report.json"
-
-      jq . "${STATION_OUT}/policy_report.json" >/dev/null
   artifacts:
     paths:
       - ${STATION_OUT}/policy_report.json
-    expire_in: 2 hours
 
-# ----------------------------------------------------------------------------
-# A2: SECURITY STATIC CHECKS STATION
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A2 Security scan
+# ------------------------------------------------
+
 A2_security:
   extends: .station_base
   stage: security
   needs: ["A0_intake"]
+
   script:
+
+    # install gitleaks
     - |
-      echo "🔒 Station A2 - Security Static Checks: Scanning..."
+      curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 \
+      -o /usr/local/bin/gitleaks
+      chmod +x /usr/local/bin/gitleaks
 
-      # Prefer portable install of gitleaks (apt is unreliable)
-      if ! command -v gitleaks >/dev/null 2>&1; then
-        echo "📦 Installing gitleaks..."
-        GL_VERSION="8.18.4"
-        curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${GL_VERSION}/gitleaks_${GL_VERSION}_linux_x64.tar.gz" \
-          | tar -xz
-        mv gitleaks /usr/local/bin/
-        chmod +x /usr/local/bin/gitleaks
-      fi
+    - gitleaks detect --source=. --no-git --report-format json --report-path ${STATION_OUT}/gitleaks.json || true
 
+    - |
       copilot chat -p "
-      You are Station A2 - SECURITY STATIC CHECKS for the Agent Factory pipeline.
+      Analyze this security report and produce security_report.json
 
-      GOAL: Detect secrets, dangerous patterns, and vulnerable dependencies
+      $(cat ${STATION_OUT}/gitleaks.json)
+      " > ${STATION_OUT}/security_raw.json
 
-      TASK:
-      1. Read ${STATION_OUT}/work_order.json
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/security_raw.json > ${STATION_OUT}/security_report.json
+    - jq . ${STATION_OUT}/security_report.json
 
-      2. If scope is 'non-agent', output skipped report
-
-      3. SECRET SCAN (S-01):
-         - Run: gitleaks detect --source=. --no-git --verbose
-         - Look for API keys (ghp_, sk-, AKIA), passwords, tokens
-         - Check .env files, YAML frontmatter, prompt bodies
-         - Severity: critical for any confirmed secret
-
-      4. DANGEROUS PATTERN SCAN (S-03):
-         - In changed agent files, scan for:
-           * allowedFilePaths: '**', '/', '~'
-           * allowedNetworkDomains: '*'
-           * Shell injection: rm -rf, eval, exec
-           * Path traversal: ../../../
-         - Severity: high for dangerous patterns
-
-      5. DEPENDENCY SCAN (S-02) - if package files changed:
-         - For package-lock.json, requirements.txt, go.mod
-         - Map CVSS to severity: ≥9.0=critical, 7.0-8.9=high, 4.0-6.9=medium
-
-      6. Output valid JSON ONLY:
-      {
-        \"station\": \"A2\",
-        \"status\": \"pass|fail|partial|skipped\",
-        \"findings\": [
-          {\"check\": \"S-01|S-02|S-03\",\"file\": \"...\",\"severity\": \"critical|high|medium|low\",\"message\": \"...\",\"line\": <number|null>}
-        ],
-        \"summary\": \"...\",
-        \"critical_count\": <count>,
-        \"high_count\": <count>
-      }
-
-      CONSTRAINTS:
-      - Indicate if a scan could not run and why
-      - critical → status='fail'
-      " > "${STATION_OUT}/security_report.json"
-
-      jq . "${STATION_OUT}/security_report.json" >/dev/null
   artifacts:
     paths:
       - ${STATION_OUT}/security_report.json
-    expire_in: 2 hours
+      - ${STATION_OUT}/gitleaks.json
 
-# ----------------------------------------------------------------------------
-# A3: PROMPT INJECTION STATION
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A3 Prompt injection check
+# ------------------------------------------------
+
 A3_prompt_injection:
   extends: .station_base
   stage: security
   needs: ["A0_intake"]
+
   script:
+
     - |
-      echo "🛡️ Station A3 - Prompt Injection: Testing..."
-
       copilot chat -p "
-      You are Station A3 - PROMPT INJECTION & EXFIL HARDENING.
+      Check prompt injection risks.
 
-      GOAL: Detect prompt injection vulnerabilities in agents/prompts
+      Read:
+      ${STATION_OUT}/work_order.json
 
-      TASK:
-      1. Read ${STATION_OUT}/work_order.json
+      Output JSON promptsec_report.json
+      " > ${STATION_OUT}/prompt_raw.json
 
-      2. Load injection payloads from station-workflows/fixtures/prompt-injection-payloads.json (if available)
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/prompt_raw.json > ${STATION_OUT}/promptsec_report.json
+    - jq . ${STATION_OUT}/promptsec_report.json
 
-      3. For each changed agent/prompt/instruction file:
-         - Check for escape sequences and context leakage phrases
-         - Look for 'ignore previous instructions', 'system prompt', role confusion
-         - Check for missing input validation
-         - Consider common payloads (delimiter, role confusion, context printing)
-
-      4. EXFIL CHECK (PI-03):
-         - If runCommands/fetch tools present
-         - Check allowedNetworkDomains restrictions
-         - Severity: high if unrestricted network + no validation
-
-      5. Output valid JSON ONLY:
-      {
-        \"station\": \"A3\",
-        \"status\": \"pass|fail|partial|skipped\",
-        \"findings\": [
-          {\"check\": \"PI-01|PI-02|PI-03\",\"file\": \"...\",\"severity\": \"critical|high|medium|low\",\"message\": \"...\",\"payload\": \"...\"}
-        ],
-        \"summary\": \"...\",
-        \"critical_count\": <count>,
-        \"high_count\": <count>
-      }
-
-      CONSTRAINTS:
-      - If fixtures missing, state so and proceed with best-effort static checks
-      - high/critical → status='fail'
-      " > "${STATION_OUT}/promptsec_report.json"
-
-      jq . "${STATION_OUT}/promptsec_report.json" >/dev/null
   artifacts:
     paths:
       - ${STATION_OUT}/promptsec_report.json
-    expire_in: 2 hours
 
-# ----------------------------------------------------------------------------
-# A4: SANDBOX SIMULATION STATION
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A4 Sandbox simulation
+# ------------------------------------------------
+
 A4_sandbox:
   extends: .station_base
   stage: simulation
-  needs: ["A0_intake", "A1_policy", "A2_security", "A3_prompt_injection"]
+
+  needs:
+    - A0_intake
+    - A1_policy
+    - A2_security
+    - A3_prompt_injection
+
   script:
+
     - |
-      echo "🧪 Station A4 - Sandbox Simulation: Testing agents..."
-
       copilot chat -p "
-      You are Station A4 - SANDBOX SIMULATION for the Agent Factory pipeline.
+      Simulate malicious inputs against the agents.
 
-      GOAL: Simulate agent behavior against malicious inputs (READ-ONLY)
+      Use:
+      ${STATION_OUT}/work_order.json
 
-      TASK:
-      1. Read ${STATION_OUT}/work_order.json
+      Output sim_report.json
+      " > ${STATION_OUT}/sim_raw.json
 
-      2. Load malicious inputs from station-workflows/fixtures/malicious-inputs.json (if available)
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/sim_raw.json > ${STATION_OUT}/sim_report.json
+    - jq . ${STATION_OUT}/sim_report.json
 
-      3. For each changed agent file:
-         - Parse the agent manifest
-         - Simulate (DO NOT EXECUTE) responses to:
-           * '../../../etc/passwd'
-           * '; rm -rf /'
-           * External exfiltration requests
-           * sudo or privilege escalation
-         - Check defenses:
-           * allowedFilePaths
-           * allowedNetworkDomains
-           * dangerous command filtering
-
-      4. Severity:
-         - Executes dangerous command → critical
-         - Reads sensitive files → high
-         - External requests → medium/high
-
-      5. Output valid JSON ONLY:
-      {
-        \"station\": \"A4\",
-        \"status\": \"pass|fail|partial|skipped\",
-        \"findings\": [
-          {\"agent\": \"...\",\"input\": \"...\",\"outcome\": \"blocked|allowed|partial\",\"severity\": \"critical|high|medium|low\",\"message\": \"...\"}
-        ],
-        \"summary\": \"...\",
-        \"agents_tested\": <count>,
-        \"critical_count\": <count>,
-        \"high_count\": <count>
-      }
-
-      IMPORTANT:
-      - SIMULATION ONLY; do NOT execute commands
-      - critical → status='fail'
-      " > "${STATION_OUT}/sim_report.json"
-
-      jq . "${STATION_OUT}/sim_report.json" >/dev/null
   artifacts:
     paths:
       - ${STATION_OUT}/sim_report.json
-    expire_in: 2 hours
 
-# ----------------------------------------------------------------------------
-# A5: POLICY GATE STATION (Decision Maker)
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A5 Gate
+# ------------------------------------------------
+
 A5_gate:
   extends: .station_base
   stage: gate
-  needs: ["A1_policy", "A2_security", "A3_prompt_injection", "A4_sandbox"]
+
+  needs:
+    - A1_policy
+    - A2_security
+    - A3_prompt_injection
+    - A4_sandbox
+
   script:
+
     - |
-      echo "⚖️ Station A5 - Policy Gate: Making decision..."
-
       copilot chat -p "
-      You are Station A5 - POLICY GATE, the final decision maker.
+      Aggregate these reports and decide gate status.
 
-      GOAL: Aggregate all station reports and make gate decision
+      $(cat ${STATION_OUT}/*.json)
 
-      TASK:
-      1. Read all reports from ${STATION_OUT}/:
-         - work_order.json
-         - policy_report.json
-         - security_report.json
-         - promptsec_report.json
-         - sim_report.json
+      Output gate_decision.json
+      " > ${STATION_OUT}/gate_raw.json
 
-      2. Gate logic:
-         IF any report critical_count > 0:
-           status = 'BLOCK' (Critical severity findings must be resolved)
-         ELSE IF sum(high_count) across all reports ≥ 3:
-           status = 'REVIEW' (Multiple high-severity findings require human review)
-         ELSE IF any report status == 'fail':
-           status = 'BLOCK' (One or more stations failed validation)
-         ELSE:
-           status = 'APPROVE' (All validations passed)
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/gate_raw.json > ${STATION_OUT}/gate_decision.json
 
-      3. Aggregate summary:
-         - Total findings by severity
-         - Blocking issues (critical/high)
-         - Recommendations
+    - jq . ${STATION_OUT}/gate_decision.json
 
-      4. Output valid JSON ONLY:
-      {
-        \"station\": \"A5\",
-        \"status\": \"APPROVE|BLOCK|REVIEW\",
-        \"justification\": \"...\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"summary\": {\"total_findings\": <count>,\"critical\": <count>,\"high\": <count>,\"medium\": <count>,\"low\": <count>},
-        \"blocking_issues\": [...],
-        \"recommendations\": [...]
-      }
+    - STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
 
-      CONSTRAINTS:
-      - Parse ALL report JSONs
-      - Apply logic exactly
-      - BLOCK/REVIEW must list issues
-      " > "${STATION_OUT}/gate_decision.json"
-
-      # Extract decision and set exit code
-      STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
-      echo ""
-      echo "═══════════════════════════════════════════════════════"
-      echo "  POLICY GATE DECISION"
-      echo "═══════════════════════════════════════════════════════"
-      jq . ${STATION_OUT}/gate_decision.json
-      echo "═══════════════════════════════════════════════════════"
-      echo ""
-
+    - |
       if [ "$STATUS" = "BLOCK" ]; then
-        echo "❌ GATE STATUS: BLOCKED"
-        echo "   This merge request cannot be merged until issues are resolved."
+        echo "Gate blocked"
         exit 1
-      elif [ "$STATUS" = "REVIEW" ]; then
-        echo "⚠️  GATE STATUS: NEEDS REVIEW"
-        echo "   Human review required before merge."
-        exit 0
-      else
-        echo "✅ GATE STATUS: APPROVED"
-        echo "   All validations passed. Safe to merge."
-        exit 0
       fi
+
   artifacts:
     paths:
-      - ${STATION_OUT}/gate_decision.json
       - ${STATION_OUT}/*.json
     expire_in: 7 days
 
-# ----------------------------------------------------------------------------
-# A6: GITLAB UPDATE STATION
-# ----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# A6 GitLab update
+# ------------------------------------------------
+
 A6_update:
-  image: debian:bookworm-slim
   stage: update
   needs:
-    - job: "A5_gate"
+    - job: A5_gate
       artifacts: true
       optional: true
-  when: always
+
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
+
   before_script:
     - apt-get update -qq && apt-get install -y -qq curl jq
-    - |
-      if [ -z "$GITLAB_TOKEN" ]; then
-        echo "⚠️ GITLAB_TOKEN not set; will skip MR commenting."
-      fi
-  script:
-    - |
-      echo "💬 Station A6 - GitLab Update: Posting results..."
 
+  script:
+
+    - |
       if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then
-        echo "⚠️ gate_decision.json not found; nothing to post."
         exit 0
       fi
 
-      STATUS=$(jq -r '.status' "${STATION_OUT}/gate_decision.json")
-      CRIT=$(jq -r '.summary.critical // 0' "${STATION_OUT}/gate_decision.json")
-      HIGH=$(jq -r '.summary.high // 0' "${STATION_OUT}/gate_decision.json")
-      MED=$(jq -r '.summary.medium // 0' "${STATION_OUT}/gate_decision.json")
-      LOW=$(jq -r '.summary.low // 0' "${STATION_OUT}/gate_decision.json")
+    - STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
 
-      if [ "$STATUS" = "APPROVE" ]; then
-        EMOJI="✅"
-      elif [ "$STATUS" = "BLOCK" ]; then
-        EMOJI="❌"
-      else
-        EMOJI="⚠️"
-      fi
-
-      COMMENT=$(cat <<'EOF'
-      ## 🤖 Agent Factory Validation Report
-
-      **Status**: STATUS_PLACEHOLDER
-
-      ### Summary
-      - Critical: CRIT_PLACEHOLDER
-      - High: HIGH_PLACEHOLDER
-      - Medium: MED_PLACEHOLDER
-      - Low: LOW_PLACEHOLDER
-
-      ### Blocking Issues
-      (See `gate_decision.json` for details)
-
-      ### Recommendations
-      (See `gate_decision.json` for actionable items)
-
-      ---
-      Pipeline: PIPELINE_URL_PLACEHOLDER
-      ---
-      EOF
-      )
-
-      COMMENT="${COMMENT//STATUS_PLACEHOLDER/${EMOJI} ${STATUS}}"
-      COMMENT="${COMMENT//CRIT_PLACEHOLDER/${CRIT}}"
-      COMMENT="${COMMENT//HIGH_PLACEHOLDER/${HIGH}}"
-      COMMENT="${COMMENT//MED_PLACEHOLDER/${MED}}"
-      COMMENT="${COMMENT//LOW_PLACEHOLDER/${LOW}}"
-      COMMENT="${COMMENT//PIPELINE_URL_PLACEHOLDER/${CI_PIPELINE_URL}}"
-
-      if [ -n "$GITLAB_TOKEN" ]; then
-        echo "📣 Posting MR comment..."
-        RESP_CODE=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
-          -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-          -H "Content-Type: application/json" \
-          --data "{\"body\": ${COMMENT@Q}}" \
-          "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes")
-
-        echo "GitLab API response code: ${RESP_CODE}"
-        if [ "${RESP_CODE}" -ge 300 ]; then
-          echo "⚠️ Failed to post comment"; cat /tmp/resp.json || true
-        fi
-      else
-        echo "🔎 Preview comment (GITLAB_TOKEN not set):"
-        echo "${COMMENT}"
-      fi
-  artifacts:
-    paths:
-      - ${STATION_OUT}/
-    expire_in: 7 days
-
-# ============================================================================
-# SUMMARY JOB
-# ============================================================================
-pipeline_summary:
-  image: debian:bookworm-slim
-  stage: update
-  needs:
-    - job: "A5_gate"
-      artifacts: true
-      optional: true
-  when: always
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq jq
-  script:
     - |
-      echo ""
-      echo "╔═══════════════════════════════════════════════════════════╗"
-      echo "║           AGENT FACTORY PIPELINE COMPLETE                ║"
-      echo "╚═══════════════════════════════════════════════════════════╝"
-      echo ""
-      echo "📊 All Reports Generated:"
-      ls -lh ${STATION_OUT}/*.json || echo "No reports found"
-      echo ""
-      if [ -f "${STATION_OUT}/gate_decision.json" ]; then
-        echo "🎯 Gate Decision:"
-        jq -C . "${STATION_OUT}/gate_decision.json"
-      else
-        echo "Gate decision not found"
+      BODY=$(jq -n \
+        --arg status "$STATUS" \
+        --arg url "$CI_PIPELINE_URL" \
+        '{body: ("Agent Factory Result: " + $status + "\nPipeline: " + $url)}')
+
+    - |
+      if [ -n "$GITLAB_TOKEN" ]; then
+        curl --request POST \
+        --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+        --header "Content-Type: application/json" \
+        --data "$BODY" \
+        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
       fi
-      echo ""
+
   artifacts:
     paths:
       - ${STATION_OUT}/
-    expire_in: 30 days
