@@ -16,3 +16,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+.github/
+
+check-gh-auth.ps1
+run-pipeline-podman.ps1

@@ -40,7 +40,14 @@ if ($Help) {
 $ghToken = ""
 if (Test-Path ".env") {
     Get-Content ".env" | ForEach-Object {
-        if ($_ -match "^GH_TOKEN=(.+)$") { $ghToken = $Matches[1].Trim() }
+        $line = $_.Trim()
+        if ($line -match "^GH_TOKEN=(.+)$") {
+            $val = $Matches[1].Trim()
+            # Strip inline comments (e.g. GH_TOKEN=ghp_xxx # my token)
+            if ($val -match "^([^#]+)#") { $val = $Matches[1].Trim() }
+            # Strip surrounding quotes (e.g. GH_TOKEN="ghp_xxx" or GH_TOKEN='ghp_xxx')
+            $ghToken = $val.Trim('"').Trim("'")
+        }
     }
 }
 if (-not $ghToken) {
@@ -73,7 +80,7 @@ Write-Host "  Agent Factory SDLC Pipeline  (Local / Podman)" -ForegroundColor Cy
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Workspace : $wsDir" -ForegroundColor Gray
-Write-Host "  GH_TOKEN  : $($ghToken.Substring(0, [Math]::Min(7,$ghToken.Length)))..." -ForegroundColor Gray
+Write-Host "  GH_TOKEN  : $($ghToken.Substring(0, [Math]::Min(7,$ghToken.Length)))... ($($ghToken.Length) chars)" -ForegroundColor Gray
 Write-Host ""
 
 # CI simulation variables injected into every container
@@ -119,8 +126,22 @@ function Invoke-Station {
         "bash", "/workspace/station-workflows/scripts/$Name.sh"
     )
 
-    & podman @podmanArgs
+    # Temporarily relax ErrorActionPreference so that harmless stderr
+    # output from the container (e.g. debconf warnings from apt-get)
+    # does not cause a NativeCommandError termination.
+    # Pipe through Write-Host to keep podman stdout OFF the function
+    # output pipeline (avoids polluting the integer return value).
+    $prevEAP = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    & podman @podmanArgs 2>&1 | ForEach-Object {
+        if ($_ -is [System.Management.Automation.ErrorRecord]) {
+            Write-Host $_.Exception.Message -ForegroundColor DarkYellow
+        } else {
+            Write-Host $_
+        }
+    }
     $code = $LASTEXITCODE
+    $ErrorActionPreference = $prevEAP
     Write-Host ""
 
     if ($code -eq 0) {
