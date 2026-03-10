@@ -1,11 +1,12 @@
 # =====================================================
-# Agent Review Pipeline (Copilot + GitLab CI)
+# Agent Review Pipeline (GitHub CLI + Copilot Extension)
 # =====================================================
 
 variables:
   STATION_OUT: "station_out"
   TOOL_DIR: "/opt/ci-tools"
   GIT_DEPTH: "0"
+  # GITHUB_TOKEN as a CI/CD variable is needed for the 'gh' tool to work
 
 stages:
   - setup
@@ -20,42 +21,32 @@ default:
   image: node:20-bookworm-slim
   retry: 1
 
-cache:
-  paths:
-    - /opt/ci-tools/node_modules
-
 # =====================================================
 # Base template used by all AI stations
 # =====================================================
 
 .station_base:
-
   before_script:
-
     - apt-get update -qq
-    - apt-get install -y -qq git jq curl ca-certificates
+    - apt-get install -y -qq git jq curl ca-certificates gnupg
 
-    # Ensure full git history
+    # 1. Install GitHub CLI (Official Repository)
+    - mkdir -p -m 0755 /etc/apt/keyrings
+    - curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+    - chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    - apt-get update -qq
+    - apt-get install -y -qq gh
+
+    # 2. Install Copilot Extension
+    # Note: Requires GITHUB_TOKEN to be set in environment
+    - gh extension install github/gh-copilot
+
+    # 3. Handle Git history
     - |
       if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
         git fetch --unshallow
       fi
-
-    # Install Copilot CLI deterministically
-    - mkdir -p ${TOOL_DIR}
-    - npm install --prefix ${TOOL_DIR} @github/copilot
-
-    # Create stable executable
-    - |
-      cat << 'EOF' > /usr/local/bin/copilot
-      #!/usr/bin/env bash
-      node /opt/ci-tools/node_modules/@github/copilot/dist/index.js "$@"
-      EOF
-
-    - chmod +x /usr/local/bin/copilot
-
-    # Verify CLI
-    - copilot --help || true
 
     - mkdir -p ${STATION_OUT}
 
@@ -69,14 +60,11 @@ cache:
 
 setup:
   stage: setup
-
   script:
     - mkdir -p ${STATION_OUT}
     - echo "Pipeline setup complete"
-
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
   artifacts:
     paths:
       - ${STATION_OUT}
@@ -86,16 +74,12 @@ setup:
 # =====================================================
 
 A0_intake:
-
   extends: .station_base
   stage: intake
-
   needs:
     - job: setup
       optional: true
-
   script:
-
     - |
       if [ -n "${CI_MERGE_REQUEST_DIFF_BASE_SHA}" ]; then
         git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA" > diff.txt
@@ -105,21 +89,17 @@ A0_intake:
       fi
 
     - |
-      copilot completion "
+      gh copilot suggest "
       Produce JSON only.
-
       Create work_order.json describing required review tasks.
-
       MR: ${CI_MERGE_REQUEST_IID}
       TITLE: ${CI_MERGE_REQUEST_TITLE}
-
       FILES:
       $(cat diff.txt)
       " > ${STATION_OUT}/raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/raw.json > ${STATION_OUT}/work_order.json
     - jq . ${STATION_OUT}/work_order.json
-
   artifacts:
     paths:
       - ${STATION_OUT}/work_order.json
@@ -129,28 +109,21 @@ A0_intake:
 # =====================================================
 
 A1_policy:
-
   extends: .station_base
   stage: validation
-
   needs:
     - A0_intake
-
   script:
-
     - |
-      copilot completion "
+      gh copilot suggest "
       Validate policy compliance.
-
       INPUT:
       $(cat ${STATION_OUT}/work_order.json)
-
       OUTPUT JSON policy_report.json
       " > ${STATION_OUT}/policy_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/policy_raw.json > ${STATION_OUT}/policy_report.json
     - jq . ${STATION_OUT}/policy_report.json
-
   artifacts:
     paths:
       - ${STATION_OUT}/policy_report.json
@@ -160,36 +133,23 @@ A1_policy:
 # =====================================================
 
 A2_security:
-
   extends: .station_base
   stage: security
-
   needs:
     - A0_intake
-
   script:
-
-    - |
-      curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 \
-      -o /usr/local/bin/gitleaks
-
+    - curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 -o /usr/local/bin/gitleaks
     - chmod +x /usr/local/bin/gitleaks
-
-    - gitleaks detect --source . --no-git --report-format json \
-      --report-path ${STATION_OUT}/gitleaks.json || true
-
+    - gitleaks detect --source . --no-git --report-format json --report-path ${STATION_OUT}/gitleaks.json || true
     - |
-      copilot completion "
+      gh copilot suggest "
       Analyze these security findings:
-
       $(cat ${STATION_OUT}/gitleaks.json)
-
       Output security_report.json
       " > ${STATION_OUT}/security_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/security_raw.json > ${STATION_OUT}/security_report.json
     - jq . ${STATION_OUT}/security_report.json
-
   artifacts:
     paths:
       - ${STATION_OUT}/security_report.json
@@ -199,28 +159,21 @@ A2_security:
 # =====================================================
 
 A3_prompt:
-
   extends: .station_base
   stage: security
-
   needs:
     - A0_intake
-
   script:
-
     - |
-      copilot completion "
+      gh copilot suggest "
       Detect prompt injection risks.
-
       INPUT:
       $(cat ${STATION_OUT}/work_order.json)
-
       Produce prompt_report.json
       " > ${STATION_OUT}/prompt_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/prompt_raw.json > ${STATION_OUT}/prompt_report.json
     - jq . ${STATION_OUT}/prompt_report.json
-
   artifacts:
     paths:
       - ${STATION_OUT}/prompt_report.json
@@ -230,27 +183,21 @@ A3_prompt:
 # =====================================================
 
 A4_simulation:
-
   extends: .station_base
   stage: simulation
-
   needs:
     - A1_policy
     - A2_security
     - A3_prompt
-
   script:
-
     - |
-      copilot completion "
-      Simulate adversarial test cases.
-
+      gh copilot suggest "
+      Simulate adversarial test cases based on the previous reports.
       Output sim_report.json
       " > ${STATION_OUT}/sim_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/sim_raw.json > ${STATION_OUT}/sim_report.json
     - jq . ${STATION_OUT}/sim_report.json
-
   artifacts:
     paths:
       - ${STATION_OUT}/sim_report.json
@@ -260,34 +207,26 @@ A4_simulation:
 # =====================================================
 
 A5_gate:
-
   extends: .station_base
   stage: gate
-
   needs:
     - A1_policy
     - A2_security
     - A3_prompt
     - A4_simulation
-
   script:
-
     - |
-      copilot completion "
-      Aggregate reports and decide PASS or BLOCK.
-
+      gh copilot suggest "
+      Aggregate these reports and decide PASS or BLOCK.
       $(cat ${STATION_OUT}/*.json)
-
       Output gate_decision.json
       " > ${STATION_OUT}/gate_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/gate_raw.json > ${STATION_OUT}/gate_decision.json
-
     - STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
-
     - |
       if [ "$STATUS" = "BLOCK" ]; then
-        echo "Pipeline blocked"
+        echo "Pipeline blocked by AI Agent"
         exit 1
       fi
 
@@ -296,36 +235,27 @@ A5_gate:
 # =====================================================
 
 A6_update:
-
   stage: update
-
   needs:
     - job: A5_gate
       optional: true
-
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
-
   before_script:
     - apt-get update -qq
     - apt-get install -y -qq curl jq
-
   script:
-
     - |
       if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then
         exit 0
       fi
-
     - STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
-
     - |
       BODY=$(jq -n \
         --arg status "$STATUS" \
         --arg url "$CI_PIPELINE_URL" \
         '{body: ("AI Review Result: " + $status + "\nPipeline: " + $url)}')
-
     - |
       if [ -n "$GITLAB_TOKEN" ]; then
         curl --request POST \
