@@ -1,9 +1,10 @@
-# Agent Factory — Secure Station Pipeline
+# ------------------------------------------------
+# Agent Factory CI Pipeline
+# ------------------------------------------------
 
 variables:
   STATION_OUT: "station_out"
   GIT_DEPTH: "0"
-  NODE_ENV: "production"
 
 stages:
   - setup
@@ -15,25 +16,25 @@ stages:
   - update
 
 default:
-  image: debian:bookworm-slim
-  retry: 2
+  image: node:20-bookworm-slim
+  retry: 1
 
 cache:
   paths:
-    - /root/.npm
+    - /opt/ci-tools/node_modules
 
 # ------------------------------------------------
-# Base template
+# Base Station Template
 # ------------------------------------------------
 
 .station_base:
-  image: node:20-bookworm-slim
 
   before_script:
+
     - apt-get update -qq
     - apt-get install -y -qq git jq curl ca-certificates
 
-    # Ensure full git history only if repo is shallow
+    # Ensure full git history
     - |
       if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
         git fetch --unshallow
@@ -43,10 +44,10 @@ cache:
     - export TOOL_DIR=/opt/ci-tools
     - mkdir -p $TOOL_DIR
 
-    # Install Copilot CLI locally (not global)
+    # Install Copilot CLI deterministically
     - npm install --prefix $TOOL_DIR @githubnext/github-copilot-cli
 
-    # Create deterministic executable wrapper
+    # Create stable copilot command
     - |
       cat << 'EOF' > /usr/local/bin/copilot
       #!/usr/bin/env bash
@@ -55,46 +56,47 @@ cache:
 
     - chmod +x /usr/local/bin/copilot
 
-    # Verify installation
+    # verify installation
     - copilot --version || true
 
     - mkdir -p ${STATION_OUT}
 
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - "**/agents/**/*.agent.md"
-        - "**/skills/**/SKILL.md"
-        - "**/prompts/**/*.prompt.md"
-        - "**/instructions/**/*.instructions.md"
-        - "station-workflows/**"
-        - ".gitlab-ci.yml"
       when: on_success
-    - when: never
-
 
 # ------------------------------------------------
 # Setup
 # ------------------------------------------------
 
 setup:
+
   stage: setup
+
   script:
     - mkdir -p ${STATION_OUT}
-    - echo "Environment ready"
+    - echo "Setup complete"
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: on_success
+
   artifacts:
     paths:
-      - ${STATION_OUT}/
-
+      - ${STATION_OUT}
 
 # ------------------------------------------------
 # A0 Intake
 # ------------------------------------------------
 
 A0_intake:
+
   extends: .station_base
   stage: intake
-  needs: ["setup"]
+
+  needs:
+    - job: setup
+      optional: true
 
   script:
 
@@ -103,177 +105,185 @@ A0_intake:
         git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA" > diff.txt
       else
         git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-        git diff --name-status "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" "$CI_COMMIT_SHA" > diff.txt
+        git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
       fi
 
     - |
       copilot chat -p "
-      Produce ONLY valid JSON.
+      Produce ONLY JSON.
 
-      Create work_order.json describing this MR.
+      Create work_order.json.
 
       MR: ${CI_MERGE_REQUEST_IID}
       TITLE: ${CI_MERGE_REQUEST_TITLE}
 
-      CHANGED FILES:
+      FILES:
       $(cat diff.txt)
-      " > ${STATION_OUT}/work_order_raw.json
+      " > ${STATION_OUT}/work_raw.json
 
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/work_order_raw.json > ${STATION_OUT}/work_order.json
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/work_raw.json > ${STATION_OUT}/work_order.json
+
     - jq . ${STATION_OUT}/work_order.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/work_order.json
 
-
 # ------------------------------------------------
-# A1 Policy validation
+# A1 Policy Validation
 # ------------------------------------------------
 
 A1_policy:
+
   extends: .station_base
   stage: validation
-  needs: ["A0_intake"]
+
+  needs:
+    - A0_intake
 
   script:
 
     - |
       copilot chat -p "
-      Output ONLY JSON.
+      Validate agent manifests.
 
-      Validate agent manifests referenced in:
+      Input:
+      $(cat ${STATION_OUT}/work_order.json)
 
-      ${STATION_OUT}/work_order.json
-
-      Return policy_report.json
+      Output policy_report.json
       " > ${STATION_OUT}/policy_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/policy_raw.json > ${STATION_OUT}/policy_report.json
+
     - jq . ${STATION_OUT}/policy_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/policy_report.json
 
-
 # ------------------------------------------------
-# A2 Security scan
+# A2 Security Scan
 # ------------------------------------------------
 
 A2_security:
+
   extends: .station_base
   stage: security
-  needs: ["A0_intake"]
+
+  needs:
+    - A0_intake
 
   script:
 
-    # install gitleaks
     - |
       curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 \
       -o /usr/local/bin/gitleaks
-      chmod +x /usr/local/bin/gitleaks
 
-    - gitleaks detect --source=. --no-git --report-format json --report-path ${STATION_OUT}/gitleaks.json || true
+    - chmod +x /usr/local/bin/gitleaks
+
+    - gitleaks detect --source . --no-git --report-format json --report-path ${STATION_OUT}/gitleaks.json || true
 
     - |
       copilot chat -p "
-      Analyze this security report and produce security_report.json
+      Analyze security results.
 
       $(cat ${STATION_OUT}/gitleaks.json)
+
+      Produce security_report.json
       " > ${STATION_OUT}/security_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/security_raw.json > ${STATION_OUT}/security_report.json
+
     - jq . ${STATION_OUT}/security_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/security_report.json
-      - ${STATION_OUT}/gitleaks.json
-
 
 # ------------------------------------------------
-# A3 Prompt injection check
+# A3 Prompt Injection Check
 # ------------------------------------------------
 
-A3_prompt_injection:
+A3_prompt:
+
   extends: .station_base
   stage: security
-  needs: ["A0_intake"]
+
+  needs:
+    - A0_intake
 
   script:
 
     - |
       copilot chat -p "
-      Check prompt injection risks.
+      Detect prompt injection risks.
 
-      Read:
-      ${STATION_OUT}/work_order.json
+      $(cat ${STATION_OUT}/work_order.json)
 
-      Output JSON promptsec_report.json
+      Output prompt_report.json
       " > ${STATION_OUT}/prompt_raw.json
 
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/prompt_raw.json > ${STATION_OUT}/promptsec_report.json
-    - jq . ${STATION_OUT}/promptsec_report.json
+    - sed -n '/^{/,/}$/p' ${STATION_OUT}/prompt_raw.json > ${STATION_OUT}/prompt_report.json
+
+    - jq . ${STATION_OUT}/prompt_report.json
 
   artifacts:
     paths:
-      - ${STATION_OUT}/promptsec_report.json
-
+      - ${STATION_OUT}/prompt_report.json
 
 # ------------------------------------------------
-# A4 Sandbox simulation
+# A4 Sandbox Simulation
 # ------------------------------------------------
 
-A4_sandbox:
+A4_simulation:
+
   extends: .station_base
   stage: simulation
 
   needs:
-    - A0_intake
     - A1_policy
     - A2_security
-    - A3_prompt_injection
+    - A3_prompt
 
   script:
 
     - |
       copilot chat -p "
-      Simulate malicious inputs against the agents.
+      Simulate adversarial inputs.
 
-      Use:
-      ${STATION_OUT}/work_order.json
-
-      Output sim_report.json
+      Provide sim_report.json
       " > ${STATION_OUT}/sim_raw.json
 
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/sim_raw.json > ${STATION_OUT}/sim_report.json
+
     - jq . ${STATION_OUT}/sim_report.json
 
   artifacts:
     paths:
       - ${STATION_OUT}/sim_report.json
 
-
 # ------------------------------------------------
-# A5 Gate
+# A5 Gate Decision
 # ------------------------------------------------
 
 A5_gate:
+
   extends: .station_base
   stage: gate
 
   needs:
     - A1_policy
     - A2_security
-    - A3_prompt_injection
-    - A4_sandbox
+    - A3_prompt
+    - A4_simulation
 
   script:
 
     - |
       copilot chat -p "
-      Aggregate these reports and decide gate status.
+      Aggregate all reports.
+
+      Decide PASS or BLOCK.
 
       $(cat ${STATION_OUT}/*.json)
 
@@ -288,25 +298,20 @@ A5_gate:
 
     - |
       if [ "$STATUS" = "BLOCK" ]; then
-        echo "Gate blocked"
+        echo "Pipeline blocked"
         exit 1
       fi
 
-  artifacts:
-    paths:
-      - ${STATION_OUT}/*.json
-    expire_in: 7 days
-
-
 # ------------------------------------------------
-# A6 GitLab update
+# A6 Merge Request Update
 # ------------------------------------------------
 
 A6_update:
+
   stage: update
+
   needs:
     - job: A5_gate
-      artifacts: true
       optional: true
 
   rules:
@@ -314,7 +319,8 @@ A6_update:
       when: always
 
   before_script:
-    - apt-get update -qq && apt-get install -y -qq curl jq
+    - apt-get update -qq
+    - apt-get install -y -qq curl jq
 
   script:
 
@@ -329,7 +335,7 @@ A6_update:
       BODY=$(jq -n \
         --arg status "$STATUS" \
         --arg url "$CI_PIPELINE_URL" \
-        '{body: ("Agent Factory Result: " + $status + "\nPipeline: " + $url)}')
+        '{body: ("Agent Factory result: " + $status + "\nPipeline: " + $url)}')
 
     - |
       if [ -n "$GITLAB_TOKEN" ]; then
@@ -339,7 +345,3 @@ A6_update:
         --data "$BODY" \
         "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
       fi
-
-  artifacts:
-    paths:
-      - ${STATION_OUT}/
