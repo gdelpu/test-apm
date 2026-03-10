@@ -1,4 +1,4 @@
-# Agent Factory — Secure Station Pipeline (Corrected)
+# Agent Factory — Secure Station Pipeline
 
 variables:
   STATION_OUT: "station_out"
@@ -27,24 +27,36 @@ cache:
 # ------------------------------------------------
 
 .station_base:
+  image: node:20-bookworm-slim
+
   before_script:
     - apt-get update -qq
-    - apt-get install -y -qq curl git jq ca-certificates nodejs npm
+    - apt-get install -y -qq git jq curl ca-certificates
 
-    # Ensure full git history
-    - git fetch --unshallow || true
-
-    # Token normalization
+    # Ensure full git history only if repo is shallow
     - |
-      if [ -n "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ]; then
-        export GH_TOKEN="$GITHUB_TOKEN"
+      if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+        git fetch --unshallow
       fi
-      export GITHUB_TOKEN="$GH_TOKEN"
 
+    # Dedicated tool directory
+    - export TOOL_DIR=/opt/ci-tools
+    - mkdir -p $TOOL_DIR
+
+    # Install Copilot CLI locally (not global)
+    - npm install --prefix $TOOL_DIR @githubnext/github-copilot-cli
+
+    # Create deterministic executable wrapper
     - |
-      if ! command -v copilot >/dev/null; then
-        npm install -g @githubnext/github-copilot-cli
-      fi
+      cat << 'EOF' > /usr/local/bin/copilot
+      #!/usr/bin/env bash
+      node /opt/ci-tools/node_modules/@githubnext/github-copilot-cli/dist/index.js "$@"
+      EOF
+
+    - chmod +x /usr/local/bin/copilot
+
+    # Verify installation
+    - copilot --version || true
 
     - mkdir -p ${STATION_OUT}
 
@@ -60,6 +72,7 @@ cache:
       when: on_success
     - when: never
 
+
 # ------------------------------------------------
 # Setup
 # ------------------------------------------------
@@ -69,12 +82,10 @@ setup:
   script:
     - mkdir -p ${STATION_OUT}
     - echo "Environment ready"
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: on_success
   artifacts:
     paths:
       - ${STATION_OUT}/
+
 
 # ------------------------------------------------
 # A0 Intake
@@ -83,11 +94,10 @@ setup:
 A0_intake:
   extends: .station_base
   stage: intake
-  needs:
-    - job: setup
-      optional: true
+  needs: ["setup"]
 
   script:
+
     - |
       if [ -n "${CI_MERGE_REQUEST_DIFF_BASE_SHA}" ]; then
         git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA" > diff.txt
@@ -116,6 +126,7 @@ A0_intake:
     paths:
       - ${STATION_OUT}/work_order.json
 
+
 # ------------------------------------------------
 # A1 Policy validation
 # ------------------------------------------------
@@ -123,10 +134,10 @@ A0_intake:
 A1_policy:
   extends: .station_base
   stage: validation
-  needs:
-    - A0_intake
+  needs: ["A0_intake"]
 
   script:
+
     - |
       copilot chat -p "
       Output ONLY JSON.
@@ -145,6 +156,7 @@ A1_policy:
     paths:
       - ${STATION_OUT}/policy_report.json
 
+
 # ------------------------------------------------
 # A2 Security scan
 # ------------------------------------------------
@@ -152,10 +164,11 @@ A1_policy:
 A2_security:
   extends: .station_base
   stage: security
-  needs:
-    - A0_intake
+  needs: ["A0_intake"]
 
   script:
+
+    # install gitleaks
     - |
       curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 \
       -o /usr/local/bin/gitleaks
@@ -178,6 +191,7 @@ A2_security:
       - ${STATION_OUT}/security_report.json
       - ${STATION_OUT}/gitleaks.json
 
+
 # ------------------------------------------------
 # A3 Prompt injection check
 # ------------------------------------------------
@@ -185,10 +199,10 @@ A2_security:
 A3_prompt_injection:
   extends: .station_base
   stage: security
-  needs:
-    - A0_intake
+  needs: ["A0_intake"]
 
   script:
+
     - |
       copilot chat -p "
       Check prompt injection risks.
@@ -206,6 +220,7 @@ A3_prompt_injection:
     paths:
       - ${STATION_OUT}/promptsec_report.json
 
+
 # ------------------------------------------------
 # A4 Sandbox simulation
 # ------------------------------------------------
@@ -213,6 +228,7 @@ A3_prompt_injection:
 A4_sandbox:
   extends: .station_base
   stage: simulation
+
   needs:
     - A0_intake
     - A1_policy
@@ -220,6 +236,7 @@ A4_sandbox:
     - A3_prompt_injection
 
   script:
+
     - |
       copilot chat -p "
       Simulate malicious inputs against the agents.
@@ -237,6 +254,7 @@ A4_sandbox:
     paths:
       - ${STATION_OUT}/sim_report.json
 
+
 # ------------------------------------------------
 # A5 Gate
 # ------------------------------------------------
@@ -244,6 +262,7 @@ A4_sandbox:
 A5_gate:
   extends: .station_base
   stage: gate
+
   needs:
     - A1_policy
     - A2_security
@@ -251,6 +270,7 @@ A5_gate:
     - A4_sandbox
 
   script:
+
     - |
       copilot chat -p "
       Aggregate these reports and decide gate status.
@@ -277,6 +297,7 @@ A5_gate:
       - ${STATION_OUT}/*.json
     expire_in: 7 days
 
+
 # ------------------------------------------------
 # A6 GitLab update
 # ------------------------------------------------
@@ -296,6 +317,7 @@ A6_update:
     - apt-get update -qq && apt-get install -y -qq curl jq
 
   script:
+
     - |
       if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then
         exit 0
@@ -307,7 +329,7 @@ A6_update:
       BODY=$(jq -n \
         --arg status "$STATUS" \
         --arg url "$CI_PIPELINE_URL" \
-        '{body: ("Agent Factory Result: " + $status + "\\nPipeline: " + $url)}')
+        '{body: ("Agent Factory Result: " + $status + "\nPipeline: " + $url)}')
 
     - |
       if [ -n "$GITLAB_TOKEN" ]; then
