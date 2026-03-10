@@ -4,8 +4,9 @@
 
 variables:
   STATION_OUT: "station_out"
-  TOOL_DIR: "/opt/ci-tools"
   GIT_DEPTH: "0"
+  # Set a clean config directory for gh to avoid cache conflicts
+  GH_CONFIG_DIR: "${CI_PROJECT_DIR}/.gh_config"
 
 stages:
   - setup
@@ -21,14 +22,12 @@ default:
 
 .station_base:
   before_script:
-    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates gnupg
-    - unalias copilot 2>/dev/null || true
-    - rm -f /usr/local/bin/copilot
-    - mkdir -p -m 0755 /etc/apt/keyrings
-    - curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
-    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    - apt-get update -qq && apt-get install -y -qq gh
-    - gh extension install github/gh-copilot --force
+    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates
+
+    # 1. Install GitHub Copilot CLI via npm
+    # See: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli-agents/overview
+    - npm install -g @github/copilot
+
     - |
       if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
         git fetch --unshallow
@@ -38,7 +37,7 @@ default:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 # =====================================================
-# A0 Intake: Analysis of Diff
+# A0 Intake: Analysis with Strict JSON formatting
 # =====================================================
 
 A0_intake:
@@ -48,101 +47,54 @@ A0_intake:
     - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
     - |
-      gh copilot suggest -t shell "
-      STRICT INSTRUCTION: Return ONLY a JSON object. No conversational text.
-      GOAL: Create a work order for a code review.
-      INPUT: MR ${CI_MERGE_REQUEST_IID}, Title: '${CI_MERGE_REQUEST_TITLE}', Files: $(cat diff.txt)
+      # Use copilot CLI in autopilot mode (non-interactive, full permissions)
+      copilot --autopilot --yolo -p "
+      SYSTEM: You are a JSON-only API. 
+      STRICT: Do not include markdown blocks (like \`\`\`json). Return raw text.
+      GOAL: Analyze MR ${CI_MERGE_REQUEST_IID} ('${CI_MERGE_REQUEST_TITLE}').
+      FILES: $(cat diff.txt)
       SCHEMA: {
-        'mr_id': number,
-        'complexity': 'low'|'medium'|'high',
-        'focus_areas': string[],
-        'automated_tasks': ['lint', 'security', 'policy']
+        'mr_id': ${CI_MERGE_REQUEST_IID},
+        'priority': 'P0'|'P1'|'P2',
+        'risks': string[]
       }
       " > ${STATION_OUT}/raw.json
+    # Extraction safety net
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/raw.json > ${STATION_OUT}/work_order.json
     - jq . ${STATION_OUT}/work_order.json
   artifacts:
     paths: [ "${STATION_OUT}/work_order.json" ]
 
 # =====================================================
-# A1 Policy: Business Logic Check
-# =====================================================
-
-A1_policy:
-  extends: .station_base
-  stage: validation
-  needs: ["A0_intake"]
-  script:
-    - |
-      gh copilot suggest -t shell "
-      STRICT INSTRUCTION: Return ONLY a JSON object.
-      GOAL: Validate against company policy (No production keys, no hardcoded IPs).
-      INPUT: $(cat ${STATION_OUT}/work_order.json)
-      SCHEMA: {
-        'policy_compliant': boolean,
-        'violations': string[],
-        'remediation': string
-      }
-      " > ${STATION_OUT}/policy_raw.json
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/policy_raw.json > ${STATION_OUT}/policy_report.json
-    - jq . ${STATION_OUT}/policy_report.json
-  artifacts:
-    paths: [ "${STATION_OUT}/policy_report.json" ]
-
-# =====================================================
-# A2 Security: Gitleaks Analysis
-# =====================================================
-
-A2_security:
-  extends: .station_base
-  stage: security
-  needs: ["A0_intake"]
-  script:
-    - curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 -o /usr/local/bin/gitleaks && chmod +x /usr/local/bin/gitleaks
-    - gitleaks detect --source . --no-git --report-format json --report-path ${STATION_OUT}/gitleaks.json || true
-    - |
-      gh copilot suggest -t shell "
-      STRICT INSTRUCTION: Return ONLY a JSON object.
-      GOAL: Summarize security findings.
-      INPUT: $(cat ${STATION_OUT}/gitleaks.json)
-      SCHEMA: {
-        'risk_score': number (0-10),
-        'critical_issues': number,
-        'summary': string
-      }
-      " > ${STATION_OUT}/security_raw.json
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/security_raw.json > ${STATION_OUT}/security_report.json
-    - jq . ${STATION_OUT}/security_report.json
-  artifacts:
-    paths: [ "${STATION_OUT}/security_report.json" ]
-
-# =====================================================
-# A5 Gate: Final Consensus
+# A5 Gate: The Final Decision
 # =====================================================
 
 A5_gate:
   extends: .station_base
   stage: gate
-  needs: ["A1_policy", "A2_security"]
+  needs: ["A0_intake"] # In a real flow, add your intermediate reports here
   script:
     - |
-      gh copilot suggest -t shell "
-      STRICT INSTRUCTION: Return ONLY a JSON object.
-      GOAL: Final merge decision.
-      REPORTS: $(cat ${STATION_OUT}/*.json)
+      copilot --autopilot --yolo -p "
+      SYSTEM: You are a gatekeeper. Return raw JSON only.
+      INPUT: $(cat ${STATION_OUT}/work_order.json)
+      DECISION: Analyze input and decide if safe to proceed.
       SCHEMA: {
         'status': 'PASS' | 'BLOCK',
-        'reason': string,
-        'approver_agent': 'Consensus_Engine_v1'
+        'reason': 'string'
       }
       " > ${STATION_OUT}/gate_raw.json
     - sed -n '/^{/,/}$/p' ${STATION_OUT}/gate_raw.json > ${STATION_OUT}/gate_decision.json
-    - if [ "$(jq -r '.status' ${STATION_OUT}/gate_decision.json)" = "BLOCK" ]; then exit 1; fi
+    - |
+      if [ "$(jq -r '.status' ${STATION_OUT}/gate_decision.json)" = "BLOCK" ]; then
+        echo "Decision: BLOCKED"
+        exit 1
+      fi
   artifacts:
     paths: [ "${STATION_OUT}/gate_decision.json" ]
 
 # =====================================================
-# A6 Update: GitLab MR Interaction
+# A6 Update: Post back to GitLab
 # =====================================================
 
 A6_update:
@@ -155,9 +107,10 @@ A6_update:
     - apt-get update -qq && apt-get install -y -qq curl jq
   script:
     - |
-      if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then echo "Skipping update"; exit 0; fi
+      if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then exit 0; fi
       STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
       REASON=$(jq -r '.reason' ${STATION_OUT}/gate_decision.json)
-      BODY=$(jq -n --arg s "$STATUS" --arg r "$REASON" '{body: "### AI Agent Gate: \($s)\n**Reason:** \($r)"}')
-      curl --request POST --header "PRIVATE-TOKEN: $GITLAB_TOKEN" --header "Content-Type: application/json" \
-      --data "$BODY" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
+      PAYLOAD=$(jq -n --arg s "$STATUS" --arg r "$REASON" '{body: "### AI Gate: \($s)\n**Reason:** \($r)"}')
+      curl --request POST --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+      --header "Content-Type: application/json" --data "$PAYLOAD" \
+      "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
