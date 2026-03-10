@@ -1,4 +1,4 @@
-# Agent Factory — Secure Station Pipeline
+# Agent Factory — Secure Station Pipeline (Corrected)
 
 variables:
   STATION_OUT: "station_out"
@@ -60,7 +60,6 @@ cache:
       when: on_success
     - when: never
 
-
 # ------------------------------------------------
 # Setup
 # ------------------------------------------------
@@ -70,10 +69,12 @@ setup:
   script:
     - mkdir -p ${STATION_OUT}
     - echo "Environment ready"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: on_success
   artifacts:
     paths:
       - ${STATION_OUT}/
-
 
 # ------------------------------------------------
 # A0 Intake
@@ -82,10 +83,11 @@ setup:
 A0_intake:
   extends: .station_base
   stage: intake
-  needs: ["setup"]
+  needs:
+    - job: setup
+      optional: true
 
   script:
-
     - |
       if [ -n "${CI_MERGE_REQUEST_DIFF_BASE_SHA}" ]; then
         git diff --name-status "$CI_MERGE_REQUEST_DIFF_BASE_SHA" "$CI_COMMIT_SHA" > diff.txt
@@ -114,7 +116,6 @@ A0_intake:
     paths:
       - ${STATION_OUT}/work_order.json
 
-
 # ------------------------------------------------
 # A1 Policy validation
 # ------------------------------------------------
@@ -122,10 +123,10 @@ A0_intake:
 A1_policy:
   extends: .station_base
   stage: validation
-  needs: ["A0_intake"]
+  needs:
+    - A0_intake
 
   script:
-
     - |
       copilot chat -p "
       Output ONLY JSON.
@@ -144,7 +145,6 @@ A1_policy:
     paths:
       - ${STATION_OUT}/policy_report.json
 
-
 # ------------------------------------------------
 # A2 Security scan
 # ------------------------------------------------
@@ -152,11 +152,10 @@ A1_policy:
 A2_security:
   extends: .station_base
   stage: security
-  needs: ["A0_intake"]
+  needs:
+    - A0_intake
 
   script:
-
-    # install gitleaks
     - |
       curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 \
       -o /usr/local/bin/gitleaks
@@ -179,7 +178,6 @@ A2_security:
       - ${STATION_OUT}/security_report.json
       - ${STATION_OUT}/gitleaks.json
 
-
 # ------------------------------------------------
 # A3 Prompt injection check
 # ------------------------------------------------
@@ -187,10 +185,10 @@ A2_security:
 A3_prompt_injection:
   extends: .station_base
   stage: security
-  needs: ["A0_intake"]
+  needs:
+    - A0_intake
 
   script:
-
     - |
       copilot chat -p "
       Check prompt injection risks.
@@ -208,7 +206,6 @@ A3_prompt_injection:
     paths:
       - ${STATION_OUT}/promptsec_report.json
 
-
 # ------------------------------------------------
 # A4 Sandbox simulation
 # ------------------------------------------------
@@ -216,7 +213,6 @@ A3_prompt_injection:
 A4_sandbox:
   extends: .station_base
   stage: simulation
-
   needs:
     - A0_intake
     - A1_policy
@@ -224,7 +220,6 @@ A4_sandbox:
     - A3_prompt_injection
 
   script:
-
     - |
       copilot chat -p "
       Simulate malicious inputs against the agents.
@@ -242,7 +237,6 @@ A4_sandbox:
     paths:
       - ${STATION_OUT}/sim_report.json
 
-
 # ------------------------------------------------
 # A5 Gate
 # ------------------------------------------------
@@ -250,7 +244,6 @@ A4_sandbox:
 A5_gate:
   extends: .station_base
   stage: gate
-
   needs:
     - A1_policy
     - A2_security
@@ -258,7 +251,6 @@ A5_gate:
     - A4_sandbox
 
   script:
-
     - |
       copilot chat -p "
       Aggregate these reports and decide gate status.
@@ -285,7 +277,6 @@ A5_gate:
       - ${STATION_OUT}/*.json
     expire_in: 7 days
 
-
 # ------------------------------------------------
 # A6 GitLab update
 # ------------------------------------------------
@@ -305,7 +296,6 @@ A6_update:
     - apt-get update -qq && apt-get install -y -qq curl jq
 
   script:
-
     - |
       if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then
         exit 0
@@ -317,7 +307,7 @@ A6_update:
       BODY=$(jq -n \
         --arg status "$STATUS" \
         --arg url "$CI_PIPELINE_URL" \
-        '{body: ("Agent Factory Result: " + $status + "\nPipeline: " + $url)}')
+        '{body: ("Agent Factory Result: " + $status + "\\nPipeline: " + $url)}')
 
     - |
       if [ -n "$GITLAB_TOKEN" ]; then
