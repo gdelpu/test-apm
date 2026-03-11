@@ -109,6 +109,13 @@ validate:copilot-advisory:
     - apt-get update && apt-get install -y curl jq
     - mkdir -p $REPORTS_DIR
     - |
+      {
+        echo "# Copilot Advisory Summary"
+        echo ""
+        echo "Copilot advisory pending execution."
+      } > "$REPORTS_DIR/copilot-advisory.md"
+    - echo '{"reports": []}' > "$REPORTS_DIR/copilot-input.json"
+    - |
       if [ -z "$COPILOT_CI_TOKEN" ]; then
         {
           echo "# Copilot Advisory Summary"
@@ -127,11 +134,6 @@ validate:copilot-advisory:
       apt-get update
       apt-get install -y gh
       gh --version
-    - |
-      printf "%s" "$COPILOT_CI_TOKEN" | gh auth login --with-token --hostname github.com
-      gh auth status --hostname github.com
-    - gh extension install github/gh-copilot --force
-    - gh copilot --help
     - |
       python3 - <<'PY'
       import json
@@ -153,6 +155,43 @@ validate:copilot-advisory:
       )
       PY
     - |
+      export GH_TOKEN="$COPILOT_CI_TOKEN"
+      if ! gh api user >/tmp/gh-user.json 2>/tmp/gh-user.err; then
+        {
+          echo "# Copilot Advisory Summary"
+          echo ""
+          echo "GitHub authentication failed in runner."
+          echo ""
+          echo "## CLI Error"
+          cat /tmp/gh-user.err
+        } > "$REPORTS_DIR/copilot-advisory.md"
+        exit 0
+      fi
+    - |
+      if ! gh extension install github/gh-copilot --force >/tmp/gh-ext.log 2>/tmp/gh-ext.err; then
+        {
+          echo "# Copilot Advisory Summary"
+          echo ""
+          echo "Failed to install gh-copilot extension in runner."
+          echo ""
+          echo "## CLI Error"
+          cat /tmp/gh-ext.err
+        } > "$REPORTS_DIR/copilot-advisory.md"
+        exit 0
+      fi
+    - |
+      if ! gh copilot --help >/tmp/gh-copilot-help.log 2>/tmp/gh-copilot-help.err; then
+        {
+          echo "# Copilot Advisory Summary"
+          echo ""
+          echo "gh-copilot extension is installed but not executable."
+          echo ""
+          echo "## CLI Error"
+          cat /tmp/gh-copilot-help.err
+        } > "$REPORTS_DIR/copilot-advisory.md"
+        exit 0
+      fi
+    - |
       PROMPT="Read reports/copilot-input.json and produce concise advisory bullets: top risks, quick fixes, and confidence level."
       if gh copilot suggest -t shell "$PROMPT" > "$REPORTS_DIR/copilot-advisory.md" 2>/tmp/copilot.err; then
         true
@@ -169,7 +208,7 @@ validate:copilot-advisory:
   artifacts:
     paths:
       - $REPORTS_DIR/copilot-advisory.md
-      - reports/copilot-input.json
+      - $REPORTS_DIR/copilot-input.json
     expire_in: 14 days
     when: always
   allow_failure: true
