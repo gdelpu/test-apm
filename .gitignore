@@ -1,6 +1,9 @@
 ﻿# Secrets  never commit
 .env
 
+# CI auth cache — must never be committed or included in artifacts
+.gh_config/
+
 # Pipeline output
 station_out/
 .station_tmp/

@@ -22,12 +22,35 @@ default:
 
 .station_base:
   before_script:
-    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates
+    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
 
     # 1. Install GitHub Copilot CLI via npm
     # See: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli-agents/overview
     - npm install -g @github/copilot
 
+    # 2. Write shared JSON extractor used by every station (replaces fragile sed heuristic)
+    - |
+      cat > /tmp/extract_json.py << 'PYEOF'
+      import sys, json
+      content = sys.stdin.read()
+      depth, start = 0, None
+      for i, ch in enumerate(content):
+          if ch == '{':
+              if start is None:
+                  start = i
+              depth += 1
+          elif ch == '}':
+              depth -= 1
+              if depth == 0 and start is not None:
+                  try:
+                      obj = json.loads(content[start:i+1])
+                      print(json.dumps(obj))
+                      sys.exit(0)
+                  except json.JSONDecodeError:
+                      start, depth = None, 0
+      sys.stderr.write('ERROR: No valid JSON object found in model output\n')
+      sys.exit(1)
+      PYEOF
     - |
       if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
         git fetch --unshallow
@@ -43,15 +66,23 @@ default:
 A0_intake:
   extends: .station_base
   stage: intake
+  resource_group: copilot-api-${CI_PROJECT_ID}
   script:
     - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
+    # Sanitize MR title: strip control characters, limit to 200 chars, block prompt-injection patterns
+    - SAFE_TITLE=$(printf '%s' "${CI_MERGE_REQUEST_TITLE}" | tr -d '\000-\031\177' | cut -c1-200)
     - |
-      # Use copilot CLI in autopilot mode (non-interactive, full permissions)
-      copilot --autopilot --yolo -p "
-      SYSTEM: You are a JSON-only API. 
+      if echo "$SAFE_TITLE" | grep -qiE '(SYSTEM:|IGNORE PREVIOUS|YOU ARE NOW|OVERRIDE:|JAILBREAK)'; then
+        echo "ERROR: MR title contains a blocked prompt-injection pattern." >&2
+        exit 1
+      fi
+    - |
+      # --yolo removed: prevents the agent from executing arbitrary tools inside CI
+      copilot --autopilot -p "
+      SYSTEM: You are a JSON-only API.
       STRICT: Do not include markdown blocks (like \`\`\`json). Return raw text.
-      GOAL: Analyze MR ${CI_MERGE_REQUEST_IID} ('${CI_MERGE_REQUEST_TITLE}').
+      GOAL: Analyze MR ${CI_MERGE_REQUEST_IID} ('${SAFE_TITLE}').
       FILES: $(cat diff.txt)
       SCHEMA: {
         'mr_id': ${CI_MERGE_REQUEST_IID},
@@ -59,11 +90,16 @@ A0_intake:
         'risks': string[]
       }
       " > ${STATION_OUT}/raw.json
-    # Extraction safety net
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/raw.json > ${STATION_OUT}/work_order.json
+    # Robust JSON extraction via Python (replaces fragile sed heuristic)
+    - |
+      if ! python3 /tmp/extract_json.py < "${STATION_OUT}/raw.json" > "${STATION_OUT}/work_order.json"; then
+        echo "ERROR: Model did not return parseable JSON." >&2
+        exit 1
+      fi
     - jq . ${STATION_OUT}/work_order.json
   artifacts:
     paths: [ "${STATION_OUT}/work_order.json" ]
+    exclude: [ ".gh_config/**" ]
 
 # =====================================================
 # A5 Gate: The Final Decision
@@ -72,10 +108,12 @@ A0_intake:
 A5_gate:
   extends: .station_base
   stage: gate
+  resource_group: copilot-api-${CI_PROJECT_ID}
   needs: ["A0_intake"] # In a real flow, add your intermediate reports here
   script:
     - |
-      copilot --autopilot --yolo -p "
+      # --yolo removed: prevents the agent from executing arbitrary tools inside CI
+      copilot --autopilot -p "
       SYSTEM: You are a gatekeeper. Return raw JSON only.
       INPUT: $(cat ${STATION_OUT}/work_order.json)
       DECISION: Analyze input and decide if safe to proceed.
@@ -84,14 +122,23 @@ A5_gate:
         'reason': 'string'
       }
       " > ${STATION_OUT}/gate_raw.json
-    - sed -n '/^{/,/}$/p' ${STATION_OUT}/gate_raw.json > ${STATION_OUT}/gate_decision.json
+    # Robust JSON extraction; failure here defaults to BLOCK (fail-closed)
     - |
-      if [ "$(jq -r '.status' ${STATION_OUT}/gate_decision.json)" = "BLOCK" ]; then
-        echo "Decision: BLOCKED"
+      if ! python3 /tmp/extract_json.py < "${STATION_OUT}/gate_raw.json" > "${STATION_OUT}/gate_decision.json"; then
+        echo "ERROR: Failed to extract gate decision JSON. Failing safe." >&2
         exit 1
       fi
+    # Fail-closed: only an explicit 'PASS' allows the pipeline to proceed
+    - |
+      GATE_STATUS=$(jq -r '.status // "UNKNOWN"' "${STATION_OUT}/gate_decision.json" 2>/dev/null || echo "UNKNOWN")
+      if [ "$GATE_STATUS" != "PASS" ]; then
+        echo "Decision: BLOCKED (status=${GATE_STATUS})" >&2
+        exit 1
+      fi
+      echo "Decision: PASS"
   artifacts:
     paths: [ "${STATION_OUT}/gate_decision.json" ]
+    exclude: [ ".gh_config/**" ]
 
 # =====================================================
 # A6 Update: Post back to GitLab
@@ -107,10 +154,19 @@ A6_update:
     - apt-get update -qq && apt-get install -y -qq curl jq
   script:
     - |
-      if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then exit 0; fi
-      STATUS=$(jq -r '.status' ${STATION_OUT}/gate_decision.json)
-      REASON=$(jq -r '.reason' ${STATION_OUT}/gate_decision.json)
-      PAYLOAD=$(jq -n --arg s "$STATUS" --arg r "$REASON" '{body: "### AI Gate: \($s)\n**Reason:** \($r)"}')
-      curl --request POST --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-      --header "Content-Type: application/json" --data "$PAYLOAD" \
-      "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
+      if [ -z "${GITLAB_TOKEN}" ]; then
+        echo "GITLAB_TOKEN is not set; skipping MR note." >&2
+        exit 0
+      fi
+      if [ ! -f "${STATION_OUT}/gate_decision.json" ]; then
+        echo "No gate decision file found; skipping MR note." >&2
+        exit 0
+      fi
+      STATUS=$(jq -r '.status' "${STATION_OUT}/gate_decision.json")
+      REASON=$(jq -r '.reason' "${STATION_OUT}/gate_decision.json")
+      PAYLOAD=$(jq -n --arg s "$STATUS" --arg r "$REASON" '{"body": "### AI Gate: \($s)\n**Reason:** \($r)"}')
+      curl --fail --silent --request POST \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data "$PAYLOAD" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes"
