@@ -134,6 +134,57 @@ See [default/skills/brand-styler/SKILL.md](default/skills/brand-styler/SKILL.md)
 
 ---
 
+### AI Backbone Merge Request checks
+
+This repository includes deterministic merge request validation for Copilot assets and workflows.
+
+**Pipeline Configuration:**
+- File: `.gitlab-ci.yml` (at repository root)
+- Skill: `default/skills/ai-backbone-pr-checks/`
+
+**Validation Scripts:**
+- `default/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py` — validates frontmatter, naming, links
+- `default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py` — validates workflow YAML structure and safety
+- `default/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py` — advisory-only gap detection
+
+**Local validation example:**
+
+```bash
+# Using Python 3.11+
+py --version
+
+# Lint workflow files
+python default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py --root . --out reports/yaml-workflow-linter.json
+
+# Validate changed files (local git diff mode)
+python default/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py --base-ref HEAD~1 --head-ref HEAD --out reports/pr-auto-validator.json
+
+# Detect documentation gaps
+python default/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py --base-ref HEAD~1 --head-ref HEAD --out reports/test-gap-detector.json
+```
+
+**Validation Gating Policy (Phase 1):**
+
+| Check | Status | Behavior |
+|-------|--------|----------|
+| Frontmatter validation | Blocking | Fails MR if frontmatter is malformed or missing from resource files |
+| Workflow YAML structure | Blocking | Fails MR if workflow files have structural issues |
+| Naming conventions | Blocking | Enforces kebab-case naming for resource files |
+| Workflow hardening | Advisory | Warns about missing permissions, @main references |
+| Documentation gaps | Advisory | Warns if scripts/workflows changed without docs updates |
+
+**CI/CD Configuration (GitLab):**
+
+To enable optional Copilot CLI advisory mode:
+
+1. Go to **Settings > CI/CD > Variables** in your GitLab project
+2. Create a new variable: `ENABLE_COPILOT_CLI` = `true`
+3. (Optional) Create a secret: `COPILOT_CI_TOKEN` = `<your-copilot-token>` for future GitHub Copilot CLI integration
+
+> **Note:** Copilot CLI advisory is optional and requires additional GitHub CLI setup. The pipeline continues without it.
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions from all members, client teams, and factory leads.
