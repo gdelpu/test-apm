@@ -97,23 +97,79 @@ validate:test-gaps:
 # Job: Copilot CLI Advisory (optional, requires GitHub Copilot CLI extension setup)
 validate:copilot-advisory:
   extends: .mr_only
-  stage: validate
+  stage: report
   image: python:3.11
+  dependencies:
+    - validate:pr-auto
+    - validate:yaml-workflows
+    - validate:test-gaps
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $ENABLE_COPILOT_CLI == "true"'
   script:
-    - echo "Detect - Copilot advisory mode enabled (GitHub CLI required)..."
+    - apt-get update && apt-get install -y curl jq
     - mkdir -p $REPORTS_DIR
     - |
-      echo "# Copilot Advisory Summary" > "$REPORTS_DIR/copilot-advisory.md"
-      echo "" >> "$REPORTS_DIR/copilot-advisory.md"
-      echo "This feature requires GitHub Copilot CLI extension." >> "$REPORTS_DIR/copilot-advisory.md"
-      echo "Configure COPILOT_CI_TOKEN as a CI/CD variable to enable." >> "$REPORTS_DIR/copilot-advisory.md"
-      echo "" >> "$REPORTS_DIR/copilot-advisory.md"
-      echo "Report: Advanced advisory features available via external integrations." >> "$REPORTS_DIR/copilot-advisory.md"
+      if [ -z "$COPILOT_CI_TOKEN" ]; then
+        {
+          echo "# Copilot Advisory Summary"
+          echo ""
+          echo "Copilot advisory skipped: missing COPILOT_CI_TOKEN CI/CD variable."
+          echo "Set COPILOT_CI_TOKEN to enable GitHub CLI + Copilot CLI in runner."
+        } > "$REPORTS_DIR/copilot-advisory.md"
+        exit 0
+      fi
+    - |
+      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+        | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+      chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+        > /etc/apt/sources.list.d/github-cli.list
+      apt-get update
+      apt-get install -y gh
+      gh --version
+    - |
+      printf "%s" "$COPILOT_CI_TOKEN" | gh auth login --with-token --hostname github.com
+      gh auth status --hostname github.com
+    - gh extension install github/gh-copilot --force
+    - gh copilot --help
+    - |
+      python3 - <<'PY'
+      import json
+      from pathlib import Path
+
+      report_paths = [
+          Path("reports/pr-auto-validator.json"),
+          Path("reports/yaml-workflow-linter.json"),
+          Path("reports/test-gap-detector.json"),
+      ]
+
+      payload = {"reports": []}
+      for p in report_paths:
+          if p.exists():
+              payload["reports"].append(json.loads(p.read_text(encoding="utf-8", errors="replace")))
+
+      Path("reports/copilot-input.json").write_text(
+          json.dumps(payload, indent=2), encoding="utf-8"
+      )
+      PY
+    - |
+      PROMPT="Read reports/copilot-input.json and produce concise advisory bullets: top risks, quick fixes, and confidence level."
+      if gh copilot suggest -t shell "$PROMPT" > "$REPORTS_DIR/copilot-advisory.md" 2>/tmp/copilot.err; then
+        true
+      else
+        {
+          echo "# Copilot Advisory Summary"
+          echo ""
+          echo "Copilot advisory execution failed."
+          echo ""
+          echo "## CLI Error"
+          cat /tmp/copilot.err
+        } > "$REPORTS_DIR/copilot-advisory.md"
+      fi
   artifacts:
     paths:
       - $REPORTS_DIR/copilot-advisory.md
+      - reports/copilot-input.json
     expire_in: 14 days
     when: always
   allow_failure: true
