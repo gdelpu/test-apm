@@ -184,13 +184,14 @@ for s in r.get('summary', []):
       } > comment.md
     # Report: post comment to merge request using GitLab API
     - echo "Report: Posting validation summary to merge request..."
-    - python3 - <<'PY'
-import json
-from pathlib import Path
+    - |
+      python3 - <<'PY'
+      import json
+      from pathlib import Path
 
-comment = Path("comment.md").read_text(encoding="utf-8", errors="replace")
-Path("comment.json").write_text(json.dumps({"body": comment}), encoding="utf-8")
-PY
+      comment = Path("comment.md").read_text(encoding="utf-8", errors="replace")
+      Path("comment.json").write_text(json.dumps({"body": comment}), encoding="utf-8")
+      PY
     - |
       curl --request POST \
         --header "JOB-TOKEN: $CI_JOB_TOKEN" \
