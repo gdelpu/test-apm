@@ -29,9 +29,7 @@ validate:pr-auto:
     - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - pip install PyYAML
   script:
-    # Collect: changed files from merge request
-    - echo "Collect: Validating changed files in merge request..."
-    # Run: PR auto validator
+    - echo "Collect - Validating changed files in merge request..."
     - mkdir -p $REPORTS_DIR
     - python $VALIDATORS_DIR/pr_auto_validator.py --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --head-ref $CI_COMMIT_SHA --out $REPORTS_DIR/pr-auto-validator.json
   artifacts:
@@ -49,9 +47,7 @@ validate:yaml-workflows:
   before_script:
     - pip install PyYAML
   script:
-    # Collect: workflow files across root, shared default, and client scopes
-    - echo "Collect: Scanning workflow files..."
-    # Run: YAML workflow linter
+    - echo "Collect - Scanning workflow files..."
     - mkdir -p $REPORTS_DIR
     - python $VALIDATORS_DIR/yaml_workflow_linter.py --root . --out $REPORTS_DIR/yaml-workflow-linter.json
   artifacts:
@@ -71,9 +67,7 @@ validate:test-gaps:
     - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - pip install PyYAML
   script:
-    # Collect: changed files from merge request
-    - echo "Collect: Detecting process documentation gaps..."
-    # Run: test gap detector
+    - echo "Collect - Detecting process documentation gaps..."
     - mkdir -p $REPORTS_DIR
     - python $VALIDATORS_DIR/test_gap_detector.py --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --head-ref $CI_COMMIT_SHA --out $REPORTS_DIR/test-gap-detector.json
   artifacts:
@@ -91,8 +85,7 @@ validate:copilot-advisory:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $ENABLE_COPILOT_CLI == "true"'
   script:
-    # Configure: minimal advisory using validator outputs only
-    - echo "Detect: Copilot advisory mode enabled (GitHub CLI required)..."
+    - echo "Detect - Copilot advisory mode enabled (GitHub CLI required)..."
     - mkdir -p $REPORTS_DIR
     - |
       echo "# Copilot Advisory Summary" > "$REPORTS_DIR/copilot-advisory.md"
@@ -119,9 +112,7 @@ report:summary:
     - validate:test-gaps
   script:
     - apt-get update && apt-get install -y curl
-    # Collect: validator JSON reports
-    - echo "Collect: Aggregating validator reports..."
-    # Parse: read JSON summaries and construct comment
+    - echo "Collect - Aggregating validator reports..."
     - |
       python3 - <<'PY'
       import json
@@ -156,9 +147,8 @@ report:summary:
       Path("comment.md").write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
       PY
     # Report: post comment to merge request using GitLab API
-    - echo "Report: Posting validation summary to merge request..."
-    - |
-      python3 - <<'PY'
+    - echo "Report - Posting validation summary to merge request..."
+    - python3 - <<'PY'
       import json
       from pathlib import Path
 
