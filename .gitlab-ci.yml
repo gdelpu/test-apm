@@ -111,21 +111,17 @@ report:summary:
     - validate:yaml-workflows
     - validate:test-gaps
   script:
-    - apt-get update && apt-get install -y curl
-    - echo "Collect - Aggregating validator reports..."
+    - apt-get update && apt-get install -y curl jq
     - |
-      python3 - <<'PY'
+      cat > /tmp/gen_comment.py <<'SCRIPT'
       import json
       from pathlib import Path
-
       reports = [
           ("PR Auto Validator", Path("reports/pr-auto-validator.json")),
           ("YAML Workflow Linter", Path("reports/yaml-workflow-linter.json")),
           ("Test Gap Detector", Path("reports/test-gap-detector.json")),
       ]
-
-      lines = ["## PR Validation Summary", ""]
-
+      lines = ["## MR Validation Summary", ""]
       for title, path in reports:
           lines.append(f"### {title}")
           if path.exists():
@@ -138,33 +134,22 @@ report:summary:
           else:
               lines.append("Report not generated")
           lines.append("")
-
       advisory = Path("reports/copilot-advisory.md")
       if advisory.exists():
           lines.append("### Copilot Advisory")
           lines.append(advisory.read_text(encoding="utf-8", errors="replace"))
-
       Path("comment.md").write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
-      PY
-    # Report: post comment to merge request using GitLab API
-    - echo "Report - Posting validation summary to merge request..."
-    - python3 - <<'PY'
-      import json
-      from pathlib import Path
-
-      comment = Path("comment.md").read_text(encoding="utf-8", errors="replace")
-      Path("comment.json").write_text(json.dumps({"body": comment}), encoding="utf-8")
-      PY
+      SCRIPT
+    - python3 /tmp/gen_comment.py
     - |
       curl --request POST \
         --header "JOB-TOKEN: $CI_JOB_TOKEN" \
         --header "Content-Type: application/json" \
-        --data @comment.json \
+        --data "{\"body\": $(jq -Rs . < comment.md)}" \
         "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" || true
   artifacts:
     paths:
       - comment.md
-      - comment.json
       - $REPORTS_DIR/
     expire_in: 14 days
     when: always
