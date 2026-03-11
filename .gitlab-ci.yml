@@ -53,27 +53,10 @@ A0_intake:
     # Filter fixture files so adversarial test payloads never reach the model
     - grep -v 'station-workflows/fixtures/' diff_raw.txt > diff.txt || cp diff_raw.txt diff.txt
     # Sanitize MR title: NFKC-normalize unicode (defeats encoding tricks), strip controls, cap at 200 chars
-    - |
-      SAFE_TITLE=$(printf '%s' "${CI_MERGE_REQUEST_TITLE}" | python3 -c "
-import sys, unicodedata
-t = sys.stdin.read()
-t = unicodedata.normalize('NFKC', t)
-t = ''.join(ch for ch in t if unicodedata.category(ch) not in ('Cc', 'Cf'))
-sys.stdout.write(t[:200])
-")
+    - SAFE_TITLE=$(printf '%s' "${CI_MERGE_REQUEST_TITLE}" | python3 "${CI_PROJECT_DIR}/station-workflows/scripts/sanitize_title.py")
     # Block injection patterns — Python regex handles whitespace/case variants missed by grep
     - |
-      if python3 -c '
-import sys, re
-t = sys.argv[1].lower()
-patterns = [
-    r"system\s*:", r"ignore\s+(previous|above|all)", r"you\s+are\s+now",
-    r"override\s*:", r"jailbreak", r"disregard\s+(previous|all)",
-    r"forget\s+(previous|all|everything)", r"\bact\s+as\b",
-    r"pretend\s+(you|to)", r"new\s+instructions?",
-]
-sys.exit(0 if any(re.search(p, t) for p in patterns) else 1)
-' "$SAFE_TITLE"; then
+      if python3 "${CI_PROJECT_DIR}/station-workflows/scripts/check_injection.py" "$SAFE_TITLE"; then
         echo "ERROR: MR title matches a prompt-injection pattern." >&2
         exit 1
       fi
