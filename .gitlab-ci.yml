@@ -54,7 +54,7 @@ A0_intake:
     - grep -v 'station-workflows/fixtures/' diff_raw.txt > diff.txt || cp diff_raw.txt diff.txt
     # Sanitize MR title: NFKC-normalize unicode (defeats encoding tricks), strip controls, cap at 200 chars
     - SAFE_TITLE=$(printf '%s' "${CI_MERGE_REQUEST_TITLE}" | python3 "${CI_PROJECT_DIR}/station-workflows/scripts/sanitize_title.py")
-    # Block injection patterns — Python regex handles whitespace/case variants missed by grep
+    # Block injection patterns -- Python regex handles whitespace/case variants missed by grep
     - |
       if python3 "${CI_PROJECT_DIR}/station-workflows/scripts/check_injection.py" "$SAFE_TITLE"; then
         echo "ERROR: MR title matches a prompt-injection pattern." >&2
@@ -84,7 +84,7 @@ A0_intake:
     exclude: [ ".gh_config/**" ]
 
 # =====================================================
-# A1–A4: Policy, Security, Injection, Sandbox stubs
+# A1-A4: Policy, Security, Injection, Sandbox stubs
 # Replace each echo/stub with a real copilot --autopilot
 # call wired to the matching station prompt file.
 # =====================================================
@@ -94,7 +94,7 @@ A1_policy_validation:
   stage: validation
   needs: ["A0_intake"]
   script:
-    - echo "STUB: A1 Policy Validation — implement with station-workflows/stations/A1-policy-validation.prompt.md"
+    - echo "STUB - A1 Policy Validation - implement with station-workflows/stations/A1-policy-validation.prompt.md"
     - echo '{"status":"STUB","station":"A1"}' > "${STATION_OUT}/a1_policy.json"
   artifacts:
     paths: [ "${STATION_OUT}/a1_policy.json" ]
@@ -105,7 +105,7 @@ A2_security_static:
   stage: security
   needs: ["A1_policy_validation"]
   script:
-    - echo "STUB: A2 Security Static Analysis — implement with station-workflows/stations/A2-security-static.prompt.md"
+    - echo "STUB - A2 Security Static Analysis - implement with station-workflows/stations/A2-security-static.prompt.md"
     - echo '{"status":"STUB","station":"A2"}' > "${STATION_OUT}/a2_security.json"
   artifacts:
     paths: [ "${STATION_OUT}/a2_security.json" ]
@@ -116,7 +116,7 @@ A3_prompt_injection:
   stage: security
   needs: ["A1_policy_validation"]
   script:
-    - echo "STUB: A3 Prompt Injection Check — implement with station-workflows/stations/A3-prompt-injection.prompt.md"
+    - echo "STUB - A3 Prompt Injection Check - implement with station-workflows/stations/A3-prompt-injection.prompt.md"
     - echo '{"status":"STUB","station":"A3"}' > "${STATION_OUT}/a3_injection.json"
   artifacts:
     paths: [ "${STATION_OUT}/a3_injection.json" ]
@@ -127,7 +127,7 @@ A4_sandbox_simulation:
   stage: security
   needs: ["A2_security_static", "A3_prompt_injection"]
   script:
-    - echo "STUB: A4 Sandbox Simulation — implement with station-workflows/stations/A4-sandbox-simulation.prompt.md"
+    - echo "STUB - A4 Sandbox Simulation - implement with station-workflows/stations/A4-sandbox-simulation.prompt.md"
     - echo '{"status":"STUB","station":"A4"}' > "${STATION_OUT}/a4_sandbox.json"
   artifacts:
     paths: [ "${STATION_OUT}/a4_sandbox.json" ]
