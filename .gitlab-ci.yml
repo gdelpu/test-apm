@@ -1,0 +1,206 @@
+# Run: merge request validation pipeline
+# This pipeline executes PR-check validators and posts results as MR comments
+
+stages:
+  - validate
+  - report
+
+variables:
+  # Configure: enable optional Copilot CLI advisory mode (set via CI/CD Variables in GitLab)
+  ENABLE_COPILOT_CLI: "false"
+  # Configure: paths to validator scripts
+  VALIDATORS_DIR: "default/skills/ai-backbone-pr-checks/tools/scripts"
+  REPORTS_DIR: "reports"
+  # Configure: full git history for reliable diff against MR target branch
+  GIT_DEPTH: "0"
+
+# Template: base job configuration for merge requests
+.mr_only:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# Job: PR Auto Validator checks frontmatter, naming, links, and workflow hygiene
+validate:pr-auto:
+  extends: .mr_only
+  stage: validate
+  image: python:3.11
+  before_script:
+    - apt-get update && apt-get install -y git
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - pip install PyYAML
+  script:
+    # Collect: changed files from merge request
+    - echo "Collect: Validating changed files in merge request..."
+    # Run: PR auto validator
+    - mkdir -p $REPORTS_DIR
+    - python $VALIDATORS_DIR/pr_auto_validator.py
+      --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+      --head-ref $CI_COMMIT_SHA
+      --out $REPORTS_DIR/pr-auto-validator.json
+  artifacts:
+    paths:
+      - $REPORTS_DIR/pr-auto-validator.json
+    expire_in: 14 days
+    when: always
+  allow_failure: false
+
+# Job: YAML Workflow Linter validates workflow structure and safety
+validate:yaml-workflows:
+  extends: .mr_only
+  stage: validate
+  image: python:3.11
+  before_script:
+    - pip install PyYAML
+  script:
+    # Collect: workflow files across root, shared default, and client scopes
+    - echo "Collect: Scanning workflow files..."
+    # Run: YAML workflow linter
+    - mkdir -p $REPORTS_DIR
+    - python $VALIDATORS_DIR/yaml_workflow_linter.py --root . --out $REPORTS_DIR/yaml-workflow-linter.json
+  artifacts:
+    paths:
+      - $REPORTS_DIR/yaml-workflow-linter.json
+    expire_in: 14 days
+    when: always
+  allow_failure: false
+
+# Job: Test Gap Detector advisory detects process documentation gaps
+validate:test-gaps:
+  extends: .mr_only
+  stage: validate
+  image: python:3.11
+  before_script:
+    - apt-get update && apt-get install -y git
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - pip install PyYAML
+  script:
+    # Collect: changed files from merge request
+    - echo "Collect: Detecting process documentation gaps..."
+    # Run: test gap detector
+    - mkdir -p $REPORTS_DIR
+    - python $VALIDATORS_DIR/test_gap_detector.py
+      --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+      --head-ref $CI_COMMIT_SHA
+      --out $REPORTS_DIR/test-gap-detector.json
+  artifacts:
+    paths:
+      - $REPORTS_DIR/test-gap-detector.json
+    expire_in: 14 days
+    when: always
+  allow_failure: true
+
+# Job: Copilot CLI Advisory (optional, requires GitHub Copilot CLI extension setup)
+validate:copilot-advisory:
+  extends: .mr_only
+  stage: validate
+  image: python:3.11
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $ENABLE_COPILOT_CLI == "true"'
+  script:
+    # Configure: minimal advisory using validator outputs only
+    - echo "Detect: Copilot advisory mode enabled (GitHub CLI required)..."
+    - mkdir -p $REPORTS_DIR
+    - |
+      echo "# Copilot Advisory Summary" > "$REPORTS_DIR/copilot-advisory.md"
+      echo "" >> "$REPORTS_DIR/copilot-advisory.md"
+      echo "This feature requires GitHub Copilot CLI extension." >> "$REPORTS_DIR/copilot-advisory.md"
+      echo "Configure COPILOT_CI_TOKEN as a CI/CD variable to enable." >> "$REPORTS_DIR/copilot-advisory.md"
+      echo "" >> "$REPORTS_DIR/copilot-advisory.md"
+      echo "Report: Advanced advisory features available via external integrations." >> "$REPORTS_DIR/copilot-advisory.md"
+  artifacts:
+    paths:
+      - $REPORTS_DIR/copilot-advisory.md
+    expire_in: 14 days
+    when: always
+  allow_failure: true
+
+# Job: Aggregate reports and post merge request comment
+report:summary:
+  extends: .mr_only
+  stage: report
+  image: python:3.11
+  dependencies:
+    - validate:pr-auto
+    - validate:yaml-workflows
+    - validate:test-gaps
+  script:
+    - apt-get update && apt-get install -y curl
+    # Collect: validator JSON reports
+    - echo "Collect: Aggregating validator reports..."
+    # Parse: read JSON summaries and construct comment
+    - |
+      {
+        echo "## PR Validation Summary"
+        echo ""
+        echo "### PR Auto Validator"
+        if [ -f "reports/pr-auto-validator.json" ]; then
+          python3 -c "
+import json
+r = json.load(open('reports/pr-auto-validator.json'))
+print(f\"**Status:** {r.get('status', 'unknown').upper()}\")
+print()
+print('Summary:')
+for s in r.get('summary', []):
+  print(f'- {s}')
+          "
+        else
+          echo "⚠️ Report not generated"
+        fi
+        echo ""
+        echo "### YAML Workflow Linter"
+        if [ -f "reports/yaml-workflow-linter.json" ]; then
+          python3 -c "
+import json
+r = json.load(open('reports/yaml-workflow-linter.json'))
+print(f\"**Status:** {r.get('status', 'unknown').upper()}\")
+print()
+print('Summary:')
+for s in r.get('summary', []):
+  print(f'- {s}')
+          "
+        else
+          echo "⚠️ Report not generated"
+        fi
+        echo ""
+        echo "### Test Gap Detector"
+        if [ -f "reports/test-gap-detector.json" ]; then
+          python3 -c "
+import json
+r = json.load(open('reports/test-gap-detector.json'))
+print(f\"**Status:** {r.get('status', 'unknown').upper()}\")
+print()
+print('Summary:')
+for s in r.get('summary', []):
+  print(f'- {s}')
+          "
+        else
+          echo "⚠️ Report not generated"
+        fi
+        if [ -f "reports/copilot-advisory.md" ]; then
+          echo ""
+          echo "### Copilot Advisory"
+          cat "reports/copilot-advisory.md"
+        fi
+      } > comment.md
+    # Report: post comment to merge request using GitLab API
+    - echo "Report: Posting validation summary to merge request..."
+    - python3 - <<'PY'
+import json
+from pathlib import Path
+
+comment = Path("comment.md").read_text(encoding="utf-8", errors="replace")
+Path("comment.json").write_text(json.dumps({"body": comment}), encoding="utf-8")
+PY
+    - |
+      curl --request POST \
+        --header "JOB-TOKEN: $CI_JOB_TOKEN" \
+        --header "Content-Type: application/json" \
+        --data @comment.json \
+        "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" || true
+  artifacts:
+    paths:
+      - comment.md
+      - comment.json
+      - $REPORTS_DIR/
+    expire_in: 14 days
+    when: always
