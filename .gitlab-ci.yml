@@ -114,7 +114,8 @@ validate:copilot-advisory:
         echo ""
         echo "Copilot advisory pending execution."
       } > "$REPORTS_DIR/copilot-advisory.md"
-    - echo '{"reports": []}' > "$REPORTS_DIR/copilot-input.json"
+    - |
+      echo '{"reports": []}' > "$REPORTS_DIR/copilot-input.json"
     - |
       if [ -z "$COPILOT_CI_TOKEN" ]; then
         {
