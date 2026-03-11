@@ -33,10 +33,7 @@ validate:pr-auto:
     - echo "Collect: Validating changed files in merge request..."
     # Run: PR auto validator
     - mkdir -p $REPORTS_DIR
-    - python $VALIDATORS_DIR/pr_auto_validator.py
-      --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-      --head-ref $CI_COMMIT_SHA
-      --out $REPORTS_DIR/pr-auto-validator.json
+    - python $VALIDATORS_DIR/pr_auto_validator.py --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --head-ref $CI_COMMIT_SHA --out $REPORTS_DIR/pr-auto-validator.json
   artifacts:
     paths:
       - $REPORTS_DIR/pr-auto-validator.json
@@ -78,10 +75,7 @@ validate:test-gaps:
     - echo "Collect: Detecting process documentation gaps..."
     # Run: test gap detector
     - mkdir -p $REPORTS_DIR
-    - python $VALIDATORS_DIR/test_gap_detector.py
-      --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-      --head-ref $CI_COMMIT_SHA
-      --out $REPORTS_DIR/test-gap-detector.json
+    - python $VALIDATORS_DIR/test_gap_detector.py --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --head-ref $CI_COMMIT_SHA --out $REPORTS_DIR/test-gap-detector.json
   artifacts:
     paths:
       - $REPORTS_DIR/test-gap-detector.json
