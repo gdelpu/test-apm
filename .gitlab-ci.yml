@@ -7,6 +7,10 @@ variables:
   GIT_DEPTH: "0"
   # Set a clean config directory for gh to avoid cache conflicts
   GH_CONFIG_DIR: "${CI_PROJECT_DIR}/.gh_config"
+  # Max diff lines sent to the LLM (prevents runaway API cost on large MRs)
+  COPILOT_MAX_DIFF_LINES: "2000"
+  # Copilot CLI version pin (supply-chain safety)
+  COPILOT_CLI_VERSION: "1.0.8"
 
 stages:
   - setup
@@ -24,13 +28,12 @@ default:
   before_script:
     - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
 
-    # 1. Install GitHub Copilot CLI via npm
-    # See: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli-agents/overview
-    - npm install -g @github/copilot
+    # 1. Install GitHub Copilot CLI via npm (pinned version for supply-chain safety)
+    - npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
 
-    # 2. Reference versioned JSON extractor from repo (avoids inline maintenance surface;
-    #    detects and warns on multi-object model responses instead of silently truncating)
+    # 2. Reference versioned scripts from repo
     - EXTRACT_JSON="${CI_PROJECT_DIR}/station-workflows/scripts/extract_json.py"
+    - HMAC_TOOL="${CI_PROJECT_DIR}/station-workflows/scripts/hmac_artifact.py"
     - |
       if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
         git fetch --unshallow
@@ -52,17 +55,23 @@ A0_intake:
     - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff_raw.txt
     # Filter fixture files so adversarial test payloads never reach the model
     - grep -v 'station-workflows/fixtures/' diff_raw.txt > diff.txt || cp diff_raw.txt diff.txt
-    # Sanitize MR title: NFKC-normalize unicode (defeats encoding tricks), strip controls, cap at 200 chars
+    # Cap diff size to prevent runaway API cost
+    - |
+      DIFF_LINES=$(wc -l < diff.txt)
+      if [ "$DIFF_LINES" -gt "${COPILOT_MAX_DIFF_LINES}" ]; then
+        echo "WARNING: diff has ${DIFF_LINES} lines; truncating to ${COPILOT_MAX_DIFF_LINES}." >&2
+        head -n "${COPILOT_MAX_DIFF_LINES}" diff.txt > diff_capped.txt && mv diff_capped.txt diff.txt
+      fi
+    # Sanitize MR title
     - SAFE_TITLE=$(printf '%s' "${CI_MERGE_REQUEST_TITLE}" | python3 "${CI_PROJECT_DIR}/station-workflows/scripts/sanitize_title.py")
-    # Block injection patterns -- Python regex handles whitespace/case variants missed by grep
+    # Block injection patterns in title and description
     - |
       if python3 "${CI_PROJECT_DIR}/station-workflows/scripts/check_injection.py" "$SAFE_TITLE"; then
         echo "ERROR: MR title matches a prompt-injection pattern." >&2
         exit 1
       fi
     - |
-      # --yolo removed: prevents the agent from executing arbitrary tools inside CI
-      copilot --autopilot -p "
+      timeout 300 copilot --autopilot -p "
       SYSTEM: You are a JSON-only API.
       STRICT: Do not include markdown blocks (like \`\`\`json). Return raw text.
       GOAL: Analyze MR ${CI_MERGE_REQUEST_IID} ('${SAFE_TITLE}').
@@ -93,9 +102,21 @@ A1_policy_validation:
   extends: .station_base
   stage: validation
   needs: ["A0_intake"]
+  resource_group: copilot-api-${CI_PROJECT_ID}
   script:
-    - echo "STUB - A1 Policy Validation - implement with station-workflows/stations/A1-policy-validation.prompt.md"
-    - echo '{"status":"STUB","station":"A1"}' > "${STATION_OUT}/a1_policy.json"
+    - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/A1-policy-validation.prompt.md")
+      timeout 300 copilot --autopilot -p "
+      ${PROMPT}
+      WORK_ORDER: $(cat ${STATION_OUT}/work_order.json)
+      CHANGED_FILES: $(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} ${CI_COMMIT_SHA})
+      OUTPUT FORMAT: raw JSON only, no markdown fences.
+      " > "${STATION_OUT}/a1_raw.json"
+    - |
+      if ! python3 "$EXTRACT_JSON" < "${STATION_OUT}/a1_raw.json" > "${STATION_OUT}/a1_policy.json"; then
+        echo '{"station":"A1","status":"fail","findings":[],"summary":"JSON extraction failed"}' > "${STATION_OUT}/a1_policy.json"
+      fi
+    - jq . "${STATION_OUT}/a1_policy.json"
   artifacts:
     paths: [ "${STATION_OUT}/a1_policy.json" ]
     exclude: [ ".gh_config/**" ]
@@ -104,9 +125,24 @@ A2_security_static:
   extends: .station_base
   stage: security
   needs: ["A1_policy_validation"]
+  resource_group: copilot-api-${CI_PROJECT_ID}
   script:
-    - echo "STUB - A2 Security Static Analysis - implement with station-workflows/stations/A2-security-static.prompt.md"
-    - echo '{"status":"STUB","station":"A2"}' > "${STATION_OUT}/a2_security.json"
+    - git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA > "${STATION_OUT}/full_diff.patch"
+    - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/A2-security-static.prompt.md")
+      DIFF_CONTENT=$(head -n "${COPILOT_MAX_DIFF_LINES}" "${STATION_OUT}/full_diff.patch")
+      timeout 300 copilot --autopilot -p "
+      ${PROMPT}
+      WORK_ORDER: $(cat ${STATION_OUT}/work_order.json)
+      DIFF:
+      ${DIFF_CONTENT}
+      OUTPUT FORMAT: raw JSON only, no markdown fences.
+      " > "${STATION_OUT}/a2_raw.json"
+    - |
+      if ! python3 "$EXTRACT_JSON" < "${STATION_OUT}/a2_raw.json" > "${STATION_OUT}/a2_security.json"; then
+        echo '{"station":"A2","status":"fail","findings":[],"summary":"JSON extraction failed"}' > "${STATION_OUT}/a2_security.json"
+      fi
+    - jq . "${STATION_OUT}/a2_security.json"
   artifacts:
     paths: [ "${STATION_OUT}/a2_security.json" ]
     exclude: [ ".gh_config/**" ]
@@ -115,9 +151,21 @@ A3_prompt_injection:
   extends: .station_base
   stage: security
   needs: ["A1_policy_validation"]
+  resource_group: copilot-api-${CI_PROJECT_ID}
   script:
-    - echo "STUB - A3 Prompt Injection Check - implement with station-workflows/stations/A3-prompt-injection.prompt.md"
-    - echo '{"status":"STUB","station":"A3"}' > "${STATION_OUT}/a3_injection.json"
+    - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/A3-prompt-injection.prompt.md")
+      timeout 300 copilot --autopilot -p "
+      ${PROMPT}
+      WORK_ORDER: $(cat ${STATION_OUT}/work_order.json)
+      CHANGED_FILES: $(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} ${CI_COMMIT_SHA})
+      OUTPUT FORMAT: raw JSON only, no markdown fences.
+      " > "${STATION_OUT}/a3_raw.json"
+    - |
+      if ! python3 "$EXTRACT_JSON" < "${STATION_OUT}/a3_raw.json" > "${STATION_OUT}/a3_injection.json"; then
+        echo '{"station":"A3","status":"fail","findings":[],"summary":"JSON extraction failed"}' > "${STATION_OUT}/a3_injection.json"
+      fi
+    - jq . "${STATION_OUT}/a3_injection.json"
   artifacts:
     paths: [ "${STATION_OUT}/a3_injection.json" ]
     exclude: [ ".gh_config/**" ]
@@ -126,9 +174,26 @@ A4_sandbox_simulation:
   extends: .station_base
   stage: security
   needs: ["A2_security_static", "A3_prompt_injection"]
+  resource_group: copilot-api-${CI_PROJECT_ID}
   script:
-    - echo "STUB - A4 Sandbox Simulation - implement with station-workflows/stations/A4-sandbox-simulation.prompt.md"
-    - echo '{"status":"STUB","station":"A4"}' > "${STATION_OUT}/a4_sandbox.json"
+    - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/A4-sandbox-simulation.prompt.md")
+      FIXTURES_MAL=$(cat "${CI_PROJECT_DIR}/station-workflows/fixtures/malicious-inputs.json")
+      FIXTURES_INJ=$(cat "${CI_PROJECT_DIR}/station-workflows/fixtures/prompt-injection-payloads.json")
+      timeout 300 copilot --autopilot -p "
+      ${PROMPT}
+      WORK_ORDER: $(cat ${STATION_OUT}/work_order.json)
+      A3_REPORT: $(cat ${STATION_OUT}/a3_injection.json)
+      MALICIOUS_INPUTS: ${FIXTURES_MAL}
+      INJECTION_PAYLOADS: ${FIXTURES_INJ}
+      CHANGED_FILES: $(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} ${CI_COMMIT_SHA})
+      OUTPUT FORMAT: raw JSON only, no markdown fences.
+      " > "${STATION_OUT}/a4_raw.json"
+    - |
+      if ! python3 "$EXTRACT_JSON" < "${STATION_OUT}/a4_raw.json" > "${STATION_OUT}/a4_sandbox.json"; then
+        echo '{"station":"A4","status":"fail","findings":[],"summary":"JSON extraction failed"}' > "${STATION_OUT}/a4_sandbox.json"
+      fi
+    - jq . "${STATION_OUT}/a4_sandbox.json"
   artifacts:
     paths: [ "${STATION_OUT}/a4_sandbox.json" ]
     exclude: [ ".gh_config/**" ]
@@ -144,13 +209,13 @@ A5_gate:
   needs: ["A0_intake", "A1_policy_validation", "A2_security_static", "A3_prompt_injection", "A4_sandbox_simulation"]
   script:
     - |
-      # --yolo removed: prevents the agent from executing arbitrary tools inside CI
-      copilot --autopilot -p "
+      # Align with A5-policy-gate.agent.md schema: decision = APPROVE | BLOCK | REVIEW
+      timeout 300 copilot --autopilot -p "
       SYSTEM: You are a gatekeeper. Return raw JSON only.
       INPUT: $(cat ${STATION_OUT}/work_order.json)
       DECISION: Analyze input and decide if safe to proceed.
       SCHEMA: {
-        'status': 'PASS' | 'BLOCK',
+        'decision': 'APPROVE' | 'BLOCK' | 'REVIEW',
         'reason': 'string'
       }
       " > ${STATION_OUT}/gate_raw.json
@@ -160,20 +225,21 @@ A5_gate:
         echo "ERROR: Failed to extract gate decision JSON. Failing safe." >&2
         exit 1
       fi
-    # Fail-closed: only an explicit 'PASS' allows the pipeline to proceed
+    # Fail-closed: only an explicit 'APPROVE' allows the pipeline to proceed;
+    # 'REVIEW' requires human intervention and is treated as a block in CI
     - |
-      GATE_STATUS=$(jq -r '.status // "UNKNOWN"' "${STATION_OUT}/gate_decision.json" 2>/dev/null || echo "UNKNOWN")
-      if [ "$GATE_STATUS" != "PASS" ]; then
-        echo "Decision: BLOCKED (status=${GATE_STATUS})" >&2
+      GATE_DECISION=$(jq -r '.decision // "UNKNOWN"' "${STATION_OUT}/gate_decision.json" 2>/dev/null || echo "UNKNOWN")
+      if [ "$GATE_DECISION" != "APPROVE" ]; then
+        echo "Decision: BLOCKED (decision=${GATE_DECISION})" >&2
         exit 1
       fi
-      echo "Decision: PASS"
-    # Sign the decision artifact so A6 can detect accidental corruption or misconfiguration
-    - sha256sum "${STATION_OUT}/gate_decision.json" > "${STATION_OUT}/gate_decision.json.sha256"
+      echo "Decision: APPROVE"
+    # Sign the decision artifact with HMAC (or SHA256 fallback)
+    - python3 "$HMAC_TOOL" sign "${STATION_OUT}/gate_decision.json"
   artifacts:
     paths:
       - "${STATION_OUT}/gate_decision.json"
-      - "${STATION_OUT}/gate_decision.json.sha256"
+      - "${STATION_OUT}/gate_decision.json.sig"
     exclude: [ ".gh_config/**" ]
 
 # =====================================================
@@ -189,6 +255,7 @@ A6_update:
   before_script:
     - apt-get update -qq && apt-get install -y -qq curl jq python3
   script:
+    - HMAC_TOOL="${CI_PROJECT_DIR}/station-workflows/scripts/hmac_artifact.py"
     - |
       if [ -z "${GITLAB_TOKEN}" ]; then
         echo "GITLAB_TOKEN is not set; skipping MR note." >&2
@@ -198,17 +265,10 @@ A6_update:
         echo "No gate decision file found; skipping MR note." >&2
         exit 0
       fi
-      # Verify artifact integrity before reading (detects accidental corruption / pipeline misconfiguration)
-      if [ -f "${STATION_OUT}/gate_decision.json.sha256" ]; then
-        if ! sha256sum -c "${STATION_OUT}/gate_decision.json.sha256" --status; then
-          echo "ERROR: gate_decision.json SHA256 mismatch; refusing to post." >&2
-          exit 1
-        fi
-      else
-        echo "WARNING: No SHA256 checksum found for gate_decision.json; skipping integrity check." >&2
-      fi
-      STATUS=$(jq -r '.status' "${STATION_OUT}/gate_decision.json")
-      # Cap reason at 500 chars and HTML-escape to prevent note injection via model output
+      # Verify artifact integrity (HMAC or SHA256 fallback)
+      python3 "$HMAC_TOOL" verify "${STATION_OUT}/gate_decision.json"
+      STATUS=$(jq -r '.decision' "${STATION_OUT}/gate_decision.json")
+      # Cap reason at 500 chars and HTML-escape to prevent note injection
       REASON_SAFE=$(jq -r '.reason' "${STATION_OUT}/gate_decision.json" | \
         python3 -c "import sys, html; print(html.escape(sys.stdin.read()[:500]), end='')")
       PAYLOAD=$(jq -n --arg s "$STATUS" --arg r "$REASON_SAFE" '{"body": "### AI Gate: \($s)\n**Reason:** \($r)"}')
