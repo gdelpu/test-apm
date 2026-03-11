@@ -98,7 +98,8 @@ def validate_file(path_str: str, blocking: List[str], warnings: List[str]) -> No
                 blocking.append(f"{path_str}: frontmatter must include 'name' and 'description'")
 
     # Detect: lightweight workflow hardening gaps.
-    if path.suffix in (".yml", ".yaml") and any(marker in f"/{path_str.replace('\\\\', '/')}/" for marker in WORKFLOW_DIR_MARKERS):
+    normalized_path = f"/{path_str.replace(chr(92), '/')}/"
+    if path.suffix in (".yml", ".yaml") and any(marker in normalized_path for marker in WORKFLOW_DIR_MARKERS):
         text = path.read_text(encoding="utf-8", errors="replace")
         if "permissions:" not in text:
             warnings.append(f"{path_str}: missing explicit workflow permissions")
