@@ -1,0 +1,192 @@
+name: AI Backbone PR Checks
+
+on:
+  # Run: active PR updates for shared/default/client assets.
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "default/**"
+      - "clients/**"
+      - ".github/**"
+      - "README.md"
+
+permissions:
+  # Configure: least-privilege access for read + PR comment posting.
+  contents: read
+  pull-requests: write
+
+env:
+  # Configure: keep Copilot CLI optional to preserve deterministic baseline checks.
+  ENABLE_COPILOT_CLI: ${{ vars.ENABLE_COPILOT_CLI || 'false' }}
+
+concurrency:
+  # Configure: cancel outdated runs for the same PR.
+  group: ai-backbone-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # Configure: full history for diff-based checks.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Configure: Python runtime for validator scripts.
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Install: minimal dependency set for YAML parsing.
+      - name: Install validator dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      # Install: GitHub CLI when Copilot CLI mode is enabled.
+      - name: Install GitHub CLI
+        if: env.ENABLE_COPILOT_CLI == 'true'
+        run: |
+          if command -v gh >/dev/null 2>&1; then
+            gh --version
+            exit 0
+          fi
+
+          sudo apt-get update
+          sudo apt-get install -y gh
+          gh --version
+
+      # Configure: Copilot CLI extension for advisory AI output in CI.
+      - name: Install Copilot CLI extension
+        if: env.ENABLE_COPILOT_CLI == 'true'
+        run: gh extension install github/gh-copilot --force
+
+      # Configure: non-interactive authentication model approved by security.
+      - name: Authenticate GitHub CLI
+        if: env.ENABLE_COPILOT_CLI == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.COPILOT_CI_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GH_TOKEN" | gh auth login --with-token
+          gh auth status
+
+      # Validate: deterministic policy checks on changed PR files.
+      - name: Run PR Auto Validator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python default/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py \
+            --repo "$GITHUB_REPOSITORY" \
+            --pr "$PR_NUMBER" \
+            --out reports/pr-auto-validator.json
+
+      # Validate: structural and safety lint for workflow YAML files.
+      - name: Run Workflow YAML Linter
+        run: |
+          python default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py \
+            --root . \
+            --out reports/yaml-workflow-linter.json
+
+      # Detect: advisory gaps for missing companion updates.
+      - name: Run Test Gap Detector
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python default/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py \
+            --repo "$GITHUB_REPOSITORY" \
+            --pr "$PR_NUMBER" \
+            --out reports/test-gap-detector.json
+
+      # Detect: optional AI summary for changed files (advisory, non-blocking).
+      - name: Run Copilot CLI Advisory Summary
+        if: env.ENABLE_COPILOT_CLI == 'true'
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = Path("reports/pr-auto-validator.json")
+          out = Path("reports/copilot-prompt.txt")
+          if report.exists():
+              data = json.loads(report.read_text(encoding="utf-8"))
+              files = data.get("checked_files", [])[:40]
+          else:
+              files = []
+
+          lines = [
+              "Summarize SDLC risk for this PR in up to 8 bullets.",
+              "Classify risk as low/medium/high with one sentence rationale.",
+              "Recommend up to 5 deterministic checks or fixes.",
+              "Changed files:",
+          ]
+          lines.extend(files or ["(no changed files detected)"])
+          out.write_text("\n".join(lines), encoding="utf-8")
+          PY
+
+          gh copilot explain "$(cat reports/copilot-prompt.txt)" > reports/copilot-advisory.md
+
+      # Report: persist JSON reports for traceability and debugging.
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-backbone-reports
+          path: reports/
+          retention-days: 14
+
+      # Report: post condensed status summary back to the PR.
+      - name: Summarize and comment on PR
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python - <<'PY'
+          # Report: aggregate JSON reports into one PR comment and fail on any failed report.
+          import json
+          import os
+          import pathlib
+          import subprocess
+
+          report_paths = [
+              ("PR Auto Validator", "reports/pr-auto-validator.json"),
+              ("YAML Workflow Linter", "reports/yaml-workflow-linter.json"),
+              ("Test Gap Detector", "reports/test-gap-detector.json"),
+          ]
+
+          lines = ["## AI Backbone Checks", ""]
+          overall_fail = False
+
+          for title, p in report_paths:
+              path = pathlib.Path(p)
+              if not path.exists():
+                  lines.append(f"- {title}: unavailable")
+                  continue
+              data = json.loads(path.read_text(encoding="utf-8"))
+              status = data.get("status", "unknown")
+              if status == "fail":
+                  overall_fail = True
+              lines.append(f"- {title}: {status}")
+              for item in data.get("summary", [])[:4]:
+                  lines.append(f"  - {item}")
+
+          lines.append("")
+          lines.append("See workflow artifacts for full JSON reports.")
+
+          body = "\n".join(lines)
+          pr_number = os.environ["PR_NUMBER"]
+          subprocess.run(["gh", "pr", "comment", pr_number, "--body", body], check=False)
+
+          if overall_fail:
+              raise SystemExit(1)
+          PY
