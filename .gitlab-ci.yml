@@ -129,59 +129,38 @@ report:summary:
     - echo "Collect: Aggregating validator reports..."
     # Parse: read JSON summaries and construct comment
     - |
-      {
-        echo "## PR Validation Summary"
-        echo ""
-        echo "### PR Auto Validator"
-        if [ -f "reports/pr-auto-validator.json" ]; then
-          python3 -c "
-import json
-r = json.load(open('reports/pr-auto-validator.json'))
-print(f\"**Status:** {r.get('status', 'unknown').upper()}\")
-print()
-print('Summary:')
-for s in r.get('summary', []):
-  print(f'- {s}')
-          "
-        else
-          echo "⚠️ Report not generated"
-        fi
-        echo ""
-        echo "### YAML Workflow Linter"
-        if [ -f "reports/yaml-workflow-linter.json" ]; then
-          python3 -c "
-import json
-r = json.load(open('reports/yaml-workflow-linter.json'))
-print(f\"**Status:** {r.get('status', 'unknown').upper()}\")
-print()
-print('Summary:')
-for s in r.get('summary', []):
-  print(f'- {s}')
-          "
-        else
-          echo "⚠️ Report not generated"
-        fi
-        echo ""
-        echo "### Test Gap Detector"
-        if [ -f "reports/test-gap-detector.json" ]; then
-          python3 -c "
-import json
-r = json.load(open('reports/test-gap-detector.json'))
-print(f\"**Status:** {r.get('status', 'unknown').upper()}\")
-print()
-print('Summary:')
-for s in r.get('summary', []):
-  print(f'- {s}')
-          "
-        else
-          echo "⚠️ Report not generated"
-        fi
-        if [ -f "reports/copilot-advisory.md" ]; then
-          echo ""
-          echo "### Copilot Advisory"
-          cat "reports/copilot-advisory.md"
-        fi
-      } > comment.md
+      python3 - <<'PY'
+      import json
+      from pathlib import Path
+
+      reports = [
+          ("PR Auto Validator", Path("reports/pr-auto-validator.json")),
+          ("YAML Workflow Linter", Path("reports/yaml-workflow-linter.json")),
+          ("Test Gap Detector", Path("reports/test-gap-detector.json")),
+      ]
+
+      lines = ["## PR Validation Summary", ""]
+
+      for title, path in reports:
+          lines.append(f"### {title}")
+          if path.exists():
+              data = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+              lines.append(f"**Status:** {str(data.get('status', 'unknown')).upper()}")
+              lines.append("")
+              lines.append("Summary:")
+              for item in data.get("summary", []):
+                  lines.append(f"- {item}")
+          else:
+              lines.append("Report not generated")
+          lines.append("")
+
+      advisory = Path("reports/copilot-advisory.md")
+      if advisory.exists():
+          lines.append("### Copilot Advisory")
+          lines.append(advisory.read_text(encoding="utf-8", errors="replace"))
+
+      Path("comment.md").write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
+      PY
     # Report: post comment to merge request using GitLab API
     - echo "Report: Posting validation summary to merge request..."
     - |
