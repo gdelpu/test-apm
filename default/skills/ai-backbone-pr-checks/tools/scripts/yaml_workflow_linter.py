@@ -43,10 +43,13 @@ def lint_workflow(path: Path, repo_root: Path) -> Tuple[List[str], List[str]]:
     if not isinstance(data, dict):
         return [f"{rel}: root document must be an object"], []
 
+    # Detect: YAML 1.1 parsers may coerce key 'on' into boolean True.
+    has_on_key = ("on" in data) or (True in data)
+
     # Validate: mandatory top-level workflow fields.
     if "name" not in data:
         blocking.append(f"{rel}: missing top-level 'name'")
-    if "on" not in data:
+    if not has_on_key:
         blocking.append(f"{rel}: missing top-level 'on'")
 
     # Validate: jobs and steps shape to catch broken workflow definitions.
