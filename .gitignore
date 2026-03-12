@@ -24,6 +24,6 @@ Thumbs.db
 
 .venv/
 
-reports/
+reports/*
 check-gh-auth.ps1
-run-pipeline-podman.ps1
+diff.txt

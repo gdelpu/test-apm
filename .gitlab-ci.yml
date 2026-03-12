@@ -137,20 +137,19 @@ validate:ai-intake:
     - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
 
     - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/A0-intake.prompt.md")
+
       timeout 300 copilot -s --output-format json \
         --available-tools \
         --no-ask-user \
         --add-dir "${CI_PROJECT_DIR}" -p "
-      SYSTEM: You are a JSON-only API. Do NOT use tools. Respond with ONLY a JSON object.
-      GOAL: Analyze MR ${CI_MERGE_REQUEST_IID}.
-      FILES: $(cat diff.txt)
+      ${PROMPT}
 
-      Respond with EXACTLY this JSON schema, nothing else:
-      {
-        \"mr_id\": ${CI_MERGE_REQUEST_IID},
-        \"priority\": \"P0\" | \"P1\" | \"P2\",
-        \"risks\": [\"string\", ...]
-      }
+      MR_IID: ${CI_MERGE_REQUEST_IID}
+      CHANGED_FILES:
+      $(cat diff.txt)
+
+      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
       " > ${STATION_OUT}/raw.json
 
     - python3 "$EXTRACT_JSON" < "${STATION_OUT}/raw.json" > "${STATION_OUT}/work_order.json"
