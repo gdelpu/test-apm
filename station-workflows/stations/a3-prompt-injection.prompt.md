@@ -8,7 +8,7 @@ description: 'Deterministic scan of agent and skill definitions for jailbreak ph
 ## Goal
 
 Detect prompt injection vulnerabilities and data exfiltration vectors in agent/skill definitions
-using deterministic (regex / keyword) scanners. The optional Red Team Agent (`A3-red-team.agent.md`)
+using deterministic (regex / keyword) scanners. The optional Red Team Agent (`a3-red-team.agent.md`)
 runs separately and appends its structured findings to the same report.
 
 Emit `station_out/promptsec_report.json`.
@@ -111,7 +111,7 @@ Pattern: `(read\|process\|execute\|follow).{0,40}(file\|document\|webpage\|url).
 
 ## Red Team Agent
 
-After the deterministic checks, the `A3-red-team.agent.md` agent MAY be invoked.
+After the deterministic checks, the `a3-red-team.agent.md` agent MAY be invoked.
 It appends its findings under the `"red_team_findings"` key and sets `"red_team_ran": true`.
 Red team findings use the same severity schema but carry `"source": "red_team"`.
 

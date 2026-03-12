@@ -71,14 +71,14 @@ All station outputs are written to `station_out/` (created by A0).
 
 | Station | File | Type |
 |---------|------|------|
-| A0 Intake | `stations/A0-intake.prompt.md` | Prompt |
-| A1 Policy Validation | `stations/A1-policy-validation.prompt.md` | Prompt |
-| A2 Security Static | `stations/A2-security-static.prompt.md` | Prompt |
-| A3 Prompt Injection (deterministic) | `stations/A3-prompt-injection.prompt.md` | Prompt |
-| A3 Red Team (AI) | `stations/A3-red-team.agent.md` | Agent |
-| A4 Sandbox Simulation | `stations/A4-sandbox-simulation.prompt.md` | Prompt |
-| A5 Policy Gate | `stations/A5-policy-gate.agent.md` | Agent |
-| A6 GitHub Update | `stations/A6-github-update.prompt.md` | Prompt |
+| A0 Intake | `stations/a0-intake.prompt.md` | Prompt |
+| A1 Policy Validation | `stations/a1-policy-validation.prompt.md` | Prompt |
+| A2 Security Static | `stations/a2-security-static.prompt.md` | Prompt |
+| A3 Prompt Injection (deterministic) | `stations/a3-prompt-injection.prompt.md` | Prompt |
+| A3 Red Team (AI) | `stations/a3-red-team.agent.md` | Agent |
+| A4 Sandbox Simulation | `stations/a4-sandbox-simulation.prompt.md` | Prompt |
+| A5 Policy Gate | `stations/a5-policy-gate.agent.md` | Agent |
+| A6 GitHub Update | `stations/a6-github-update.prompt.md` | Prompt |
 
 ## Schemas
 

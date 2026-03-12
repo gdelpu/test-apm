@@ -6,9 +6,9 @@ Structure follows [awesome-copilot](https://github.com/github/awesome-copilot) c
 ## Structure
 
 ```
+.gitlab-ci.yml                ← GitLab CI/CD pipeline (CI orchestration)
 .github/
   copilot-instructions.md   ← workspace-level Copilot instructions
-  workflows/                ← GitHub Actions CI workflows
 agents/
   *.agent.md                ← agent definition files (flat)
 prompts/
@@ -73,3 +73,29 @@ Reviews prompts, agents, instructions, and code for prompt injection, data exfil
 3. Add prompts to `prompts/<your-prompt>.prompt.md`.
 4. Add instructions to `instructions/<your-topic>.instructions.md`.
 5. Add a job in `.github/workflows/` (or extend the existing one) pointing to the new paths.
+
+## PR validation baseline
+
+Shared merge request checks are implemented for this repository under:
+
+- Pipeline: `.gitlab-ci.yml` (at repository root)
+- Skill: `default/skills/ai-backbone-pr-checks/`
+
+Scripts executed by CI:
+
+- `default/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py` — validates frontmatter, naming, and links
+- `default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py` — validates workflow YAML structure
+- `default/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py` — detects gaps in process documentation
+
+Local smoke test:
+
+```bash
+py --version  # verify Python 3.11+
+python default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py --root . --out reports/yaml-workflow-linter.json
+```
+
+Optional Copilot CLI advisory mode in CI:
+
+- GitLab CI/CD Variable: `ENABLE_COPILOT_CLI=true` (set in repository settings)
+- GitLab CI/CD Secret: `COPILOT_CI_TOKEN` (optional, for future GitHub Copilot CLI integration)
+- Generated advisory output: `reports/copilot-advisory.md`

@@ -1,4 +1,3 @@
-```chatagent
 ---
 name: 'A5 Policy Gate'
 description: 'Aggregate all station reports and decide whether to APPROVE, BLOCK, or escalate a PR for human REVIEW. Produces a structured gate_decision.json.'
@@ -117,4 +116,3 @@ Write `station_out/gate_decision.json` with this structure:
 2. Do not soften a finding's severity to avoid blocking.
 3. Your justification must quote the specific finding that drove the decision.
 4. If all station reports are skipped (scope was `"non-agent"`), output `"decision": "APPROVE"` with note `"No agent/skill artefacts changed."`.
-```

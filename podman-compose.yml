@@ -1,0 +1,223 @@
+# =======================================================
+# Local runner for .gitlab-ci.yml validation jobs
+# =======================================================
+#
+# Usage (podman-compose or docker-compose):
+#
+#   1. Copy .env.example → .env and fill in the values.
+#   2. Run ALL validators:
+#        podman-compose up --abort-on-container-exit
+#   3. Run a SINGLE job:
+#        podman-compose up validate-pr-auto
+#   4. Run only the Python validators (no Copilot CLI needed):
+#        podman-compose up validate-pr-auto validate-yaml-workflows validate-test-gaps
+#
+# Reports are written to ./reports/ on your host.
+# Station outputs are written to ./station_out/ on your host.
+# =======================================================
+
+version: "3.8"
+
+x-common-env: &common-env
+  CI_PROJECT_DIR: /workspace
+  VALIDATORS_DIR: default/skills/ai-backbone-pr-checks/tools/scripts
+  REPORTS_DIR: reports
+  STATION_OUT: station_out
+  CI_MERGE_REQUEST_TARGET_BRANCH_NAME: ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}
+  CI_COMMIT_SHA: ${CI_COMMIT_SHA:-HEAD}
+  CI_MERGE_REQUEST_IID: ${CI_MERGE_REQUEST_IID:-0}
+  COPILOT_MAX_DIFF_LINES: "2000"
+  COPILOT_CLI_VERSION: "1.0.4"
+  GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+
+x-repo-volume: &repo-volume
+  - .:/workspace:z
+
+services:
+  # ---------------------------------------------------
+  # Python-only validators  (no Copilot CLI required)
+  # ---------------------------------------------------
+
+  validate-pr-auto:
+    image: python:3.11
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+    volumes: *repo-volume
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        apt-get update -qq && apt-get install -y -qq git
+        python3 -m pip install --upgrade pip PyYAML -q
+        git config --global --add safe.directory /workspace
+
+        mkdir -p $REPORTS_DIR
+        python3 $VALIDATORS_DIR/pr_auto_validator.py \
+          --base-ref $CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
+          --head-ref $CI_COMMIT_SHA \
+          --out $REPORTS_DIR/pr-auto-validator.json
+
+        echo "=== PR Auto Validator result ==="
+        cat $REPORTS_DIR/pr-auto-validator.json
+
+  validate-yaml-workflows:
+    image: python:3.11
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+    volumes: *repo-volume
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        python3 -m pip install --upgrade pip PyYAML -q
+
+        mkdir -p $REPORTS_DIR
+        python3 $VALIDATORS_DIR/yaml_workflow_linter.py \
+          --root . \
+          --out $REPORTS_DIR/yaml-workflow-linter.json
+
+        echo "=== YAML Workflow Linter result ==="
+        cat $REPORTS_DIR/yaml-workflow-linter.json
+
+  validate-test-gaps:
+    image: python:3.11
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+    volumes: *repo-volume
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        apt-get update -qq && apt-get install -y -qq git
+        python3 -m pip install --upgrade pip PyYAML -q
+        git config --global --add safe.directory /workspace
+
+        mkdir -p $REPORTS_DIR
+        python3 $VALIDATORS_DIR/test_gap_detector.py \
+          --base-ref $CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
+          --head-ref $CI_COMMIT_SHA \
+          --out $REPORTS_DIR/test-gap-detector.json
+
+        echo "=== Test Gap Detector result ==="
+        cat $REPORTS_DIR/test-gap-detector.json
+
+  # ---------------------------------------------------
+  # AI Station jobs  (require GitHub Copilot CLI + token)
+  # ---------------------------------------------------
+
+  validate-ai-intake:
+    image: node:20-bookworm-slim
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+    volumes: *repo-volume
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
+        npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
+        git config --global --add safe.directory /workspace
+
+        if git rev-parse --is-shallow-repository 2>/dev/null | grep -q true; then
+          git fetch --unshallow
+        fi
+
+        mkdir -p $STATION_OUT
+
+        EXTRACT_JSON="/workspace/station-workflows/scripts/extract_json.py"
+
+        git diff --name-status $CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
+
+        timeout 300 copilot --autopilot -p "
+        SYSTEM: You are a JSON-only API.
+        GOAL: Analyze MR ${CI_MERGE_REQUEST_IID}.
+        FILES: $$(cat diff.txt)
+
+        SCHEMA:
+        {
+          'mr_id': ${CI_MERGE_REQUEST_IID},
+          'priority': 'P0'|'P1'|'P2',
+          'risks': string[]
+        }
+        " > $${STATION_OUT}/raw.json
+
+        python3 "$$EXTRACT_JSON" < "$${STATION_OUT}/raw.json" > "$${STATION_OUT}/work_order.json"
+
+        echo "=== AI Intake result ==="
+        cat $${STATION_OUT}/work_order.json
+
+  validate-policy:
+    image: node:20-bookworm-slim
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+    volumes: *repo-volume
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
+        npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
+        git config --global --add safe.directory /workspace
+
+        if git rev-parse --is-shallow-repository 2>/dev/null | grep -q true; then
+          git fetch --unshallow
+        fi
+
+        mkdir -p $STATION_OUT
+
+        EXTRACT_JSON="/workspace/station-workflows/scripts/extract_json.py"
+
+        PROMPT=$$(cat "/workspace/station-workflows/stations/a1-policy-validation.prompt.md")
+
+        timeout 300 copilot --autopilot -p "
+        $${PROMPT}
+
+        CHANGED_FILES:
+        $$(git diff --name-only $CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA)
+
+        OUTPUT FORMAT: raw JSON only
+        " > "$${STATION_OUT}/policy_raw.json"
+
+        python3 "$$EXTRACT_JSON" < "$${STATION_OUT}/policy_raw.json" > "$${STATION_OUT}/policy.json"
+
+        echo "=== Policy Validation result ==="
+        cat $${STATION_OUT}/policy.json
+
+  validate-security:
+    image: node:20-bookworm-slim
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+    volumes: *repo-volume
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
+        npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
+        git config --global --add safe.directory /workspace
+
+        if git rev-parse --is-shallow-repository 2>/dev/null | grep -q true; then
+          git fetch --unshallow
+        fi
+
+        mkdir -p $STATION_OUT
+
+        EXTRACT_JSON="/workspace/station-workflows/scripts/extract_json.py"
+
+        git diff $CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA > "$${STATION_OUT}/diff.patch"
+
+        PROMPT=$$(cat "/workspace/station-workflows/stations/a2-security-static.prompt.md")
+
+        timeout 600 copilot --autopilot -p "
+        $${PROMPT}
+
+        DIFF:
+        $$(head -n $COPILOT_MAX_DIFF_LINES $${STATION_OUT}/diff.patch)
+
+        OUTPUT FORMAT: raw JSON only
+        " > "$${STATION_OUT}/security_raw.json"
+
+        python3 "$$EXTRACT_JSON" < "$${STATION_OUT}/security_raw.json" > "$${STATION_OUT}/security.json"
+
+        echo "=== Security Analysis result ==="
+        cat $${STATION_OUT}/security.json
