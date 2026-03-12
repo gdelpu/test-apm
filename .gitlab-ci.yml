@@ -90,12 +90,17 @@ validate:yaml-workflows:
 
   before_script:
     - python3 -m pip install --upgrade pip PyYAML
+    - mkdir -p $REPORTS_DIR
 
   script:
-    - mkdir -p $REPORTS_DIR
-    - python3 $VALIDATORS_DIR/yaml_workflow_linter.py \
+    - |
+      python3 $VALIDATORS_DIR/yaml_workflow_linter.py \
         --root . \
-        --out $REPORTS_DIR/yaml-workflow-linter.json
+        --out $REPORTS_DIR/yaml-workflow-linter.json || {
+          echo '{"status":"error","summary":["yaml_workflow_linter.py crashed"],"blocking_issues":["Script failed before producing report"],"warnings":[]}' \
+            > $REPORTS_DIR/yaml-workflow-linter.json
+          exit 1
+        }
 
   artifacts:
     paths:
