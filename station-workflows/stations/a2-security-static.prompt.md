@@ -50,7 +50,13 @@ If any dependency manifest or lock file is in `changed_files`, run **Trivy** (or
 
 ### S-03 · Dangerous-pattern scan
 
-Scan every changed file with the following regex rules:
+Scan every changed file with the following regex rules.
+
+**Exclusion**: Files under `**/fixtures/**` or `**/test*/**` directories are test
+assets that intentionally contain adversarial payloads. If a pattern matches
+inside an excluded path, **downgrade the severity to `info`** and add
+`"note": "test fixture — intentional payload"` to the finding. These `info`
+findings do NOT count toward the pass/fail decision.
 
 | Rule ID | Pattern | Description | Severity |
 |---------|---------|-------------|----------|
@@ -98,5 +104,8 @@ Check for references to sensitive paths in agent tool configurations:
 |-----------|--------|
 | Any `critical` finding | `"fail"` |
 | Any `high` finding | `"fail"` |
-| Only `medium` / `low` | `"pass"` |
+| Only `medium` / `low` / `info` | `"pass"` |
 | Clean | `"pass"` |
+
+> **Note**: `info`-level findings (e.g. from test fixtures) are included in the
+> report for transparency but never trigger a `"fail"` status.

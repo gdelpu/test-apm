@@ -22,5 +22,8 @@ Thumbs.db
 
 .github/
 
+.venv/
+
+reports/
 check-gh-auth.ps1
 run-pipeline-podman.ps1

@@ -137,16 +137,19 @@ validate:ai-intake:
     - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
 
     - |
-      timeout 300 copilot --autopilot -p "
-      SYSTEM: You are a JSON-only API.
+      timeout 300 copilot -s --output-format json \
+        --available-tools \
+        --no-ask-user \
+        --add-dir "${CI_PROJECT_DIR}" -p "
+      SYSTEM: You are a JSON-only API. Do NOT use tools. Respond with ONLY a JSON object.
       GOAL: Analyze MR ${CI_MERGE_REQUEST_IID}.
       FILES: $(cat diff.txt)
 
-      SCHEMA:
+      Respond with EXACTLY this JSON schema, nothing else:
       {
-        'mr_id': ${CI_MERGE_REQUEST_IID},
-        'priority': 'P0'|'P1'|'P2',
-        'risks': string[]
+        \"mr_id\": ${CI_MERGE_REQUEST_IID},
+        \"priority\": \"P0\" | \"P1\" | \"P2\",
+        \"risks\": [\"string\", ...]
       }
       " > ${STATION_OUT}/raw.json
 
@@ -165,16 +168,28 @@ validate:policy:
     - |
       PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a1-policy-validation.prompt.md")
 
-      timeout 300 copilot --autopilot -p "
+      timeout 600 copilot -s --output-format json \
+        --available-tools \
+        --no-ask-user \
+        --add-dir "${CI_PROJECT_DIR}" -p "
       ${PROMPT}
 
       CHANGED_FILES:
       $(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} ${CI_COMMIT_SHA})
 
-      OUTPUT FORMAT: raw JSON only
+      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
       " > "${STATION_OUT}/policy_raw.json"
 
     - python3 "$EXTRACT_JSON" < "${STATION_OUT}/policy_raw.json" > "${STATION_OUT}/policy.json"
+
+    - |
+      STATUS=$(jq -r '.status' "${STATION_OUT}/policy.json")
+      echo "Policy gate status: $STATUS"
+      if [ "$STATUS" = "fail" ]; then
+        echo "GATE FAILED: Policy validation reported critical/high findings."
+        cat "${STATION_OUT}/policy.json"
+        exit 1
+      fi
 
   artifacts:
     paths:
@@ -191,17 +206,30 @@ validate:security:
     - |
       PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a2-security-static.prompt.md")
 
-      timeout 600 copilot --autopilot -p "
+      timeout 600 copilot -s --output-format json \
+        --available-tools \
+        --no-ask-user \
+        --add-dir "${CI_PROJECT_DIR}" -p "
       ${PROMPT}
 
       DIFF:
       $(head -n ${COPILOT_MAX_DIFF_LINES} ${STATION_OUT}/diff.patch)
 
-      OUTPUT FORMAT: raw JSON only
+      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
       " > "${STATION_OUT}/security_raw.json"
 
     - python3 "$EXTRACT_JSON" < "${STATION_OUT}/security_raw.json" > "${STATION_OUT}/security.json"
 
+    - |
+      STATUS=$(jq -r '.status' "${STATION_OUT}/security.json")
+      echo "Security gate status: $STATUS"
+      if [ "$STATUS" = "fail" ]; then
+        echo "GATE FAILED: Security scan reported critical/high findings."
+        cat "${STATION_OUT}/security.json"
+        exit 1
+      fi
+
   artifacts:
     paths:
       - "${STATION_OUT}/security.json"
+    when: always

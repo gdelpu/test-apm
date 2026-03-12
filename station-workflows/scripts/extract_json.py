@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """Extracts the first valid top-level JSON object from model output (stdin).
 
+Supports two input formats:
+1. Plain text (copilot --output-format text): searches for JSON objects in
+   the raw text stream.
+2. JSONL (copilot -s --output-format json): each line is a JSON event.
+   The script concatenates all assistant.message content fields and then
+   searches for JSON objects within the combined model response.
+
 Improvements over the previous inline sed+jq approach:
 - Handles multi-object model responses: emits a warning instead of silently
   returning only the first object, so callers can investigate unexpected output.
@@ -13,7 +20,65 @@ Usage:
 """
 
 import json
+import re
 import sys
+
+
+# JSONL envelope types that are never the model's answer.
+_ENVELOPE_TYPES = frozenset({
+    "session.tools_updated", "user.message", "assistant.turn_start",
+    "assistant.turn_end", "assistant.reasoning_delta", "assistant.reasoning",
+    "tool.execution_start", "tool.execution_complete",
+    "tool.execution_partial_result", "assistant.message_delta",
+    "subagent.started", "subagent.completed",
+    "session.background_tasks_changed", "result",
+})
+
+
+def extract_jsonl_content(raw: str) -> str:
+    """If input is JSONL from copilot --output-format json, concatenate all
+    assistant.message content fields. Falls back to raw text if not JSONL."""
+    lines = raw.splitlines()
+    if not lines:
+        return raw
+
+    # Quick heuristic: if the first non-empty line is a JSON object with a
+    # "type" key, treat the whole input as JSONL.
+    first = ""
+    for line in lines:
+        line = line.strip()
+        if line:
+            first = line
+            break
+
+    try:
+        probe = json.loads(first)
+        if not isinstance(probe, dict) or "type" not in probe:
+            return raw
+    except (json.JSONDecodeError, ValueError):
+        return raw
+
+    # It's JSONL — collect assistant message content in order.
+    parts: list[str] = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            evt = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        evt_type = evt.get("type", "")
+        if evt_type == "assistant.message":
+            content = evt.get("data", {}).get("content", "")
+            if content:
+                parts.append(content)
+        elif evt_type == "session.task_complete":
+            summary = evt.get("data", {}).get("summary", "")
+            if summary:
+                parts.append(summary)
+
+    return "\n".join(parts) if parts else raw
 
 
 def find_json_objects(text: str) -> list:
@@ -54,7 +119,12 @@ def find_json_objects(text: str) -> list:
 
 
 def main() -> None:
-    content = sys.stdin.read()
+    raw = sys.stdin.read()
+    content = extract_jsonl_content(raw)
+
+    # Strip markdown code fences that models sometimes wrap JSON in.
+    content = re.sub(r"```(?:json)?\s*\n?", "", content)
+
     objects = find_json_objects(content)
 
     if not objects:
