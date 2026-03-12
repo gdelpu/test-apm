@@ -62,14 +62,19 @@ validate:pr-auto:
   before_script:
     - apt-get update && apt-get install -y git
     - python3 -m pip install --upgrade pip PyYAML
-    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - mkdir -p $REPORTS_DIR
 
   script:
-    - mkdir -p $REPORTS_DIR
-    - python3 $VALIDATORS_DIR/pr_auto_validator.py \
+    - |
+      python3 $VALIDATORS_DIR/pr_auto_validator.py \
         --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
         --head-ref $CI_COMMIT_SHA \
-        --out $REPORTS_DIR/pr-auto-validator.json
+        --out $REPORTS_DIR/pr-auto-validator.json || {
+          echo '{"status":"error","summary":["pr_auto_validator.py crashed"],"blocking_issues":["Script failed before producing report"],"warnings":[]}' \
+            > $REPORTS_DIR/pr-auto-validator.json
+          exit 1
+        }
 
   artifacts:
     paths:
@@ -107,14 +112,19 @@ validate:test-gaps:
   before_script:
     - apt-get update && apt-get install -y git
     - python3 -m pip install --upgrade pip PyYAML
-    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - mkdir -p $REPORTS_DIR
 
   script:
-    - mkdir -p $REPORTS_DIR
-    - python3 $VALIDATORS_DIR/test_gap_detector.py \
+    - |
+      python3 $VALIDATORS_DIR/test_gap_detector.py \
         --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
         --head-ref $CI_COMMIT_SHA \
-        --out $REPORTS_DIR/test-gap-detector.json
+        --out $REPORTS_DIR/test-gap-detector.json || {
+          echo '{"status":"error","summary":["test_gap_detector.py crashed"],"blocking_issues":["Script failed before producing report"],"warnings":[]}' \
+            > $REPORTS_DIR/test-gap-detector.json
+          exit 1
+        }
 
   artifacts:
     paths:
@@ -137,7 +147,7 @@ validate:ai-intake:
     - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
 
     - |
-      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/A0-intake.prompt.md")
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a0-intake.prompt.md")
 
       timeout 300 copilot -s --output-format json \
         --available-tools \
