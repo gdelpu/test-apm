@@ -10,23 +10,28 @@ A shared collection of AI agents, prompts, instructions, skills, hooks, and plug
 
 ```plaintext
 ai-sdlc-foundation/
-├── default/          # Common SDLC resources — shared across all clients & factories
-│   ├── agents/       # Agent definition files (.agent.md)
-│   ├── prompts/      # Reusable task prompts (.prompt.md)
-│   ├── instructions/ # Coding standards & guidelines (.instructions.md)
-│   ├── skills/       # Self-contained skill folders (SKILL.md + bundled assets)
-│   ├── hooks/        # Automated workflow hooks
-│   ├── plugins/      # Installable plugin packages
-│   ├── .github/      # Copilot workspace instructions & CI workflows
-│   └── .specify/     # SpecKit constitution, templates & scripts
+├── default/              # Common SDLC resources — shared across all clients & factories
+│   ├── agents/           # Agent definition files (.agent.md)
+│   ├── prompts/          # Reusable task prompts (.prompt.md)
+│   ├── instructions/     # Coding standards & guidelines (.instructions.md)
+│   ├── skills/           # Self-contained skill folders (SKILL.md + bundled assets)
+│   ├── hooks/            # Automated workflow hooks (planned)
+│   ├── plugins/          # Installable plugin packages (planned)
+│   └── .specify/         # SpecKit constitution, templates & scripts
 │
-├── clients/          # Client-specific Copilot resources (one sub-folder per client)
-│   └── <client>/     # Same structure as default/ — scoped to a client engagement
+├── clients/              # Client-specific Copilot resources (one sub-folder per client)
+│   └── <client>/         # Same structure as default/ — scoped to a client engagement
 │
-└── factories/        # Technology-factory Copilot resources
-    ├── dotnet/       # .NET factory — agents, prompts & instructions for C#/.NET
-    ├── java/         # Java factory — agents, prompts & instructions for Java/Spring
-    └── drupal/       # Drupal factory — agents, prompts & instructions for PHP/Drupal
+├── factories/            # Technology-factory Copilot resources
+│   ├── dotnet/           # .NET factory — agents, prompts & instructions for C#/.NET
+│   ├── java/             # Java factory — agents, prompts & instructions for Java/Spring
+│   └── drupal/           # Drupal factory — agents, prompts & instructions for PHP/Drupal
+│
+└── station-workflows/    # AI-driven merge request validation pipeline
+    ├── stations/         # Prompt files for each AI validation station
+    ├── schemas/          # JSON schemas for agent/skill manifest validation
+    ├── scripts/          # Pipeline helper scripts (extract_json, hmac, sanitize)
+    └── fixtures/         # Test fixtures for security scanning
 ```
 
 ### How it works
@@ -83,13 +88,29 @@ Each folder (`default/`, per-client, per-factory) follows the same sub-structure
 
 ---
 
+## ⚙️ Prerequisites
+
+| Tool | Version | Required For |
+|------|---------|-------------|
+| Python | 3.11+ | Deterministic validators, pipeline scripts |
+| Git | 2.x+ | Diff generation, all validation jobs |
+| Node.js | 20+ | Copilot CLI runtime (AI stations) |
+| GitHub Copilot CLI | 1.0.4 | AI Agent stations (`npm install -g @github/copilot@1.0.4`) |
+| jq | 1.6+ | Gate enforcement in pipeline |
+| Podman + podman-compose | — | Local full pipeline execution (optional) |
+| Pandoc | — | Brand Styler document conversion (optional) |
+
+For AI station jobs, you also need a **GitHub PAT** with Copilot access set as `GH_TOKEN` / `GITHUB_TOKEN` (see [CI/CD Configuration](#cicd-configuration-gitlab)).
+
+---
+
 ## 🔧 How to Use
 
 ### Using resources in VS Code
 
 1. Copy or symlink the desired `agents/`, `prompts/`, `instructions/`, or `skills/` folder into your project's `.github/` directory, **or** reference them directly via the path when using Copilot Chat.
 
-2. For workspace-level instructions, copy `.github/copilot-instructions.md` into your project.
+2. For workspace-level instructions, create a `.github/copilot-instructions.md` in your project referencing the desired resources.
 
 3. For skills, reference the skill path in your agent definition or Copilot Chat session.
 
@@ -119,7 +140,7 @@ The Sopra Steria common constitution lives at `default/.specify/memory/constitut
 
 If you evolve the constitution on a client engagement or factory:
 1. Copy your updated `.specify/memory/constitution.md` to `clients/<client-name>/.specify/memory/` or `factories/<name>/.specify/memory/`.
-2. Open a PR — the Sopra Steria team will review and merge improvements into `default/.specify/memory/constitution.md`.
+2. Open a merge request — the Sopra Steria team will review and merge improvements into `default/.specify/memory/constitution.md`.
 
 ---
 
@@ -134,54 +155,72 @@ See [default/skills/brand-styler/SKILL.md](default/skills/brand-styler/SKILL.md)
 
 ---
 
-### AI Backbone Merge Request checks
+## 🛡️ Validation Gating Policy
 
-This repository includes deterministic merge request validation for Copilot assets and workflows.
+Every merge request triggers a **validation pipeline** (`.gitlab-ci.yml`) that runs six jobs concurrently in the `validate` stage. Three are deterministic Python scripts; three are **AI Agent stations** powered by GitHub Copilot CLI. Together they enforce structural, policy, and security standards before code is merged.
 
-**Pipeline Configuration:**
-- File: `.gitlab-ci.yml` (at repository root)
-- Skill: `default/skills/ai-backbone-pr-checks/`
+### Pipeline Architecture
 
-**Validation Scripts:**
-- `default/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py` — validates frontmatter, naming, links
-- `default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py` — validates workflow YAML structure and safety
-- `default/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py` — advisory-only gap detection
+```
+merge_request_event
+  └─ validate (concurrent)
+       ├─ validate:pr-auto          ← Python deterministic
+       ├─ validate:yaml-workflows   ← Python deterministic
+       ├─ validate:test-gaps        ← Python deterministic (advisory)
+       ├─ validate:ai-intake  (A0)  ← Copilot CLI AI Agent
+       ├─ validate:policy     (A1)  ← Copilot CLI AI Agent  ⛔ gates
+       └─ validate:security   (A2)  ← Copilot CLI AI Agent  ⛔ gates
+```
 
-**Local validation example:**
+### Validation Jobs
+
+| Job | Type | Script / Prompt | Purpose | Gating |
+|-----|------|----------------|---------|--------|
+| `validate:pr-auto` | Deterministic | `pr_auto_validator.py` | Validates frontmatter, kebab-case naming, and internal links | **Blocking** |
+| `validate:yaml-workflows` | Deterministic | `yaml_workflow_linter.py` | Validates workflow YAML structure and safety rules | **Blocking** |
+| `validate:test-gaps` | Deterministic | `test_gap_detector.py` | Detects missing documentation when scripts/workflows change | **Advisory** |
+| `validate:ai-intake` | AI Agent | [`A0-intake.prompt.md`](station-workflows/stations/A0-intake.prompt.md) | Classifies changed files, extracts MR context (id, priority, risks) | **Informational** |
+| `validate:policy` | AI Agent | [`a1-policy-validation.prompt.md`](station-workflows/stations/a1-policy-validation.prompt.md) | Validates agent/skill manifests against JSON schemas, enforces tool allowlists and safety fields | **Blocking** — fails MR on `status: "fail"` |
+| `validate:security` | AI Agent | [`a2-security-static.prompt.md`](station-workflows/stations/a2-security-static.prompt.md) | Scans MR diff for hardcoded secrets, vulnerable dependencies, and dangerous shell patterns | **Blocking** — fails MR on `status: "fail"` |
+
+Deterministic scripts live in `default/skills/ai-backbone-pr-checks/tools/scripts/`. AI station prompts live in `station-workflows/stations/`.
+
+### How AI Stations Work
+
+Each AI station invokes **GitHub Copilot CLI v1.0.4** in text-only mode — no tools are available to the model (`--available-tools` with an empty allow-list), ensuring structured JSON output without agent-style tool-calling loops.
+
+1. Copilot CLI receives the station prompt plus the MR diff/changed files as input
+2. The model responds with **raw JSON only** (enforced by `--available-tools` empty allow-list + JSON-only system prompt)
+3. `extract_json.py` parses the JSONL output and extracts the structured JSON object
+4. For policy and security stations, `jq -r '.status'` reads the result — if `"fail"`, the pipeline exits with code 1
+
+### Local Validation
+
+**Deterministic validators:**
 
 ```bash
-# Using Python 3.11+
-py --version
-
-# Lint workflow files
 python default/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py --root . --out reports/yaml-workflow-linter.json
-
-# Validate changed files (local git diff mode)
 python default/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py --base-ref HEAD~1 --head-ref HEAD --out reports/pr-auto-validator.json
-
-# Detect documentation gaps
 python default/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py --base-ref HEAD~1 --head-ref HEAD --out reports/test-gap-detector.json
 ```
 
-**Validation Gating Policy (Phase 1):**
+**Full pipeline (including AI stations) via Podman:**
 
-| Check | Status | Behavior |
-|-------|--------|----------|
-| Frontmatter validation | Blocking | Fails MR if frontmatter is malformed or missing from resource files |
-| Workflow YAML structure | Blocking | Fails MR if workflow files have structural issues |
-| Naming conventions | Blocking | Enforces kebab-case naming for resource files |
-| Workflow hardening | Advisory | Warns about missing permissions, @main references |
-| Documentation gaps | Advisory | Warns if scripts/workflows changed without docs updates |
+```bash
+podman-compose up --build
+```
 
-**CI/CD Configuration (GitLab):**
+See [LOCAL_TESTING.md](LOCAL_TESTING.md) for full setup instructions.
 
-To enable optional Copilot CLI advisory mode:
+### CI/CD Configuration (GitLab)
+
+The AI station jobs require a GitHub token with Copilot CLI access:
 
 1. Go to **Settings > CI/CD > Variables** in your GitLab project
-2. Create a new variable: `ENABLE_COPILOT_CLI` = `true`
-3. (Optional) Create a secret: `COPILOT_CI_TOKEN` = `<your-copilot-token>` for future GitHub Copilot CLI integration
+2. Create a masked variable: `GITHUB_TOKEN` with a GitHub PAT that has Copilot CLI access
+3. The three AI station jobs (`ai-intake`, `policy`, `security`) use this token to authenticate with Copilot CLI
 
-> **Note:** Copilot CLI advisory is optional and requires additional GitHub CLI setup. The pipeline continues without it.
+For local testing, set `GH_TOKEN` and `GITHUB_TOKEN` in your `.env` file (see [LOCAL_TESTING.md](LOCAL_TESTING.md)).
 
 ---
 
@@ -195,19 +234,19 @@ We welcome contributions from all members, client teams, and factory leads.
 2. Place prompt files flat in `default/prompts/<name>.prompt.md`
 3. Place instruction files flat in `default/instructions/<name>.instructions.md`
 4. For skills with bundled assets, create `default/skills/<name>/SKILL.md`
-5. For constitution updates, edit `default/.specify/memory/constitution.md` and describe the change in your PR
+5. For constitution updates, edit `default/.specify/memory/constitution.md` and describe the change in your MR
 
 ### Contributing from a client engagement
 
 1. Create `clients/<client-name>/` mirroring the `default/` structure
 2. Add your agents, prompts, instructions, and skills under that folder
-3. Open a pull request — the Sopra Steria team will review and promote reusable items to `default/`
+3. Open a merge request — the Sopra Steria team will review and promote reusable items to `default/`
 
 ### Contributing from a factory
 
 1. Add resources under `factories/<dotnet|java|drupal>/`
 2. Follow the same naming conventions as `default/`
-3. Open a pull request targeting the `staged` branch
+3. Open a merge request targeting the `staged` branch
 
 ### Naming conventions
 
@@ -216,18 +255,18 @@ We welcome contributions from all members, client teams, and factory leads.
 - All `SKILL.md` files must have `name` (matching the folder name) and `description` frontmatter fields
 - Description values must be **wrapped in single quotes**
 
-### Quick checklist before opening a PR
+### Quick checklist before opening an MR
 
 - [ ] Frontmatter is present and valid
 - [ ] File name is lowercase with hyphens
 - [ ] Paths inside files point to the correct folder (`default/`, `factories/<name>/`, or `clients/<name>/`)
-- [ ] PR targets the `staged` branch, not `main`
+- [ ] MR targets the `staged` branch, not `main`
 
 ---
 
 ## 📄 License
 
-Resources in this repository are for internal Sopra Steria use. See [LICENSE](LICENSE) where present, or consult your delivery lead for usage terms on client-contributed content.
+Resources in this repository are for internal Sopra Steria use. Consult your delivery lead for usage terms on client-contributed content.
 
 ---
 

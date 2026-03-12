@@ -1,0 +1,29 @@
+﻿# Secrets  never commit
+.env
+
+# CI auth cache — must never be committed or included in artifacts
+.gh_config/
+
+# Pipeline output
+station_out/
+.station_tmp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.suo
+*.user
+
+# Logs
+*.log
+
+.github/
+
+.venv/
+
+reports/*
+check-gh-auth.ps1
+diff.txt

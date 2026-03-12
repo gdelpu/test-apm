@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "agent-manifest.schema.json",
+  "title": "Agent Manifest",
+  "description": "JSON Schema for the YAML frontmatter of *.agent.md files in this workspace.",
+  "type": "object",
+  "required": ["name", "description", "tools"],
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable name of the agent."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "What the agent does. Must be at least 20 characters."
+    },
+    "tools": {
+      "type": "array",
+      "description": "Declared tools the agent may use. Must be a subset of the workspace allowlist.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "codebase",
+          "search",
+          "edit/editFiles",
+          "problems",
+          "runCommands",
+          "github",
+          "terminal",
+          "fetch",
+          "vscode"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "commandAllowlist": {
+      "type": "array",
+      "description": "Required when 'runCommands' is in tools. Explicit list of permitted shell commands.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "allowedNetworkDomains": {
+      "type": "array",
+      "description": "Required when 'fetch' is in tools. Explicit list of permitted domain names (no wildcards).",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!\\*).*$",
+        "description": "Domain name without wildcard prefix."
+      },
+      "minItems": 1
+    },
+    "allowedFilePaths": {
+      "type": "array",
+      "description": "Optional explicit list of file path globs the agent may read or edit. Wildcards ('**') are flagged as high risk.",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "if": {
+    "properties": {
+      "tools": { "contains": { "const": "runCommands" } }
+    },
+    "required": ["tools"]
+  },
+  "then": {
+    "required": ["commandAllowlist"],
+    "properties": {
+      "commandAllowlist": { "minItems": 1 }
+    }
+  },
+  "if": {
+    "properties": {
+      "tools": { "contains": { "const": "fetch" } }
+    },
+    "required": ["tools"]
+  },
+  "then": {
+    "required": ["allowedNetworkDomains"],
+    "properties": {
+      "allowedNetworkDomains": { "minItems": 1 }
+    }
+  }
+}

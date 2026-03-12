@@ -1,268 +1,249 @@
-# Run: merge request validation pipeline
-# This pipeline executes PR-check validators and posts results as MR comments
+# =====================================================
+# Merge Request Validation Pipeline
+# =====================================================
 
 stages:
   - validate
-  - report
 
+# -----------------------------------------------------
+# Global Variables (merged)
+# -----------------------------------------------------
 variables:
-  # Configure: enable optional Copilot CLI advisory mode (set via CI/CD Variables in GitLab)
   ENABLE_COPILOT_CLI: "false"
-  # Configure: paths to validator scripts
+
   VALIDATORS_DIR: "default/skills/ai-backbone-pr-checks/tools/scripts"
   REPORTS_DIR: "reports"
-  # Configure: full git history for reliable diff against MR target branch
+
+  STATION_OUT: "station_out"
+
   GIT_DEPTH: "0"
 
-# Template: base job configuration for merge requests
+  GH_CONFIG_DIR: "${CI_PROJECT_DIR}/.gh_config"
+  COPILOT_MAX_DIFF_LINES: "2000"
+  COPILOT_CLI_VERSION: "1.0.4"
+
+default:
+  image: node:20-bookworm-slim
+  retry: 1
+
+# -----------------------------------------------------
+# Templates
+# -----------------------------------------------------
+
 .mr_only:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-# Job: PR Auto Validator checks frontmatter, naming, links, and workflow hygiene
+.station_base:
+  extends: .mr_only
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
+    - npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
+
+    - EXTRACT_JSON="${CI_PROJECT_DIR}/station-workflows/scripts/extract_json.py"
+    - HMAC_TOOL="${CI_PROJECT_DIR}/station-workflows/scripts/hmac_artifact.py"
+
+    - |
+      if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+        git fetch --unshallow
+      fi
+
+    - mkdir -p ${STATION_OUT}
+
+# =====================================================
+# PR Validators
+# =====================================================
+
 validate:pr-auto:
   extends: .mr_only
   stage: validate
   image: python:3.11
+
   before_script:
     - apt-get update && apt-get install -y git
-    - python3 --version && python3 -m pip --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install PyYAML
-    - python3 -c "import yaml; print('PyYAML OK')"
-    - echo "Git branches available:" && git branch -a
-    - echo "Fetching origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME..." && git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" 2>&1 || echo "Fetch returned non-zero status"
-  script:
-    - pwd
-    - ls -la default/skills/ai-backbone-pr-checks/tools/scripts/ || echo "Scripts directory NOT FOUND"
+    - python3 -m pip install --upgrade pip PyYAML
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - mkdir -p $REPORTS_DIR
-    - python3 $VALIDATORS_DIR/pr_auto_validator.py --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --head-ref $CI_COMMIT_SHA --out $REPORTS_DIR/pr-auto-validator.json
-    - ls -la $REPORTS_DIR/
+
+  script:
+    - |
+      python3 $VALIDATORS_DIR/pr_auto_validator.py \
+        --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
+        --head-ref $CI_COMMIT_SHA \
+        --out $REPORTS_DIR/pr-auto-validator.json || {
+          echo '{"status":"error","summary":["pr_auto_validator.py crashed"],"blocking_issues":["Script failed before producing report"],"warnings":[]}' \
+            > $REPORTS_DIR/pr-auto-validator.json
+          exit 1
+        }
+
   artifacts:
     paths:
       - $REPORTS_DIR/pr-auto-validator.json
     expire_in: 14 days
     when: always
-  allow_failure: false
 
-# Job: YAML Workflow Linter validates workflow structure and safety
+
 validate:yaml-workflows:
   extends: .mr_only
   stage: validate
   image: python:3.11
+
   before_script:
-    - python3 --version && python3 -m pip --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install PyYAML
-    - python3 -c "import yaml; print('PyYAML OK')"
-  script:
-    - pwd
-    - ls -la default/skills/ai-backbone-pr-checks/tools/scripts/ || echo "Scripts directory NOT FOUND"
+    - python3 -m pip install --upgrade pip PyYAML
     - mkdir -p $REPORTS_DIR
-    - python3 $VALIDATORS_DIR/yaml_workflow_linter.py --root . --out $REPORTS_DIR/yaml-workflow-linter.json
-    - ls -la $REPORTS_DIR/
+
+  script:
+    - |
+      python3 $VALIDATORS_DIR/yaml_workflow_linter.py \
+        --root . \
+        --out $REPORTS_DIR/yaml-workflow-linter.json || {
+          echo '{"status":"error","summary":["yaml_workflow_linter.py crashed"],"blocking_issues":["Script failed before producing report"],"warnings":[]}' \
+            > $REPORTS_DIR/yaml-workflow-linter.json
+          exit 1
+        }
+
   artifacts:
     paths:
       - $REPORTS_DIR/yaml-workflow-linter.json
     expire_in: 14 days
     when: always
-  allow_failure: false
 
-# Job: Test Gap Detector advisory detects process documentation gaps
+
 validate:test-gaps:
   extends: .mr_only
   stage: validate
   image: python:3.11
+
   before_script:
     - apt-get update && apt-get install -y git
-    - python3 --version && python3 -m pip --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install PyYAML
-    - python3 -c "import yaml; print('PyYAML OK')"
-    - echo "Git branches available:" && git branch -a
-    - echo "Fetching origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME..." && git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" 2>&1 || echo "Fetch returned non-zero status"
-  script:
-    - pwd
-    - ls -la default/skills/ai-backbone-pr-checks/tools/scripts/ || echo "Scripts directory NOT FOUND"
+    - python3 -m pip install --upgrade pip PyYAML
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - mkdir -p $REPORTS_DIR
-    - python3 $VALIDATORS_DIR/test_gap_detector.py --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --head-ref $CI_COMMIT_SHA --out $REPORTS_DIR/test-gap-detector.json
-    - ls -la $REPORTS_DIR/
+
+  script:
+    - |
+      python3 $VALIDATORS_DIR/test_gap_detector.py \
+        --base-ref origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
+        --head-ref $CI_COMMIT_SHA \
+        --out $REPORTS_DIR/test-gap-detector.json || {
+          echo '{"status":"error","summary":["test_gap_detector.py crashed"],"blocking_issues":["Script failed before producing report"],"warnings":[]}' \
+            > $REPORTS_DIR/test-gap-detector.json
+          exit 1
+        }
+
   artifacts:
     paths:
       - $REPORTS_DIR/test-gap-detector.json
     expire_in: 14 days
     when: always
+
   allow_failure: true
 
-# Job: Copilot CLI Advisory (optional, requires GitHub Copilot CLI extension setup)
-validate:copilot-advisory:
-  extends: .mr_only
-  stage: report
-  image: python:3.11
-  dependencies:
-    - validate:pr-auto
-    - validate:yaml-workflows
-    - validate:test-gaps
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $ENABLE_COPILOT_CLI == "true"'
+# =====================================================
+# AI Station Validation
+# =====================================================
+
+validate:ai-intake:
+  extends: .station_base
+  stage: validate
+
   script:
-    - apt-get update && apt-get install -y curl jq
-    - mkdir -p $REPORTS_DIR
-    - |
-      {
-        echo "# Copilot Advisory Summary"
-        echo ""
-        echo "Copilot advisory pending execution."
-      } > "$REPORTS_DIR/copilot-advisory.md"
-    - |
-      echo '{"reports": []}' > "$REPORTS_DIR/copilot-input.json"
-    - |
-      if [ -z "$COPILOT_CI_TOKEN" ]; then
-        {
-          echo "# Copilot Advisory Summary"
-          echo ""
-          echo "Copilot advisory skipped: missing COPILOT_CI_TOKEN CI/CD variable."
-          echo "Set COPILOT_CI_TOKEN to enable GitHub CLI + Copilot CLI in runner."
-        } > "$REPORTS_DIR/copilot-advisory.md"
-        exit 0
-      fi
-    - |
-      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-        | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-      chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
-        > /etc/apt/sources.list.d/github-cli.list
-      apt-get update
-      apt-get install -y gh
-      gh --version
-    - |
-      python3 - <<'PY'
-      import json
-      from pathlib import Path
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
 
-      report_paths = [
-          Path("reports/pr-auto-validator.json"),
-          Path("reports/yaml-workflow-linter.json"),
-          Path("reports/test-gap-detector.json"),
-      ]
+    - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a0-intake.prompt.md")
 
-      payload = {"reports": []}
-      for p in report_paths:
-          if p.exists():
-              payload["reports"].append(json.loads(p.read_text(encoding="utf-8", errors="replace")))
+      timeout 300 copilot -s --output-format json \
+        --available-tools \
+        --no-ask-user \
+        --add-dir "${CI_PROJECT_DIR}" -p "
+      ${PROMPT}
 
-      Path("reports/copilot-input.json").write_text(
-          json.dumps(payload, indent=2), encoding="utf-8"
-      )
-      PY
-    - |
-      export GH_TOKEN="$COPILOT_CI_TOKEN"
-      if ! gh api user >/tmp/gh-user.json 2>/tmp/gh-user.err; then
-        {
-          echo "# Copilot Advisory Summary"
-          echo ""
-          echo "GitHub authentication failed in runner."
-          echo ""
-          echo "## CLI Error"
-          cat /tmp/gh-user.err
-        } > "$REPORTS_DIR/copilot-advisory.md"
-        exit 0
-      fi
-    - |
-      if ! gh extension install github/gh-copilot --force >/tmp/gh-ext.log 2>/tmp/gh-ext.err; then
-        {
-          echo "# Copilot Advisory Summary"
-          echo ""
-          echo "Failed to install gh-copilot extension in runner."
-          echo ""
-          echo "## CLI Error"
-          cat /tmp/gh-ext.err
-        } > "$REPORTS_DIR/copilot-advisory.md"
-        exit 0
-      fi
-    - |
-      if ! gh copilot --help >/tmp/gh-copilot-help.log 2>/tmp/gh-copilot-help.err; then
-        {
-          echo "# Copilot Advisory Summary"
-          echo ""
-          echo "gh-copilot extension is installed but not executable."
-          echo ""
-          echo "## CLI Error"
-          cat /tmp/gh-copilot-help.err
-        } > "$REPORTS_DIR/copilot-advisory.md"
-        exit 0
-      fi
-    - |
-      PROMPT="Read reports/copilot-input.json and produce concise advisory bullets: top risks, quick fixes, and confidence level."
-      if gh copilot suggest -t shell "$PROMPT" > "$REPORTS_DIR/copilot-advisory.md" 2>/tmp/copilot.err; then
-        true
-      else
-        {
-          echo "# Copilot Advisory Summary"
-          echo ""
-          echo "Copilot advisory execution failed."
-          echo ""
-          echo "## CLI Error"
-          cat /tmp/copilot.err
-        } > "$REPORTS_DIR/copilot-advisory.md"
-      fi
+      MR_IID: ${CI_MERGE_REQUEST_IID}
+      CHANGED_FILES:
+      $(cat diff.txt)
+
+      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
+      " > ${STATION_OUT}/raw.json
+
+    - python3 "$EXTRACT_JSON" < "${STATION_OUT}/raw.json" > "${STATION_OUT}/work_order.json"
+
   artifacts:
     paths:
-      - $REPORTS_DIR/copilot-advisory.md
-      - $REPORTS_DIR/copilot-input.json
-    expire_in: 14 days
-    when: always
-  allow_failure: true
+      - "${STATION_OUT}/work_order.json"
 
-# Job: Aggregate reports and post merge request comment
-report:summary:
-  extends: .mr_only
-  stage: report
-  image: python:3.11
-  dependencies:
-    - validate:pr-auto
-    - validate:yaml-workflows
-    - validate:test-gaps
+
+validate:policy:
+  extends: .station_base
+  stage: validate
+
   script:
-    - apt-get update && apt-get install -y curl jq
     - |
-      cat > /tmp/gen_comment.py <<'SCRIPT'
-      import json
-      from pathlib import Path
-      reports = [
-          ("PR Auto Validator", Path("reports/pr-auto-validator.json")),
-          ("YAML Workflow Linter", Path("reports/yaml-workflow-linter.json")),
-          ("Test Gap Detector", Path("reports/test-gap-detector.json")),
-      ]
-      lines = ["## MR Validation Summary", ""]
-      for title, path in reports:
-          lines.append(f"### {title}")
-          if path.exists():
-              data = json.loads(path.read_text(encoding="utf-8", errors="replace"))
-              lines.append(f"**Status:** {str(data.get('status', 'unknown')).upper()}")
-              lines.append("")
-              lines.append("Summary:")
-              for item in data.get("summary", []):
-                  lines.append(f"- {item}")
-          else:
-              lines.append("Report not generated")
-          lines.append("")
-      advisory = Path("reports/copilot-advisory.md")
-      if advisory.exists():
-          lines.append("### Copilot Advisory")
-          lines.append(advisory.read_text(encoding="utf-8", errors="replace"))
-      Path("comment.md").write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
-      SCRIPT
-    - python3 /tmp/gen_comment.py
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a1-policy-validation.prompt.md")
+
+      timeout 600 copilot -s --output-format json \
+        --available-tools \
+        --no-ask-user \
+        --add-dir "${CI_PROJECT_DIR}" -p "
+      ${PROMPT}
+
+      CHANGED_FILES:
+      $(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} ${CI_COMMIT_SHA})
+
+      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
+      " > "${STATION_OUT}/policy_raw.json"
+
+    - python3 "$EXTRACT_JSON" < "${STATION_OUT}/policy_raw.json" > "${STATION_OUT}/policy.json"
+
     - |
-      curl --request POST \
-        --header "JOB-TOKEN: $CI_JOB_TOKEN" \
-        --header "Content-Type: application/json" \
-        --data "{\"body\": $(jq -Rs . < comment.md)}" \
-        "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" || true
+      STATUS=$(jq -r '.status' "${STATION_OUT}/policy.json")
+      echo "Policy gate status: $STATUS"
+      if [ "$STATUS" = "fail" ]; then
+        echo "GATE FAILED: Policy validation reported critical/high findings."
+        cat "${STATION_OUT}/policy.json"
+        exit 1
+      fi
+
   artifacts:
     paths:
-      - comment.md
-      - $REPORTS_DIR/
-    expire_in: 14 days
+      - "${STATION_OUT}/policy.json"
+
+
+validate:security:
+  extends: .station_base
+  stage: validate
+
+  script:
+    - git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA > "${STATION_OUT}/diff.patch"
+
+    - |
+      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a2-security-static.prompt.md")
+
+      timeout 600 copilot -s --output-format json \
+        --available-tools \
+        --no-ask-user \
+        --add-dir "${CI_PROJECT_DIR}" -p "
+      ${PROMPT}
+
+      DIFF:
+      $(head -n ${COPILOT_MAX_DIFF_LINES} ${STATION_OUT}/diff.patch)
+
+      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
+      " > "${STATION_OUT}/security_raw.json"
+
+    - python3 "$EXTRACT_JSON" < "${STATION_OUT}/security_raw.json" > "${STATION_OUT}/security.json"
+
+    - |
+      STATUS=$(jq -r '.status' "${STATION_OUT}/security.json")
+      echo "Security gate status: $STATUS"
+      if [ "$STATUS" = "fail" ]; then
+        echo "GATE FAILED: Security scan reported critical/high findings."
+        cat "${STATION_OUT}/security.json"
+        exit 1
+      fi
+
+  artifacts:
+    paths:
+      - "${STATION_OUT}/security.json"
     when: always
