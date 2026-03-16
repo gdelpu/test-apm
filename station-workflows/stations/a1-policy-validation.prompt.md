@@ -17,12 +17,18 @@ Emit `station_out/policy_report.json`.
 - `station-workflows/schemas/agent-manifest.schema.json`
 - `station-workflows/schemas/skill-manifest.schema.json`
 
+## Target Selection
+
+From `work_order.json` → `changed_files`, collect entries where `type == "agent"` or `type == "skill"`.
+**Exclude any file whose path starts with `station-workflows/stations/`** — those are pipeline
+infrastructure files, not user-authored agents or skills. Validating them produces false positives.
+
 ## Skip Condition
 
-If `work_order.json` has `"scope": "non-agent"`, write a skipped report and stop:
+If `work_order.json` has `"scope": "non-agent"`, or if no eligible files remain after the exclusion above:
 
 ```json
-{ "station": "A1", "status": "skipped", "findings": [], "summary": "No agent/skill files changed." }
+{ "station": "A1", "status": "skipped", "findings": [], "summary": "No user-authored agent/skill files changed." }
 ```
 
 ## Policy Rules

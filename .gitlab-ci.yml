@@ -1,12 +1,19 @@
 # =====================================================
 # Merge Request Validation Pipeline
 # =====================================================
+#
+# Two-phase design:
+#   1. validate  — deterministic Python checks run in parallel
+#   2. stations  — AI station orchestrator runs sequentially,
+#                  only after blocking validators pass
+# =====================================================
 
 stages:
   - validate
+  - stations
 
 # -----------------------------------------------------
-# Global Variables (merged)
+# Global Variables
 # -----------------------------------------------------
 variables:
   ENABLE_COPILOT_CLI: "false"
@@ -15,6 +22,8 @@ variables:
   REPORTS_DIR: "reports"
 
   STATION_OUT: "station_out"
+  STATION_DIR: "station-workflows/stations"
+  STATION_TIMEOUT: "900"
 
   GIT_DEPTH: "0"
 
@@ -33,22 +42,6 @@ default:
 .mr_only:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-.station_base:
-  extends: .mr_only
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
-    - npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
-
-    - EXTRACT_JSON="${CI_PROJECT_DIR}/station-workflows/scripts/extract_json.py"
-    - HMAC_TOOL="${CI_PROJECT_DIR}/station-workflows/scripts/hmac_artifact.py"
-
-    - |
-      if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
-        git fetch --unshallow
-      fi
-
-    - mkdir -p ${STATION_OUT}
 
 # =====================================================
 # PR Validators
@@ -140,110 +133,42 @@ validate:test-gaps:
   allow_failure: true
 
 # =====================================================
-# AI Station Validation
+# AI Station Orchestrator
+# =====================================================
+# Dynamically discovers all .prompt.md / .agent.md files
+# in station-workflows/stations/, sorts by prefix (a0…a7),
+# and runs them sequentially via Copilot CLI.
+#
+# Runs ONLY after the two blocking deterministic validators
+# pass (test-gaps is advisory and does not gate).
 # =====================================================
 
-validate:ai-intake:
-  extends: .station_base
-  stage: validate
+stations:run-all:
+  extends: .mr_only
+  stage: stations
+  image: node:20-bookworm-slim
 
-  script:
-    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-    - git diff --name-status origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
+  needs:
+    - job: validate:pr-auto
+      artifacts: true
+    - job: validate:yaml-workflows
+      artifacts: true
 
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3 findutils
+    - npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
     - |
-      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a0-intake.prompt.md")
-
-      timeout 300 copilot -s --output-format json \
-        --available-tools \
-        --no-ask-user \
-        --add-dir "${CI_PROJECT_DIR}" -p "
-      ${PROMPT}
-
-      MR_IID: ${CI_MERGE_REQUEST_IID}
-      CHANGED_FILES:
-      $(cat diff.txt)
-
-      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
-      " > ${STATION_OUT}/raw.json
-
-    - python3 "$EXTRACT_JSON" < "${STATION_OUT}/raw.json" > "${STATION_OUT}/work_order.json"
-
-  artifacts:
-    paths:
-      - "${STATION_OUT}/work_order.json"
-
-
-validate:policy:
-  extends: .station_base
-  stage: validate
-
-  script:
-    - |
-      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a1-policy-validation.prompt.md")
-
-      timeout 600 copilot -s --output-format json \
-        --available-tools \
-        --no-ask-user \
-        --add-dir "${CI_PROJECT_DIR}" -p "
-      ${PROMPT}
-
-      CHANGED_FILES:
-      $(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} ${CI_COMMIT_SHA})
-
-      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
-      " > "${STATION_OUT}/policy_raw.json"
-
-    - python3 "$EXTRACT_JSON" < "${STATION_OUT}/policy_raw.json" > "${STATION_OUT}/policy.json"
-
-    - |
-      STATUS=$(jq -r '.status' "${STATION_OUT}/policy.json")
-      echo "Policy gate status: $STATUS"
-      if [ "$STATUS" = "fail" ]; then
-        echo "GATE FAILED: Policy validation reported critical/high findings."
-        cat "${STATION_OUT}/policy.json"
-        exit 1
+      if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+        git fetch --unshallow
       fi
-
-  artifacts:
-    paths:
-      - "${STATION_OUT}/policy.json"
-
-
-validate:security:
-  extends: .station_base
-  stage: validate
+    - mkdir -p ${STATION_OUT}
 
   script:
-    - git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA > "${STATION_OUT}/diff.patch"
-
-    - |
-      PROMPT=$(cat "${CI_PROJECT_DIR}/station-workflows/stations/a2-security-static.prompt.md")
-
-      timeout 600 copilot -s --output-format json \
-        --available-tools \
-        --no-ask-user \
-        --add-dir "${CI_PROJECT_DIR}" -p "
-      ${PROMPT}
-
-      DIFF:
-      $(head -n ${COPILOT_MAX_DIFF_LINES} ${STATION_OUT}/diff.patch)
-
-      OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
-      " > "${STATION_OUT}/security_raw.json"
-
-    - python3 "$EXTRACT_JSON" < "${STATION_OUT}/security_raw.json" > "${STATION_OUT}/security.json"
-
-    - |
-      STATUS=$(jq -r '.status' "${STATION_OUT}/security.json")
-      echo "Security gate status: $STATUS"
-      if [ "$STATUS" = "fail" ]; then
-        echo "GATE FAILED: Security scan reported critical/high findings."
-        cat "${STATION_OUT}/security.json"
-        exit 1
-      fi
+    - bash "${CI_PROJECT_DIR}/station-workflows/scripts/run_stations.sh"
 
   artifacts:
     paths:
-      - "${STATION_OUT}/security.json"
+      - ${STATION_OUT}/
+      - ${REPORTS_DIR}/
+    expire_in: 14 days
     when: always

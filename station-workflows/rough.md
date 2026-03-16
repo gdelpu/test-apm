@@ -22,17 +22,18 @@ Optional read-only “Red Team Agent”:
 tries to generate exploit prompts / tool misuse scenarios
 outputs structured findings (no code execution)
 Output: station_out/promptsec_report.json
-Station A4 — Sandbox Simulation (deterministic)
+Station A4 — Red Team Agent
+Station A5 — Sandbox Simulation (deterministic)
 Run the agent/skill in a locked sandbox against test fixtures:
 malicious user inputs
 prompt injection payloads
 “exfiltrate secrets” attempts
 “modify CI pipeline” attempts
 Output: station_out/sim_report.json
-Station A5 — Policy Gate
+Station A6 — Policy Gate
 Block PR if any “critical” finding or missing mandatory fields
 Apply risk label / require human approval for “high-risk agent”
 Output: station_out/gate_decision.json
-Station A6 — GitHub Update
+Station A7 — GitLab Update
 Comment on PR with a short report + links to artifacts
 Add labels like security:blocker, agent:risk-high, needs:manual-review

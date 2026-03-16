@@ -20,12 +20,11 @@ This guide explains how to run the Agent Factory pipeline locally using `gitlab-
 **Use the native Podman runner** (no npm/Node.js required):
 
 ```powershell
-# Full pipeline (all 6 stations, A6 skipped)
+# Full pipeline (deterministic validators + all stations)
 .\run-pipeline-podman.ps1
 
-# Individual stations
-.\run-pipeline-podman.ps1 A0-intake
-.\run-pipeline-podman.ps1 A5-policy-gate
+# Run only the station orchestrator (skips deterministic validators)
+bash station-workflows/scripts/run_stations.sh
 
 # Show help
 .\run-pipeline-podman.ps1 -Help
@@ -42,12 +41,28 @@ npm install -g gitlab-ci-local
 # Configure test scenario
 # Edit .gitlab-ci-local-variables.yml
 
-# Run pipeline
+# Run full pipeline (both phases)
 gitlab-ci-local
 
-# Run single station
-gitlab-ci-local A0-intake
+# Run only deterministic validators
+gitlab-ci-local validate:pr-auto
+gitlab-ci-local validate:yaml-workflows
+
+# Run station orchestrator (discovers all stations dynamically)
+gitlab-ci-local stations:run-all
 ```
+
+## Pipeline Phases
+
+The pipeline runs in two phases:
+
+1. **Phase 1 — `validate` stage**: Three deterministic Python validators run in parallel.
+   `validate:pr-auto` and `validate:yaml-workflows` are blocking; `validate:test-gaps` is advisory.
+2. **Phase 2 — `stations` stage**: The `stations:run-all` job invokes
+   `station-workflows/scripts/run_stations.sh`, which dynamically discovers all
+   `*.prompt.md` and `*.agent.md` files in `station-workflows/stations/`, sorts
+   them by prefix (a0 → a6), and runs each sequentially via Copilot CLI.
+   It starts only after the two blocking validators pass.
 
 ## Station Outputs
 
@@ -57,8 +72,8 @@ All stations write their results to the `station_out/` directory:
 - `station_out/policy_report.json` — A1 validation results
 - `station_out/security_report.json` — A2 security scan
 - `station_out/promptsec_report.json` — A3 prompt injection checks
-- `station_out/sim_report.json` — A4 sandbox test results
-- `station_out/gate_decision.json` — A5 final decision
+- `station_out/sim_report.json` — A5 sandbox test results
+- `station_out/gate_decision.json` — A6 final decision
 
 ## Testing Specific Scenarios
 
@@ -67,26 +82,26 @@ All stations write their results to the `station_out/` directory:
 1. Add a malicious pattern to an agent file (e.g., hardcoded token)
 2. Run: `.\run-pipeline-local.ps1 A2-security-static`
 3. Verify: `station_out/security_report.json` shows critical finding
-4. Run: `.\run-pipeline-local.ps1 A5-policy-gate`
-5. Verify: A5 exits with code 1 (BLOCK decision)
+4. Run: `.\run-pipeline-local.ps1 A6-policy-gate`
+5. Verify: A6 exits with code 1 (BLOCK decision)
 
 ### Test REVIEW Decision (High Risk)
 
 1. Add `allowRunCommands: true` to an agent
 2. Run: `.\run-pipeline-local.ps1 A1-policy-validation`
 3. Verify: `station_out/policy_report.json` flags high-risk pattern
-4. Run: `.\run-pipeline-local.ps1 A5-policy-gate`
+4. Run: `.\run-pipeline-local.ps1 A6-policy-gate`
 5. Verify: Decision is "REVIEW"
 
-### Test A6 GitLab API Calls (Labels/Notes)
+### Test A7 GitLab API Calls (Labels/Notes)
 
-**Note:** A6 requires a real GitLab instance. For local testing, A6 will attempt API calls that will fail against `http://localhost` endpoints. To skip A6 during local testing, run only stations A0-A5.
+**Note:** A7 requires a real GitLab instance. For local testing, A7 will attempt API calls that will fail against `http://localhost` endpoints. To skip A7 during local testing, run only stations A0-A6.
 
 If you want to test A6:
 1. Set `GITLAB_TOKEN` in `.gitlab-ci-local-variables.yml`
 2. Update `CI_API_V4_URL` to point to your GitLab instance
 3. Set `CI_PROJECT_ID` to a real project ID
-4. Run: `.\run-pipeline-local.ps1 A6-gitlab-update`
+4. Run: `.\run-pipeline-local.ps1 A7-gitlab-update`
 
 ## Troubleshooting
 
@@ -193,12 +208,14 @@ Before pushing to GitLab, verify locally:
 - [ ] A1 passes all policy rules (or intentionally flags expected violations)
 - [ ] A2 security scan runs without blocking findings (unless expected)
 - [ ] A3 prompt injection checks pass
-- [ ] A4 sandbox scenarios complete without crashes
-- [ ] A5 produces expected decision (APPROVE/REVIEW/BLOCK)
+- [ ] A4 red team findings reviewed
+- [ ] A5 sandbox scenarios complete without crashes
+- [ ] A6 produces expected decision (APPROVE/REVIEW/BLOCK)
 - [ ] All station JSON outputs are valid and complete
 
 ## Resources
 
 - **gitlab-ci-local docs:** https://github.com/firecow/gitlab-ci-local
 - **GitLab CI YAML reference:** https://docs.gitlab.com/ee/ci/yaml/
-- **Pipeline file:** `.gitlab/agent-factory.gitlab-ci.yml`
+- **Pipeline file:** `.gitlab-ci.yml`
+- **Station orchestrator:** `station-workflows/scripts/run_stations.sh`

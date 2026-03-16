@@ -35,12 +35,16 @@ _ENVELOPE_TYPES = frozenset({
 })
 
 
-def extract_jsonl_content(raw: str) -> str:
-    """If input is JSONL from copilot --output-format json, concatenate all
-    assistant.message content fields. Falls back to raw text if not JSONL."""
+def extract_jsonl_content(raw: str) -> list[str]:
+    """If input is JSONL from copilot --output-format json, return candidate
+    content strings ordered by preference:
+      1. assistant.message text (normal path)
+      2. create-tool file_text (fallback for models that write JSON via tools)
+      3. raw text (last resort)
+    The caller tries each candidate until a valid JSON object is found."""
     lines = raw.splitlines()
     if not lines:
-        return raw
+        return [raw]
 
     # Quick heuristic: if the first non-empty line is a JSON object with a
     # "type" key, treat the whole input as JSONL.
@@ -54,12 +58,13 @@ def extract_jsonl_content(raw: str) -> str:
     try:
         probe = json.loads(first)
         if not isinstance(probe, dict) or "type" not in probe:
-            return raw
+            return [raw]
     except (json.JSONDecodeError, ValueError):
-        return raw
+        return [raw]
 
-    # It's JSONL — collect assistant message content in order.
+    # It's JSONL — collect assistant message content and create-tool content.
     parts: list[str] = []
+    tool_json_parts: list[str] = []
     for line in lines:
         line = line.strip()
         if not line:
@@ -77,8 +82,21 @@ def extract_jsonl_content(raw: str) -> str:
             summary = evt.get("data", {}).get("summary", "")
             if summary:
                 parts.append(summary)
+        elif evt_type == "tool.execution_start":
+            # Capture JSON from 'create' tool calls — some models (e.g. Haiku)
+            # write structured output as a file instead of emitting text.
+            data = evt.get("data", {})
+            if data.get("toolName") == "create":
+                file_text = data.get("arguments", {}).get("file_text", "")
+                if file_text:
+                    tool_json_parts.append(file_text)
 
-    return "\n".join(parts) if parts else raw
+    candidates: list[str] = []
+    if parts:
+        candidates.append("\n".join(parts))
+    if tool_json_parts:
+        candidates.append("\n".join(tool_json_parts))
+    return candidates if candidates else [raw]
 
 
 def find_json_objects(text: str) -> list:
@@ -120,24 +138,39 @@ def find_json_objects(text: str) -> list:
 
 def main() -> None:
     raw = sys.stdin.read()
-    content = extract_jsonl_content(raw)
+    candidates = extract_jsonl_content(raw)
 
-    # Strip markdown code fences that models sometimes wrap JSON in.
-    content = re.sub(r"```(?:json)?\s*\n?", "", content)
-
-    objects = find_json_objects(content)
+    # Try each candidate source in priority order until we find JSON.
+    for content in candidates:
+        # Strip markdown code fences that models sometimes wrap JSON in.
+        content = re.sub(r"```(?:json)?\s*\n?", "", content)
+        objects = find_json_objects(content)
+        if objects:
+            break
+    else:
+        objects = []
 
     if not objects:
         sys.stderr.write("ERROR: No valid JSON object found in model output\n")
         sys.exit(1)
 
+    # When multiple JSON objects exist, prefer the one that looks like a
+    # station result (has a "station" key) over inline fragments the model
+    # may have embedded in its prose.
     if len(objects) > 1:
+        station_objs = [o for o in objects if "station" in o]
+        if station_objs:
+            result = station_objs[0]
+        else:
+            result = objects[0]
         sys.stderr.write(
-            f"WARNING: {len(objects)} JSON objects found; using the first. "
-            "Model returned unexpected multi-block output — investigate raw response.\n"
+            f"WARNING: {len(objects)} JSON objects found; "
+            f"selected {'station-keyed' if 'station' in result else 'first'} object.\n"
         )
+    else:
+        result = objects[0]
 
-    print(json.dumps(objects[0]))
+    print(json.dumps(result))
 
 
 if __name__ == "__main__":

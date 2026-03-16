@@ -8,7 +8,7 @@ description: 'Deterministic scan of agent and skill definitions for jailbreak ph
 ## Goal
 
 Detect prompt injection vulnerabilities and data exfiltration vectors in agent/skill definitions
-using deterministic (regex / keyword) scanners. The optional Red Team Agent (`a3-red-team.agent.md`)
+using deterministic (regex / keyword) scanners. The optional Red Team Agent (`a4-red-team.agent.md`)
 runs separately and appends its structured findings to the same report.
 
 Emit `station_out/promptsec_report.json`.
@@ -18,11 +18,18 @@ Emit `station_out/promptsec_report.json`.
 - `station_out/work_order.json`
 - Full text of changed `*.agent.md`, `SKILL.md`, and `*.prompt.md` files
 
+## Target Selection
+
+From `work_order.json` → `changed_files`, collect entries where `type` is `"agent"`, `"skill"`, or
+`"prompt"`. **Exclude any file whose path starts with `station-workflows/stations/`** — these are
+pipeline infrastructure files whose bodies intentionally contain adversarial pattern examples
+(jailbreak phrase tables, regex rules, fixture references). Scanning them produces false positives.
+
 ## Skip Condition
 
-If `work_order.json` has `"scope": "non-agent"`, skip:
+If `work_order.json` has `"scope": "non-agent"`, or if no eligible files remain after the exclusion above:
 ```json
-{ "station": "A3", "status": "skipped", "findings": [], "summary": "No agent/skill files changed." }
+{ "station": "A3", "status": "skipped", "findings": [], "summary": "No user-authored agent/skill/prompt files changed." }
 ```
 
 ## Deterministic Checks
@@ -111,7 +118,7 @@ Pattern: `(read\|process\|execute\|follow).{0,40}(file\|document\|webpage\|url).
 
 ## Red Team Agent
 
-After the deterministic checks, the `a3-red-team.agent.md` agent MAY be invoked.
+After the deterministic checks, the `a4-red-team.agent.md` agent MAY be invoked.
 It appends its findings under the `"red_team_findings"` key and sets `"red_team_ran": true`.
 Red team findings use the same severity schema but carry `"source": "red_team"`.
 
