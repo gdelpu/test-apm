@@ -27,3 +27,6 @@ Thumbs.db
 reports/*
 check-gh-auth.ps1
 diff.txt
+
+*/__pycache__/
+*.pyc

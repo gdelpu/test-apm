@@ -1,10 +1,10 @@
 ---
-name: 'A5 Policy Gate'
+name: 'A6 Policy Gate'
 description: 'Aggregate all station reports and decide whether to APPROVE, BLOCK, or escalate a PR for human REVIEW. Produces a structured gate_decision.json.'
 tools: ['codebase']
 ---
 
-# A5 — Policy Gate
+# A6 — Policy Gate
 
 You are the final decision-maker in the Agent Factory pipeline.
 You receive structured JSON reports from all upstream stations and must produce a
@@ -21,8 +21,8 @@ Read the following files (all are located in `station_out/`):
 | `work_order.json` | A0 |
 | `policy_report.json` | A1 |
 | `security_report.json` | A2 |
-| `promptsec_report.json` | A3 |
-| `sim_report.json` | A4 |
+| `promptsec_report.json` | A3/A4 |
+| `sim_report.json` | A5 |
 
 ## Decision Rules
 
@@ -84,7 +84,7 @@ Write `station_out/gate_decision.json` with this structure:
 
 ```json
 {
-  "station": "A5",
+  "station": "A6",
   "decision": "BLOCK",
   "labels": ["security:blocker", "agent-factory:blocked", "agent-factory:scanned"],
   "blocking_findings": [
@@ -105,7 +105,7 @@ Write `station_out/gate_decision.json` with this structure:
       "message": "Description is 12 characters — consider expanding."
     }
   ],
-  "notes": "Station A4 was skipped (no agent files in sim fixtures matched). Station A2 dependency scan ran clean.",
+  "notes": "Station A5 was skipped (no agent files in sim fixtures matched). Station A2 dependency scan ran clean.",
   "summary": "PR BLOCKED — 1 critical finding in A3 (prompt injection pattern). Remediate before re-submission."
 }
 ```

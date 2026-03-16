@@ -5,12 +5,12 @@
 # Usage (podman-compose or docker-compose):
 #
 #   1. Copy .env.example → .env and fill in the values.
-#   2. Run ALL validators:
+#   2. Run ALL validators + station orchestrator:
 #        podman-compose up --abort-on-container-exit
-#   3. Run a SINGLE job:
-#        podman-compose up validate-pr-auto
-#   4. Run only the Python validators (no Copilot CLI needed):
+#   3. Run only the Python validators (no Copilot CLI needed):
 #        podman-compose up validate-pr-auto validate-yaml-workflows validate-test-gaps
+#   4. Run only the station orchestrator:
+#        podman-compose up stations-run-all
 #
 # Reports are written to ./reports/ on your host.
 # Station outputs are written to ./station_out/ on your host.
@@ -23,11 +23,14 @@ x-common-env: &common-env
   VALIDATORS_DIR: default/skills/ai-backbone-pr-checks/tools/scripts
   REPORTS_DIR: reports
   STATION_OUT: station_out
+  STATION_DIR: station-workflows/stations
+  STATION_TIMEOUT: "900"
   CI_MERGE_REQUEST_TARGET_BRANCH_NAME: ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}
   CI_COMMIT_SHA: ${CI_COMMIT_SHA:-HEAD}
   CI_MERGE_REQUEST_IID: ${CI_MERGE_REQUEST_IID:-0}
   COPILOT_MAX_DIFF_LINES: "2000"
   COPILOT_CLI_VERSION: "1.0.4"
+  ENABLE_COPILOT_CLI: ${ENABLE_COPILOT_CLI:-false}
   GITHUB_TOKEN: ${GITHUB_TOKEN:-}
 
 x-repo-volume: &repo-volume
@@ -102,144 +105,32 @@ services:
         cat $REPORTS_DIR/test-gap-detector.json
 
   # ---------------------------------------------------
-  # AI Station jobs  (require GitHub Copilot CLI + token)
+  # AI Station Orchestrator (requires GitHub Copilot CLI + token)
+  # ---------------------------------------------------
+  # Dynamically discovers all station files and runs them
+  # sequentially. Mirrors the stations:run-all CI job.
   # ---------------------------------------------------
 
-  validate-ai-intake:
+  stations-run-all:
     image: node:20-bookworm-slim
     working_dir: /workspace
+    depends_on:
+      - validate-pr-auto
+      - validate-yaml-workflows
     environment:
       <<: *common-env
     volumes: *repo-volume
     entrypoint: ["/bin/bash", "-ec"]
     command:
       - |
-        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
-        npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
+        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3 findutils
+        npm install -g "@github/copilot@$${COPILOT_CLI_VERSION}"
         git config --global --add safe.directory /workspace
 
         if git rev-parse --is-shallow-repository 2>/dev/null | grep -q true; then
           git fetch --unshallow
         fi
 
-        mkdir -p $STATION_OUT
+        mkdir -p $$STATION_OUT
 
-        EXTRACT_JSON="/workspace/station-workflows/scripts/extract_json.py"
-
-        git diff --name-status $CI_MERGE_REQUEST_TARGET_BRANCH_NAME "$CI_COMMIT_SHA" > diff.txt
-
-        PROMPT=$$(cat /workspace/station-workflows/stations/A0-intake.prompt.md)
-
-        timeout 300 copilot -s --output-format json \
-          --available-tools \
-          --no-ask-user \
-          --add-dir /workspace -p "
-        $${PROMPT}
-
-        MR_IID: ${CI_MERGE_REQUEST_IID}
-        CHANGED_FILES:
-        $$(cat diff.txt)
-
-        OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
-        " > $${STATION_OUT}/raw.json
-
-        python3 "$$EXTRACT_JSON" < "$${STATION_OUT}/raw.json" > "$${STATION_OUT}/work_order.json"
-
-        echo "=== AI Intake result ==="
-        cat $${STATION_OUT}/work_order.json
-
-  validate-policy:
-    image: node:20-bookworm-slim
-    working_dir: /workspace
-    environment:
-      <<: *common-env
-    volumes: *repo-volume
-    entrypoint: ["/bin/bash", "-ec"]
-    command:
-      - |
-        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
-        npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
-        git config --global --add safe.directory /workspace
-
-        if git rev-parse --is-shallow-repository 2>/dev/null | grep -q true; then
-          git fetch --unshallow
-        fi
-
-        mkdir -p $STATION_OUT
-
-        EXTRACT_JSON="/workspace/station-workflows/scripts/extract_json.py"
-
-        PROMPT=$$(cat "/workspace/station-workflows/stations/a1-policy-validation.prompt.md")
-
-        timeout 600 copilot -s --output-format json \
-          --available-tools \
-          --no-ask-user \
-          --add-dir /workspace -p "
-        $${PROMPT}
-
-        CHANGED_FILES:
-        $$(git diff --name-only $CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA)
-
-        OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
-        " > "$${STATION_OUT}/policy_raw.json"
-
-        python3 "$$EXTRACT_JSON" < "$${STATION_OUT}/policy_raw.json" > "$${STATION_OUT}/policy.json"
-
-        echo "=== Policy Validation result ==="
-        cat $${STATION_OUT}/policy.json
-
-        STATUS=$$(jq -r '.status' "$${STATION_OUT}/policy.json")
-        echo "Policy gate status: $$STATUS"
-        if [ "$$STATUS" = "fail" ]; then
-          echo "GATE FAILED: Policy validation reported critical/high findings."
-          exit 1
-        fi
-
-  validate-security:
-    image: node:20-bookworm-slim
-    working_dir: /workspace
-    environment:
-      <<: *common-env
-    volumes: *repo-volume
-    entrypoint: ["/bin/bash", "-ec"]
-    command:
-      - |
-        apt-get update -qq && apt-get install -y -qq git jq curl ca-certificates python3
-        npm install -g "@github/copilot@${COPILOT_CLI_VERSION}"
-        git config --global --add safe.directory /workspace
-
-        if git rev-parse --is-shallow-repository 2>/dev/null | grep -q true; then
-          git fetch --unshallow
-        fi
-
-        mkdir -p $STATION_OUT
-
-        EXTRACT_JSON="/workspace/station-workflows/scripts/extract_json.py"
-
-        git diff $CI_MERGE_REQUEST_TARGET_BRANCH_NAME $CI_COMMIT_SHA > "$${STATION_OUT}/diff.patch"
-
-        PROMPT=$$(cat "/workspace/station-workflows/stations/a2-security-static.prompt.md")
-
-        timeout 600 copilot -s --output-format json \
-          --available-tools \
-          --no-ask-user \
-          --add-dir /workspace -p "
-        $${PROMPT}
-
-        DIFF:
-        $$(head -n $COPILOT_MAX_DIFF_LINES $${STATION_OUT}/diff.patch)
-
-        OUTPUT FORMAT: Respond with ONLY a raw JSON object, no prose.
-        " > "$${STATION_OUT}/security_raw.json"
-
-        python3 "$$EXTRACT_JSON" < "$${STATION_OUT}/security_raw.json" > "$${STATION_OUT}/security.json"
-
-        echo "=== Security Analysis result ==="
-        cat $${STATION_OUT}/security.json
-
-        STATUS=$$(jq -r '.status' "$${STATION_OUT}/security.json")
-        echo "Security gate status: $$STATUS"
-        if [ "$$STATUS" = "fail" ]; then
-          echo "GATE FAILED: Security scan reported critical/high findings."
-          exit 1
-        fi
+        bash /workspace/station-workflows/scripts/run_stations.sh

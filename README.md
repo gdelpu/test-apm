@@ -157,19 +157,23 @@ See [default/skills/brand-styler/SKILL.md](default/skills/brand-styler/SKILL.md)
 
 ## 🛡️ Validation Gating Policy
 
-Every merge request triggers a **validation pipeline** (`.gitlab-ci.yml`) that runs six jobs concurrently in the `validate` stage. Three are deterministic Python scripts; three are **AI Agent stations** powered by GitHub Copilot CLI. Together they enforce structural, policy, and security standards before code is merged.
+Every merge request triggers a **two-phase validation pipeline** (`.gitlab-ci.yml`). Phase 1 runs three deterministic Python scripts in parallel. Phase 2 runs **all AI Agent stations** sequentially via a single orchestrator job, only after the blocking Python validators pass.
 
 ### Pipeline Architecture
 
 ```
 merge_request_event
-  └─ validate (concurrent)
-       ├─ validate:pr-auto          ← Python deterministic
-       ├─ validate:yaml-workflows   ← Python deterministic
-       ├─ validate:test-gaps        ← Python deterministic (advisory)
-       ├─ validate:ai-intake  (A0)  ← Copilot CLI AI Agent
-       ├─ validate:policy     (A1)  ← Copilot CLI AI Agent  ⛔ gates
-       └─ validate:security   (A2)  ← Copilot CLI AI Agent  ⛔ gates
+  │
+  ├─ validate (parallel)                  ← Phase 1
+  │   ├─ validate:pr-auto                  Python   ⛔ gates
+  │   ├─ validate:yaml-workflows           Python   ⛔ gates
+  │   └─ validate:test-gaps                Python   advisory
+  │
+  └─ stations (sequential)                ← Phase 2 (needs pr-auto + yaml-workflows)
+      └─ stations:run-all
+           Discovers stations/*.prompt.md & *.agent.md
+           Runs A0 → A1 → A2 → … → A7 in order
+           Fails fast on any station with status: "fail"
 ```
 
 ### Validation Jobs
@@ -179,11 +183,13 @@ merge_request_event
 | `validate:pr-auto` | Deterministic | `pr_auto_validator.py` | Validates frontmatter, kebab-case naming, and internal links | **Blocking** |
 | `validate:yaml-workflows` | Deterministic | `yaml_workflow_linter.py` | Validates workflow YAML structure and safety rules | **Blocking** |
 | `validate:test-gaps` | Deterministic | `test_gap_detector.py` | Detects missing documentation when scripts/workflows change | **Advisory** |
-| `validate:ai-intake` | AI Agent | [`A0-intake.prompt.md`](station-workflows/stations/A0-intake.prompt.md) | Classifies changed files, extracts MR context (id, priority, risks) | **Informational** |
-| `validate:policy` | AI Agent | [`a1-policy-validation.prompt.md`](station-workflows/stations/a1-policy-validation.prompt.md) | Validates agent/skill manifests against JSON schemas, enforces tool allowlists and safety fields | **Blocking** — fails MR on `status: "fail"` |
-| `validate:security` | AI Agent | [`a2-security-static.prompt.md`](station-workflows/stations/a2-security-static.prompt.md) | Scans MR diff for hardcoded secrets, vulnerable dependencies, and dangerous shell patterns | **Blocking** — fails MR on `status: "fail"` |
+| `stations:run-all` | AI Orchestrator | `run_stations.sh` | Dynamically discovers and runs all station prompts/agents sequentially (A0–A7) | **Blocking** — fails on any station `status: "fail"` |
 
 Deterministic scripts live in `default/skills/ai-backbone-pr-checks/tools/scripts/`. AI station prompts live in `station-workflows/stations/`.
+
+### Dynamic Station Discovery
+
+The orchestrator (`station-workflows/scripts/run_stations.sh`) finds all `*.prompt.md` and `*.agent.md` files in `station-workflows/stations/`, sorts them by filename prefix (`a0`, `a1`, … `a7`), and runs each through Copilot CLI. Adding or removing a station file requires **no `.gitlab-ci.yml` changes**.
 
 ### How AI Stations Work
 
@@ -218,7 +224,8 @@ The AI station jobs require a GitHub token with Copilot CLI access:
 
 1. Go to **Settings > CI/CD > Variables** in your GitLab project
 2. Create a masked variable: `GITHUB_TOKEN` with a GitHub PAT that has Copilot CLI access
-3. The three AI station jobs (`ai-intake`, `policy`, `security`) use this token to authenticate with Copilot CLI
+3. Set `ENABLE_COPILOT_CLI` to `true` to enable AI station execution
+4. The `stations:run-all` job uses this token to authenticate with Copilot CLI for all stations (A0–A7)
 
 For local testing, set `GH_TOKEN` and `GITHUB_TOKEN` in your `.env` file (see [LOCAL_TESTING.md](LOCAL_TESTING.md)).
 

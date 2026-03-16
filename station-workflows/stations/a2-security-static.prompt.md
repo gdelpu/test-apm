@@ -52,9 +52,10 @@ If any dependency manifest or lock file is in `changed_files`, run **Trivy** (or
 
 Scan every changed file with the following regex rules.
 
-**Exclusion**: Files under `**/fixtures/**` or `**/test*/**` directories are test
-assets that intentionally contain adversarial payloads. If a pattern matches
-inside an excluded path, **downgrade the severity to `info`** and add
+**Exclusion**: Files under `**/fixtures/**`, `**/test*/**`, or
+`station-workflows/stations/**` directories are test assets or station rule
+definitions that intentionally contain adversarial pattern examples. If a pattern
+matches inside an excluded path, **downgrade the severity to `info`** and add
 `"note": "test fixture — intentional payload"` to the finding. These `info`
 findings do NOT count toward the pass/fail decision.
 
