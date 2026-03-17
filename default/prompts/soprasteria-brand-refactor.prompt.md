@@ -1,3 +1,8 @@
+---
+name: soprasteria-brand-refactor
+description: 'Refactor an application, document, presentation, or template into Sopra Steria brand style with audit, strategy, implementation, and validation.'
+---
+
 # Sopra Steria brand refactor
 
 Refactor the provided application, document, presentation, or template into Sopra Steria brand style.

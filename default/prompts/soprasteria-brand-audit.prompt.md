@@ -1,3 +1,8 @@
+---
+name: soprasteria-brand-audit
+description: 'Assess an application, document, slide deck, page, mockup, or codebase against Sopra Steria branding and produce a structured compliance report.'
+---
+
 # Sopra Steria brand audit
 
 Assess the provided application, document, slide deck, page, mockup, or codebase against Sopra Steria branding.
