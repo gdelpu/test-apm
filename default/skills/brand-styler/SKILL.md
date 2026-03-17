@@ -1,6 +1,7 @@
 ---
 name: brand-styler
 description: 'Generates and converts documents to Sopra Steria brand specification with AA accessibility. Produces branded DOCX and PDF outputs via Pandoc using custom font, color, and layout templates.'
+triggers: ['document conversion', 'DOCX generation', 'PDF generation', 'branded document', 'Pandoc', 'brand styling']
 ---
 
 # Brand Styler

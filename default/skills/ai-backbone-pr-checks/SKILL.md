@@ -1,6 +1,7 @@
 ---
 name: ai-backbone-pr-checks
 description: 'Deterministic merge request validation for Copilot assets: frontmatter, workflow YAML quality, and repository-specific test-gap advisories. Runs on GitLab CI.'
+triggers: ['PR validation', 'merge request checks', 'frontmatter validation', 'YAML lint', 'test gap detection']
 ---
 
 # AI Backbone Merge Request Checks
