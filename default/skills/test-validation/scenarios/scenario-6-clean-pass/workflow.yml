@@ -1,0 +1,15 @@
+name: scenario-6-clean-workflow
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run checks
+        run: echo "All good"

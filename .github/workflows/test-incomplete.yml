@@ -1,0 +1,8 @@
+name: Test Workflow Missing Fields
+
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Missing uses field and references @main"
+      - uses: actions/checkout@main

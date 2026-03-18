@@ -47,6 +47,7 @@ def main() -> None:
         mode = "local"
 
     warnings: List[str] = []
+    fix_suggestions: List[Dict[str, str]] = []
 
     # Detect: changed files by concern so heuristics stay explicit.
     changed_md = [f for f in changed if f.endswith(".md")]
@@ -61,15 +62,35 @@ def main() -> None:
     # Detect: advisory-only heuristics for companion updates.
     if changed_scripts and not changed_md:
         warnings.append("Scripts changed without accompanying markdown docs/examples updates")
+        fix_suggestions.append({
+            "file": "docs/README scope",
+            "issue": "scripts_without_docs",
+            "proposed_fix": "Add or update markdown docs/examples that explain script behavior and usage",
+        })
 
     if changed_workflows and not any(path.endswith("README.md") for path in changed_md):
         warnings.append("Workflow files changed without README/process documentation update")
+        fix_suggestions.append({
+            "file": "README.md",
+            "issue": "workflow_without_process_doc",
+            "proposed_fix": "Update README with workflow trigger, permissions, and expected outputs",
+        })
 
     if changed_agents and not any("/skills/" in path for path in changed):
         warnings.append("Agent changed without skill/docs/tool updates")
+        fix_suggestions.append({
+            "file": "skills/<agent>/",
+            "issue": "agent_without_skill_updates",
+            "proposed_fix": "Update related skill manifest/docs/tools to keep agent behavior documented and reproducible",
+        })
 
     if changed_prompts and not any(path.endswith(".instructions.md") for path in changed):
         warnings.append("Prompt changed without instruction alignment update")
+        fix_suggestions.append({
+            "file": "instructions/*.instructions.md",
+            "issue": "prompt_without_instructions",
+            "proposed_fix": "Align prompt update with corresponding instruction file changes",
+        })
 
     status = "warn" if warnings else "pass"
     report: Dict[str, Any] = {
@@ -81,6 +102,7 @@ def main() -> None:
         ],
         "blocking_issues": [],
         "warnings": warnings,
+        "fix_suggestions": fix_suggestions,
         "metadata": {
             "mode": mode,
             "changed_files_count": len(changed),
@@ -88,6 +110,7 @@ def main() -> None:
             "changed_agents": len(changed_agents),
             "changed_prompts": len(changed_prompts),
             "changed_scripts": len(changed_scripts),
+            "fix_suggestions_count": len(fix_suggestions),
         },
         "checked_files": changed,
     }
