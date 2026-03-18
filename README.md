@@ -37,7 +37,7 @@ ai-sdlc-foundation/
 ### How it works
 
 | Folder | Purpose | Who contributes |
-|---|---|---|
+| --- | --- | --- |
 | `default/` | Cross-cutting SDLC resources: brand tooling, shared agents, common guidelines | Everyone |
 | `clients/<name>/` | Resources built during a client engagement, shared back to Sopra Steria | Client teams |
 | `factories/dotnet/` | .NET-specific agents, prompts & instructions | .NET factory |
@@ -65,7 +65,7 @@ Each folder (`default/`, per-client, per-factory) follows the same sub-structure
 ### Default (Common Sopra Steria)
 
 | Type | Name | Description |
-|---|---|---|
+| --- | --- | --- |
 | Agent | [Brand Styler](default/agents/brand-styler.agent.md) | Generate and convert documents to Sopra Steria brand spec with AA accessibility |
 | Prompt | [Convert MD to DOCX & PDF](default/prompts/convert-md-to-docx-and-pdf.prompt.md) | Convert Markdown files to branded DOCX and PDF via Pandoc |
 | Prompt | [Create One-Pager](default/prompts/create-one-pager.prompt.md) | Create a concise Sopra Steria–branded one-pager from notes |
@@ -75,7 +75,7 @@ Each folder (`default/`, per-client, per-factory) follows the same sub-structure
 ### Factories
 
 | Factory | Status |
-|---|---|
+| --- | --- |
 | `factories/dotnet/` | 🟡 Incoming — .NET factory contributions welcome |
 | `factories/java/` | 🟡 Incoming — Java factory contributions welcome |
 | `factories/drupal/` | 🟡 Incoming — Drupal factory contributions welcome |
@@ -83,7 +83,7 @@ Each folder (`default/`, per-client, per-factory) follows the same sub-structure
 ### Clients
 
 | Client | Status |
-|---|---|
+| --- | --- |
 | `clients/` | 🟡 Incoming — add a sub-folder per client engagement |
 
 ---
@@ -91,7 +91,7 @@ Each folder (`default/`, per-client, per-factory) follows the same sub-structure
 ## ⚙️ Prerequisites
 
 | Tool | Version | Required For |
-|------|---------|-------------|
+| --- | --- | --- |
 | Python | 3.11+ | Deterministic validators, pipeline scripts |
 | Git | 2.x+ | Diff generation, all validation jobs |
 | Node.js | 20+ | Copilot CLI runtime (AI stations) |
@@ -119,6 +119,7 @@ For AI station jobs, you also need a **GitHub PAT** with Copilot access set as `
 [spec-kit](https://github.com/github/spec-kit) is a toolchain that generates a living **constitution** — a structured set of engineering principles and quality gates that Copilot agents follow throughout a project.
 
 The Sopra Steria common constitution lives at `default/.specify/memory/constitution.md` and covers:
+
 - **Code Quality Standards** — naming, documentation, complexity, SRP
 - **Testing Standards** — test-first, 80 % unit coverage, CI/CD automation
 - **UX Consistency** — accessibility (WCAG AA), design system, performance UX
@@ -128,10 +129,13 @@ The Sopra Steria common constitution lives at `default/.specify/memory/constitut
 
 1. Copy `default/.specify/` into your project root.
 2. Reference the constitution in your `.github/copilot-instructions.md`:
+
    ```markdown
    Follow the engineering principles defined in `.specify/memory/constitution.md`.
    ```
+
 3. Use the bundled spec-kit scripts to create feature specs and plans:
+
    ```powershell
    .specify/scripts/powershell/create-new-feature.ps1 -FeatureName "my-feature"
    ```
@@ -139,6 +143,7 @@ The Sopra Steria common constitution lives at `default/.specify/memory/constitut
 #### Sharing a constitution back to Sopra Steria
 
 If you evolve the constitution on a client engagement or factory:
+
 1. Copy your updated `.specify/memory/constitution.md` to `clients/<client-name>/.specify/memory/` or `factories/<name>/.specify/memory/`.
 2. Open a merge request — the Sopra Steria team will review and merge improvements into `default/.specify/memory/constitution.md`.
 
@@ -161,7 +166,7 @@ Every merge request triggers a **two-phase validation pipeline** (`.gitlab-ci.ym
 
 ### Pipeline Architecture
 
-```
+```text
 merge_request_event
   │
   ├─ validate (parallel)                  ← Phase 1
@@ -179,7 +184,7 @@ merge_request_event
 ### Validation Jobs
 
 | Job | Type | Script / Prompt | Purpose | Gating |
-|-----|------|----------------|---------|--------|
+| --- | --- | --- | --- | --- |
 | `validate:pr-auto` | Deterministic | `pr_auto_validator.py` | Validates frontmatter, kebab-case naming, and internal links | **Blocking** |
 | `validate:yaml-workflows` | Deterministic | `yaml_workflow_linter.py` | Validates workflow YAML structure and safety rules | **Blocking** |
 | `validate:test-gaps` | Deterministic | `test_gap_detector.py` | Detects missing documentation when scripts/workflows change | **Advisory** |
