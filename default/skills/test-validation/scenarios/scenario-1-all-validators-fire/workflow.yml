@@ -1,0 +1,8 @@
+name: workflow-no-trigger-no-permissions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - run: echo "missing on trigger, permissions and pinned SHA"

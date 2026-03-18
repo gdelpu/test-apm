@@ -62,7 +62,7 @@ def collect_markdown_links(path: Path) -> List[str]:
 
 
 # Validate: repository PR rules on one changed file.
-def validate_file(path_str: str, blocking: List[str], warnings: List[str]) -> None:
+def validate_file(path_str: str, blocking: List[str], warnings: List[str], fix_suggestions: List[Dict[str, str]]) -> None:
     path = Path(path_str)
     if not path.exists() or path.is_dir():
         return
@@ -74,28 +74,69 @@ def validate_file(path_str: str, blocking: List[str], warnings: List[str]) -> No
         fm = extract_frontmatter(path)
         if not fm:
             blocking.append(f"{path_str}: missing or malformed YAML frontmatter")
+            fix_suggestions.append({
+                "file": path_str,
+                "issue": "missing_or_malformed_frontmatter",
+                "proposed_fix": "Add valid YAML frontmatter at top: ---\\nname: my-resource\\ndescription: 'Short purpose'\\n---",
+            })
         else:
             if "name" not in fm:
                 blocking.append(f"{path_str}: frontmatter missing 'name'")
+                fix_suggestions.append({
+                    "file": path_str,
+                    "issue": "frontmatter_missing_name",
+                    "proposed_fix": "Add frontmatter key: name: my-resource",
+                })
             if "description" not in fm:
                 blocking.append(f"{path_str}: frontmatter missing 'description'")
+                fix_suggestions.append({
+                    "file": path_str,
+                    "issue": "frontmatter_missing_description",
+                    "proposed_fix": "Add frontmatter key: description: 'Short purpose sentence'",
+                })
             if isinstance(fm.get("description"), str):
                 desc = fm["description"].strip()
                 if not (desc.startswith("'") and desc.endswith("'")):
                     warnings.append(f"{path_str}: description should be wrapped in single quotes")
+                    fix_suggestions.append({
+                        "file": path_str,
+                        "issue": "description_quotes",
+                        "proposed_fix": "Wrap description with single quotes, e.g. description: 'Purpose of this asset'",
+                    })
 
         stem = name.replace(".agent.md", "").replace(".prompt.md", "").replace(".instructions.md", "")
         if not is_kebab_case(stem):
             blocking.append(f"{path_str}: filename must use lowercase kebab-case")
+            fixed_stem = re.sub(r"[^a-z0-9]+", "-", stem.lower()).strip("-") or "resource-name"
+            fixed_name = name
+            for suffix in FRONTMATTER_SUFFIXES:
+                if name.endswith(suffix):
+                    fixed_name = f"{fixed_stem}{suffix}"
+                    break
+            fix_suggestions.append({
+                "file": path_str,
+                "issue": "filename_kebab_case",
+                "proposed_fix": f"Rename file to lowercase kebab-case, e.g. {fixed_name}",
+            })
 
     # Validate: SKILL manifest frontmatter requirements.
     if name == "SKILL.md":
         fm = extract_frontmatter(path)
         if not fm:
             blocking.append(f"{path_str}: missing or malformed YAML frontmatter")
+            fix_suggestions.append({
+                "file": path_str,
+                "issue": "skill_frontmatter_missing",
+                "proposed_fix": "Add SKILL frontmatter: ---\\nname: skill-name\\ndescription: 'What this skill does'\\n---",
+            })
         else:
             if "name" not in fm or "description" not in fm:
                 blocking.append(f"{path_str}: frontmatter must include 'name' and 'description'")
+                fix_suggestions.append({
+                    "file": path_str,
+                    "issue": "skill_metadata_incomplete",
+                    "proposed_fix": "Ensure SKILL.md frontmatter has both keys: name and description",
+                })
 
     # Detect: lightweight workflow hardening gaps.
     normalized_path = f"/{path_str.replace(chr(92), '/')}/"
@@ -103,8 +144,18 @@ def validate_file(path_str: str, blocking: List[str], warnings: List[str]) -> No
         text = path.read_text(encoding="utf-8", errors="replace")
         if "permissions:" not in text:
             warnings.append(f"{path_str}: missing explicit workflow permissions")
+            fix_suggestions.append({
+                "file": path_str,
+                "issue": "workflow_permissions_missing",
+                "proposed_fix": "Add minimal permissions block, e.g. permissions:\\n  contents: read",
+            })
         if "@main" in text:
             warnings.append(f"{path_str}: action reference uses @main")
+            fix_suggestions.append({
+                "file": path_str,
+                "issue": "workflow_uses_main",
+                "proposed_fix": "Pin action version by tag or SHA instead of @main, e.g. actions/checkout@v4",
+            })
 
     # Validate: local markdown links resolve inside the repository.
     if path.suffix == ".md":
@@ -123,6 +174,11 @@ def validate_file(path_str: str, blocking: List[str], warnings: List[str]) -> No
                 continue
             if not candidate.exists():
                 warnings.append(f"{path_str}: broken relative link target '{target}'")
+                fix_suggestions.append({
+                    "file": path_str,
+                    "issue": "broken_relative_link",
+                    "proposed_fix": f"Update or remove link target: {target}",
+                })
 
 
 # Run: entry point to choose changed-file source, execute checks, and emit JSON.
@@ -146,10 +202,11 @@ def main() -> None:
 
     blocking: List[str] = []
     warnings: List[str] = []
+    fix_suggestions: List[Dict[str, str]] = []
 
     # Validate: only changed files to keep PR checks fast.
     for changed_file in changed:
-        validate_file(changed_file, blocking, warnings)
+        validate_file(changed_file, blocking, warnings, fix_suggestions)
 
     status = "fail" if blocking else ("warn" if warnings else "pass")
     report = {
@@ -162,9 +219,11 @@ def main() -> None:
         ],
         "blocking_issues": blocking,
         "warnings": warnings,
+        "fix_suggestions": fix_suggestions,
         "metadata": {
             "mode": mode,
             "changed_files_count": len(changed),
+            "fix_suggestions_count": len(fix_suggestions),
         },
         "checked_files": changed,
     }
@@ -175,8 +234,7 @@ def main() -> None:
     out_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2))
 
-    if blocking:
-        raise SystemExit(1)
+    # Always exit 0; let report:summary job decide based on JSON report content
 
 
 if __name__ == "__main__":

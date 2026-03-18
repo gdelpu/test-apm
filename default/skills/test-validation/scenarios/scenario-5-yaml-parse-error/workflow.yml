@@ -1,0 +1,14 @@
+name: scenario-5-yaml-parse-error
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: bad step
+        run: |
+          echo "unclosed string
+          echo "another line"
+        env:
+          KEY: value: with: colons: everywhere
