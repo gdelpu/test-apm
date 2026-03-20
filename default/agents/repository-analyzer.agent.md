@@ -1,13 +1,13 @@
 ---
 name: Repository Analyzer
 description: This agent analyzes a code repository to provide a high level overview of its structure, documentation and dependencies.
-tools: [execute, read, agent, search]
+tools: [vscode, execute, read, agent, search]
 model: Claude Opus 4.6 (copilot)
 target: vscode
 
 handoffs: 
   - label: Reverse Engineer Product Backlog
-    agent: reverse backlog agent
+    agent: Reverse Backlog Generator
     prompt: Analyze the repository and create a product backlog of features based on the existing code and documentation.
     send: true
     model: Claude Opus 4.6 (copilot)
