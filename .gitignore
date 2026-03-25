@@ -17,6 +17,9 @@ Thumbs.db
 *.suo
 *.user
 
+.cursor/
+.cursorrules
+
 # Logs
 *.log
 
