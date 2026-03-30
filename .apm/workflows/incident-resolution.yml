@@ -1,0 +1,138 @@
+name: incident-resolution
+description: Structured incident diagnosis and resolution from analysis through fix, regression testing, and knowledge capture.
+type: delivery
+
+stations:
+  - id: incident-analysis
+    name: Incident Analysis
+    agent: analysis-agent
+    skills:
+      - incident-analysis
+      - repo-analysis
+    inputs: []
+    outputs:
+      - incident-analysis.md
+    gate:
+      criteria:
+        - "Affected services and components are identified"
+        - "Timeline of events is reconstructed"
+        - "Logs and traces are collected and referenced"
+        - "Impact scope and severity are classified"
+      severity: blocker
+
+  - id: root-cause-hypothesis
+    name: Root Cause Hypothesis
+    agent: analysis-agent
+    skills:
+      - root-cause-analysis
+    inputs:
+      - incident-analysis.md
+    outputs:
+      - root-cause.md
+    gate:
+      criteria:
+        - "Root cause hypothesis is stated with evidence"
+        - "Contributing factors are listed"
+        - "Alternative hypotheses are considered and ruled out"
+      severity: blocker
+
+  - id: reproduction
+    name: Reproduction Scenario
+    agent: analysis-agent
+    skills:
+      - incident-analysis
+      - bug-reproduction
+    inputs:
+      - incident-analysis.md
+      - root-cause.md
+    outputs:
+      - reproduction.md
+    gate:
+      criteria:
+        - "Reproduction steps are documented"
+        - "Environment conditions are specified"
+        - "Expected vs actual behavior is stated"
+      severity: blocker
+
+  - id: fix-proposal
+    name: Fix Proposal
+    agent: implementer
+    skills:
+      - fix-planning
+      - code-implementation
+    inputs:
+      - root-cause.md
+      - reproduction.md
+    outputs:
+      - plan.md
+      - tasks.md
+    gate:
+      criteria:
+        - "Fix is minimal and targeted at root cause"
+        - "Blast radius is assessed"
+        - "Rollback path exists"
+      severity: blocker
+
+  - id: regression-test
+    name: Regression Test Creation
+    agent: implementer
+    skills:
+      - code-implementation
+      - test-strategy
+    inputs:
+      - reproduction.md
+      - plan.md
+    outputs:
+      - regression-tests.md
+    gate:
+      criteria:
+        - "Regression test reproduces original incident scenario"
+        - "Test passes with the fix applied"
+        - "Edge cases from root cause analysis are covered"
+      severity: blocker
+
+  - id: patch-validation
+    name: Patch Validation
+    agent: quality-validator
+    skills:
+      - lint-analysis
+      - coverage-assessment
+      - security-scan
+    inputs:
+      - tasks.md
+      - regression-tests.md
+    outputs:
+      - validation-report.md
+    gate:
+      criteria:
+        - "Build passes"
+        - "All tests pass including regression tests"
+        - "No new security vulnerabilities introduced"
+        - "No side effects detected"
+      severity: blocker
+
+  - id: knowledge-update
+    name: Knowledge Update
+    agent: spec-orchestrator
+    skills:
+      - knowledge-update
+      - adr-generation
+    inputs:
+      - incident-analysis.md
+      - root-cause.md
+      - plan.md
+      - validation-report.md
+    outputs:
+      - knowledge-update.md
+    gate:
+      criteria:
+        - "ADR or playbook entry is created for the incident"
+        - "Preventive measures are documented"
+        - "Monitoring improvements are recommended"
+      severity: warning
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

@@ -1,0 +1,121 @@
+name: spec-to-execution
+description: Transform a validated specification into an executable plan with risk analysis, rollback strategy, and decomposed tasks.
+type: delivery
+
+stations:
+  - id: plan-generation
+    name: Plan Generation
+    agent: spec-orchestrator
+    skills:
+      - spec-plan
+    inputs:
+      - spec.md
+      - clarifications.md
+      - architecture-review.md
+    outputs:
+      - plan.md
+    gate:
+      criteria:
+        - "Plan addresses all spec requirements"
+        - "Risks are identified with mitigations"
+        - "Dependencies between work items are explicit"
+      severity: blocker
+
+  - id: risk-analysis
+    name: Risk Analysis
+    agent: architecture-governance
+    skills:
+      - architecture-guardrails
+      - nfr-review
+    inputs:
+      - plan.md
+      - spec.md
+      - nfr-review.md
+    outputs:
+      - risk-analysis.md
+    gate:
+      criteria:
+        - "All high-severity risks have mitigations"
+        - "Residual risk is accepted explicitly"
+        - "Security and compliance risks are addressed"
+      severity: blocker
+      reviewer: architecture-governance
+
+  - id: rollout-rollback
+    name: Rollout / Rollback Definition
+    agent: spec-orchestrator
+    skills:
+      - spec-plan
+    inputs:
+      - plan.md
+      - risk-analysis.md
+    outputs:
+      - rollout-strategy.md
+    gate:
+      criteria:
+        - "Rollout strategy is defined (phased, canary, or big-bang)"
+        - "Rollback procedure exists for each deployment step"
+        - "Data migration rollback is addressed (if applicable)"
+      severity: blocker
+
+  - id: task-decomposition
+    name: Task Decomposition
+    agent: spec-orchestrator
+    skills:
+      - spec-tasks
+    inputs:
+      - plan.md
+      - risk-analysis.md
+    outputs:
+      - tasks.md
+    gate:
+      criteria:
+        - "Tasks are traceable to spec requirements"
+        - "Each task has clear acceptance criteria"
+        - "Task dependencies and ordering are defined"
+      severity: blocker
+
+  - id: test-strategy
+    name: Test Strategy Alignment
+    agent: spec-orchestrator
+    skills:
+      - test-strategy
+    inputs:
+      - tasks.md
+      - spec.md
+      - nfr-review.md
+    outputs:
+      - test-strategy.md
+    gate:
+      criteria:
+        - "Test levels are defined (unit, integration, e2e)"
+        - "Coverage expectations are stated per component"
+        - "NFR validation approach is described"
+      severity: warning
+
+  - id: execution-readiness
+    name: Execution Readiness Gate
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - plan.md
+      - tasks.md
+      - risk-analysis.md
+      - rollout-strategy.md
+      - test-strategy.md
+    outputs:
+      - execution-readiness.md
+    gate:
+      criteria:
+        - "Tasks are traceable to specification"
+        - "All high-severity risks are mitigated"
+        - "Rollback strategy is defined"
+        - "Test coverage strategy exists for all task groups"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

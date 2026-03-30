@@ -24,7 +24,7 @@ This guide explains how to run the Agent Factory pipeline locally using `gitlab-
 .\run-pipeline-podman.ps1
 
 # Run only the station orchestrator (skips deterministic validators)
-bash station-workflows/scripts/run_stations.sh
+bash ci-gates/scripts/run_stations.sh
 
 # Show help
 .\run-pipeline-podman.ps1 -Help
@@ -59,8 +59,8 @@ The pipeline runs in two phases:
 1. **Phase 1 — `validate` stage**: Three deterministic Python validators run in parallel.
    `validate:pr-auto` and `validate:yaml-workflows` are blocking; `validate:test-gaps` is advisory.
 2. **Phase 2 — `stations` stage**: The `stations:run-all` job invokes
-   `station-workflows/scripts/run_stations.sh`, which dynamically discovers all
-   `*.prompt.md` and `*.agent.md` files in `station-workflows/stations/`, sorts
+   `ci-gates/scripts/run_stations.sh`, which dynamically discovers all
+   `*.prompt.md` and `*.agent.md` files in `ci-gates/stations/`, sorts
    them by prefix (a0 → a6), and runs each sequentially via Copilot CLI.
    It starts only after the two blocking validators pass.
 
@@ -129,7 +129,7 @@ Error: Command failed with exit code 127: git ls-files --deduplicate
 3. **Manual station testing** (bypass gitlab-ci-local):
    ```powershell
    # Run stations directly with Podman
-   podman run --rm -v "${PWD}:/workspace" -w /workspace python:3.12-slim bash -c "apt-get update && apt-get install -y git && cd /workspace && python station-workflows/stations/A0-intake.prompt.md"
+   podman run --rm -v "${PWD}:/workspace" -w /workspace python:3.12-slim bash -c "apt-get update && apt-get install -y git && cd /workspace && python ci-gates/stations/A0-intake.prompt.md"
    ```
 
 ### Container Runtime Not Running
@@ -218,4 +218,4 @@ Before pushing to GitLab, verify locally:
 - **gitlab-ci-local docs:** https://github.com/firecow/gitlab-ci-local
 - **GitLab CI YAML reference:** https://docs.gitlab.com/ee/ci/yaml/
 - **Pipeline file:** `.gitlab-ci.yml`
-- **Station orchestrator:** `station-workflows/scripts/run_stations.sh`
+- **Station orchestrator:** `ci-gates/scripts/run_stations.sh`

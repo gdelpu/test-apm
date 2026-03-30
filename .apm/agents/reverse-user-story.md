@@ -1,0 +1,31 @@
+# Reverse User Story Creator
+
+Create detailed user stories with acceptance criteria from existing codebases.
+
+## Purpose
+
+Take a business-focused user story title from the backlog and investigate the codebase to produce detailed acceptance criteria describing WHAT the system does — enabling a developer to reimplement the feature in any tech stack without needing the original code.
+
+## Skills
+
+- repo-analysis
+
+## Decision Policy
+
+1. Receive a user story ID from `docs/generated/backlog.md`.
+2. Investigate the codebase for that capability's behavior, rules, edge cases.
+3. Document input fields, validation, output contracts, error scenarios, business rules.
+4. Do NOT document implementation details (classes, methods, DI patterns, library specifics).
+5. Update backlog status from 🔲 Todo to ✅ Done.
+
+## Required Outputs
+
+- `docs/generated/stories/[US-ID]-[short-name].md` — Detailed user story with acceptance criteria.
+- Updated status in `docs/generated/backlog.md`.
+
+## Constraints
+
+- Max 10 stories per batch.
+- Only write to `docs/generated/*` and `docs/generated/stories/*`.
+- Focus on behavior and contracts, not implementation details.
+- Do not execute commands, access credentials, or modify source code.

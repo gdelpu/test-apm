@@ -1,0 +1,123 @@
+name: bug-fixing
+description: Structured bug resolution from triage through root-cause analysis, fix, regression testing, and quality validation.
+type: delivery
+
+stations:
+  - id: triage
+    name: Triage
+    agent: spec-orchestrator
+    skills:
+      - spec-clarify
+    inputs:
+      - bug-report.md
+    outputs:
+      - triage.md
+    gate:
+      criteria:
+        - "Severity and priority assigned"
+        - "Affected components identified"
+        - "Reproduction steps documented"
+      severity: blocker
+
+  - id: reproduce
+    name: Reproduce
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - triage.md
+    outputs:
+      - reproduction-log.md
+    gate:
+      criteria:
+        - "Bug reliably reproduced"
+        - "Environment and conditions documented"
+      severity: blocker
+
+  - id: root-cause
+    name: Root Cause Analysis
+    agent: spec-orchestrator
+    skills:
+      - repo-analysis
+    inputs:
+      - reproduction-log.md
+    outputs:
+      - root-cause.md
+    gate:
+      criteria:
+        - "Root cause identified with evidence"
+        - "Impact scope assessed"
+      severity: blocker
+
+  - id: fix
+    name: Fix Implementation
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - root-cause.md
+      - triage.md
+    outputs:
+      - fix-log.md
+    gate:
+      criteria:
+        - "Fix addresses root cause"
+        - "Code compiles without errors"
+        - "Existing tests pass"
+      severity: blocker
+
+  - id: regression
+    name: Regression Testing
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - fix-log.md
+      - reproduction-log.md
+    outputs:
+      - regression-report.md
+    gate:
+      criteria:
+        - "Regression test added for the bug"
+        - "All existing tests still pass"
+        - "Original reproduction steps no longer trigger the bug"
+      severity: blocker
+
+  - id: quality-validation
+    name: Quality Validation
+    agent: workflow-orchestrator
+    skills:
+      - workflow-engine
+    inputs:
+      - fix-log.md
+    outputs:
+      - quality-report.md
+    gate:
+      criteria:
+        - "All quality validation stations pass"
+      severity: blocker
+
+  - id: close
+    name: Close
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - triage.md
+      - fix-log.md
+      - regression-report.md
+      - quality-report.md
+    outputs:
+      - closure.md
+    gate:
+      criteria:
+        - "Bug verified as fixed"
+        - "Documentation updated"
+      severity: blocker
+
+config:
+  output_dir: specs/bugs/<bug-id>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false

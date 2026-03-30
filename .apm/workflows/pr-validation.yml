@@ -1,0 +1,185 @@
+name: pr-validation
+description: Multi-stage merge request validation pipeline with deterministic checks and AI-powered security stations.
+type: validation
+
+stations:
+  # --- Phase 1: Deterministic Validators (parallel) ---
+  - id: validate-pr-auto
+    name: PR Auto Validator
+    agent: pr-validator
+    skills:
+      - ai-backbone-pr-checks
+    inputs: []
+    outputs:
+      - reports/pr-auto-validator.json
+    parallel: true
+    gate:
+      criteria:
+        - "No frontmatter violations"
+        - "Naming conventions followed (kebab-case)"
+        - "No broken links detected"
+      severity: blocker
+
+  - id: validate-yaml-workflows
+    name: YAML Workflow Linter
+    agent: pr-validator
+    skills:
+      - ai-backbone-pr-checks
+    inputs: []
+    outputs:
+      - reports/yaml-workflow-linter.json
+    parallel: true
+    gate:
+      criteria:
+        - "YAML structure is valid"
+        - "Required fields present"
+        - "No unsafe patterns detected"
+      severity: blocker
+
+  - id: validate-test-gaps
+    name: Test Gap Detector
+    agent: pr-validator
+    skills:
+      - ai-backbone-pr-checks
+    inputs: []
+    outputs:
+      - reports/test-gap-detector.json
+    parallel: true
+    optional: true
+    gate:
+      criteria:
+        - "Documentation gaps identified and reported"
+      severity: warning
+
+  # --- Phase 2: AI Stations (sequential) ---
+  - id: a0-intake
+    name: A0 Intake
+    agent: station-orchestrator
+    skills: []
+    inputs: []
+    outputs:
+      - station_out/work_order.json
+    gate:
+      criteria:
+        - "Work order generated with PR metadata and diff"
+      severity: warning
+
+  - id: a1-policy-validation
+    name: A1 Policy Validation
+    agent: station-orchestrator
+    skills:
+      - soprasteria-agent-policy-guard
+    inputs:
+      - station_out/work_order.json
+    outputs:
+      - station_out/policy_report.json
+    gate:
+      criteria:
+        - "All policy rules (P-01 to P-06) evaluated"
+        - "No critical policy violations"
+      severity: blocker
+
+  - id: a2-security-static
+    name: A2 Security Static
+    agent: station-orchestrator
+    skills:
+      - secret-scan
+    inputs:
+      - station_out/work_order.json
+    outputs:
+      - station_out/security_report.json
+    gate:
+      criteria:
+        - "No secrets, API keys, or credentials detected"
+        - "No dangerous execution patterns (curl|bash, eval, rm -rf)"
+        - "No sensitive file paths referenced"
+      severity: blocker
+
+  - id: a3-prompt-injection
+    name: A3 Prompt Injection
+    agent: station-orchestrator
+    skills:
+      - injection-detection
+    inputs:
+      - station_out/work_order.json
+    outputs:
+      - station_out/promptsec_report.json
+    gate:
+      criteria:
+        - "No jailbreak phrases or instruction overrides"
+        - "Refusal anchors present in agent definitions"
+        - "Content sanitisation enforced"
+        - "Resource exhaustion guards in place"
+      severity: blocker
+
+  - id: a4-red-team
+    name: A4 Red Team
+    agent: station-orchestrator
+    skills:
+      - red-team-simulation
+    inputs:
+      - station_out/policy_report.json
+      - station_out/security_report.json
+      - station_out/promptsec_report.json
+    outputs:
+      - station_out/a4_result.json
+    optional: true
+    gate:
+      criteria:
+        - "Red team simulation completed"
+        - "No critical bypass vectors found"
+      severity: warning
+
+  - id: a5-sandbox-simulation
+    name: A5 Sandbox Simulation
+    agent: station-orchestrator
+    skills:
+      - sandbox-execution
+    inputs:
+      - station_out/work_order.json
+    outputs:
+      - station_out/sim_report.json
+    gate:
+      criteria:
+        - "Sandbox simulation completed without escapes"
+        - "Tool scoping validated"
+      severity: blocker
+
+  - id: a6-policy-gate
+    name: A6 Policy Gate
+    agent: station-orchestrator
+    skills:
+      - policy-gate
+    inputs:
+      - station_out/policy_report.json
+      - station_out/security_report.json
+      - station_out/promptsec_report.json
+      - station_out/a4_result.json
+      - station_out/sim_report.json
+    outputs:
+      - station_out/gate_decision.json
+    gate:
+      criteria:
+        - "Final gate decision is PASS or CONDITIONAL_PASS"
+        - "All critical findings resolved or accepted"
+      severity: blocker
+
+  - id: a7-update
+    name: A7 Platform Update
+    agent: station-orchestrator
+    skills: []
+    inputs:
+      - station_out/gate_decision.json
+    outputs: []
+    optional: true
+    gate:
+      criteria:
+        - "Platform (GitLab/GitHub) updated with results"
+      severity: warning
+
+config:
+  output_dir: station_out/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: false
+  nestable: true

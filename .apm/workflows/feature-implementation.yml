@@ -1,0 +1,165 @@
+name: feature-implementation
+description: End-to-end feature delivery from constitution through specification, planning, implementation, and quality validation.
+type: delivery
+
+stations:
+  - id: constitution
+    name: Constitution
+    agent: spec-orchestrator
+    skills:
+      - spec-constitution
+    inputs: []
+    outputs:
+      - constitution.md
+    gate:
+      criteria:
+        - "Constitution covers architecture, quality, security, testing, observability"
+      severity: blocker
+
+  - id: specification
+    name: Feature Specification
+    agent: spec-orchestrator
+    skills:
+      - spec-feature
+    inputs:
+      - constitution.md
+    outputs:
+      - spec.md
+    gate:
+      criteria:
+        - "Scope and out-of-scope are defined"
+        - "Acceptance criteria are testable"
+      severity: blocker
+
+  - id: clarification
+    name: Clarification
+    agent: spec-orchestrator
+    skills:
+      - spec-clarify
+    inputs:
+      - spec.md
+    outputs:
+      - clarifications.md
+    gate:
+      criteria:
+        - "No unresolved blocker questions remain"
+      severity: blocker
+
+  - id: architecture-review
+    name: Architecture Review
+    agent: architecture-governance
+    skills:
+      - architecture-guardrails
+    inputs:
+      - spec.md
+      - clarifications.md
+    outputs:
+      - architecture-review.md
+    gate:
+      criteria:
+        - "Architecture principles are satisfied"
+        - "No unmitigated high-risk concerns"
+      severity: blocker
+      reviewer: architecture-governance
+
+  - id: plan
+    name: Implementation Plan
+    agent: spec-orchestrator
+    skills:
+      - spec-plan
+    inputs:
+      - spec.md
+      - clarifications.md
+      - architecture-review.md
+    outputs:
+      - plan.md
+    gate:
+      criteria:
+        - "Risks identified with mitigations"
+        - "Rollout and rollback strategies defined"
+      severity: blocker
+
+  - id: tasks
+    name: Task Breakdown
+    agent: spec-orchestrator
+    skills:
+      - spec-tasks
+    inputs:
+      - plan.md
+    outputs:
+      - tasks.md
+    gate:
+      criteria:
+        - "Tasks traceable to the plan"
+        - "Testing tasks included"
+      severity: blocker
+
+  - id: implementation
+    name: Implementation
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - tasks.md
+      - plan.md
+    outputs:
+      - implementation-log.md
+    gate:
+      criteria:
+        - "Code compiles without errors"
+        - "All tests pass"
+      severity: blocker
+
+  - id: quality-validation
+    name: Quality Validation
+    agent: workflow-orchestrator
+    skills:
+      - workflow-engine
+    inputs:
+      - implementation-log.md
+    outputs:
+      - quality-report.md
+    gate:
+      criteria:
+        - "All quality validation stations pass"
+      severity: blocker
+
+  - id: pr-validation
+    name: PR Validation
+    agent: workflow-orchestrator
+    skills:
+      - workflow-engine
+    inputs:
+      - quality-report.md
+    outputs:
+      - pr-validation-report.md
+    optional: true
+    gate:
+      criteria:
+        - "All PR validation stations pass"
+      severity: blocker
+
+  - id: quality-gate
+    name: Final Quality Gate
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - spec.md
+      - plan.md
+      - tasks.md
+      - quality-report.md
+    outputs:
+      - quality-gate.md
+    gate:
+      criteria:
+        - "Specification package is complete and coherent"
+        - "All quality checks have passed"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false

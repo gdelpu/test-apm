@@ -1,0 +1,114 @@
+name: implementation-loop
+description: Agent-assisted development loop from task selection through code generation, review, testing, and commit readiness.
+type: delivery
+
+stations:
+  - id: task-selection
+    name: Task Selection
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - tasks.md
+      - plan.md
+    outputs:
+      - current-task.md
+    gate:
+      criteria:
+        - "Task prerequisites are met"
+        - "Task scope is clear and bounded"
+      severity: blocker
+
+  - id: code-generation
+    name: Code Generation
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - current-task.md
+      - tasks.md
+      - plan.md
+    outputs:
+      - implementation-log.md
+    gate:
+      criteria:
+        - "Code compiles without errors"
+        - "Changed files are within task scope"
+      severity: blocker
+
+  - id: self-review
+    name: Self-Review
+    agent: implementer
+    skills:
+      - code-implementation
+      - lint-analysis
+    inputs:
+      - implementation-log.md
+    outputs:
+      - review-notes.md
+    gate:
+      criteria:
+        - "No obvious code smells or anti-patterns"
+        - "Naming conventions and project style are followed"
+        - "No security vulnerabilities introduced"
+      severity: warning
+
+  - id: test-generation
+    name: Test Generation
+    agent: implementer
+    skills:
+      - code-implementation
+      - coverage-assessment
+    inputs:
+      - implementation-log.md
+      - current-task.md
+    outputs:
+      - test-log.md
+    gate:
+      criteria:
+        - "Tests cover the acceptance criteria of the current task"
+        - "New code has corresponding test coverage"
+      severity: blocker
+
+  - id: local-validation
+    name: Local Validation
+    agent: quality-validator
+    skills:
+      - lint-analysis
+      - coverage-assessment
+    inputs:
+      - implementation-log.md
+      - test-log.md
+    outputs:
+      - validation-report.md
+    gate:
+      criteria:
+        - "Build passes"
+        - "All tests pass"
+        - "Coverage threshold is met"
+      severity: blocker
+
+  - id: commit-readiness
+    name: Commit Readiness
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - implementation-log.md
+      - validation-report.md
+      - review-notes.md
+    outputs:
+      - commit-summary.md
+    gate:
+      criteria:
+        - "Build passes"
+        - "Tests pass"
+        - "Coverage threshold met"
+        - "No blocker issues in review notes"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

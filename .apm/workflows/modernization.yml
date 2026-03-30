@@ -1,0 +1,173 @@
+name: modernization
+description: Guided modernization from baseline assessment through target definition, migration planning, implementation, and quality assurance.
+type: modernization
+
+stations:
+  - id: baseline
+    name: Baseline Assessment
+    agent: modernization-agent
+    skills:
+      - repo-analysis
+    inputs: []
+    outputs:
+      - reverse-brief.md
+    gate:
+      criteria:
+        - "Reverse brief covers current-state snapshot"
+        - "Affected modules and dependencies identified"
+        - "Do-not-break constraints listed"
+      severity: blocker
+
+  - id: decisions
+    name: Architecture Decisions
+    agent: modernization-agent
+    skills:
+      - adr-generation
+    inputs:
+      - reverse-brief.md
+    outputs:
+      - decisions.md
+    gate:
+      criteria:
+        - "ADRs capture architecturally significant decisions"
+        - "Each ADR has rationale, confidence level, and consequences"
+      severity: blocker
+
+  - id: target-state
+    name: Target State Definition
+    agent: modernization-agent
+    skills:
+      - spec-feature
+    inputs:
+      - reverse-brief.md
+      - decisions.md
+    outputs:
+      - spec.md
+    gate:
+      criteria:
+        - "Target state clearly defined"
+        - "Acceptance criteria are testable"
+      severity: blocker
+
+  - id: architecture-review
+    name: Architecture Review
+    agent: architecture-governance
+    skills:
+      - architecture-guardrails
+    inputs:
+      - reverse-brief.md
+      - spec.md
+      - decisions.md
+    outputs:
+      - architecture-review.md
+    gate:
+      criteria:
+        - "Migration approach satisfies architecture principles"
+        - "Coexistence strategy is viable"
+      severity: blocker
+      reviewer: architecture-governance
+
+  - id: migration-plan
+    name: Migration Plan
+    agent: modernization-agent
+    skills:
+      - spec-plan
+    inputs:
+      - spec.md
+      - architecture-review.md
+      - reverse-brief.md
+      - decisions.md
+    outputs:
+      - plan.md
+    gate:
+      criteria:
+        - "Rollback path defined for every stage"
+        - "Data migration risks addressed"
+        - "Critical path identified"
+      severity: blocker
+
+  - id: risk-clarification
+    name: Risk Clarification
+    agent: modernization-agent
+    skills:
+      - spec-clarify
+    inputs:
+      - plan.md
+      - spec.md
+    outputs:
+      - clarifications.md
+    gate:
+      criteria:
+        - "All blocker-level risks have mitigations"
+        - "No unresolved compatibility questions"
+      severity: blocker
+
+  - id: task-breakdown
+    name: Task Breakdown
+    agent: modernization-agent
+    skills:
+      - spec-tasks
+    inputs:
+      - plan.md
+      - clarifications.md
+    outputs:
+      - tasks.md
+    gate:
+      criteria:
+        - "Tasks sequenced with dependencies"
+        - "Regression testing tasks included"
+        - "Rollback verification tasks exist"
+      severity: blocker
+
+  - id: implementation
+    name: Implementation
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - tasks.md
+      - plan.md
+      - decisions.md
+    outputs:
+      - implementation-log.md
+    gate:
+      criteria:
+        - "Code compiles without errors"
+        - "All existing tests pass"
+      severity: blocker
+
+  - id: quality-validation
+    name: Quality Validation
+    agent: workflow-orchestrator
+    skills:
+      - workflow-engine
+    inputs:
+      - implementation-log.md
+    outputs:
+      - quality-report.md
+    gate:
+      criteria:
+        - "All quality validation stations pass"
+      severity: blocker
+
+  - id: pr-validation
+    name: PR Validation
+    agent: workflow-orchestrator
+    skills:
+      - workflow-engine
+    inputs:
+      - quality-report.md
+    outputs:
+      - pr-validation-report.md
+    optional: true
+    gate:
+      criteria:
+        - "All PR validation stations pass"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false

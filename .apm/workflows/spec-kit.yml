@@ -1,0 +1,134 @@
+name: spec-kit
+description: Specification-only flow — produce a complete spec package without implementation.
+type: delivery
+
+stations:
+  - id: constitution
+    name: Constitution
+    agent: spec-orchestrator
+    skills:
+      - spec-constitution
+    inputs: []
+    outputs:
+      - constitution.md
+    gate:
+      criteria:
+        - "Constitution covers architecture, quality, security, testing, observability"
+      severity: blocker
+
+  - id: specification
+    name: Feature Specification
+    agent: spec-orchestrator
+    skills:
+      - spec-feature
+    inputs:
+      - constitution.md
+    outputs:
+      - spec.md
+    gate:
+      criteria:
+        - "Scope and out-of-scope defined"
+        - "Acceptance criteria testable"
+      severity: blocker
+
+  - id: clarification
+    name: Clarification
+    agent: spec-orchestrator
+    skills:
+      - spec-clarify
+    inputs:
+      - spec.md
+    outputs:
+      - clarifications.md
+    gate:
+      criteria:
+        - "No unresolved blocker questions"
+      severity: blocker
+
+  - id: architecture-review
+    name: Architecture Review
+    agent: architecture-governance
+    skills:
+      - architecture-guardrails
+    inputs:
+      - spec.md
+      - clarifications.md
+    outputs:
+      - architecture-review.md
+    gate:
+      criteria:
+        - "Architecture principles satisfied"
+      severity: blocker
+
+  - id: plan
+    name: Implementation Plan
+    agent: spec-orchestrator
+    skills:
+      - spec-plan
+    inputs:
+      - spec.md
+      - clarifications.md
+      - architecture-review.md
+    outputs:
+      - plan.md
+    gate:
+      criteria:
+        - "Risks identified with mitigations"
+        - "Rollout and rollback strategies defined"
+      severity: blocker
+
+  - id: tasks
+    name: Task Breakdown
+    agent: spec-orchestrator
+    skills:
+      - spec-tasks
+    inputs:
+      - plan.md
+    outputs:
+      - tasks.md
+    gate:
+      criteria:
+        - "Tasks traceable to the plan"
+        - "Testing tasks included"
+      severity: blocker
+
+  - id: test-strategy
+    name: Test Strategy
+    agent: spec-orchestrator
+    skills:
+      - test-strategy
+    inputs:
+      - spec.md
+      - tasks.md
+    outputs:
+      - test-strategy.md
+    gate:
+      criteria:
+        - "Test approach aligned with risk"
+        - "Coverage expectations stated"
+      severity: blocker
+
+  - id: quality-gate
+    name: Spec Quality Gate
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - spec.md
+      - clarifications.md
+      - plan.md
+      - tasks.md
+      - test-strategy.md
+    outputs:
+      - quality-gate.md
+    gate:
+      criteria:
+        - "Specification package is complete and coherent"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false

@@ -1,0 +1,112 @@
+name: quality-validation
+description: Validate code quality, security, and compliance using external tool adapters.
+type: validation
+
+stations:
+  - id: lint-analysis
+    name: Lint Analysis
+    agent: quality-validator
+    skills:
+      - lint-analysis
+    inputs: []
+    outputs:
+      - lint-report.md
+    parallel: true
+    gate:
+      criteria:
+        - "No lint errors (warnings acceptable)"
+      severity: blocker
+
+  - id: static-analysis
+    name: Static Analysis
+    agent: quality-validator
+    skills:
+      - static-analysis
+    inputs: []
+    outputs:
+      - static-analysis-report.md
+    parallel: true
+    gate:
+      criteria:
+        - "No blocker or critical issues"
+      severity: blocker
+
+  - id: security-sast
+    name: Security SAST Scan
+    agent: quality-validator
+    skills:
+      - security-scan
+    inputs: []
+    outputs:
+      - sast-report.md
+    parallel: true
+    gate:
+      criteria:
+        - "No high or critical vulnerabilities"
+      severity: blocker
+
+  - id: dependency-audit
+    name: Dependency Audit
+    agent: quality-validator
+    skills:
+      - dependency-audit
+    inputs: []
+    outputs:
+      - dependency-report.md
+    parallel: true
+    gate:
+      criteria:
+        - "No known critical CVEs in dependencies"
+      severity: blocker
+
+  - id: coverage
+    name: Test Coverage Assessment
+    agent: quality-validator
+    skills:
+      - coverage-assessment
+    inputs: []
+    outputs:
+      - coverage-report.md
+    gate:
+      criteria:
+        - "Coverage meets or exceeds configured threshold"
+      severity: blocker
+
+  - id: security-dast
+    name: Security DAST Scan
+    agent: quality-validator
+    skills:
+      - security-scan
+    inputs: []
+    outputs:
+      - dast-report.md
+    optional: true
+    gate:
+      criteria:
+        - "No critical DAST findings"
+      severity: warning
+
+  - id: quality-report
+    name: Quality Report
+    agent: quality-validator
+    skills:
+      - quality-report
+    inputs:
+      - lint-report.md
+      - static-analysis-report.md
+      - sast-report.md
+      - dependency-report.md
+      - coverage-report.md
+    outputs:
+      - quality-report.md
+    gate:
+      criteria:
+        - "Aggregated quality status is passed"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: true
