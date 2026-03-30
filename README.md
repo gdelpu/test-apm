@@ -64,16 +64,16 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     CANONICAL LAYER                          │
+│                     CANONICAL LAYER                         │
 │  .apm/agents/  .apm/skills/  .apm/workflows/  knowledge/    │
 │  .apm/templates/  .apm/scripts/  .apm/prompts/              │
 │  (17 agents)   (54 skills)   (15 workflows)   (principles,  │
-│                                                governance,   │
-│                                                playbooks)    │
+│                                                governance,  │
+│                                                playbooks)   │
 └──────────────┬──────────────────────┬───────────────────────┘
                │                      │
   ┌────────────▼──────────────────────▼──────────────────┐
-  │                  PROVIDER ADAPTERS                    │
+  │                  PROVIDER ADAPTERS                   │
   │                                                      │
   │  providers/github-copilot/   providers/claude-code/  │
   │    conventions.md              CLAUDE.md             │
