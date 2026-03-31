@@ -1,4 +1,5 @@
 ---
+name: workflow-bmad
 mode: agent
 description: 'Run Build → Measure → Analyze → Decide feedback loop (4 stations).'
 ---

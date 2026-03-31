@@ -1,3 +1,9 @@
+---
+name: lint-analysis
+description: 'Run language-specific linters to detect code style violations, syntax errors, and potential bugs.'
+triggers: ['linting', 'code style', 'syntax errors', 'lint rules']
+---
+
 # Skill: lint-analysis
 
 ## Goal

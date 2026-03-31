@@ -1,3 +1,9 @@
+---
+name: architecture-guardrails
+description: 'Apply architecture guardrails relevant to the chosen or existing architecture style and stack.'
+triggers: ['architecture review', 'architecture validation', 'NFR validation']
+---
+
 # Skill: architecture-guardrails
 
 ## Goal

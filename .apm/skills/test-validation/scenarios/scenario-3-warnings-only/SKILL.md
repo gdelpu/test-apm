@@ -1,6 +1,7 @@
 ---
 name: scenario-3-warnings-only
 description: 'All blocking issues fixed, only advisory warnings remain'
+triggers: ['test scenario', 'warnings validation']
 ---
 
 # Scenario 3: Warnings Only

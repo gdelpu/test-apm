@@ -1,4 +1,5 @@
 ---
+name: workflow-feature
 mode: agent
 description: 'Run end-to-end feature implementation workflow (9 stations).'
 ---

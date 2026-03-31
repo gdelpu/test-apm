@@ -86,7 +86,10 @@ CHANGED_FILE="${STATION_OUT}/changed_files.txt"
 git fetch origin "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}" 2>/dev/null || true
 
 git diff --name-status "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}" \
-    "${CI_COMMIT_SHA:-HEAD}" > "${CHANGED_FILE}" 2>/dev/null || true
+    "${CI_COMMIT_SHA:-HEAD}" > "${CHANGED_FILE}.raw" 2>/dev/null || true
+
+# Filter out known test-fixture paths that intentionally violate policies.
+grep -v 'test-validation/scenarios/' "${CHANGED_FILE}.raw" > "${CHANGED_FILE}" || true
 
 git diff "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}" \
     "${CI_COMMIT_SHA:-HEAD}" > "${DIFF_FILE}" 2>/dev/null || true

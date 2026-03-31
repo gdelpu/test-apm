@@ -1,6 +1,7 @@
 ---
 name: cc-skill-coding-standards
 description: "Universal coding standards, best practices, and patterns for TypeScript, JavaScript, React, and Node.js development."
+triggers: ['coding standards', 'best practices', 'TypeScript', 'code quality']
 risk: unknown
 source: community
 date_added: "2026-02-27"

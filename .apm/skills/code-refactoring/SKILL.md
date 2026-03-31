@@ -1,3 +1,9 @@
+---
+name: code-refactoring
+description: 'Execute safe, incremental refactoring of existing code to improve structure, readability, or maintainability without changing external behavior.'
+triggers: ['refactoring', 'code improvement', 'maintainability', 'incremental refactoring']
+---
+
 # Skill: code-refactoring
 
 ## Goal

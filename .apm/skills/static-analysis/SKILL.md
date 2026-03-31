@@ -1,3 +1,9 @@
+---
+name: static-analysis
+description: 'Run static analysis tools to detect code quality issues, bugs, code smells, and security vulnerabilities.'
+triggers: ['static analysis', 'code quality', 'code smells', 'SonarQube']
+---
+
 # Skill: static-analysis
 
 ## Goal

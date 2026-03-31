@@ -1,3 +1,9 @@
+---
+name: security-scan
+description: 'Run security scanning tools (SAST and/or DAST) to detect vulnerabilities in source code and running applications.'
+triggers: ['security scan', 'SAST', 'DAST', 'vulnerability detection']
+---
+
 # Skill: security-scan
 
 ## Goal

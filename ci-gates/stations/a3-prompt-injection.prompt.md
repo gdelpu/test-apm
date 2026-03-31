@@ -49,6 +49,12 @@ Scan prompt bodies and agent instructions for known jailbreak trigger patterns:
 | `developer mode` | Developer-mode jailbreak | `high` |
 | `\[SYSTEM\]` / `\[INST\]` pattern in user-facing text | Injected system-role delimiter | `critical` |
 
+**Code-block exclusion**: If a match occurs inside a fenced code block (delimited by
+triple backticks) AND that code block includes a safety comment such as
+`# example`, `# do not follow`, `# do not interpret`, or `# detection patterns`,
+the match MUST be **skipped** (not reported). These represent documentation of
+attack patterns, not active injection vectors.
+
 ### PI-02 · Required "non-negotiable" system constraints
 
 Every `*.agent.md` body MUST include at least one sentence describing what the agent

@@ -1,221 +1,205 @@
-﻿# Local GitLab CI Pipeline Testing
+﻿# Local Pipeline Testing
 
-This guide explains how to run the Agent Factory pipeline locally using `gitlab-ci-local`.
+Run the full CI pipeline locally using `podman-compose` (or `docker-compose`).
 
 ## Prerequisites
 
-### For Windows (Native Podman Runner)
-- **Podman Desktop** installed and running
-- **Git** installed (for repository operations)
+- **Podman Desktop** installed with a running machine (`podman machine info` → `MachineState: Running`)
+- **Python 3.10+** with a virtual environment (for `podman-compose`)
+- **Git** installed and on PATH
+- A **GitHub Personal Access Token** with Copilot scope (for AI stations)
 
-### For Linux/WSL/Mac (gitlab-ci-local)
-- **Node.js** (v16+) and **npm** installed
-- **Git** installed
-- **Podman Desktop** or **Docker Desktop** running
+## Setup
+
+```powershell
+# 1. Create and activate a virtual environment
+python -m venv .venv
+.\.venv\Scripts\activate
+
+# 2. Install podman-compose
+pip install podman-compose
+
+# 3. Create .env from the example below
+```
+
+### `.env` file (required)
+
+Create a `.env` file in the repository root:
+
+```env
+GH_TOKEN=github_pat_YOUR_TOKEN_HERE
+GITHUB_TOKEN=github_pat_YOUR_TOKEN_HERE
+CI_MERGE_REQUEST_TARGET_BRANCH_NAME=main
+CI_COMMIT_SHA=HEAD
+CI_MERGE_REQUEST_IID=1
+ENABLE_COPILOT_CLI=true
+```
+
+Set `ENABLE_COPILOT_CLI=false` to skip Copilot CLI invocations (stations will be listed but not executed).
 
 ## Quick Start
 
-### Windows Users (Recommended)
-
-**Use the native Podman runner** (no npm/Node.js required):
+> **Important:** Always activate the venv first — `podman-compose` is installed there.
 
 ```powershell
-# Full pipeline (deterministic validators + all stations)
-.\run-pipeline-podman.ps1
-
-# Run only the station orchestrator (skips deterministic validators)
-bash ci-gates/scripts/run_stations.sh
-
-# Show help
-.\run-pipeline-podman.ps1 -Help
+.\.venv\Scripts\activate
 ```
 
-### Linux/WSL/Mac Users
+### Run everything (validators + stations)
 
-Use gitlab-ci-local for full CI simulation:
+Due to `--abort-on-container-exit` terminating all containers when the first one exits,
+run validators and stations separately:
 
-```bash
-# Install
-npm install -g gitlab-ci-local
+```powershell
+# Step 1: Run the three Python validators
+podman-compose up validate-pr-auto validate-yaml-workflows validate-test-gaps
 
-# Configure test scenario
-# Edit .gitlab-ci-local-variables.yml
+# Step 2: Run the AI station orchestrator (A0–A7)
+podman-compose up stations-run-all
+```
 
-# Run full pipeline (both phases)
-gitlab-ci-local
+### Run only the Python validators (no token needed)
 
-# Run only deterministic validators
-gitlab-ci-local validate:pr-auto
-gitlab-ci-local validate:yaml-workflows
+```powershell
+podman-compose up validate-pr-auto validate-yaml-workflows validate-test-gaps
+```
 
-# Run station orchestrator (discovers all stations dynamically)
-gitlab-ci-local stations:run-all
+### Run only the AI stations
+
+```powershell
+podman-compose up stations-run-all
+```
+
+### Clean up between runs
+
+```powershell
+podman-compose down
+Remove-Item station_out\*_raw.json, station_out\*_result.json -ErrorAction SilentlyContinue
 ```
 
 ## Pipeline Phases
 
-The pipeline runs in two phases:
+### Phase 1 — Python Validators (`validate` stage)
 
-1. **Phase 1 — `validate` stage**: Three deterministic Python validators run in parallel.
-   `validate:pr-auto` and `validate:yaml-workflows` are blocking; `validate:test-gaps` is advisory.
-2. **Phase 2 — `stations` stage**: The `stations:run-all` job invokes
-   `ci-gates/scripts/run_stations.sh`, which dynamically discovers all
-   `*.prompt.md` and `*.agent.md` files in `ci-gates/stations/`, sorts
-   them by prefix (a0 → a6), and runs each sequentially via Copilot CLI.
-   It starts only after the two blocking validators pass.
+Three deterministic validators run in parallel inside `python:3.11` containers:
+
+| Service | Script | Blocking? |
+|---------|--------|-----------|
+| `validate-pr-auto` | `pr_auto_validator.py` | Yes |
+| `validate-yaml-workflows` | `yaml_workflow_linter.py` | Yes |
+| `validate-test-gaps` | `test_gap_detector.py` | Advisory |
+
+### Phase 2 — AI Station Orchestrator (`stations` stage)
+
+The `stations-run-all` container (`node:20-bookworm-slim`) installs Copilot CLI
+and invokes `ci-gates/scripts/run_stations.sh`, which:
+
+1. Discovers all `*.prompt.md` and `*.agent.md` files in `ci-gates/stations/`
+2. Sorts them by prefix (a0 → a7)
+3. Runs each sequentially via Copilot CLI with per-station model selection
+4. Sleeps 30s between stations (rate-limit throttle)
+5. Aborts the pipeline if any station returns `status: fail`
+
+| Station | Model | Purpose |
+|---------|-------|---------|
+| A0 — Intake | Haiku | Classify PR scope, extract changed files |
+| A1 — Policy Validation | Sonnet | Validate agent/skill frontmatter against policy rules |
+| A2 — Security Static | Haiku | Static security scan (secrets, dependencies) |
+| A3 — Prompt Injection | Sonnet | Deterministic jailbreak/exfil pattern scan |
+| A4 — Red Team | Sonnet | Adversarial red team assessment (advisory, non-blocking) |
+| A5 — Sandbox Simulation | Sonnet | Simulated attack scenarios |
+| A6 — Policy Gate | Sonnet | Aggregate all reports → APPROVE / REVIEW / BLOCK |
+| A7 — GitLab Update | Haiku | Post labels/notes to GitLab MR (skipped locally without `GITLAB_TOKEN`) |
 
 ## Station Outputs
 
-All stations write their results to the `station_out/` directory:
+All outputs are written to `station_out/`:
 
-- `station_out/work_order.json` — A0 diff analysis
-- `station_out/policy_report.json` — A1 validation results
-- `station_out/security_report.json` — A2 security scan
-- `station_out/promptsec_report.json` — A3 prompt injection checks
-- `station_out/sim_report.json` — A5 sandbox test results
-- `station_out/gate_decision.json` — A6 final decision
+| File | Station | Content |
+|------|---------|---------|
+| `a0_result.json` | A0 | Work order: PR metadata, changed files, scope classification |
+| `a1_result.json` | A1 | Policy findings (P-01 through P-06) |
+| `a2_result.json` | A2 | Security scan findings |
+| `a3_result.json` | A3 | Prompt injection findings (PI-01 through PI-06) |
+| `a4_result.json` | A4 | Red team findings (advisory) |
+| `a5_result.json` | A5 | Sandbox simulation results |
+| `a6_result.json` | A6 | Gate decision (APPROVE/REVIEW/BLOCK) |
+| `a7_result.json` | A7 | GitLab update status (or skipped) |
+| `changed_files.txt` | Shared | Git diff name-status |
+| `diff.patch` | Shared | Full diff fed to stations |
 
-## Testing Specific Scenarios
+Validator reports are written to `reports/`:
 
-### Test BLOCK Decision (Critical Findings)
-
-1. Add a malicious pattern to an agent file (e.g., hardcoded token)
-2. Run: `.\run-pipeline-local.ps1 A2-security-static`
-3. Verify: `station_out/security_report.json` shows critical finding
-4. Run: `.\run-pipeline-local.ps1 A6-policy-gate`
-5. Verify: A6 exits with code 1 (BLOCK decision)
-
-### Test REVIEW Decision (High Risk)
-
-1. Add `allowRunCommands: true` to an agent
-2. Run: `.\run-pipeline-local.ps1 A1-policy-validation`
-3. Verify: `station_out/policy_report.json` flags high-risk pattern
-4. Run: `.\run-pipeline-local.ps1 A6-policy-gate`
-5. Verify: Decision is "REVIEW"
-
-### Test A7 GitLab API Calls (Labels/Notes)
-
-**Note:** A7 requires a real GitLab instance. For local testing, A7 will attempt API calls that will fail against `http://localhost` endpoints. To skip A7 during local testing, run only stations A0-A6.
-
-If you want to test A6:
-1. Set `GITLAB_TOKEN` in `.gitlab-ci-local-variables.yml`
-2. Update `CI_API_V4_URL` to point to your GitLab instance
-3. Set `CI_PROJECT_ID` to a real project ID
-4. Run: `.\run-pipeline-local.ps1 A7-gitlab-update`
+| File | Validator |
+|------|-----------|
+| `pr-auto-validator.json` | PR structural checks |
+| `yaml-workflow-linter.json` | Workflow YAML lint |
+| `test-gap-detector.json` | Test coverage gaps |
 
 ## Troubleshooting
 
-### Windows: Git Command Not Found
+### `podman-compose` not recognized
+
+Always activate the venv first:
+```powershell
+.\.venv\Scripts\activate
 ```
-Error: Command failed with exit code 127: git ls-files --deduplicate
-```
-**Root Cause:** gitlab-ci-local requires git during initialization on Windows.
 
-**Solutions:**
-1. **Install Git for Windows** and ensure it's in PATH:
-   ```powershell
-   git --version  # Should show version
-   ```
-   Download from: https://git-scm.com/download/win
-
-2. **Use WSL2** (recommended for Windows):
-   ```bash
-   # From WSL2 terminal
-   cd /mnt/c/Users/rasinha/source/repos/ai-sdlc-foundation
-   npm install -g gitlab-ci-local
-   gitlab-ci-local
-   ```
-
-3. **Manual station testing** (bypass gitlab-ci-local):
-   ```powershell
-   # Run stations directly with Podman
-   podman run --rm -v "${PWD}:/workspace" -w /workspace python:3.12-slim bash -c "apt-get update && apt-get install -y git && cd /workspace && python ci-gates/stations/A0-intake.prompt.md"
-   ```
-
-### Container Runtime Not Running
-```
-Error: Cannot connect to the Docker daemon
-```
-**Solution:** Start Podman Desktop or Docker Desktop
-
-The script automatically detects and uses Podman (preferred) or Docker.
-
-### Station Artifacts Missing
-If a downstream station can't find upstream artifacts (e.g., A1 can't find `work_order.json`):
+### Podman machine not running
 
 ```powershell
-# Run stations in sequence
-.\run-pipeline-local.ps1 A0-intake
-.\run-pipeline-local.ps1 A1-policy-validation
-# ... etc
+podman machine start
 ```
 
-### Python Dependencies Fail to Install
-If you see pip errors during job execution:
+### Stations skip with "ENABLE_COPILOT_CLI != true"
+
+Ensure `.env` has `ENABLE_COPILOT_CLI=true` and a valid `GITHUB_TOKEN`.
+
+### Rate limit hit
+
+The orchestrator retries up to 3 times with 70s waits. If it persists, increase `COPILOT_INTER_STATION_SLEEP` in `.env` (default: 30s).
+
+### Stale containers block re-runs
 
 ```powershell
-# Clear container cache (Podman)
-podman system prune -a
-
-# Or with Docker
-docker system prune -a
+podman-compose down
 ```
 
-### Workflow Rules Block Execution
-If the pipeline doesn't start, ensure `.gitlab-ci-local-variables.yml` has:
-```yaml
-CI_PIPELINE_SOURCE: merge_request_event
-```
+### Container can't find git
 
-## Differences from GitLab CI
+The `stations-run-all` container installs git automatically. If validators fail with git errors, ensure the repo is a valid git working tree.
 
-| Feature | GitLab CI | gitlab-ci-local |
-|---------|-----------|-----------------|
-| Artifact persistence | Between jobs | ✓ Fully supported |
-| `needs:` dependencies | ✓ Full DAG | ✓ Full DAG |
-| `when: always` | ✓ Runs always | ✓ Runs always |
-| GitLab API calls (A6) | Real API | Requires real GitLab instance |
-| `interruptible: true` | ✓ Cancels on new MR push | ⚠️ Not applicable locally |
-| Git context | Real MR diff | Uses local git state |
+## Environment Variables
 
-## Advanced Usage
+Override these in `.env` as needed:
 
-### Run with Custom Variables
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `ENABLE_COPILOT_CLI` | `false` | Set `true` to run AI stations |
+| `GITHUB_TOKEN` | — | GitHub PAT with Copilot scope |
+| `CI_MERGE_REQUEST_TARGET_BRANCH_NAME` | `main` | Base branch for diff |
+| `CI_COMMIT_SHA` | `HEAD` | Head commit for diff |
+| `CI_MERGE_REQUEST_IID` | `0` | MR identifier |
+| `STATION_TIMEOUT` | `900` | Per-station timeout (seconds) |
+| `COPILOT_MAX_DIFF_LINES` | `2000` | Max diff lines fed to stations |
+| `COPILOT_INTER_STATION_SLEEP` | `30` | Seconds between stations |
+| `COPILOT_RATE_LIMIT_WAIT` | `70` | Seconds to wait on rate limit |
+| `COPILOT_RATE_LIMIT_RETRIES` | `3` | Max retries per station |
+| `COPILOT_MODEL_DEFAULT` | `claude-haiku-4.5` | Default model |
+| `GITLAB_TOKEN` | — | GitLab API token (A7 only) |
 
-```powershell
-# Override specific variables
-gitlab-ci-local A0-intake --variable CI_MERGE_REQUEST_IID=42
-```
+## CI/CD Integration Checklist
 
-### Debug Mode
+Before pushing, verify locally:
 
-```powershell
-# Show verbose output
-gitlab-ci-local --debug
-```
-
-### List All Jobs
-
-```powershell
-gitlab-ci-local --list
-```
-
-## CI/CD Integration Test Checklist
-
-Before pushing to GitLab, verify locally:
-
-- [ ] A0 generates valid `work_order.json` for your changes
-- [ ] A1 passes all policy rules (or intentionally flags expected violations)
-- [ ] A2 security scan runs without blocking findings (unless expected)
+- [ ] `validate-pr-auto` passes (0 blocking issues)
+- [ ] `validate-yaml-workflows` passes
+- [ ] A0 generates valid work order classifying your changes
+- [ ] A1 passes all policy rules (0 critical/high)
+- [ ] A2 security scan has no blocking findings
 - [ ] A3 prompt injection checks pass
-- [ ] A4 red team findings reviewed
-- [ ] A5 sandbox scenarios complete without crashes
-- [ ] A6 produces expected decision (APPROVE/REVIEW/BLOCK)
+- [ ] A4 red team findings reviewed (advisory)
+- [ ] A5 sandbox scenarios pass
+- [ ] A6 decision is APPROVE (or REVIEW with justification)
 - [ ] All station JSON outputs are valid and complete
-
-## Resources
-
-- **gitlab-ci-local docs:** https://github.com/firecow/gitlab-ci-local
-- **GitLab CI YAML reference:** https://docs.gitlab.com/ee/ci/yaml/
-- **Pipeline file:** `.gitlab-ci.yml`
 - **Station orchestrator:** `ci-gates/scripts/run_stations.sh`

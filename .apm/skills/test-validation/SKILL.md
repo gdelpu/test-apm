@@ -1,6 +1,7 @@
 ---
 name: test-validation
 description: 'Test skill with intentional validation issues'
+triggers: ['test validation', 'validation testing', 'test scenarios']
 ---
 
 # Test Validation Skill

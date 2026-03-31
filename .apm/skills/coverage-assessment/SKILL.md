@@ -1,3 +1,9 @@
+---
+name: coverage-assessment
+description: 'Measure test coverage and evaluate whether it meets configured thresholds.'
+triggers: ['test coverage', 'coverage thresholds', 'coverage measurement']
+---
+
 # Skill: coverage-assessment
 
 ## Goal

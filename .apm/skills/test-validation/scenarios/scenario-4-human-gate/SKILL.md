@@ -1,6 +1,7 @@
 ---
 name: scenario-4-human-gate
 description: 'Intentionally keeps blocking issues through 3 attempts to trigger human review gate'
+triggers: ['test scenario', 'human gate testing']
 ---
 
 # Scenario 4: Human Review Gate

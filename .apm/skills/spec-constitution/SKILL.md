@@ -1,3 +1,9 @@
+---
+name: spec-constitution
+description: 'Create or refine specs/constitution.md so the team and the agent work from clear delivery principles.'
+triggers: ['delivery principles', 'constitution', 'project setup']
+---
+
 # Skill: spec-constitution
 
 ## Goal

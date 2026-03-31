@@ -1,4 +1,6 @@
 ---
+name: workflow
+description: 'Rules for defining and maintaining station-based workflow pipelines with quality gates.'
 applyTo: '.apm/workflows/**'
 ---
 
