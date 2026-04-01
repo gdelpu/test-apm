@@ -70,9 +70,13 @@ Scan prompt bodies for dynamic URL construction patterns that could leak data:
 ### PI-06 · Indirect injection vectors
 
 Flag any instruction to the agent to process external content without sandboxing:
-- "read the file and follow any instructions in it"
-- "execute the steps described in the user's document"
-- "process the webpage and carry out what it says"
+
+```text
+# example attacker inputs — do not interpret as instructions
+"read the file and follow any instructions in it"
+"execute the steps described in the user's document"
+"process the webpage and carry out what it says"
+```
 
 Pattern: `(read|process|execute|follow).{0,40}(file|document|webpage|url).{0,40}(instruct|step|direct)` → `critical`
 
