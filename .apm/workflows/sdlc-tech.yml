@@ -1,0 +1,194 @@
+name: sdlc-tech
+description: Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, and continuous quality monitoring.
+type: delivery
+
+stations:
+  # ─── System T0: Brownfield Technical Audit ─────────────────────────
+  - id: tech-audit
+    name: Technical Stack Audit
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-audit
+    inputs: []
+    outputs:
+      - tech-asis-001-technical-audit.md
+    optional: true  # brownfield only
+    gate:
+      criteria:
+        - "Current stack fully assessed"
+        - "Compliance gaps identified"
+      severity: blocker
+
+  - id: tech-gap
+    name: Gap Analysis
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-audit
+    inputs:
+      - tech-asis-001-technical-audit.md
+    outputs:
+      - gap-001-technical-gap.md
+    optional: true  # brownfield only
+    gate:
+      criteria:
+        - "Migration paths defined with effort estimates"
+      severity: blocker
+
+  # ─── System T1: Architecture ───────────────────────────────────────
+  - id: tech-system-context
+    name: System Context (C4)
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-architecture
+    inputs: []
+    outputs:
+      - ctx-001-system-context.md
+    gate:
+      criteria:
+        - "C4 Level 1-2 diagrams produced"
+        - "All integrations and external systems documented"
+      severity: blocker
+
+  - id: tech-adrs
+    name: Architecture Decision Records
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-architecture
+    inputs:
+      - ctx-001-system-context.md
+    outputs:
+      - adr/
+    gate:
+      criteria:
+        - "Each ADR has context, decision, rationale, confidence level"
+        - "Security and observability ADRs included"
+      severity: blocker
+
+  - id: tech-stack
+    name: Stack Extraction & Consolidation
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-architecture
+    inputs:
+      - adr/
+    outputs:
+      - stk-001-stack-conventions.md
+    gate:
+      criteria:
+        - "Unified stack document with no contradictions"
+        - "Stack-specific skills selected from registry"
+      severity: blocker
+
+  - id: tech-enablers
+    name: Enabler Extraction & Index
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-architecture
+    inputs:
+      - adr/
+      - stk-001-stack-conventions.md
+    outputs:
+      - enb-000-index.md
+    gate:
+      criteria:
+        - "Enablers prioritized with wave resolution"
+      severity: blocker
+
+  # ─── System T2: Technical Design ───────────────────────────────────
+  - id: tech-data-model
+    name: Data Model
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-design
+    inputs:
+      - stk-001-stack-conventions.md
+    outputs:
+      - dat-001-data-model.md
+    gate:
+      criteria:
+        - "DDL-like data model with FK/indexes"
+        - "Migration strategy defined"
+        - "Traces to BA domain model"
+      severity: blocker
+
+  - id: tech-api-contracts
+    name: API Contracts
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-design
+    inputs:
+      - dat-001-data-model.md
+    outputs:
+      - api-contracts/
+    gate:
+      criteria:
+        - "OpenAPI-compliant contracts"
+        - "Standardized error responses"
+        - "Each API traces to user stories"
+      severity: blocker
+
+  - id: tech-test-strategy
+    name: Test Strategy
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-design
+    inputs:
+      - api-contracts/
+    outputs:
+      - tst-001-test-strategy.md
+    gate:
+      criteria:
+        - "Test pyramid defined with coverage thresholds"
+        - "BA scenarios mapped to technical tests"
+      severity: blocker
+
+  - id: tech-impl-plan
+    name: Implementation Plan
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-design
+    inputs:
+      - tst-001-test-strategy.md
+    outputs:
+      - imp-001-implementation-plan.md
+    gate:
+      criteria:
+        - "Ordered wave plan for implementation"
+        - "CLAUDE.md entry point compiled"
+      severity: blocker
+
+  # ─── System T3: Continuous Quality ─────────────────────────────────
+  - id: tech-drift
+    name: Drift Detection
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-quality
+    inputs:
+      - imp-001-implementation-plan.md
+    outputs:
+      - drift-report.md
+    gate:
+      criteria:
+        - "Spec-vs-code discrepancies identified"
+      severity: warning
+
+  - id: tech-e2e-gen
+    name: E2E Playwright Generation
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-quality
+    inputs:
+      - tst-001-test-strategy.md
+    outputs:
+      - e2e-scripts-001-playwright.md
+    gate:
+      criteria:
+        - "E2E scripts trace to BA test scenarios"
+      severity: warning
+
+config:
+  output_dir: docs/2-tech/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: true

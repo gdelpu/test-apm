@@ -1,0 +1,197 @@
+name: sdlc-full
+description: Composite SDLC pipeline orchestrating all four domains — BA specification, Tech architecture, Test campaigns, and Steer governance — with inter-domain quality gates.
+type: delivery
+
+stations:
+  # ─── Phase 1: Project Initialization ───────────────────────────────
+  - id: scaffold
+    name: Directory Scaffold
+    agent: sdlc-coordinator
+    skills:
+      - sdlc-scaffold
+    inputs: []
+    outputs:
+      - docs/
+    gate:
+      criteria:
+        - "Directory structure created"
+      severity: blocker
+
+  - id: project-init
+    name: Project Initialization (P0)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-init
+    inputs:
+      - docs/
+    outputs:
+      - pil-001-project-sheet.md
+      - kpi-001-baseline.md
+    gate:
+      criteria:
+        - "Project sheet and KPI baselines established"
+      severity: blocker
+
+  # ─── Phase 2: Business Analysis ────────────────────────────────────
+  - id: ba-pipeline
+    name: BA Pipeline (S0-S3)
+    agent: sdlc-coordinator
+    skills:
+      - sdlc-ba-audit
+      - sdlc-ba-scoping
+      - sdlc-ba-specification
+      - sdlc-ba-functional-design
+    inputs:
+      - pil-001-project-sheet.md
+    outputs:
+      - ba-validation-report.md
+    gate:
+      criteria:
+        - "All BA systems complete"
+        - "Traceability chain verified: EXF → EP → FT → US → BR → SCE"
+      severity: blocker
+
+  # ─── Phase 3: Sprint Planning ──────────────────────────────────────
+  - id: sprint-planning
+    name: Sprint Planning (P1)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-planning
+    inputs:
+      - ba-validation-report.md
+    outputs:
+      - plan-001-sprint-planning.md
+      - rdp-001-roadmap.md
+      - rsk-001-risk-register.md
+    gate:
+      criteria:
+        - "Features batched into sprints"
+        - "Roadmap and risk register complete"
+      severity: blocker
+
+  # ─── Phase 4: Technical Architecture & Design ──────────────────────
+  - id: tech-pipeline
+    name: Tech Pipeline (T0-T3)
+    agent: sdlc-coordinator
+    skills:
+      - sdlc-tech-audit
+      - sdlc-tech-architecture
+      - sdlc-tech-design
+      - sdlc-tech-quality
+    inputs:
+      - plan-001-sprint-planning.md
+      - ba-validation-report.md
+    outputs:
+      - imp-001-implementation-plan.md
+    gate:
+      criteria:
+        - "All Tech systems complete"
+        - "BA-Tech traceability verified"
+        - "Implementation plan and CLAUDE.md compiled"
+      severity: blocker
+
+  # ─── Phase 5: Implementation ───────────────────────────────────────
+  - id: implementation
+    name: Code Implementation
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - imp-001-implementation-plan.md
+    outputs:
+      - implementation-log.md
+    gate:
+      criteria:
+        - "Code compiles without errors"
+        - "All tests pass"
+      severity: blocker
+
+  # ─── Phase 6: Test Campaigns ───────────────────────────────────────
+  - id: test-campaign
+    name: E2E/UAT Campaign
+    agent: sdlc-test-executor
+    skills:
+      - sdlc-test-campaign
+    inputs:
+      - implementation-log.md
+    outputs:
+      - campaign-report.md
+    gate:
+      criteria:
+        - "Campaign pass rate above threshold"
+        - "Critical anomalies resolved"
+      severity: blocker
+
+  - id: test-performance
+    name: Performance Campaign
+    agent: sdlc-test-executor
+    skills:
+      - sdlc-test-performance
+    inputs:
+      - implementation-log.md
+    outputs:
+      - performance-report.md
+    parallel: true  # can run in parallel with campaign
+    gate:
+      criteria:
+        - "Performance within defined thresholds"
+      severity: blocker
+
+  # ─── Phase 7: Sprint Tracking ──────────────────────────────────────
+  - id: sprint-tracking
+    name: Sprint Tracking (P2)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-sprint
+    inputs:
+      - campaign-report.md
+      - performance-report.md
+    outputs:
+      - sprint-progress.md
+      - sprint-risks.md
+    gate:
+      criteria:
+        - "Sprint progress documented"
+        - "Risks assessed"
+      severity: warning
+
+  # ─── Phase 8: Quality Validation ───────────────────────────────────
+  - id: quality-validation
+    name: Quality Validation
+    agent: workflow-orchestrator
+    skills:
+      - workflow-engine
+    inputs:
+      - implementation-log.md
+    outputs:
+      - quality-report.md
+    gate:
+      criteria:
+        - "All quality validation stations pass"
+      severity: blocker
+
+  # ─── Phase 9: Governance ───────────────────────────────────────────
+  - id: copil
+    name: COPIL & Go/No-Go (P3)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-governance
+    inputs:
+      - quality-report.md
+      - campaign-report.md
+      - performance-report.md
+      - sprint-risks.md
+    outputs:
+      - gng-001-go-nogo.md
+    gate:
+      criteria:
+        - "All domain data aggregated"
+        - "Go/No-Go decision documented with evidence"
+      severity: blocker
+
+config:
+  output_dir: docs/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false
