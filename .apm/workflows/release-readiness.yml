@@ -1,0 +1,124 @@
+name: release-readiness
+description: Validate that a feature meets all release criteria across spec completeness, testing, security, observability, and deployment.
+type: validation
+
+stations:
+  - id: spec-completeness
+    name: Spec Completeness Check
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - spec.md
+      - clarifications.md
+      - plan.md
+      - tasks.md
+    outputs:
+      - spec-completeness.md
+    gate:
+      criteria:
+        - "Specification is complete and coherent"
+        - "All clarifications are resolved"
+        - "Plan and tasks are aligned with spec"
+      severity: blocker
+
+  - id: test-completeness
+    name: Test Completeness
+    agent: quality-validator
+    skills:
+      - coverage-assessment
+      - test-strategy
+    inputs:
+      - test-strategy.md
+      - tasks.md
+    outputs:
+      - test-completeness.md
+    gate:
+      criteria:
+        - "All acceptance criteria have corresponding tests"
+        - "Coverage meets or exceeds threshold"
+        - "Integration and e2e tests exist for critical paths"
+      severity: blocker
+
+  - id: security-validation
+    name: Security Validation
+    agent: quality-validator
+    skills:
+      - security-scan
+      - dependency-audit
+    inputs: []
+    outputs:
+      - security-report.md
+    gate:
+      criteria:
+        - "No critical or high SAST vulnerabilities"
+        - "No critical CVEs in dependencies"
+        - "Authentication and authorization are verified"
+      severity: blocker
+
+  - id: observability-readiness
+    name: Observability Readiness
+    agent: architecture-governance
+    skills:
+      - observability-readiness
+      - nfr-review
+    inputs:
+      - spec.md
+      - nfr-review.md
+    outputs:
+      - observability-report.md
+    gate:
+      criteria:
+        - "Logging is structured and covers key operations"
+        - "Metrics and health endpoints are defined"
+        - "Alerting thresholds are configured"
+        - "Tracing is integrated for distributed calls"
+      severity: blocker
+
+  - id: deployment-readiness
+    name: Deployment Readiness
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - rollout-strategy.md
+      - tasks.md
+      - implementation-log.md
+    outputs:
+      - deployment-readiness.md
+    gate:
+      criteria:
+        - "Deployment procedure is documented"
+        - "Rollback procedure is tested or validated"
+        - "Environment configuration is defined"
+        - "Database migrations are reversible (if applicable)"
+      severity: blocker
+
+  - id: go-no-go
+    name: Go / No-Go Decision
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+      - quality-report
+    inputs:
+      - spec-completeness.md
+      - test-completeness.md
+      - security-report.md
+      - observability-report.md
+      - deployment-readiness.md
+    outputs:
+      - release-decision.md
+    gate:
+      criteria:
+        - "Spec is coherent and complete"
+        - "Monitoring and logging are defined"
+        - "Rollback is validated"
+        - "No critical vulnerabilities"
+        - "All blocker gates from prior stations have passed"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

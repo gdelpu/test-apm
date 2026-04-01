@@ -1,0 +1,72 @@
+name: bmad
+description: Build-Measure-Analyze-Decide feedback loop for hypothesis-driven delivery.
+type: delivery
+
+stations:
+  - id: build
+    name: Build
+    agent: implementer
+    skills:
+      - code-implementation
+    inputs:
+      - hypothesis.md
+    outputs:
+      - build-log.md
+    gate:
+      criteria:
+        - "Minimum viable change is deployed or deployable"
+        - "Instrumentation for measurement is in place"
+      severity: blocker
+
+  - id: measure
+    name: Measure
+    agent: quality-validator
+    skills:
+      - coverage-assessment
+    inputs:
+      - build-log.md
+    outputs:
+      - metrics.md
+    gate:
+      criteria:
+        - "Key metrics collected for the hypothesis"
+        - "Data is statistically meaningful or time-boxed"
+      severity: blocker
+
+  - id: analyze
+    name: Analyze
+    agent: spec-orchestrator
+    skills:
+      - spec-clarify
+    inputs:
+      - metrics.md
+      - hypothesis.md
+    outputs:
+      - analysis.md
+    gate:
+      criteria:
+        - "Metrics interpreted against success criteria"
+        - "Root causes for deviations identified"
+      severity: blocker
+
+  - id: decide
+    name: Decide
+    agent: spec-orchestrator
+    skills:
+      - adr-generation
+    inputs:
+      - analysis.md
+    outputs:
+      - decision.md
+    gate:
+      criteria:
+        - "Decision recorded: pivot, persevere, or stop"
+        - "Next actions documented"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false

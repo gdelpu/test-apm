@@ -1,0 +1,130 @@
+name: idea-to-spec
+description: Transform a raw idea into a validated, unambiguous specification with NFRs and architecture sketch.
+type: delivery
+
+stations:
+  - id: intent-capture
+    name: Intent Capture
+    agent: spec-orchestrator
+    skills:
+      - intent-capture
+    inputs: []
+    outputs:
+      - intent.md
+    gate:
+      criteria:
+        - "Business goal is stated in outcome terms"
+        - "Constraints and boundaries are explicit"
+        - "Target users or personas are identified"
+      severity: blocker
+
+  - id: domain-enrichment
+    name: Domain / Context Enrichment
+    agent: spec-orchestrator
+    skills:
+      - brownfield-context
+      - repo-analysis
+    inputs:
+      - intent.md
+    outputs:
+      - context-brief.md
+    optional: true
+    gate:
+      criteria:
+        - "Existing codebase patterns and constraints are documented (if brownfield)"
+        - "Domain terms are defined or a glossary is referenced"
+      severity: warning
+
+  - id: specification
+    name: Feature Specification
+    agent: spec-orchestrator
+    skills:
+      - spec-feature
+    inputs:
+      - intent.md
+      - context-brief.md
+    outputs:
+      - spec.md
+    gate:
+      criteria:
+        - "Scope and out-of-scope are defined"
+        - "Acceptance criteria are testable"
+        - "User stories or scenarios are present"
+      severity: blocker
+
+  - id: clarification
+    name: Clarification Loop
+    agent: spec-orchestrator
+    skills:
+      - spec-clarify
+    inputs:
+      - spec.md
+    outputs:
+      - clarifications.md
+    gate:
+      criteria:
+        - "No unresolved blocker questions remain"
+        - "All ambiguous terms are resolved"
+      severity: blocker
+
+  - id: nfr-definition
+    name: NFR Definition
+    agent: spec-orchestrator
+    skills:
+      - nfr-review
+    inputs:
+      - spec.md
+      - clarifications.md
+    outputs:
+      - nfr-review.md
+    gate:
+      criteria:
+        - "Security, performance, resilience NFRs are defined"
+        - "Observability requirements are stated"
+        - "Each NFR has a measurable target"
+      severity: blocker
+
+  - id: architecture-sketch
+    name: Architecture Sketch
+    agent: architecture-governance
+    skills:
+      - architecture-guardrails
+    inputs:
+      - spec.md
+      - nfr-review.md
+      - clarifications.md
+    outputs:
+      - architecture-review.md
+    gate:
+      criteria:
+        - "Architecture principles are satisfied"
+        - "No unmitigated high-risk concerns"
+        - "Key technology choices are justified"
+      severity: blocker
+      reviewer: architecture-governance
+
+  - id: spec-quality-gate
+    name: Spec Quality Gate
+    agent: spec-orchestrator
+    skills:
+      - spec-quality-gate
+    inputs:
+      - spec.md
+      - clarifications.md
+      - nfr-review.md
+      - architecture-review.md
+    outputs:
+      - quality-gate.md
+    gate:
+      criteria:
+        - "No ambiguity blockers remain"
+        - "Acceptance criteria are testable"
+        - "NFRs are defined with measurable targets"
+        - "Architecture risks are addressed"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

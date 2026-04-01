@@ -1,0 +1,46 @@
+name: ssg-ai-backbone
+version: 1.0.0
+description: >
+  Sopra Steria Group AI SDLC Foundation — cross-provider collection of agents,
+  skills, workflows, prompts, and foundational knowledge for specification-driven
+  delivery, quality validation, security governance, brand compliance, and
+  full-lifecycle SDLC support. Designed for reuse as an MCP server across
+  projects with dynamic workflows covering the entire software development
+  lifecycle.
+
+targets:
+  - github-copilot
+  - claude-code
+  - cli
+
+exports:
+  agents: .apm/agents
+  skills: .apm/skills
+  prompts: .apm/prompts
+  instructions: .apm/instructions
+  contexts: .apm/contexts
+  workflows: .apm/workflows
+
+knowledge: knowledge
+
+providers:
+  github-copilot:
+    adapter: providers/github-copilot
+    conventions: providers/github-copilot/conventions.md
+    sync-map: providers/github-copilot/sync-map.md
+    runtime: .github
+  claude-code:
+    context: providers/claude-code/CLAUDE.md
+    commands: providers/claude-code/commands
+  cli:
+    runner: providers/cli/run-workflow.sh
+
+ci-gates: ci-gates
+
+schemas:
+  agents: knowledge/governance/schemas/agent-manifest.schema.json
+  skills: knowledge/governance/schemas/skill-manifest.schema.json
+
+clients: clients
+
+dependencies: []

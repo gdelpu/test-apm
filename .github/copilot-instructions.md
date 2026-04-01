@@ -1,0 +1,96 @@
+# Copilot Instructions — SSG AI SDLC Foundation
+
+This repository is the **SSG AI SDLC Foundation**: a cross-provider collection
+of agents, skills, workflows, prompts, and foundational knowledge for
+specification-driven delivery, quality validation, security governance, brand
+compliance, and full-lifecycle SDLC support.
+
+## Architecture (three layers)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    CANONICAL LAYER                           │
+│  .apm/agents/  .apm/skills/  .apm/workflows/  knowledge/    │
+│  (17 agents)   (54 skills)   (15 workflows)   (principles,  │
+│                                                governance,   │
+│                                                playbooks)    │
+└──────────────┬──────────────────────┬───────────────────────┘
+               │                      │
+  ┌────────────▼──────────────────────▼──────────────────┐
+  │                  PROVIDER ADAPTERS                    │
+  │                                                      │
+  │  providers/github-copilot/   providers/claude-code/  │
+  │    conventions.md              CLAUDE.md             │
+  │    sync-map.md                 commands/ (7)         │
+  │    → .github/ (runtime)                              │
+  │      agents/ (6)             providers/cli/          │
+  │      prompts/ (12)             lib/ (5)              │
+  │      instructions/ (5)         run-workflow.sh       │
+  │                                                      │
+  └──────────────────────┬───────────────────────────────┘
+                         │
+            ┌────────────▼──────────────┐
+            │      Outputs: specs/      │
+            │  features/  decisions/    │
+            └───────────────────────────┘
+```
+
+## Repository layout
+
+| Path | Purpose |
+|------|---------|
+| `.apm/` | Canonical layer — agents, skills, prompts, instructions, contexts, workflows, templates, scripts |
+| `.apm/templates/` | Spec-kit workflow templates (plan, spec, tasks, checklist, agent-file) |
+| `.apm/scripts/` | Workflow automation scripts (PowerShell) |
+| `.apm/workflows/` | Workflow definitions (YAML) with stations and quality gates |
+| `knowledge/` | Foundational knowledge base — constitution, governance, playbooks |
+| `providers/github-copilot/` | Copilot adapter docs (conventions.md, sync-map.md) |
+| `.github/` | Copilot runtime projection (agents, prompts, instructions) |
+| `providers/claude-code/` | Claude Code adapter (CLAUDE.md, commands) |
+| `providers/cli/` | CLI workflow runner with tool adapters |
+| `ci-gates/` | PR validation station implementations (A0–A7) |
+| `clients/` | Client-specific overlays |
+| `specs/` | Generated specification artifacts |
+
+## Source of truth
+
+- `.apm/` and `knowledge/` are the **canonical sources** (Layer 1).
+- `providers/` holds adapter documentation only — not runtime files (Layer 2).
+- `.github/` is the Copilot runtime projection, derived from `.apm/` (Layer 3).
+
+## Working rules
+
+- Write all generated artifacts under `specs/`.
+- For brownfield work, start with a reverse brief.
+- Do not create implementation tasks before a plan exists.
+- Prefer the local skills and templates over inventing new structures.
+- Reference `knowledge/` for principles, governance, and playbooks.
+- Reference `knowledge/constitution/speckit-constitution.md` for the SpecKit constitution.
+- Reference `.apm/templates/` for spec-kit workflow templates (plan, spec, tasks).
+- Reference `.apm/scripts/` for workflow automation scripts.
+- Reference `.apm/skills/` for skill definitions and resources.
+
+## Workflows
+
+Workflow pipelines are available, each with stations and quality gates:
+
+| Workflow | Stations | Type | Purpose |
+|----------|----------|------|---------|
+| Feature Implementation | 10 | Delivery | End-to-end: constitution → spec → plan → implement → quality → gate |
+| Modernization | 10 | Delivery | Baseline → decisions → target → review → plan → risk → tasks → implement → quality |
+| Bug Fixing | 7 | Delivery | Triage → reproduce → root-cause → fix → regression → quality → close |
+| Incident Resolution | 7 | Delivery | Analysis → root-cause → reproduction → fix → regression → validation → knowledge |
+| BMAD | 4 | Delivery | Build → measure → analyze → decide (loop) |
+| Implementation Loop | 6 | Delivery | Task selection → code → review → test → validate → commit |
+| Idea to Spec | 7 | Specification | Intent → context → spec → clarify → NFR → architecture → gate |
+| Spec Kit | 8 | Specification | Constitution → spec → clarify → review → plan → tasks → test-strategy → gate |
+| Spec to Execution | 6 | Specification | Plan → risk → rollout → tasks → test-strategy → readiness |
+| Quality Validation | 7 | Validation | Lint → static → SAST → deps → coverage → DAST → report |
+| PR Validation | 11 | Validation | PR auto ∥ YAML lint ∥ test gaps → A0–A7 stations |
+| Compliance Check | 6 | Validation | PII → injection → policy → risk-score → approval → report |
+| Release Readiness | 6 | Validation | Spec → tests → security → observability → deployment → go/no-go |
+| Maturity Assessment | 4 | Assessment | Assessment → scoring → report → roadmap |
+| Delivery Retrospective | 5 | Assessment | Cycle time → defects → bottlenecks → improvements → playbook update |
+
+Workflows are defined in `.apm/workflows/` (YAML).
+Quality validation and PR validation can be nested inside delivery workflows.

@@ -1,0 +1,95 @@
+name: delivery-retrospective
+description: AI-native continuous improvement cycle analyzing delivery metrics, defects, bottlenecks, and producing actionable improvements.
+type: validation
+
+stations:
+  - id: cycle-time-analysis
+    name: Analyze Cycle Time
+    agent: spec-orchestrator
+    skills:
+      - delivery-metrics
+    inputs: []
+    outputs:
+      - cycle-time-report.md
+    gate:
+      criteria:
+        - "Cycle time per workflow station is measured"
+        - "Bottleneck stations are identified"
+        - "Trend compared to previous iterations (if available)"
+      severity: warning
+
+  - id: defect-analysis
+    name: Analyze Defects
+    agent: spec-orchestrator
+    skills:
+      - delivery-metrics
+      - quality-report
+    inputs:
+      - cycle-time-report.md
+    outputs:
+      - defect-report.md
+    gate:
+      criteria:
+        - "Defect categories and frequencies are tallied"
+        - "Defect escape rate is calculated"
+        - "Root cause patterns are identified"
+      severity: warning
+
+  - id: bottleneck-identification
+    name: Identify Bottlenecks
+    agent: spec-orchestrator
+    skills:
+      - delivery-metrics
+    inputs:
+      - cycle-time-report.md
+      - defect-report.md
+    outputs:
+      - bottleneck-report.md
+    gate:
+      criteria:
+        - "Top 3 bottlenecks are ranked by impact"
+        - "Each bottleneck has a contributing factor analysis"
+      severity: warning
+
+  - id: improvement-suggestions
+    name: Suggest Improvements
+    agent: architecture-governance
+    skills:
+      - architecture-guardrails
+      - delivery-metrics
+    inputs:
+      - cycle-time-report.md
+      - defect-report.md
+      - bottleneck-report.md
+    outputs:
+      - improvement-proposals.md
+    gate:
+      criteria:
+        - "Each bottleneck has at least one concrete improvement proposal"
+        - "Proposals are prioritized by effort vs impact"
+        - "Proposals reference relevant architecture principles"
+      severity: warning
+
+  - id: constitution-update
+    name: Update Constitution / Playbooks
+    agent: spec-orchestrator
+    skills:
+      - knowledge-update
+      - adr-generation
+    inputs:
+      - improvement-proposals.md
+      - bottleneck-report.md
+    outputs:
+      - retrospective-actions.md
+    gate:
+      criteria:
+        - "Accepted improvements are captured as ADRs or playbook updates"
+        - "Constitution changes are proposed (if applicable)"
+        - "Action items have owners or next-step references"
+      severity: warning
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

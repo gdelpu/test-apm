@@ -1,0 +1,75 @@
+name: maturity-assessment
+description: Assess SDLC maturity across dimensions and produce a scored report with improvement roadmap.
+type: assessment
+
+stations:
+  - id: assess
+    name: Maturity Assessment
+    agent: repository-analyzer
+    skills:
+      - repo-analysis
+    inputs: []
+    outputs:
+      - assessment.md
+    gate:
+      criteria:
+        - "All maturity dimensions evaluated"
+        - "Evidence collected for each dimension"
+      severity: blocker
+
+  - id: score
+    name: Scoring
+    agent: spec-orchestrator
+    skills:
+      - spec-clarify
+    inputs:
+      - assessment.md
+    outputs:
+      - scores.md
+    gate:
+      criteria:
+        - "Scores assigned per dimension (1-5 scale)"
+        - "Scoring rationale documented"
+      severity: blocker
+
+  - id: report
+    name: Maturity Report
+    agent: spec-orchestrator
+    skills:
+      - spec-feature
+    inputs:
+      - assessment.md
+      - scores.md
+    outputs:
+      - maturity-report.md
+    gate:
+      criteria:
+        - "Executive summary included"
+        - "Dimension-by-dimension breakdown present"
+        - "Current vs. target maturity visualized"
+      severity: blocker
+
+  - id: roadmap
+    name: Improvement Roadmap
+    agent: spec-orchestrator
+    skills:
+      - spec-plan
+    inputs:
+      - maturity-report.md
+      - scores.md
+    outputs:
+      - roadmap.md
+    gate:
+      criteria:
+        - "Quick wins identified (< 1 month)"
+        - "Medium-term improvements defined (1-3 months)"
+        - "Long-term strategic initiatives outlined (3-12 months)"
+        - "Each improvement mapped to maturity dimension"
+      severity: blocker
+
+config:
+  output_dir: specs/assessments/<assessment-id>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: false

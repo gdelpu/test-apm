@@ -1,0 +1,114 @@
+name: compliance-check
+description: Validate compliance, privacy, and AI governance requirements including PII scanning, prompt injection detection, and risk scoring.
+type: validation
+
+stations:
+  - id: pii-scan
+    name: PII Scan
+    agent: quality-validator
+    skills:
+      - governance-rules
+    inputs: []
+    outputs:
+      - pii-report.md
+    gate:
+      criteria:
+        - "All source files scanned for PII patterns"
+        - "No unprotected PII in code, config, or test data"
+        - "Data classification labels applied where required"
+      severity: blocker
+
+  - id: prompt-injection-detection
+    name: Prompt Injection Detection
+    agent: quality-validator
+    skills:
+      - governance-rules
+      - security-scan
+    inputs: []
+    outputs:
+      - prompt-injection-report.md
+    gate:
+      criteria:
+        - "All prompt templates and AI inputs scanned"
+        - "No unescaped user input in prompt construction"
+        - "Injection boundaries are enforced"
+      severity: blocker
+
+  - id: policy-validation
+    name: Policy Validation
+    agent: workflow-orchestrator
+    skills:
+      - governance-rules
+    inputs:
+      - pii-report.md
+      - prompt-injection-report.md
+    outputs:
+      - policy-report.md
+    gate:
+      criteria:
+        - "All applicable policies are identified and checked"
+        - "Policy violations are listed with remediation steps"
+        - "Organizational governance rules are satisfied"
+      severity: blocker
+
+  - id: risk-scoring
+    name: Risk Scoring
+    agent: workflow-orchestrator
+    skills:
+      - risk-scoring
+    inputs:
+      - pii-report.md
+      - prompt-injection-report.md
+      - policy-report.md
+    outputs:
+      - risk-score.md
+    gate:
+      criteria:
+        - "Overall risk score is computed"
+        - "Risk factors are itemized with weights"
+        - "Score is within acceptable threshold"
+      severity: blocker
+
+  - id: human-approval
+    name: Human Approval
+    agent: workflow-orchestrator
+    skills:
+      - governance-rules
+    inputs:
+      - risk-score.md
+      - policy-report.md
+    outputs:
+      - approval-record.md
+    optional: true
+    gate:
+      criteria:
+        - "Human reviewer has signed off (if required by risk level)"
+        - "Approval is recorded with reviewer identity and timestamp"
+      severity: warning
+
+  - id: compliance-report
+    name: Compliance Report
+    agent: workflow-orchestrator
+    skills:
+      - governance-rules
+      - quality-report
+    inputs:
+      - pii-report.md
+      - prompt-injection-report.md
+      - policy-report.md
+      - risk-score.md
+      - approval-record.md
+    outputs:
+      - compliance-report.md
+    gate:
+      criteria:
+        - "All compliance stations are summarized"
+        - "Overall compliance status is stated (pass / conditional / fail)"
+        - "Remediation roadmap exists for any findings"
+      severity: blocker
+
+config:
+  output_dir: specs/features/<feature>/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true

@@ -18,11 +18,11 @@ stages:
 variables:
   ENABLE_COPILOT_CLI: "false"
 
-  VALIDATORS_DIR: "default/skills/ai-backbone-pr-checks/tools/scripts"
+  VALIDATORS_DIR: ".apm/skills/ai-backbone-pr-checks/tools/scripts"
   REPORTS_DIR: "reports"
 
   STATION_OUT: "station_out"
-  STATION_DIR: "station-workflows/stations"
+  STATION_DIR: "ci-gates/stations"
   STATION_TIMEOUT: "900"
 
   GIT_DEPTH: "0"
@@ -136,7 +136,7 @@ validate:test-gaps:
 # AI Station Orchestrator
 # =====================================================
 # Dynamically discovers all .prompt.md / .agent.md files
-# in station-workflows/stations/, sorts by prefix (a0…a7),
+# in ci-gates/stations/, sorts by prefix (a0…a7),
 # and runs them sequentially via Copilot CLI.
 #
 # Runs ONLY after the two blocking deterministic validators
@@ -164,7 +164,7 @@ stations:run-all:
     - mkdir -p ${STATION_OUT}
 
   script:
-    - bash "${CI_PROJECT_DIR}/station-workflows/scripts/run_stations.sh"
+    - bash "${CI_PROJECT_DIR}/ci-gates/scripts/run_stations.sh"
 
   artifacts:
     paths:
