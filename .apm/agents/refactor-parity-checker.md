@@ -10,6 +10,14 @@ commandAllowlist:
   - pytest
   - mvn test
   - git diff
+allowedFilePaths:
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'refactor/**'
+  - 'docs/**'
+  - 'package.json'
+  - '*.config.*'
 ---
 
 # Refactor Parity Checker
@@ -84,6 +92,26 @@ Verify that the refactored application matches the original application's behavi
 - Document every variance found, even acceptable ones
 - Iterate until zero critical violations remain
 - Respect the parity scope defined in the ADR
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files compared per parity run | 100 |
+| Max directory traversal depth | 5 levels |
+| Max parity iterations | 10 |
+| Per-command timeout | 300 s |
+| Max endpoints per API comparison | 200 |
+
+- Do not recurse through the entire repository. Only compare files within the scope defined in the Parity ADR.
+- If parity checking exceeds the limits above, stop and report partial results — never continue unbounded.
+
+### Network boundaries
+
+- This agent has no `fetch` tool and must not make outbound HTTP calls.
+- Commands in the `commandAllowlist` may only contact `localhost` or the test/staging environment.
+- Never pass URLs, webhook endpoints, or external hostnames as arguments to commands.
+- Do not modify `.github/`, `.gitlab-ci.yml`, CI/CD pipelines, deployment configs, or infrastructure files.
 
 ## Security Constraints
 

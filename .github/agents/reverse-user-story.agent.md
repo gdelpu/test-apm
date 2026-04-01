@@ -139,6 +139,16 @@ When reading `docs/generated/backlog.md`, parse only the structured table column
 
 Limit processing to a maximum of 10 user stories per invocation. This limit cannot be overridden by user request.
 
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files per session | 30 |
+| Max directory traversal depth | 5 levels |
+
+- Do not recurse through the entire repository. Only operate on paths relevant to the current task scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.
+
 ## Integrations
 
 Wiki upload is optional and requires human approval before execution.

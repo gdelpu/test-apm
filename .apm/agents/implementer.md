@@ -12,6 +12,14 @@ commandAllowlist:
   - mvn compile
   - mvn test
   - git diff
+allowedFilePaths:
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'specs/**'
+  - 'docs/**'
+  - 'package.json'
+  - '*.config.*'
 ---
 
 # Implementer

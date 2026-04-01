@@ -28,3 +28,13 @@ Review specifications and plans against architecture principles, non-functional 
 - Do not read or summarise `.env`, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `.aws/*`, `.ssh/*` files.
 - Do not access credentials, environment variables, or secret stores.
 - Review is read-only — never modify specifications or plans directly.
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files analysed per session | 50 |
+| Max directory traversal depth | 5 levels |
+
+- Do not recurse through the entire repository. Only review paths relevant to the current specification scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.

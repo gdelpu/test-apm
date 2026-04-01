@@ -80,6 +80,16 @@ When reading intermediary documents from `docs/generated/` (produced by upstream
 - When handing off to the Reverse User Story Creator, process at most 10 stories per batch.
 - Always request explicit human approval before triggering bulk handoffs that process more than 5 stories.
 
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files per session | 50 |
+| Max directory traversal depth | 5 levels |
+
+- Do not recurse through the entire repository. Only operate on paths relevant to the current task scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.
+
 ## Integrations
 
 Wiki upload is optional and requires human approval before execution.

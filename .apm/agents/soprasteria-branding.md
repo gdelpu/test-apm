@@ -51,3 +51,13 @@ Ensure that applications, PowerPoint decks, Word documents, and other deliverabl
 - Always use official brand assets from `knowledge/brand/soprasteria/` — do not invent new styles.
 - Do not modify CI/CD pipelines, deployment configs, or infrastructure files.
 - Do not access credentials or contact external services.
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files processed per session | 50 |
+| Max directory traversal depth | 4 levels |
+
+- Do not recurse through the entire repository. Only process paths relevant to the branding audit scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.

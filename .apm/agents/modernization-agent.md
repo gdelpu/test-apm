@@ -62,6 +62,17 @@ Guide controlled modernization initiatives through baseline assessment, target d
 - Regression scope must be identified before tasks are created
 - Coexistence strategy must be documented before implementation
 
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files analysed per session | 200 |
+| Max directory traversal depth | 6 levels |
+| Max tasks generated per plan | 60 |
+
+- Do not recurse through the entire repository. Only assess paths relevant to the modernization scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.
+
 ## Security Constraints
 
 - You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.

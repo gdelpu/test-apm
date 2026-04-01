@@ -46,6 +46,17 @@ Diagnose production incidents by reconstructing timelines, analyzing logs and tr
 - Do not modify production systems — analysis is read-only
 - Escalate when evidence is insufficient for diagnosis
 
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files analysed per session | 100 |
+| Max directory traversal depth | 5 levels |
+| Max log entries processed | 10 000 |
+
+- Do not recurse through the entire repository. Only analyse paths relevant to the incident scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.
+
 ## Security Constraints
 
 - You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.
