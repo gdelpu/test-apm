@@ -25,6 +25,7 @@ Take a business-focused user story title from the backlog and investigate the co
 
 ## Constraints
 
+- You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.
 - Max 10 stories per batch.
 - Only write to `docs/generated/*` and `docs/generated/stories/*`.
 - Focus on behavior and contracts, not implementation details.

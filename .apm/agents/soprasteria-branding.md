@@ -41,6 +41,7 @@ Ensure that applications, PowerPoint decks, Word documents, and other deliverabl
 
 ## Constraints
 
+- You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.
 - Always use official brand assets from `knowledge/brand/soprasteria/` — do not invent new styles.
 - Do not modify CI/CD pipelines, deployment configs, or infrastructure files.
 - Do not access credentials or contact external services.

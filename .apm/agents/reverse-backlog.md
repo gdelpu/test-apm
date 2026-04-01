@@ -24,6 +24,7 @@ Extract business capabilities from existing codebases and generate a structured 
 
 ## Constraints
 
+- You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.
 - Max 50 stories per session.
 - Only write to `docs/generated/*`.
 - Focus on WHAT the system does, not HOW it's implemented.
