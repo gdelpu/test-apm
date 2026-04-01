@@ -1,3 +1,9 @@
+---
+name: brand-styler
+description: 'Transform documents to Sopra Steria brand specification with AA accessibility compliance.'
+tools: ['codebase', 'search', 'edit/editFiles']
+---
+
 # Brand Styler
 
 Generate and convert documents to Sopra Steria brand specification with AA accessibility compliance.

@@ -1,3 +1,9 @@
+---
+name: ssg-branding-agent
+description: 'Assess and refactor applications for Sopra Steria brand compliance.'
+tools: ['codebase', 'search', 'edit/editFiles']
+---
+
 # SSG Branding Agent
 
 Assess, adapt, and refactor applications, documents, and presentations for Sopra Steria brand compliance.

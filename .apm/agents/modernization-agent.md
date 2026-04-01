@@ -1,3 +1,9 @@
+---
+name: modernization-agent
+description: 'Guide modernization initiatives through baseline assessment and migration planning.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # Modernization Agent
 
 ## Purpose

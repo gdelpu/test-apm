@@ -1,6 +1,7 @@
 ---
 name: sdlc-ba-audit
 description: 'Perform a functional snapshot of an existing system (brownfield audit) and produce an evolution delta matrix qualifying what is new, evolving, preserved, or deprecated.'
+triggers: ['brownfield audit', 'functional snapshot', 'AS-IS analysis', 'evolution delta']
 ---
 
 # Skill: sdlc-ba-audit

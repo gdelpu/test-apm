@@ -1,6 +1,7 @@
 ---
 name: sdlc-steer-planning
 description: 'Create the sprint plan, project roadmap, and initial risk register — establishing the execution framework for all downstream domain pipelines.'
+triggers: ['sprint planning', 'project roadmap', 'risk register', 'feature batching']
 ---
 
 # Skill: sdlc-steer-planning

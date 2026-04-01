@@ -1,3 +1,9 @@
+---
+name: bmad-orchestrator
+description: 'Drive BMAD feedback loop with quality scoring and adaptive decision-making.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # BMAD Orchestrator
 
 ## Purpose

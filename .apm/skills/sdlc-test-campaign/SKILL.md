@@ -1,6 +1,7 @@
 ---
 name: sdlc-test-campaign
 description: 'Launch E2E/UAT test campaigns by executing Playwright scripts, logging anomalies, and producing qualification reports with Go/No-Go quality gate data.'
+triggers: ['test campaign', 'E2E testing', 'UAT', 'qualification report', 'Playwright']
 ---
 
 # Skill: sdlc-test-campaign

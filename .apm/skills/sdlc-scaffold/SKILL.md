@@ -1,6 +1,7 @@
 ---
 name: sdlc-scaffold
 description: 'Create the standard docs/ directory structure for an SDLC project — both the base scaffold and per-feature scaffolds after fan-out discovery.'
+triggers: ['scaffold', 'directory structure', 'project scaffold', 'docs structure']
 ---
 
 # Skill: sdlc-scaffold

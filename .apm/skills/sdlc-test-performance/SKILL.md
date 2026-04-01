@@ -1,6 +1,7 @@
 ---
 name: sdlc-test-performance
 description: 'Execute performance tests (k6/Artillery), collect results, and analyze against defined thresholds with baseline comparison to detect regressions.'
+triggers: ['performance testing', 'k6', 'Artillery', 'load testing', 'baseline comparison']
 ---
 
 # Skill: sdlc-test-performance

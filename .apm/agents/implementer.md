@@ -1,3 +1,9 @@
+---
+name: implementer
+description: 'Execute implementation tasks by reading task breakdowns and producing code.'
+tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+---
+
 # Implementer
 
 ## Purpose

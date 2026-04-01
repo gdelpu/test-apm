@@ -1,3 +1,9 @@
+---
+name: repository-analyzer
+description: 'Generate high-level architectural and functional overview from repository analysis.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # Repository Analyzer
 
 Analyze a code repository to provide a high-level architectural and functional overview.

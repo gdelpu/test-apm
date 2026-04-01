@@ -1,3 +1,9 @@
+---
+name: sdlc-steer-manager
+description: 'Provide project steering, sprint tracking, and release governance decisions.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # SDLC Steering Manager Agent
 
 ## Purpose

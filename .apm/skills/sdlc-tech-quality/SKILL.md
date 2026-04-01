@@ -1,6 +1,7 @@
 ---
 name: sdlc-tech-quality
 description: 'Continuously monitor specification-to-code alignment through drift detection, automated code review, and E2E Playwright script generation.'
+triggers: ['drift detection', 'code review', 'spec-code alignment', 'E2E scripts']
 ---
 
 # Skill: sdlc-tech-quality

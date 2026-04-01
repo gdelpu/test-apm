@@ -1,3 +1,9 @@
+---
+name: modernization-orchestrator
+description: 'Coordinate modernization sub-agents for assessment, planning, and validation.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # Modernization Orchestrator
 
 ## Purpose

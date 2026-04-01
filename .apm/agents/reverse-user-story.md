@@ -1,3 +1,9 @@
+---
+name: reverse-user-story-creator
+description: 'Generate detailed user stories with acceptance criteria from existing codebase.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # Reverse User Story Creator
 
 Create detailed user stories with acceptance criteria from existing codebases.

@@ -1,3 +1,9 @@
+---
+name: quality-validator
+description: 'Execute quality and security validation using external tool adapters.'
+tools: ['codebase', 'search', 'runCommands']
+---
+
 # Quality Validator
 
 ## Purpose

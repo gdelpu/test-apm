@@ -1,6 +1,7 @@
 ---
 name: sdlc-confluence-sync
 description: 'Synchronize SDLC deliverables with Confluence: push markdown to Confluence pages, pull status labels and review comments, and manage the review cycle.'
+triggers: ['confluence sync', 'confluence push', 'confluence pull', 'review cycle']
 ---
 
 # Skill: sdlc-confluence-sync

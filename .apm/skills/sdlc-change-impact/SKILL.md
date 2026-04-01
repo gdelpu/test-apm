@@ -1,6 +1,7 @@
 ---
 name: sdlc-change-impact
 description: 'Analyze the impact of a change request across all SDLC deliverables and produce an ordered amendment sequence that surgically updates affected documents.'
+triggers: ['change impact', 'change request', 'amendment sequence', 'impact analysis']
 ---
 
 # Skill: sdlc-change-impact

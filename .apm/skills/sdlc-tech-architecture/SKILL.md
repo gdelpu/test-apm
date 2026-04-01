@@ -1,6 +1,7 @@
 ---
 name: sdlc-tech-architecture
 description: 'Define the system architecture through C4 context diagrams, architecture decision records (ADRs), technology stack extraction, and enabler identification.'
+triggers: ['system architecture', 'C4 diagrams', 'ADR', 'architecture decision record', 'technology stack']
 ---
 
 # Skill: sdlc-tech-architecture

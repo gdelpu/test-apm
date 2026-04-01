@@ -1,3 +1,9 @@
+---
+name: bug-fixer
+description: 'Drive structured bug diagnosis and resolution with regression testing.'
+tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+---
+
 # Bug Fixer
 
 ## Purpose

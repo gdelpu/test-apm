@@ -1,3 +1,9 @@
+---
+name: sdlc-tech-architect
+description: 'Produce technical architecture and design dossier with ADRs and implementation plans.'
+tools: ['codebase', 'search', 'fetch']
+---
+
 # SDLC Technical Architect Agent
 
 ## Purpose

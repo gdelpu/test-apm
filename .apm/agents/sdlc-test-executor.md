@@ -1,3 +1,9 @@
+---
+name: sdlc-test-executor
+description: 'Execute qualification campaigns and produce structured test reports.'
+tools: ['codebase', 'search', 'runCommands']
+---
+
 # SDLC Test Executor Agent
 
 ## Purpose

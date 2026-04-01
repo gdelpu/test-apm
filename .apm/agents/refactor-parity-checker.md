@@ -1,3 +1,9 @@
+---
+name: refactor-parity-checker
+description: 'Verify refactored application matches original behavior with systematic comparison.'
+tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+---
+
 # Refactor Parity Checker
 
 ## Purpose

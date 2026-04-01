@@ -1,6 +1,7 @@
 ---
 name: sdlc-deliverable-validation
 description: 'Audit any SDLC deliverable for quality: template conformance, completeness, placeholder removal, traceability integrity, and production confidence scoring.'
+triggers: ['deliverable validation', 'quality audit', 'template conformance', 'traceability check']
 ---
 
 # Skill: sdlc-deliverable-validation

@@ -1,6 +1,7 @@
 ---
 name: sdlc-steer-init
 description: 'Initialize the project steering framework with team composition, capacity allocation, budget structure, and KPI baselines.'
+triggers: ['project initialization', 'team composition', 'capacity allocation', 'KPI baselines']
 ---
 
 # Skill: sdlc-steer-init
