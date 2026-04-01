@@ -1,4 +1,5 @@
 ---
+name: sdlc-tech-2-design
 mode: agent
 description: 'Run Tech System T2 — Technical Design (4 stations).'
 ---

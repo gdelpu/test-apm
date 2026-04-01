@@ -1,4 +1,5 @@
 ---
+name: sdlc-test-2-perf
 mode: agent
 description: 'Run Test Performance system (2 stations).'
 ---

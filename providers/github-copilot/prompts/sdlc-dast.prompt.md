@@ -1,4 +1,5 @@
 ---
+name: sdlc-dast
 mode: agent
 description: 'Run OWASP ZAP DAST security scan.'
 ---

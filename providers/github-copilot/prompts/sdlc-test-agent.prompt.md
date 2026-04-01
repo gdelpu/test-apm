@@ -1,4 +1,5 @@
 ---
+name: sdlc-test-agent
 mode: agent
 description: 'Execute a single Test agent by ID (e.g., camp.1, perf.2).'
 ---

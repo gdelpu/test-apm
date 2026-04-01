@@ -1,4 +1,5 @@
 ---
+name: workflow-sdlc-steer
 mode: agent
 description: 'Run full Steer pipeline — project init through Go/No-Go (10 stations).'
 ---

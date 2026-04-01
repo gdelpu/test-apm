@@ -1,3 +1,8 @@
+---
+name: sdlc-ba-functional-design
+description: 'Produce per-feature functional design deliverables: user stories, user journeys, screen specifications, notifications, test scenarios, test data, and the cross-feature E2E test plan.'
+---
+
 # Skill: sdlc-ba-functional-design
 
 ## Goal

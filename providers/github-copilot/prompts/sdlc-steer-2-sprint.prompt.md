@@ -1,4 +1,5 @@
 ---
+name: sdlc-steer-2-sprint
 mode: agent
 description: 'Run Steer System P2 — Sprint Tracking, recurring (3 stations).'
 ---

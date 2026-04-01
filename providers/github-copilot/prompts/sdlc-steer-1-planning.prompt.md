@@ -1,4 +1,5 @@
 ---
+name: sdlc-steer-1-planning
 mode: agent
 description: 'Run Steer System P1 — Sprint Planning (3 stations).'
 ---

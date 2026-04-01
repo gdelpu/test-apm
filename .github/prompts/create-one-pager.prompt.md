@@ -1,7 +1,6 @@
 ---
 name: create-one-pager
-description: 'Create a concise branded one-pager in Markdown from notes.'
-mode: agent
+description: 'Create a concise branded one-pager in Markdown following Sopra Steria brand guidelines.'
 ---
 
 # Create a branded one‑pager from notes

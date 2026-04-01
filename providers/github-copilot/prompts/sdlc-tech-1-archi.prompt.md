@@ -1,4 +1,5 @@
 ---
+name: sdlc-tech-1-archi
 mode: agent
 description: 'Run Tech System T1 — Architecture (4 stations).'
 ---

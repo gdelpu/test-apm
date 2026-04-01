@@ -1,4 +1,5 @@
 ---
+name: sdlc-impact
 mode: agent
 description: 'Change impact analysis with optional amendment cascade.'
 ---

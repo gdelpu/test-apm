@@ -1,3 +1,8 @@
+---
+name: sdlc-ba-specification
+description: 'Build the domain model, decompose into epics and features, and consolidate business rules — transforming scoping deliverables into a structured specification ready for functional design.'
+---
+
 # Skill: sdlc-ba-specification
 
 ## Goal

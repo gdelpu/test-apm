@@ -1,4 +1,5 @@
 ---
+name: sdlc-ba-1-scoping
 mode: agent
 description: 'Run BA System S1 — Scoping (4 stations).'
 ---

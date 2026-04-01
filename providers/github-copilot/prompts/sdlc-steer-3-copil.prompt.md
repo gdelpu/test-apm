@@ -1,4 +1,5 @@
 ---
+name: sdlc-steer-3-copil
 mode: agent
 description: 'Run Steer System P3 — COPIL & Go/No-Go (2 stations).'
 ---

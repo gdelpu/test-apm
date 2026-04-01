@@ -1,4 +1,5 @@
 ---
+name: sdlc-tech-agent
 mode: agent
 description: 'Execute a single Tech agent by number (e.g., t1.1, t2.3).'
 ---

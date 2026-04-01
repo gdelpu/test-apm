@@ -1,4 +1,5 @@
 ---
+name: sdlc-confluence-pull
 mode: agent
 description: 'Pull status and comments from Confluence into local deliverables.'
 ---

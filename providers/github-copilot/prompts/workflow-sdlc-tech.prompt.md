@@ -1,4 +1,5 @@
 ---
+name: workflow-sdlc-tech
 mode: agent
 description: 'Run full Tech pipeline — architecture through continuous quality (12 stations).'
 ---

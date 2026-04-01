@@ -1,3 +1,8 @@
+---
+name: sdlc-ba-audit
+description: 'Perform a functional snapshot of an existing system (brownfield audit) and produce an evolution delta matrix qualifying what is new, evolving, preserved, or deprecated.'
+---
+
 # Skill: sdlc-ba-audit
 
 ## Goal

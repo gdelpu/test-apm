@@ -1,4 +1,5 @@
 ---
+name: workflow-sdlc-test
 mode: agent
 description: 'Run full Test pipeline — E2E/UAT campaign + performance.'
 ---

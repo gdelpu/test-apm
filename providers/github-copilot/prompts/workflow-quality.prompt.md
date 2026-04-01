@@ -1,4 +1,5 @@
 ---
+name: workflow-quality
 mode: agent
 description: 'Run code quality validation workflow (7 stations).'
 ---

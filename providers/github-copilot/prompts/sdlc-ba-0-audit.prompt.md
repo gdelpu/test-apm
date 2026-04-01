@@ -1,4 +1,5 @@
 ---
+name: sdlc-ba-0-audit
 mode: agent
 description: 'Run BA System S0 — Brownfield Audit (2 stations).'
 ---

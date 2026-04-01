@@ -1,4 +1,5 @@
 ---
+name: sdlc-to-word
 mode: agent
 description: 'Convert Markdown deliverable to Word via Pandoc.'
 ---

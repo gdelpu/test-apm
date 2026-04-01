@@ -1,4 +1,5 @@
 ---
+name: sdlc-ba-2-spec
 mode: agent
 description: 'Run BA System S2 — Specification with epic/feature fan-out (4 stations).'
 ---

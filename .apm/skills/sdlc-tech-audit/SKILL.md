@@ -1,3 +1,8 @@
+---
+name: sdlc-tech-audit
+description: 'Perform a technical stack assessment and gap analysis for brownfield projects, identifying compliance gaps, migration paths, and estimated effort.'
+---
+
 # Skill: sdlc-tech-audit
 
 ## Goal

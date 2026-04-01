@@ -1,4 +1,5 @@
 ---
+name: workflow-sdlc-ba
 mode: agent
 description: 'Run full BA pipeline — brownfield audit through functional design (16 stations).'
 ---

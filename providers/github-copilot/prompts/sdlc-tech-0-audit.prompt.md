@@ -1,4 +1,5 @@
 ---
+name: sdlc-tech-0-audit
 mode: agent
 description: 'Run Tech System T0 — Brownfield Technical Audit (2 stations).'
 ---

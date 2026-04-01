@@ -1,4 +1,6 @@
 ---
+name: readme
+description: 'Rules for maintaining the root README.md as canonical repo documentation.'
 applyTo: README.md
 ---
 

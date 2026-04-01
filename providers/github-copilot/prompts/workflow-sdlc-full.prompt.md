@@ -1,4 +1,5 @@
 ---
+name: workflow-sdlc-full
 mode: agent
 description: 'Run full SDLC pipeline — BA + Tech + Test + Steer (11 stations).'
 ---

@@ -1,4 +1,5 @@
 ---
+name: sdlc-ba-3-design
 mode: agent
 description: 'Run BA System S3 — Functional Design per feature (5 stations).'
 ---

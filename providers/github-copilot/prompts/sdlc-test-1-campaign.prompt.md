@@ -1,4 +1,5 @@
 ---
+name: sdlc-test-1-campaign
 mode: agent
 description: 'Run Test E2E/UAT Campaign system (2 stations).'
 ---

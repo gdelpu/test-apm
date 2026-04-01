@@ -1,3 +1,8 @@
+---
+name: sdlc-ba-scoping
+description: 'Define the product scope through vision statement, business glossary (DDD ubiquitous language), actor/role identification, and functional requirements catalogue.'
+---
+
 # Skill: sdlc-ba-scoping
 
 ## Goal

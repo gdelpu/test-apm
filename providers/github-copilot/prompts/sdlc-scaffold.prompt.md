@@ -1,4 +1,5 @@
 ---
+name: sdlc-scaffold
 mode: agent
 description: 'Create docs/ directory structure for SDLC project.'
 ---

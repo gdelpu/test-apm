@@ -1,4 +1,5 @@
 ---
+name: provider-parity
 applyTo: 'providers/**,.apm/workflows/**'
 description: 'Enforces provider parity: every command or workflow entry point must exist across all three providers (Claude Code, GitHub Copilot, CLI).'
 ---

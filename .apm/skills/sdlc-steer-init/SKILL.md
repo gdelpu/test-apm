@@ -1,3 +1,8 @@
+---
+name: sdlc-steer-init
+description: 'Initialize the project steering framework with team composition, capacity allocation, budget structure, and KPI baselines.'
+---
+
 # Skill: sdlc-steer-init
 
 ## Goal

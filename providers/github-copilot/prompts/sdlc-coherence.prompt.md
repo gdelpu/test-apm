@@ -1,4 +1,5 @@
 ---
+name: sdlc-coherence
 mode: agent
 description: 'Cross-deliverable coherence check (references, orphans, coverage).'
 ---

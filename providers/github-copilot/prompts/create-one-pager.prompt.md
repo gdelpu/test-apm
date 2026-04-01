@@ -1,4 +1,8 @@
-```prompt
+---
+name: create-one-pager
+description: 'Create a concise branded one-pager in Markdown following Sopra Steria brand guidelines.'
+---
+
 # Create a branded one‑pager from notes
 
 Create a concise one‑pager in Markdown that:
@@ -9,5 +13,3 @@ Create a concise one‑pager in Markdown that:
 - Keeps the layout airy (white background, minimal saturated blocks).
 
 Save as `skills/brand-styler/docs/<slug>.md`.
-
-```

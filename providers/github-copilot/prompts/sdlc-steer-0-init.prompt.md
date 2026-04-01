@@ -1,4 +1,5 @@
 ---
+name: sdlc-steer-0-init
 mode: agent
 description: 'Run Steer System P0 — Project Initialization (2 stations).'
 ---

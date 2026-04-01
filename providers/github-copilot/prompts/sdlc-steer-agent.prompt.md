@@ -1,4 +1,5 @@
 ---
+name: sdlc-steer-agent
 mode: agent
 description: 'Execute a single Steer agent by number (e.g., p0.1, p2.1).'
 ---

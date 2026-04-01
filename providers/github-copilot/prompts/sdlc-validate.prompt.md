@@ -1,4 +1,5 @@
 ---
+name: sdlc-validate
 mode: agent
 description: 'Quality audit a SDLC deliverable (PASS / WARN / BLOCK).'
 ---

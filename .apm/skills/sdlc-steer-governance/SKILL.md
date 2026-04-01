@@ -1,3 +1,8 @@
+---
+name: sdlc-steer-governance
+description: 'Prepare steering committee (COPIL) presentation packs and produce Go/No-Go release decisions by aggregating quality, security, test, and risk data.'
+---
+
 # Skill: sdlc-steer-governance
 
 ## Goal

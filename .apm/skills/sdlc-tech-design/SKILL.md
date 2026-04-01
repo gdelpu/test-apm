@@ -1,3 +1,8 @@
+---
+name: sdlc-tech-design
+description: 'Produce the technical design dossier: data model with DDL and migrations, OpenAPI-compliant API contracts, test strategy, and the implementation plan.'
+---
+
 # Skill: sdlc-tech-design
 
 ## Goal

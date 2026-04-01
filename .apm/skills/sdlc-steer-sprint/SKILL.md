@@ -1,3 +1,8 @@
+---
+name: sdlc-steer-sprint
+description: 'Track sprint progress, monitor system health metrics, and assess evolving risks — producing recurring reports for steering committee preparation.'
+---
+
 # Skill: sdlc-steer-sprint
 
 ## Goal

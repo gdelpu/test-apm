@@ -1,4 +1,5 @@
 ---
+name: sdlc-tech-3-quality
 mode: agent
 description: 'Run Tech System T3 — Continuous Quality (2 stations).'
 ---

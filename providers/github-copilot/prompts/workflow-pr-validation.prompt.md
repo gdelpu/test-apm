@@ -1,4 +1,5 @@
 ---
+name: workflow-pr-validation
 mode: agent
 description: 'Run PR validation pipeline — A0-A7 stations (11 stations).'
 ---

@@ -1,7 +1,6 @@
 ---
 name: convert-md-to-docx-and-pdf
-description: 'Convert Markdown files to branded Sopra Steria DOCX and PDF outputs.'
-mode: agent
+description: 'Convert Markdown files to Sopra Steria branded DOCX and PDF outputs using Pandoc.'
 ---
 
 # Convert Markdown to branded DOCX & PDF

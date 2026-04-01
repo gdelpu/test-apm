@@ -1,4 +1,5 @@
 ---
+name: sdlc-ba-agent
 mode: agent
 description: 'Execute a single BA agent by number (e.g., 1.2, 3.5).'
 ---

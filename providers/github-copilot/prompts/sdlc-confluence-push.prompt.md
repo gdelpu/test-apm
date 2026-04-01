@@ -1,4 +1,5 @@
 ---
+name: sdlc-confluence-push
 mode: agent
 description: 'Push a SDLC deliverable to Confluence (create or update).'
 ---

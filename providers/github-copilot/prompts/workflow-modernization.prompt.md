@@ -1,4 +1,5 @@
 ---
+name: workflow-modernization
 mode: agent
 description: 'Run guided modernization workflow (10 stations).'
 ---
