@@ -1,7 +1,7 @@
 ---
 name: sdlc-coordinator
 description: 'Orchestrate the full SDLC harness with DAG resolution and wave scheduling.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # SDLC Coordinator

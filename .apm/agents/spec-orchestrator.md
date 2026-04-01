@@ -1,7 +1,7 @@
 ---
 name: spec-orchestrator
 description: 'Lead structured specification-driven flow for software changes and initiatives.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # Spec Orchestrator

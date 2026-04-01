@@ -2,6 +2,15 @@
 name: bug-fixer
 description: 'Drive structured bug diagnosis and resolution with regression testing.'
 tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+commandAllowlist:
+  - npm test
+  - npm run build
+  - dotnet test
+  - dotnet build
+  - pytest
+  - mvn test
+  - git diff
+  - git log
 ---
 
 # Bug Fixer

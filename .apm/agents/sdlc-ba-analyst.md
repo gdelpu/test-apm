@@ -1,7 +1,7 @@
 ---
 name: sdlc-ba-analyst
 description: 'Transform business needs into complete functional specification through structured pipeline.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # SDLC Business Analyst Agent

@@ -2,6 +2,14 @@
 name: refactor-parity-checker
 description: 'Verify refactored application matches original behavior with systematic comparison.'
 tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+commandAllowlist:
+  - npm test
+  - npm run build
+  - dotnet test
+  - dotnet build
+  - pytest
+  - mvn test
+  - git diff
 ---
 
 # Refactor Parity Checker

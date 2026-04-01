@@ -1,7 +1,7 @@
 ---
 name: repository-analyzer
 description: 'Generate high-level architectural and functional overview from repository analysis.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # Repository Analyzer

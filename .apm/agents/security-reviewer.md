@@ -1,7 +1,7 @@
 ---
 name: security-reviewer
 description: 'Review AI artifacts for prompt injection, data exfiltration, and LLM security risks.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # Security Reviewer

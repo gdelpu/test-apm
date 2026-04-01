@@ -2,6 +2,13 @@
 name: sdlc-test-executor
 description: 'Execute qualification campaigns and produce structured test reports.'
 tools: ['codebase', 'search', 'runCommands']
+commandAllowlist:
+  - npx playwright test
+  - npm test
+  - k6 run
+  - artillery run
+  - pytest
+  - dotnet test
 ---
 
 # SDLC Test Executor Agent

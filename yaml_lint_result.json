@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "summary": [
+    "Workflow files scanned: 1",
+    "Blocking issues: 0",
+    "Warnings: 0"
+  ],
+  "blocking_issues": [],
+  "warnings": [],
+  "fix_suggestions": [],
+  "metadata": {
+    "workflow_count": 1,
+    "root": "C:/devenv/workspaces/SSG_AI_Backbone/ai-sdlc-foundation",
+    "fix_suggestions_count": 0
+  },
+  "checked_files": [
+    "clients/agoria/.github/workflows/frontend-ci.yml"
+  ]
+}

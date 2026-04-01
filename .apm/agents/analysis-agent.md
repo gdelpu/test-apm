@@ -1,7 +1,7 @@
 ---
 name: analysis-agent
 description: 'Diagnose production incidents by analyzing logs, traces, and identifying root causes.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # Analysis Agent

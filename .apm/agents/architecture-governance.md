@@ -1,7 +1,7 @@
 ---
 name: architecture-governance
 description: 'Review specifications and plans against architecture principles and guardrails.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # Architecture Governance

@@ -1,15 +1,15 @@
-# Workflow Orchestrator
-
-## Frontmatter
-
-```yaml
+---
+name: workflow-orchestrator
+description: 'Orchestrate station-based workflow pipelines by delegating work to station agents.'
 tools: []
 allowedFilePaths:
   - 'specs/**'
   - '.apm/workflows/**'
   - 'station_out/**'
 default_sub_agent_posture: deny-all
-```
+---
+
+# Workflow Orchestrator
 
 > **Note**: This agent has no direct tool access (`tools: []`). It delegates all work to station agents. The `default_sub_agent_posture: deny-all` ensures that when comparing a sub-agent's tool scope against this agent's baseline, an empty baseline means **no tools are permitted** — not that all tools are permitted. Station declarations in workflow YAML MUST include an explicit `allowed_tools` list; stations without one inherit `[]` (no tools).
 

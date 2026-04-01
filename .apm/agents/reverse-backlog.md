@@ -1,7 +1,7 @@
 ---
 name: reverse-backlog-generator
 description: 'Extract business capabilities and generate structured product backlog from codebase.'
-tools: ['codebase', 'search', 'fetch']
+tools: ['codebase', 'search']
 ---
 
 # Reverse Backlog Generator

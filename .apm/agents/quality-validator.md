@@ -2,6 +2,15 @@
 name: quality-validator
 description: 'Execute quality and security validation using external tool adapters.'
 tools: ['codebase', 'search', 'runCommands']
+commandAllowlist:
+  - npm run lint
+  - npm audit
+  - npm test
+  - npx eslint
+  - dotnet build
+  - pytest
+  - mvn verify
+  - python scripts/validate_all.py
 ---
 
 # Quality Validator
