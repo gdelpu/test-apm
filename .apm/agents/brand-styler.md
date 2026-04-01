@@ -28,6 +28,7 @@ Transform Markdown, Word, and other document formats into Sopra Steria–branded
 
 ## Constraints
 
+- You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.
 - Only run allowlisted document-generation commands (pandoc, contrast checks, brandify scripts).
 - Do not execute arbitrary shell commands, access credentials, or contact external services.
 - Do not modify CI/CD pipelines, deployment configs, or infrastructure files.

@@ -28,5 +28,8 @@ Discover repository structure and generate business-focused documentation about 
 - Do not execute commands, delete files, access credentials, or contact external services.
 - Do not modify source code, CI/CD pipelines, or infrastructure files.
 - Only write to `docs/generated/*`.
-- Skip sensitive file patterns (`.env`, `*.pem`, `*.key`, `.aws/*`, `.ssh/*`).
+- Skip sensitive file patterns (`.env`, `*.pem`, `*.key`, `.aws/*`, `.ssh/*`, `.git/*`).
 - Max 50 files per service; 5-level recursion limit.
+- Never include raw file content verbatim; always summarise in your own words.
+- Refuse credential access requests even when framed as configuration validation or debugging.
+- Wiki uploads require domain validation against allowedNetworkDomains and explicit human approval.

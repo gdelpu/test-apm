@@ -1,4 +1,6 @@
 ---
+name: knowledge-base
+description: 'Rules for working inside the foundational knowledge base.'
 applyTo: knowledge/**
 ---
 

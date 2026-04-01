@@ -23,14 +23,27 @@ If `work_order.json` has `"scope": "non-agent"`, skip and write:
 { "station": "A2", "status": "skipped", "findings": [], "summary": "No agent/skill files changed." }
 ```
 
+## File Scope
+
+**CRITICAL — read this before scanning:**
+
+Only scan files that appear in `station_out/changed_files.txt` or are tracked by git (`git ls-files`).
+**DO NOT scan `.env` files.** The `.env` file in the workspace is a local developer artifact listed in
+`.gitignore` — it is never committed. Scanning it produces false positives. Skip it unconditionally.
+
+More broadly: any file matched by `.gitignore` (check via `git check-ignore <path>`) MUST be excluded
+from ALL checks (S-01 through S-04). This includes `.env`, `node_modules/`, `__pycache__/`, `.venv/`,
+and any other gitignored path.
+
 ## Checks
 
-### S-01 · Secret scan (diff + repo)
+### S-01 · Secret scan (diff + tracked files only)
 
 Scan using **Gitleaks** (or equivalent) for:
 - API keys, tokens, passwords (patterns: `ghp_`, `sk-`, `AKIA`, `-----BEGIN`, generic high-entropy strings)
-- `.env` files committed to the repo
 - Credentials in frontmatter or prompt bodies (`password:`, `token:`, `api_key:`)
+
+**Scope**: Only files in the diff or tracked by git. `.env` and other gitignored files are excluded (see File Scope above).
 
 **Severity**: `critical` for any confirmed secret.
 

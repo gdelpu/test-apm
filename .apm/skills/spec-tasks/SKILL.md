@@ -1,3 +1,9 @@
+---
+name: spec-tasks
+description: 'Break down the implementation plan into reviewable, sequenced tasks.'
+triggers: ['task breakdown', 'task sequencing', 'implementation tasks']
+---
+
 # Skill: spec-tasks
 
 ## Goal

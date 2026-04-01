@@ -1,3 +1,9 @@
+---
+name: spec-quality-gate
+description: 'Confirm that the specification package is complete, coherent, and safe enough for implementation.'
+triggers: ['spec gate', 'specification review', 'go/no-go decision']
+---
+
 # Skill: spec-quality-gate
 
 ## Goal

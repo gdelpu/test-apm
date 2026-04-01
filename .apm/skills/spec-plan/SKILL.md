@@ -1,3 +1,9 @@
+---
+name: spec-plan
+description: 'Produce an implementation plan that explains how the feature will be delivered.'
+triggers: ['implementation plan', 'delivery plan', 'feature planning']
+---
+
 # Skill: spec-plan
 
 ## Goal

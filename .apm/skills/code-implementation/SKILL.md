@@ -1,3 +1,9 @@
+---
+name: code-implementation
+description: 'Execute implementation tasks from a task breakdown, producing or modifying code while following project conventions.'
+triggers: ['implementation', 'code tasks', 'task execution', 'build and test']
+---
+
 # Skill: code-implementation
 
 ## Goal

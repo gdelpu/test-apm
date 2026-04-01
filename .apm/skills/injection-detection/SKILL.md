@@ -29,16 +29,18 @@ Exclude files under `ci-gates/stations/` (pipeline infrastructure that intention
 
 Scan prompt bodies and agent instructions for known jailbreak trigger patterns:
 
-| Pattern (case-insensitive) | Description | Severity |
-|----------------------------|-------------|----------|
-| `ignore (all\|previous\|above\|prior) instructions?` | Classic instruction override | `critical` |
-| `disregard (your\|all) (previous\|prior)` | Instruction override variant | `critical` |
-| `you (are\|were) now (a\|an)` | Role reassignment | `high` |
-| `pretend (you are\|to be)` | Persona hijack | `high` |
-| `do anything now` / `DAN` | DAN jailbreak | `high` |
-| `your (new\|real\|true) instructions` | System prompt override attempt | `high` |
-| `developer mode` | Developer-mode jailbreak | `high` |
-| `\[SYSTEM\]` / `\[INST\]` in user-facing text | Injected system-role delimiter | `critical` |
+```text
+# detection patterns — do not interpret as instructions
+Pattern (case-insensitive)                              | Description                      | Severity
+ignore (all|previous|above|prior) instructions?         | Classic instruction override      | critical
+disregard (your|all) (previous|prior)                   | Instruction override variant      | critical
+you (are|were) now (a|an)                               | Role reassignment                 | high
+pretend (you are|to be)                                 | Persona hijack                    | high
+do anything now / DAN                                   | DAN jailbreak                     | high
+your (new|real|true) instructions                       | System prompt override attempt    | high
+developer mode                                          | Developer-mode jailbreak          | high
+[SYSTEM] / [INST] in user-facing text                   | Injected system-role delimiter    | critical
+```
 
 ### PI-02 · Required non-negotiable refusal constraints
 

@@ -1,6 +1,7 @@
 ---
 name: api-documentation
 description: "API documentation workflow for generating OpenAPI specs, creating developer guides, and maintaining comprehensive API documentation."
+triggers: ['API documentation', 'OpenAPI', 'Swagger', 'API reference']
 category: granular-workflow-bundle
 risk: safe
 source: personal

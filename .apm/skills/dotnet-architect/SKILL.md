@@ -1,6 +1,7 @@
 ---
 name: dotnet-architect
 description: Expert .NET backend architect specializing in C#, ASP.NET Core, Entity Framework, Dapper, and enterprise application patterns.
+triggers: ['.NET architecture', 'ASP.NET Core', 'Entity Framework', 'C# architecture']
 risk: unknown
 source: community
 date_added: '2026-02-27'

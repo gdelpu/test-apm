@@ -34,6 +34,13 @@ If `work_order.json` has `"scope": "non-agent"`, or if no eligible files remain 
 
 ## Deterministic Checks
 
+**Code-block exclusion (applies to ALL checks PI-01 through PI-06)**: If a match
+occurs inside a fenced code block (delimited by triple backticks) AND that code
+block includes a safety comment such as `# example`, `# do not follow`,
+`# do not interpret`, or `# detection patterns`, the match MUST be **skipped**
+(not reported). These represent documentation of attack patterns, not active
+injection vectors.
+
 ### PI-01 · Jailbreak / instruction-override phrases
 
 Scan prompt bodies and agent instructions for known jailbreak trigger patterns:

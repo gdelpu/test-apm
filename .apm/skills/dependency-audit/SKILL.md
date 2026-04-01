@@ -1,3 +1,9 @@
+---
+name: dependency-audit
+description: 'Scan project dependencies for known vulnerabilities (CVEs).'
+triggers: ['dependency audit', 'vulnerability scan', 'CVE detection', 'supply chain security']
+---
+
 # Skill: dependency-audit
 
 ## Goal

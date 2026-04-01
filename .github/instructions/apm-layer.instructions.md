@@ -1,4 +1,6 @@
 ---
+name: apm-layer
+description: 'Rules for working inside the canonical APM packaging layer (source of truth).'
 applyTo: .apm/**
 ---
 

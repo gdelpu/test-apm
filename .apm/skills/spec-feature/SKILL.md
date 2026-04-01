@@ -1,3 +1,9 @@
+---
+name: spec-feature
+description: 'Produce a functional feature specification that explains what should be built, for whom, why, and how success will be judged.'
+triggers: ['feature specification', 'feature spec', 'requirements documentation']
+---
+
 # Skill: spec-feature
 
 ## Goal

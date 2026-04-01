@@ -14,6 +14,11 @@ except ImportError as exc:
 FRONTMATTER_SUFFIXES = (".agent.md", ".prompt.md", ".instructions.md")
 WORKFLOW_DIR_MARKERS = ("/.github/workflows/",)
 
+# Known false positives: test fixtures that intentionally violate rules.
+KNOWN_FALSE_POSITIVES = {
+    "test-validation/scenarios/scenario-1-all-validators-fire/SKILL.md",
+}
+
 
 # Run: execute shell commands and fail fast with captured error output.
 def run(cmd: List[str]) -> str:
@@ -49,6 +54,23 @@ def extract_frontmatter(path: Path) -> Dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
+# Check: whether the raw description line in frontmatter uses single quotes.
+def _raw_description_is_quoted(path: Path) -> bool:
+    """Check the raw frontmatter text for single-quoted description value."""
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if not text.startswith("---\n"):
+        return True  # no frontmatter → skip this check
+    end = text.find("\n---\n", 4)
+    if end < 0:
+        return True
+    fm_text = text[4:end]
+    for line in fm_text.splitlines():
+        if line.startswith("description:"):
+            value = line.split(":", 1)[1].strip()
+            return value.startswith("'") and value.endswith("'")
+    return True  # no description line → skip this check
+
+
 # Validate: lowercase-kebab naming policy for resource files.
 def is_kebab_case(stem: str) -> bool:
     return bool(re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", stem))
@@ -65,6 +87,10 @@ def collect_markdown_links(path: Path) -> List[str]:
 def validate_file(path_str: str, blocking: List[str], warnings: List[str], fix_suggestions: List[Dict[str, str]]) -> None:
     path = Path(path_str)
     if not path.exists() or path.is_dir():
+        return
+
+    # Skip known false positives (intentional test fixtures).
+    if any(path_str.replace("\\", "/").endswith(fp) for fp in KNOWN_FALSE_POSITIVES):
         return
 
     name = path.name
@@ -95,8 +121,7 @@ def validate_file(path_str: str, blocking: List[str], warnings: List[str], fix_s
                     "proposed_fix": "Add frontmatter key: description: 'Short purpose sentence'",
                 })
             if isinstance(fm.get("description"), str):
-                desc = fm["description"].strip()
-                if not (desc.startswith("'") and desc.endswith("'")):
+                if not _raw_description_is_quoted(path):
                     warnings.append(f"{path_str}: description should be wrapped in single quotes")
                     fix_suggestions.append({
                         "file": path_str,

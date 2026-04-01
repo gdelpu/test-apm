@@ -1,6 +1,7 @@
 ---
 name: dotnet-backend
 description: "Build ASP.NET Core 8+ backend services with EF Core, auth, background jobs, and production API patterns."
+triggers: ['.NET backend', 'ASP.NET Core', 'EF Core', 'C# development']
 risk: safe
 source: self
 date_added: "2026-02-27"

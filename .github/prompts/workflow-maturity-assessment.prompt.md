@@ -1,4 +1,5 @@
 ---
+name: workflow-maturity-assessment
 mode: agent
 description: 'Run SDLC maturity assessment workflow (6 stations).'
 ---

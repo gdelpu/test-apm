@@ -1,4 +1,6 @@
 ---
+name: readme
+description: 'Rules for maintaining the root README.md to reflect the actual state of the repository.'
 applyTo: README.md
 ---
 

@@ -1,3 +1,9 @@
+---
+name: quality-report
+description: 'Aggregate results from all quality validation stations into a single, comprehensive quality report.'
+triggers: ['quality report', 'quality aggregation', 'validation summary']
+---
+
 # Skill: quality-report
 
 ## Goal

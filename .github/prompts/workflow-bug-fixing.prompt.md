@@ -1,4 +1,5 @@
 ---
+name: workflow-bug-fixing
 mode: agent
 description: 'Run structured bug diagnosis and resolution workflow (7 stations).'
 ---

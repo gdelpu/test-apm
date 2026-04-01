@@ -1,6 +1,7 @@
 ---
 name: planning-with-files
 description: "Implements Manus-style file-based planning for complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when starting complex multi-step tasks, research projects, or any task requirin..."
+triggers: ['file-based planning', 'task plan', 'complex task planning']
 risk: unknown
 source: community
 date_added: "2026-02-27"

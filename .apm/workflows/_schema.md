@@ -26,6 +26,8 @@ stations:
         - <string>
       severity: blocker | warning # blocker = halt workflow; warning = log and continue
       reviewer: <string>          # Optional: agent that reviews gate (e.g., security-reviewer)
+    allowed_tools:                # Explicit tool scope for this station (validated against policy allowlist)
+      - <string>                  # Each entry must be in the station_tools_allowlist (see below)
 
 config:
   output_dir: <string>            # Where artifacts are written (supports <feature> placeholder)
@@ -44,6 +46,44 @@ config:
 - A station with `optional: true` and `gate.severity: warning` is fully skippable.
 - Stations with `parallel: true` can run concurrently (used in validation phases).
 - Nested workflows are referenced by a station that names another workflow.
+
+## Resource Limits
+
+The following limits are enforced by the workflow orchestrator during YAML validation, before any station agent is invoked. Workflows exceeding any limit are rejected with a blocker-severity error.
+
+| Limit | Value | Scope |
+|-------|-------|-------|
+| Max stations per workflow | 50 | Per workflow YAML file |
+| Max `context` field length | 2 000 characters | Per station |
+| Max `description` field length | 500 characters | Per station |
+| Max nesting depth | 5 levels | Across nested workflows |
+| Max `allowed_tools` per station | 10 entries | Per station |
+
+### High-privilege tool policy
+
+The following tools are classified as **high-privilege**: `runCommands`, `editFiles`, `fetch`.
+
+Any station declaring a high-privilege tool in its `allowed_tools` list MUST be immediately preceded by a station with `gate.severity: blocker` and `gate.reviewer: human`. Workflow YAML that places a high-privilege station without such a preceding human-approval gate is rejected during structure validation.
+
+### Station `allowed_tools` allowlist
+
+Every entry in a station's `allowed_tools` array MUST be one of the following policy-controlled values:
+
+```yaml
+station_tools_allowlist:
+  - codebase       # Read-only workspace search
+  - search         # Text/semantic search
+  - problems       # Diagnostics / lint errors
+  - view           # Read files (Copilot CLI)
+  - create         # Write files (Copilot CLI)
+  - edit/editFiles # Modify existing files
+  - runCommands    # Execute shell commands (requires preceding human-approval gate)
+  - fetch          # Network requests (requires preceding human-approval gate)
+  - github         # GitHub API access
+  - terminal       # Terminal interaction
+```
+
+Any value not in this allowlist is rejected during YAML structure validation with a `critical` severity finding. This prevents attacker-contributed workflow YAML from introducing unknown or custom tool scopes.
 
 ## State File Format
 

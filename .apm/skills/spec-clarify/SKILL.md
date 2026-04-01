@@ -1,3 +1,9 @@
+---
+name: spec-clarify
+description: 'Turn ambiguity into explicit decisions, assumptions, or open questions.'
+triggers: ['spec clarification', 'ambiguity resolution', 'open questions']
+---
+
 # Skill: spec-clarify
 
 ## Goal

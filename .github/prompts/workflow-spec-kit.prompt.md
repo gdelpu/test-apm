@@ -1,4 +1,5 @@
 ---
+name: workflow-spec-kit
 mode: agent
 description: 'Run specification-only workflow (8 stations).'
 ---

@@ -1,6 +1,7 @@
 ---
 name: soprasteria-brand-refactor
 description: 'Refactor an application, document, presentation, or template into Sopra Steria brand style with audit, strategy, implementation, and validation.'
+mode: agent
 ---
 
 # Sopra Steria brand refactor

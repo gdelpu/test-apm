@@ -1,4 +1,5 @@
 ---
+name: corrections
 description: 'Accumulated corrections from user feedback. Agents append lessons here automatically when corrected during conversations.'
 applyTo: '**'
 ---
