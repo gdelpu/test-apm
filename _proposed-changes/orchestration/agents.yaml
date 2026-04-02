@@ -1,0 +1,1278 @@
+# SDLC Agentic Harness — Agent Registry
+# Each agent = skill + refs + tools + hooks
+# Consumed by the coordinator (orchestration/coordinator.md).
+
+# ─── Shared Definitions ──────────────────────────────────────────────
+
+shared:
+
+  ba_conventions_base: &ba_cv_base
+    - BA-Agents/refs/conventions/cv-markdown.md
+    - BA-Agents/refs/conventions/cv-domain-language.md
+    - BA-Agents/refs/conventions/cv-output-language.md
+
+  ba_conventions_brownfield: &ba_cv_brownfield
+    - BA-Agents/refs/conventions/cv-markdown.md
+    - BA-Agents/refs/conventions/cv-domain-language.md
+    - BA-Agents/refs/conventions/cv-output-language.md
+    - BA-Agents/refs/conventions/cv-brownfield.md
+
+  ba_hooks_standard: &ba_hooks_std
+    pre:
+      - BA-Agents/hooks/pre-input-validation.md
+      - BA-Agents/hooks/pre-amendment-mode.md
+    post:
+      - BA-Agents/hooks/post-quality-control.md
+      - BA-Agents/hooks/post-confluence-push.md
+
+  ba_tools_base: &ba_tools_base
+    required: [file-read, file-write]
+    optional: [jira-mcp]
+
+  tech_conventions_base: &tech_cv_base
+    - Tech-Agents/refs/conventions/cv-tech-markdown.md
+    - Tech-Agents/refs/conventions/cv-ba-integration.md
+
+  tech_hooks_standard: &tech_hooks_std
+    pre:
+      - Tech-Agents/hooks/pre-input-validation.md
+      - Tech-Agents/hooks/pre-amendment-mode.md
+    post:
+      - Tech-Agents/hooks/post-quality-control.md
+      - Tech-Agents/hooks/post-confluence-push.md
+
+  test_conventions_base: &test_cv_base
+    - Test-Agents/refs/conventions/cv-test-conventions.md
+
+  test_hooks_standard: &test_hooks_std
+    pre:
+      - Test-Agents/hooks/pre-input-validation.md
+    post:
+      - Test-Agents/hooks/post-quality-control.md
+      - Test-Agents/hooks/post-confluence-push.md
+
+  steer_conventions_base: &steer_cv_base
+    - Steer-Agents/refs/conventions/cv-pilotage-conventions.md
+    - Steer-Agents/refs/conventions/cv-pilotage-agentique.md
+
+  steer_hooks_standard: &steer_hooks_std
+    pre:
+      - Steer-Agents/hooks/pre-input-validation.md
+    post:
+      - Steer-Agents/hooks/post-quality-control.md
+      - Steer-Agents/hooks/post-confluence-push.md
+
+# ─── BA Agents — System 0 (Audit) ───────────────────────────────────
+
+agents:
+
+  ba-0.1:
+    name: Existing Audit
+    domain: BA
+    system: S0
+    min_depth: standard
+    skill: BA-Agents/skills/sk-0.1-existing-audit.md
+    refs:
+      conventions: *ba_cv_brownfield
+      template: BA-Agents/refs/templates/tpl-existing-audit.md
+      upstream: []
+    client_inputs: docs/0-inputs/ba/0-audit/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/0-audit/asis-001-existing-audit.md
+
+  ba-0.2:
+    name: Delta Analysis
+    domain: BA
+    system: S0
+    min_depth: standard
+    skill: BA-Agents/skills/sk-0.2-delta-analysis.md
+    refs:
+      conventions: *ba_cv_brownfield
+      template: BA-Agents/refs/templates/tpl-delta-analysis.md
+      upstream:
+        - docs/1-prd/0-audit/asis-001-existing-audit.md
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/0-audit/delta-001-delta-analysis.md
+
+  # ─── BA Agents — System 1 (Scoping) ─────────────────────────────────
+
+  ba-1.1:
+    name: Product Vision & Scope
+    domain: BA
+    system: S1
+    min_depth: essential
+    skill: BA-Agents/skills/sk-1.1-vision.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-product-vision.md
+      upstream:
+        - docs/1-prd/1-scoping/dco-001-discovery.md
+    client_inputs: docs/0-inputs/ba/1-scoping/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/1-scoping/vis-001-product-vision.md
+
+  ba-1.2:
+    name: Business Glossary
+    domain: BA
+    system: S1
+    min_depth: standard
+    skill: BA-Agents/skills/sk-1.2-glossary.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-glossary.md
+      upstream:
+        - docs/1-prd/1-scoping/dco-001-discovery.md
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+    client_inputs: docs/0-inputs/ba/1-scoping/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/1-scoping/glo-001-glossary.md
+
+  ba-1.3:
+    name: Actors & Roles
+    domain: BA
+    system: S1
+    min_depth: standard
+    skill: BA-Agents/skills/sk-1.3-actors-roles.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-actors-roles.md
+      upstream:
+        - docs/1-prd/1-scoping/dco-001-discovery.md
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/1-prd/1-scoping/glo-001-glossary.md
+    client_inputs: docs/0-inputs/ba/1-scoping/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/1-scoping/act-001-actors-roles.md
+
+  ba-1.4:
+    name: Functional Requirements
+    domain: BA
+    system: S1
+    min_depth: standard
+    skill: BA-Agents/skills/sk-1.4-functional-requirements.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-functional-requirements.md
+      upstream:
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/1-prd/1-scoping/glo-001-glossary.md
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+    client_inputs: docs/0-inputs/ba/1-scoping/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, r4j-api]
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/1-scoping/exf-001-functional-requirements.md
+
+  # ─── BA Agents — System 2 (Specification) ────────────────────────────
+
+  ba-2.1:
+    name: Domain Model
+    domain: BA
+    system: S2
+    min_depth: standard
+    skill: BA-Agents/skills/sk-2.1-domain-model.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-domain-model.md
+      upstream:
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/1-prd/1-scoping/glo-001-glossary.md
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - docs/1-prd/0-audit/delta-001-delta-analysis.md
+    client_inputs: docs/0-inputs/ba/2-spec/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, mermaid]
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/2-specification/dom-001-domain-model.md
+    secondary_output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-domain.md"
+    rules_only: auto   # skip primary output if it already exists on disk
+
+  ba-2.2:
+    name: Epics
+    domain: BA
+    system: S2
+    min_depth: essential
+    skill: BA-Agents/skills/sk-2.2-epics.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-epic.md
+      upstream:
+        - docs/1-prd/2-specification/dom-001-domain-model.md
+        - docs/1-prd/1-scoping/exf-001-functional-requirements.md
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+    client_inputs: docs/0-inputs/ba/2-spec/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "docs/1-prd/3-epics/ep-{id}-{slug}/"
+    secondary_output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-epics.md"
+    rules_only: auto   # skip primary output if epics already exist on disk
+
+  ba-2.2b:
+    name: Feature Specifications
+    domain: BA
+    system: S2
+    min_depth: essential
+    skill: BA-Agents/skills/sk-2.2b-features.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-feature.md
+      template_variants:
+        essential: BA-Agents/refs/templates/tpl-feature-essential.md
+        standard: BA-Agents/refs/templates/tpl-feature-standard.md
+      upstream_pattern: "docs/1-prd/3-epics/{epic}/ep-*.md"
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
+    secondary_output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-{epic-slug}.md"
+    rules_only: auto   # skip primary output if features already exist on disk
+
+  ba-2.3:
+    name: Business Rules (Consolidation)
+    domain: BA
+    system: S2
+    min_depth: full
+    skill: BA-Agents/skills/sk-2.3-business-rules.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-business-rules.md
+      upstream:
+        - "docs/1-prd/2-specification/_rules-staging/{rule_type}/"   # only files for this rule type
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/1-prd/1-scoping/glo-001-glossary.md
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/"
+
+  ba-2.3b:
+    name: Business Rules Dispatch & Confluence Push
+    domain: BA
+    system: S2
+    min_depth: full
+    script: "tools/dispatch-rules-to-features.sh"
+    tools:
+      required: [file-read, file-write]
+      optional: [confluence-api]
+    hooks:
+      pre: []
+      post:
+        - BA-Agents/hooks/post-confluence-push.md
+    model: skip   # no LLM — script only
+    output_pattern: "docs/1-prd/3-epics/{epic}/{feature}/business-rules.md"
+    confluence_push: "docs/1-prd/3-epics/*/ft-*/business-rules.md"
+
+  # ─── BA Agents — System 3 (Design) — per feature ────────────────────
+
+  ba-3.1:
+    name: User Stories
+    domain: BA
+    system: S3
+    min_depth: standard
+    skill: BA-Agents/skills/sk-3.1-user-stories.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-user-story.md
+      template_variants:
+        standard: BA-Agents/refs/templates/tpl-user-story-standard.md
+      upstream_scope:
+        - "{feature_path}/ft-*.md"
+        - "{feature_path}/business-rules.md"   # per-feature business rules (dispatched by sk-2.3)
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - docs/1-prd/1-scoping/glo-001-glossary.md
+        - docs/1-prd/2-specification/dom-001-domain-model.md
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, r4j-api]
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/user-stories/"
+
+  ba-3.2:
+    name: User Journeys
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.2-user-journeys.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-user-journey.md
+      upstream_scope:
+        - "{feature_path}/user-stories/"
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/journeys/"
+
+  ba-3.3:
+    name: Screen Specifications
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.3-screen-specs.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-screen-spec.md
+      upstream_scope:
+        - "{feature_path}/user-stories/"
+        - "{feature_path}/journeys/"
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/screens/"
+
+  ba-3.3b:
+    name: HTML Prototypes
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.3b-figma-prototypes.md
+    refs:
+      conventions: *ba_cv_base
+      upstream_scope:
+        - "{feature_path}/screens/"
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      required: [file-read, file-write]
+      optional: [figma-mcp]  # generate_figma_design for optional import into Figma
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/prototypes/"
+
+  ba-3.3c:
+    name: Batch Specifications
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.3c-batch-specs.md
+    refs:
+      conventions: *ba_cv_base
+      upstream_scope:
+        - "{feature_path}/user-stories/"
+        - docs/1-prd/2-specification/dom-001-domain-model.md
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/batches/"
+
+  ba-3.4:
+    name: Notifications
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.4-notifications.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-notification.md
+      upstream_scope:
+        - "{feature_path}/user-stories/"
+        - "{feature_path}/journeys/"
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/notifications/"
+
+  ba-3.5:
+    name: Test Scenarios
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.5-test-scenarios.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-test-scenario.md
+      upstream_scope:
+        - "{feature_path}/user-stories/"
+        - "{feature_path}/journeys/"
+        - "{feature_path}/screens/"
+        - "{feature_path}/batches/"
+        - "{feature_path}/notifications/"
+        - "{feature_path}/business-rules.md"   # per-feature business rules (dispatched by sk-2.3)
+    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, xray-api]
+    hooks:
+      pre:
+        - BA-Agents/hooks/pre-input-validation.md
+      post:
+        - BA-Agents/hooks/post-quality-control.md
+        - BA-Agents/hooks/post-confluence-push.md
+    model: sonnet
+    output_pattern: "{feature_path}/tests/"
+
+  ba-3.6:
+    name: Test Data Seeds
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.6-test-data.md
+    refs:
+      conventions: *ba_cv_base
+      template: BA-Agents/refs/templates/tpl-test-data.md
+      upstream_scope:
+        - "{feature_path}/tests/"
+        - "{feature_path}/user-stories/"
+        - docs/1-prd/2-specification/dom-001-domain-model.md
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output_pattern: "{feature_path}/tests/"
+
+  ba-3.6b:
+    name: E2E Test Plan
+    domain: BA
+    system: S3
+    min_depth: full
+    skill: BA-Agents/skills/sk-3.6b-e2e-plan.md
+    refs:
+      conventions: *ba_cv_base
+      upstream:
+        - docs/1-prd/3-epics/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      <<: *ba_hooks_std
+    model: sonnet
+    output: docs/1-prd/4-tests/e2e-plan-001.md
+
+  # ─── BA Tools (on-demand) ──────────────────────────────────────────
+
+  ba-validate:
+    name: Deliverable Validation
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-validate.md
+    refs:
+      conventions: *ba_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-discovery:
+    name: Discovery Workshop
+    domain: BA
+    system: tool
+    min_depth: essential
+    skill: BA-Agents/skills/tools/sk-discovery.md
+    refs:
+      conventions: *ba_cv_base
+      template: null
+    client_inputs: docs/0-inputs/ba/_source/
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      pre: []
+      post:
+        - BA-Agents/hooks/post-quality-control.md
+        - BA-Agents/hooks/post-confluence-push.md
+    model: sonnet
+    output: docs/1-prd/1-scoping/dco-001-discovery.md
+
+  ba-review-workshop:
+    name: Review Workshop — Preparation
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-review-workshop.md
+    refs:
+      conventions: *ba_cv_base
+      template: null
+    tools:
+      <<: *ba_tools_base
+    hooks:
+      pre: []
+      post:
+        - BA-Agents/hooks/post-quality-control.md
+        - BA-Agents/hooks/post-confluence-push.md
+    model: sonnet
+    output_pattern: "docs/1-prd/6-workshops/wrk-{NNN}-{scope-slug}-review.md"
+
+  ba-coherence:
+    name: Coherence Check
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-coherence-check.md
+    refs:
+      conventions: *ba_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-impact:
+    name: Change Impact
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-change-impact.md
+    refs:
+      conventions: *ba_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-to-word:
+    name: Word Conversion
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-word-conversion.md
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, file-write, pandoc]
+    hooks:
+      pre: []
+      post: []
+    model: haiku
+
+  ba-from-word:
+    name: Word Reintegration
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-word-reintegration.md
+    refs:
+      conventions: *ba_cv_base
+    tools:
+      required: [file-read, file-write, pandoc]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-sync-jira:
+    name: Jira Sync
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-sync-jira.md
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, jira-mcp]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-sync-xray:
+    name: Xray Sync
+    domain: BA
+    system: tool
+    skill: BA-Agents/skills/tools/sk-sync-xray.md
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, xray-api]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-publish:
+    name: Confluence Publish
+    domain: BA
+    system: tool
+    script: tools/confluence-publish.js
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, confluence-api]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  ba-confluence-pull:
+    name: Confluence Pull
+    domain: BA
+    system: tool
+    script: tools/confluence-pull.js
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, file-write, confluence-api]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  # ─── Tech Agents (skeleton — skills to be migrated) ────────────────
+
+  tech-t0.1:
+    name: Technical Audit
+    domain: Tech
+    system: T0
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t0.1-technical-audit.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-audit-technique.md
+    client_inputs:
+      - docs/0-inputs/tech/_source/
+      - docs/0-inputs/tech/0-audit/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/0-audit/tech-asis-001-technical-audit.md
+
+  tech-t0.2:
+    name: Technical Gap
+    domain: Tech
+    system: T0
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t0.2-technical-gap.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-migration-plan.md
+    client_inputs: docs/0-inputs/tech/0-audit/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/0-audit/gap-001-technical-gap.md
+
+  tech-t1.1:
+    name: System Context
+    domain: Tech
+    system: T1
+    min_depth: essential
+    skill: Tech-Agents/skills/sk-t1.1-system-context.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-system-context.md
+      upstream:
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - docs/2-tech/1-architecture/dco-tech-001-discovery.md
+    client_inputs: docs/0-inputs/tech/1-archi/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, mermaid]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/1-architecture/ctx-001-system-context.md
+
+  tech-t1.2:
+    name: Architecture Decisions
+    domain: Tech
+    system: T1
+    min_depth: essential
+    skill: Tech-Agents/skills/sk-t1.2-architecture-decisions.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-adr.md
+      upstream:
+        - docs/2-tech/1-architecture/ctx-001-system-context.md
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/2-tech/1-architecture/dco-tech-001-discovery.md
+    client_inputs: docs/0-inputs/tech/1-archi/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md"
+
+  tech-t1.3:
+    name: Stack Extraction (per ADR)
+    domain: Tech
+    system: T1
+    min_depth: full
+    skill: Tech-Agents/skills/sk-t1.3-stack-extraction.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+    output_pattern: "docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md"
+
+  tech-t1.3b:
+    name: Stack Consolidation
+    domain: Tech
+    system: T1
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t1.3b-stack-consolidation.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-stack-conventions.md
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/1-architecture/stk-001-stack-conventions.md
+
+  tech-t1.4:
+    name: Enabler Extraction (per ADR)
+    domain: Tech
+    system: T1
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t1.4-enablers.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-enabler.md
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+    output_pattern: "docs/2-tech/2-design/enablers/enb-{id}-{slug}.md"
+
+  tech-t1.4b:
+    name: Enabler Index & Wave Resolution
+    domain: Tech
+    system: T1
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t1.4b-enabler-index.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/2-design/enablers/enb-000-index.md
+
+  tech-t2.1:
+    name: Data Model
+    domain: Tech
+    system: T2
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t2.1-data-model.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-data-model.md
+    client_inputs: docs/0-inputs/tech/2-design/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, mermaid]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/2-design/dat-001-data-model.md
+
+  tech-t2.2:
+    name: API Contracts
+    domain: Tech
+    system: T2
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t2.2-api-contracts.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-api-contract.md
+    client_inputs: docs/0-inputs/tech/2-design/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "docs/2-tech/2-design/api/api-{id}-{slug}.md"
+
+  tech-t2.4:
+    name: Test Strategy
+    domain: Tech
+    system: T2
+    min_depth: full
+    skill: Tech-Agents/skills/sk-t2.4-test-strategy.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-test-strategy.md
+    client_inputs: docs/0-inputs/tech/2-design/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/2-design/tst-001-test-strategy.md
+
+  tech-t2.5:
+    name: Implementation Plan
+    domain: Tech
+    system: T2
+    min_depth: standard
+    skill: Tech-Agents/skills/sk-t2.5-implementation-plan.md
+    refs:
+      conventions: *tech_cv_base
+      template: Tech-Agents/refs/templates/tpl-implementation-plan.md
+    client_inputs: docs/0-inputs/tech/2-design/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/2-design/imp-001-implementation-plan.md
+
+  tech-t3.1:
+    name: Drift Detection
+    domain: Tech
+    system: T3
+    min_depth: full
+    skill: Tech-Agents/skills/sk-t3.1-drift-detection.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/3-quality/dft-001-drift-report.md
+
+  tech-t3.2:
+    name: Automated Code Review
+    domain: Tech
+    system: T3
+    min_depth: full
+    skill: Tech-Agents/skills/sk-t3.2-code-review.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output: docs/2-tech/3-quality/
+
+  # ─── Tech Tools (on-demand) ──────────────────────────────────────────
+
+  tech-validate:
+    name: Tech Deliverable Validation
+    domain: Tech
+    system: tool
+    skill: Tech-Agents/skills/tools/sk-validate.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  tech-review-workshop:
+    name: Tech Review Workshop
+    domain: Tech
+    system: tool
+    skill: Tech-Agents/skills/tools/sk-review-workshop-tech.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post:
+        - Tech-Agents/hooks/post-quality-control.md
+        - Tech-Agents/hooks/post-confluence-push.md
+    model: sonnet
+    output_pattern: "docs/2-tech/4-workshops/wrk-tech-{NNN}-{scope-slug}-review.md"
+
+  tech-coherence:
+    name: Tech Coherence Check
+    domain: Tech
+    system: tool
+    skill: Tech-Agents/skills/tools/sk-coherence-check-tech.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  tech-confluence-pull:
+    name: Tech Confluence Pull
+    domain: Tech
+    system: tool
+    script: tools/confluence-pull.js
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, file-write, confluence-api]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  tech-impact:
+    name: Tech Change Impact
+    domain: Tech
+    system: tool
+    skill: BA-Agents/skills/tools/sk-change-impact.md
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post: []
+    model: sonnet
+
+  tech-discovery:
+    name: Tech Discovery Workshop
+    domain: Tech
+    system: tool
+    min_depth: essential
+    skill: Tech-Agents/skills/tools/sk-tech-discovery.md
+    refs:
+      conventions: *tech_cv_base
+      template: null
+      upstream:
+        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - docs/1-prd/1-scoping/act-001-actors-roles.md
+    client_inputs:
+      - docs/0-inputs/tech/_source/
+      - docs/0-inputs/tech/1-archi/
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      pre: []
+      post:
+        - Tech-Agents/hooks/post-quality-control.md
+        - Tech-Agents/hooks/post-confluence-push.md
+    model: sonnet
+    output: docs/2-tech/1-architecture/dco-tech-001-discovery.md
+
+  tech-to-word:
+    name: Tech Word Conversion
+    domain: Tech
+    system: tool
+    skill: BA-Agents/skills/tools/sk-word-conversion.md
+    refs:
+      conventions: []
+    tools:
+      required: [file-read, file-write, pandoc]
+    hooks:
+      pre: []
+      post: []
+    model: haiku
+
+  # ─── Test Agents — Campaign System ────────────────────────────────────
+
+  test-camp.1:
+    name: Campaign Launch
+    domain: Test
+    system: E-Campaign
+    skill: Test-Agents/skills/sk-camp.1-launch.md
+    refs:
+      conventions: *test_cv_base
+      upstream:
+        - docs/1-prd/4-tests/e2e-plan-001.md
+        - docs/1-prd/4-tests/dat-test-001-shared-seeds.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, xray-api, playwright]
+    hooks:
+      <<: *test_hooks_std
+    model: sonnet
+
+  test-camp.2:
+    name: Campaign Report
+    domain: Test
+    system: E-Campaign
+    skill: Test-Agents/skills/sk-camp.2-report.md
+    refs:
+      conventions: *test_cv_base
+      upstream:
+        - docs/1-prd/4-tests/e2e-plan-001.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp, xray-api]
+    hooks:
+      <<: *test_hooks_std
+    model: sonnet
+    output_pattern: "docs/1-prd/4-tests/camp-rpt-{NNN}.md"
+
+  # ─── Test Agents — Performance System ────────────────────────────────
+
+  test-perf.1:
+    name: Performance Campaign Execution
+    domain: Test
+    system: E-Perf
+    skill: Test-Agents/skills/sk-perf.1-execution.md
+    refs:
+      conventions: *test_cv_base
+    tools:
+      required: [file-read, file-write]
+      optional: [k6, artillery]
+    hooks:
+      <<: *test_hooks_std
+    model: sonnet
+
+  test-perf.2:
+    name: Performance Report
+    domain: Test
+    system: E-Perf
+    skill: Test-Agents/skills/sk-perf.2-report.md
+    refs:
+      conventions: *test_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *test_hooks_std
+    model: sonnet
+    output_pattern: "docs/1-prd/4-tests/perf-rpt-{NNN}.md"
+
+  # ─── Test Tools (on-demand) ──────────────────────────────────────────
+
+  test-dast:
+    name: DAST Security Scan
+    domain: Test
+    system: tool
+    skill: Test-Agents/skills/tools/sk-dast.md
+    refs:
+      conventions: *test_cv_base
+    tools:
+      required: [file-read, file-write]
+      optional: [owasp-zap]
+    hooks:
+      pre:
+        - Test-Agents/hooks/pre-input-validation.md
+      post:
+        - Test-Agents/hooks/post-quality-control.md
+    model: sonnet
+    output_pattern: "docs/1-prd/4-tests/dast-rpt-{NNN}.md"
+
+  # ─── Steer Agents ──────────────────────────────────────────────────
+
+  steer-p0.1:
+    name: Project Sheet
+    domain: Steer
+    system: P0
+    min_depth: standard
+    skill: Steer-Agents/skills/sk-p0.1-project-sheet.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-fiche-projet.md
+    client_inputs: docs/0-inputs/steer/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output: docs/3-steer/pil-001-project-sheet.md
+
+  steer-p0.2:
+    name: KPI Baseline
+    domain: Steer
+    system: P0
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p0.2-kpi-baseline.md
+    refs:
+      conventions: *steer_cv_base
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output: docs/3-steer/kpi-001-baseline-kpis.md
+
+  steer-p1.3:
+    name: Sprint Planning (AI-Native)
+    domain: Steer
+    system: P1
+    min_depth: standard
+    skill: Steer-Agents/skills/sk-p1.3-sprint-planning-design.md
+    refs:
+      conventions: *steer_cv_base
+      upstream:
+        - "docs/1-prd/3-epics/ep-*/ep-*.md"
+        - "docs/2-tech/2-design/enablers/enb-*.md"
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output: docs/3-steer/plan-001-sprint-planning.md
+
+  steer-p1.1:
+    name: Roadmap
+    domain: Steer
+    system: P1
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p1.1-roadmap.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-roadmap.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output: docs/3-steer/rdp-001-roadmap.md
+
+  steer-p1.2:
+    name: Initial Risk Register
+    domain: Steer
+    system: P1
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p1.2-risk-register.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-risque.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output: docs/3-steer/rsk-001-risk-register.md
+
+  steer-p2.1:
+    name: Sprint Progress
+    domain: Steer
+    system: P2
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p2.1-sprint-progress.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-rapport-sprint.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output_pattern: "docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-{nn}.md"
+
+  steer-p2.2:
+    name: System Health
+    domain: Steer
+    system: P2
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p2.2-system-health.md
+    refs:
+      conventions: *steer_cv_base
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+
+  steer-p2.3:
+    name: Sprint Risks
+    domain: Steer
+    system: P2
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p2.3-sprint-risks.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-risque.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+
+  steer-p3.1:
+    name: COPIL Preparation
+    domain: Steer
+    system: P3
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p3.1-copil.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-copil.md
+    client_inputs: docs/0-inputs/steer/
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output_pattern: "docs/3-steer/1-committees/cop-{NNN}-{date}.md"
+
+  steer-p3.2:
+    name: Release Go/No-Go
+    domain: Steer
+    system: P3
+    min_depth: full
+    skill: Steer-Agents/skills/sk-p3.2-go-nogo.md
+    refs:
+      conventions: *steer_cv_base
+      template: Steer-Agents/refs/templates/tpl-go-nogo.md
+    tools:
+      required: [file-read, file-write]
+      optional: [jira-mcp]
+    hooks:
+      <<: *steer_hooks_std
+    model: sonnet
+    output: docs/3-steer/gng-001-release-gonogo.md

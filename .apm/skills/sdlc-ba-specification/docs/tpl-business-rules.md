@@ -8,7 +8,6 @@ status: draft
 version: "1.0"
 last_updated: YYYY-MM-DD
 author: agent-rules
-reviewers: []
 dependencies: ["VIS-001", "GLO-001", "ACT-001"]
 ---
 
@@ -24,67 +23,51 @@ dependencies: ["VIS-001", "GLO-001", "ACT-001"]
 
 ## Rules
 
+<!-- Repeat this block for each rule.
+     Use the compact format below — one table per rule, adapted to the rule type.
+     Keep each rule self-contained but concise: no variable tables, no entity/feature
+     cross-references per rule (these are in the indices at the bottom). -->
+
 ### [BR-{rule_type}-001] Rule name
 
-<!-- Repeat this block for each rule. Fields depend on the rule type: -->
-
 <!-- === VAL (Validation) === -->
-<!-- | Property | Value |
+| Property | Value |
 |----------|-------|
-| **Description** | <!-- Description in natural language -->  |
 | **Condition** | IF <!-- condition --> |
 | **Consequence** | THEN <!-- what happens --> |
 | **Error message** | "<!-- Exact message displayed to the user -->" |
-| **Concerned entities** | [ENT-xxx] |
-| **Concerned attributes** | attribute1, attribute2 |
-| **Related features** | [FT-xxx] |
 | **Severity** | Blocking / Warning |
 
-**Example:**
-> IF the order amount is less than 5.00€
-> THEN block the validation and display "The minimum order amount is 5.00€" -->
+**Example:** <!-- One concrete example with realistic values -->
 
 <!-- === CAL (Calculation) === -->
-<!-- | Property | Value |
+| Property | Value |
 |----------|-------|
-| **Description** | |
-| **Formula** | `result = operand1 × operand2 + operand3` |
-| **Variables** | operand1 = [ENT-xxx].attribute, operand2 = ... |
-| **Rounding** | <!-- Rounding rule if applicable --> |
-| **Concerned entities** | [ENT-xxx] |
-| **Related features** | [FT-xxx] |
+| **Formula** | <!-- Natural-language formula, e.g.: Row Total = sum of day allocations for working days --> |
+| **Precision** | <!-- Rounding rule if applicable --> |
 
-**Numerical example:**
-> Inputs: amountExcludingTax = 100.00€, vatRate = 20%
-> Calculation: amountIncludingTax = 100.00 × (1 + 0.20) = 120.00€ -->
+**Numerical example:** <!-- One concrete example with inputs → result -->
 
 <!-- === TRG (Trigger) === -->
-<!-- | Property | Value |
+| Property | Value |
 |----------|-------|
-| **Triggering event** | <!-- When this rule activates --> |
-| **Condition** | IF <!-- condition for the action to trigger --> |
+| **Event** | <!-- When this rule activates --> |
+| **Condition** | IF <!-- condition --> |
 | **Action** | THEN <!-- action(s) executed --> |
-| **Concerned entities** | [ENT-xxx] |
-| **Related features** | [FT-xxx] |
-| **Related notification** | [NTF-xxx] (if applicable) | -->
 
 <!-- === COH (Consistency) === -->
-<!-- | Property | Value |
+| Property | Value |
 |----------|-------|
 | **Invariant** | <!-- Condition that must ALWAYS be true --> |
-| **Concerned entities** | [ENT-xxx], [ENT-yyy] |
-| **Verification moment** | <!-- On creation / modification / deletion --> |
+| **Verification** | <!-- On creation / modification / deletion --> |
 | **Action if violated** | <!-- Block / Auto-correct / Alert --> |
-| **Related features** | [FT-xxx] | -->
 
 <!-- === AUT (Authorisation) === -->
-<!-- | Property | Value |
+| Property | Value |
 |----------|-------|
 | **Controlled action** | <!-- Which action is subject to this rule --> |
 | **Condition** | IF <!-- authorisation condition --> |
 | **Authorised roles** | [ROL-xxx] |
-| **Exception** | <!-- Cases where the rule does not apply --> |
-| **Related features** | [FT-xxx] | -->
 
 ---
 

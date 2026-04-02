@@ -7,9 +7,11 @@ status: draft
 version: "1.0"
 last_updated: YYYY-MM-DD
 author: agent-features
+reviewers: []
 epic: EP-001
 dependencies: ["EP-001", "GLO-001"]
 requirements: ["EX-xxx"]
+doc_depth: standard
 ---
 
 # [FT-001] Feature Name
@@ -37,6 +39,10 @@ requirements: ["EX-xxx"]
 
 ## Associated business rules
 
+<!-- Business rules that specifically apply to this feature.
+     In standard mode, rules are referenced here as a summary table.
+     Detailed rule definitions are in the consolidated business-rules files. -->
+
 | Rule ID | Description | Type |
 |---------|-------------|------|
 | [BR-xxx] | <!-- Rule summary --> | BR-VAL / BR-CAL / BR-TRG / BR-AUT |
@@ -45,8 +51,8 @@ requirements: ["EX-xxx"]
 
 ## Acceptance criteria
 
-<!-- Feature-level acceptance criteria (FAC): test integrated capability,
-     not individual stories. 2-5 criteria per feature. -->
+<!-- Feature-level acceptance criteria (FAC): test integrated capability.
+     2-5 criteria per feature. -->
 
 ### FAC-001: <!-- Criterion name — integrated capability -->
 

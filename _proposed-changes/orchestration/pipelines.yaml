@@ -1,0 +1,268 @@
+# SDLC Agentic Harness — Pipeline Definitions
+# Source of truth for agent sequencing, dependencies, fan-out/fan-in, and gates.
+# Consumed by the coordinator (orchestration/coordinator.md).
+
+defaults:
+  max_concurrency: 5
+  gate_mode: pause          # default for individual pipelines
+
+# ─── BA Pipelines ────────────────────────────────────────────────────
+
+pipelines:
+
+  ba-0-audit:
+    domain: BA
+    system: S0
+    condition: brownfield_only
+    gate_after: true
+    agents:
+      "0.1": {}
+      "0.2": { depends_on: ["0.1"] }
+
+  ba-1-scoping:
+    domain: BA
+    system: S1
+    gate_after: true
+    prerequisites:
+      - file: docs/1-prd/1-scoping/dco-001-discovery.md
+        agent: ba-discovery
+        description: "Discovery Workshop — produces [DCO-001] from raw source documents"
+    agents:
+      "1.1": {}
+      "1.2": {}
+      "1.3": { depends_on: ["1.2"] }
+      "1.4": { depends_on: ["1.1", "1.2", "1.3"] }
+
+  ba-2-spec:
+    domain: BA
+    system: S2
+    gate_after: true
+    agents:
+      "2.1": {}
+      "2.2":
+        depends_on: ["2.1"]
+        produces: epics
+        output_pattern: "docs/1-prd/3-epics/ep-{id}-{slug}/"
+      "2.2b":
+        depends_on: ["2.2"]
+        foreach: epics
+        produces: features
+        output_pattern: "docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
+      "2.3":
+        depends_on: ["2.1", "2.2b"]
+        foreach: rule_types
+        discover:
+          rule_types:
+            pattern: "docs/1-prd/2-specification/_rules-staging/*/"
+            extract: dirname   # use subdirectory names as collection items
+      "2.3b":
+        depends_on: ["2.3"]
+        scope: project
+        script: "tools/dispatch-rules-to-features.sh"
+        confluence_push: "docs/1-prd/3-epics/*/ft-*/business-rules.md"
+
+  ba-3-design:
+    domain: BA
+    system: S3
+    gate_after: true
+    agents:
+      "3.1":
+        foreach: features
+        scope: feature
+      "3.2":
+        depends_on: ["3.1"]
+        foreach: features
+        scope: feature
+      "3.3":
+        depends_on: ["3.1"]
+        foreach: features
+        scope: feature
+        condition: has_screens
+      "3.3b":
+        depends_on: ["3.3"]
+        foreach: features
+        scope: feature
+        condition: has_screens
+      "3.3c":
+        depends_on: ["3.1"]
+        foreach: features
+        scope: feature
+        condition: has_batches
+      "3.4":
+        depends_on: ["3.1"]
+        foreach: features
+        scope: feature
+        condition: has_notifications
+      "3.5":
+        depends_on: ["3.2", "3.3", "3.3b", "3.3c", "3.4"]
+        foreach: features
+        scope: feature
+      "3.6":
+        depends_on: ["3.5"]
+        foreach: features
+        scope: feature
+      "3.6b":
+        depends_on: ["3.5"]
+        scope: project
+
+  # ─── Tech Pipelines ──────────────────────────────────────────────
+
+  tech-0-audit:
+    domain: Tech
+    system: T0
+    condition: brownfield_only
+    gate_after: true
+    agents:
+      "t0.1": {}
+      "t0.2": { depends_on: ["t0.1"] }
+
+  tech-1-archi:
+    domain: Tech
+    system: T1
+    gate_after: true
+    prerequisites:
+      - file: docs/2-tech/1-architecture/dco-tech-001-discovery.md
+        agent: tech-discovery
+        description: "Tech Discovery Workshop — structures technical constraints into [DCO-TECH-001] before architecture"
+    agents:
+      "t1.1": {}
+      "t1.2":
+        depends_on: ["t1.1"]
+        produces: adrs
+        output_pattern: "docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md"
+      "t1.3":
+        depends_on: ["t1.2"]
+        foreach: adrs
+        scope: adr
+      "t1.3b":
+        depends_on: ["t1.3"]
+        scope: project
+      "t1.4":
+        depends_on: ["t1.3b"]
+        foreach: adrs
+        scope: adr
+      "t1.4b":
+        depends_on: ["t1.4"]
+        scope: project
+
+  tech-2-design:
+    domain: Tech
+    system: T2
+    gate_after: true
+    agents:
+      "t2.1": {}
+      "t2.2": { depends_on: ["t2.1"] }
+      "t2.4": { depends_on: ["t2.2"] }
+      "t2.5": { depends_on: ["t2.4"] }
+
+  tech-3-quality:
+    domain: Tech
+    system: T3
+    gate_after: false
+    agents:
+      "t3.1": {}
+      "t3.2": { depends_on: ["t3.1"] }
+
+  # ─── Steer Pipelines ─────────────────────────────────────────────
+
+  steer-0-init:
+    domain: Steer
+    system: P0
+    gate_after: false
+    agents:
+      "p0.1": {}
+      "p0.2": { depends_on: ["p0.1"] }
+
+  steer-1-planning:
+    domain: Steer
+    system: P1
+    gate_after: true
+    agents:
+      "p1.3": {}
+      "p1.1": { depends_on: ["p1.3"] }
+      "p1.2": { depends_on: ["p1.1"] }
+
+  steer-2-sprint:
+    domain: Steer
+    system: P2
+    gate_after: true
+    recurring: true
+    agents:
+      "p2.1": {}
+      "p2.2": { depends_on: ["p2.1"] }
+      "p2.3": { depends_on: ["p2.1", "p2.2"] }
+
+  steer-3-copil:
+    domain: Steer
+    system: P3
+    gate_after: true
+    agents:
+      "p3.1": {}
+      "p3.2": { depends_on: ["p3.1"] }
+
+  # ─── Test Pipelines ──────────────────────────────────────────────
+
+  test-1-campaign:
+    domain: Test
+    system: E-Campaign
+    gate_after: true
+    agents:
+      "camp.1": {}
+      "camp.2": { depends_on: ["camp.1"] }
+
+  test-2-perf:
+    domain: Test
+    system: E-Perf
+    gate_after: false
+    agents:
+      "perf.1": {}
+      "perf.2": { depends_on: ["perf.1"] }
+
+# ─── Composite Pipelines ──────────────────────────────────────────
+
+composites:
+
+  ba:
+    description: "Full BA pipeline (S0 to S3), no human gates"
+    compose: [ba-0-audit, ba-1-scoping, ba-2-spec, ba-3-design]
+    gate_mode: skip
+
+  ba-gated:
+    description: "Full BA pipeline with gates between systems"
+    compose: [ba-0-audit, ba-1-scoping, ba-2-spec, ba-3-design]
+    gate_mode: pause
+
+  tech:
+    description: "Full Tech pipeline (T0 to T3), no human gates"
+    compose: [tech-0-audit, tech-1-archi, tech-2-design, tech-3-quality]
+    gate_mode: skip
+
+  tech-gated:
+    description: "Full Tech pipeline with gates"
+    compose: [tech-0-audit, tech-1-archi, tech-2-design, tech-3-quality]
+    gate_mode: pause
+
+  test:
+    description: "Full Test pipeline (campaign + perf), no human gates"
+    compose: [test-1-campaign, test-2-perf]
+    gate_mode: skip
+
+  sdlc:
+    description: "Full SDLC: BA then Tech, no human gates"
+    compose: [ba, tech]
+    gate_mode: skip
+
+  sdlc-gated:
+    description: "Full SDLC with all gates"
+    compose: [ba-gated, tech-gated]
+    gate_mode: pause
+
+  sdlc-full:
+    description: "Full SDLC including tests: BA + Tech + Test"
+    compose: [ba, tech, test]
+    gate_mode: skip
+
+  sdlc-full-gated:
+    description: "Full SDLC including tests with all gates"
+    compose: [ba-gated, tech-gated, test-1-campaign, test-2-perf]
+    gate_mode: pause
