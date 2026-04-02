@@ -1,0 +1,38 @@
+# Impact Cascade Graph
+# Read by the /impact tool to determine which deliverables are affected by a change.
+# Format: source identifier prefix → list of impacted deliverable prefixes.
+# The /impact agent traverses these chains instead of inferring dependencies from prose.
+
+ba:
+  EX:   [BRL, EP, FT, US, SCE, DAT-TEST]
+  BR:   [US, SCE]
+  ENT:  [DOM, BRL, US, SCE]
+  EP:   [FT, US]
+  FT:   [US, SCE]
+  US:   [SCE, DAT-TEST]
+
+tech:
+  EX:   [ADR, API, DAT, TST, ENB]
+  BR:   [API, DAT]
+  ENT:  [DAT]
+  US:   [API]
+
+# Re-execution order (respects inter-system dependencies).
+# The /impact agent uses this to produce the re-execution sequence.
+# Agents not impacted are simply skipped.
+execution_order:
+  - agent-1.4            # EXF — Functional Requirements
+  - agent-2.2            # EP  — Epics
+  - agent-2.2b           # FT  — Features
+  - agent-2.3            # BRL — Business Rules
+  - agent-3.1            # US  — User Stories
+  - agent-3.2            # UJ  — User Journeys
+  - agent-3.3            # SCR — Screens
+  - agent-3.5            # SCE — Test Scenarios
+  - agent-3.6            # DAT-TEST — Test Data
+  - agent-t1.2           # ADR — Architecture Decisions
+  - agent-t2.1           # DAT — Data Model
+  - agent-t2.2           # API — API Contracts
+  - agent-t2.4           # TST — Test Strategy
+  - agent-t2.5           # ENB — Enablers
+  - agent-coherence      # Always last

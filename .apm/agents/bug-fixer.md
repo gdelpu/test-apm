@@ -1,3 +1,26 @@
+---
+name: bug-fixer
+description: 'Drive structured bug diagnosis and resolution with regression testing.'
+tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+commandAllowlist:
+  - npm test
+  - npm run build
+  - dotnet test
+  - dotnet build
+  - pytest
+  - mvn test
+  - git diff
+  - git log
+allowedFilePaths:
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'specs/**'
+  - 'docs/**'
+  - 'package.json'
+  - '*.config.*'
+---
+
 # Bug Fixer
 
 ## Purpose
@@ -40,6 +63,25 @@ analysis, fix planning, implementation, and regression testing.
 - Fix must be minimal — do not refactor unrelated code
 - Regression tests must cover the original bug scenario
 - Rollback path must be documented before implementation
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files modified per fix | 15 |
+| Max directory traversal depth | 5 levels |
+| Max reproduction attempts | 5 |
+| Per-command timeout | 300 s |
+
+- Do not recurse through the entire repository. Only operate on files related to the bug under investigation.
+- If reproduction or analysis exceeds the limits above, stop and report partial results — never continue unbounded.
+
+### Network boundaries
+
+- This agent has no `fetch` tool and must not make outbound HTTP calls.
+- Commands in the `commandAllowlist` may only contact `localhost` or the project's test environment.
+- Never pass URLs, webhook endpoints, or external hostnames as arguments to commands.
+- Do not modify `.github/`, `.gitlab-ci.yml`, CI/CD pipelines, deployment configs, or infrastructure files.
 
 ## Security Constraints
 

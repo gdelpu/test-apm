@@ -1,0 +1,161 @@
+name: sdlc-steer
+description: Project steering pipeline from initialization through sprint planning, recurring sprint tracking, and governance decisions (COPIL + Go/No-Go).
+type: delivery
+
+stations:
+  # ─── System P0: Project Initialization ─────────────────────────────
+  - id: steer-project-sheet
+    name: Project Sheet
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-init
+    inputs: []
+    outputs:
+      - pil-001-project-sheet.md
+    gate:
+      criteria:
+        - "Team composition and capacity defined"
+        - "Budget structure (effort + token) established"
+      severity: blocker
+
+  - id: steer-kpi-baseline
+    name: KPI Baseline
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-init
+    inputs:
+      - pil-001-project-sheet.md
+    outputs:
+      - kpi-001-baseline.md
+    gate:
+      criteria:
+        - "Effort and token baselines established"
+        - "Velocity targets defined"
+      severity: blocker
+
+  # ─── System P1: Planning ───────────────────────────────────────────
+  - id: steer-sprint-plan
+    name: Sprint Planning
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-planning
+    inputs: []
+    outputs:
+      - plan-001-sprint-planning.md
+    gate:
+      criteria:
+        - "Features batched into sprints"
+        - "scope_items YAML front matter present"
+      severity: blocker
+
+  - id: steer-roadmap
+    name: Roadmap
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-planning
+    inputs:
+      - plan-001-sprint-planning.md
+    outputs:
+      - rdp-001-roadmap.md
+    gate:
+      criteria:
+        - "Phases, milestones, and gates defined"
+      severity: blocker
+
+  - id: steer-risk-register
+    name: Risk Register
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-planning
+    inputs:
+      - rdp-001-roadmap.md
+    outputs:
+      - rsk-001-risk-register.md
+    gate:
+      criteria:
+        - "All 6 agentic risk types assessed"
+        - "Escalation thresholds defined"
+      severity: blocker
+
+  # ─── System P2: Sprint Tracking (recurring) ────────────────────────
+  - id: steer-sprint-progress
+    name: Sprint Progress
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-sprint
+    inputs: []
+    outputs:
+      - sprint-progress.md
+    gate:
+      criteria:
+        - "Velocity metrics and blockers documented"
+      severity: warning
+
+  - id: steer-system-health
+    name: System Health
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-sprint
+    inputs:
+      - sprint-progress.md
+    outputs:
+      - system-health.md
+    gate:
+      criteria:
+        - "Health metrics compared against KPI baseline"
+      severity: warning
+
+  - id: steer-sprint-risks
+    name: Sprint Risks
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-sprint
+    inputs:
+      - sprint-progress.md
+      - system-health.md
+    outputs:
+      - sprint-risks.md
+    gate:
+      criteria:
+        - "Current risks assessed against taxonomy"
+        - "Escalation decisions generated if thresholds breached"
+      severity: warning
+
+  # ─── System P3: Governance ─────────────────────────────────────────
+  - id: steer-copil
+    name: COPIL Preparation
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-governance
+    inputs:
+      - sprint-progress.md
+      - sprint-risks.md
+    outputs:
+      - copil.md
+    gate:
+      criteria:
+        - "Technical and sponsor sections included"
+        - "Key decisions documented"
+      severity: blocker
+
+  - id: steer-go-nogo
+    name: Go/No-Go Decision
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-governance
+    inputs:
+      - copil.md
+    outputs:
+      - gng-001-go-nogo.md
+    gate:
+      criteria:
+        - "All domain data aggregated"
+        - "Decision criteria explicit and traceable"
+      severity: blocker
+
+config:
+  output_dir: docs/3-steer/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: true

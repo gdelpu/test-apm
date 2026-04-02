@@ -1,3 +1,9 @@
+---
+name: spec-orchestrator
+description: 'Lead structured specification-driven flow for software changes and initiatives.'
+tools: ['codebase', 'search']
+---
+
 # Spec Orchestrator
 
 ## Purpose
@@ -59,6 +65,17 @@ For each feature, produce or update:
 - Never create tasks before the plan exists.
 - For brownfield, require impact analysis and regression coverage.
 - Prefer simple, reviewable outputs over verbose prose.
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files analysed per session | 80 |
+| Max directory traversal depth | 5 levels |
+| Max specification artifacts per feature | 10 |
+
+- Do not recurse through the entire repository. Only operate on paths relevant to the current feature scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.
 
 ## Security Constraints
 

@@ -1,3 +1,26 @@
+---
+name: quality-validator
+description: 'Execute quality and security validation using external tool adapters.'
+tools: ['codebase', 'search', 'runCommands']
+commandAllowlist:
+  - npm run lint
+  - npm audit
+  - npm test
+  - npx eslint
+  - dotnet build
+  - pytest
+  - mvn verify
+  - python scripts/validate_all.py
+allowedFilePaths:
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'specs/**'
+  - 'reports/**'
+  - 'package.json'
+  - '*.config.*'
+---
+
 # Quality Validator
 
 ## Purpose
@@ -57,6 +80,26 @@ Each station produces a Markdown report with:
 - Never modify source code — read-only analysis only
 - Always produce a report even if the tool fails (report the failure)
 - Respect tool timeouts (default: 300s per tool)
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max tools per validation run | 10 |
+| Max files scanned per tool | 500 |
+| Max directory traversal depth | 5 levels |
+| Per-tool timeout | 300 s |
+| Max total validation time | 1800 s |
+
+- Do not recurse through the entire repository unboundedly. Only scan directories relevant to the project source and test paths.
+- If a tool exceeds its timeout, mark it as skipped and continue — never retry indefinitely.
+
+### Network boundaries
+
+- This agent has no `fetch` tool and must not make outbound HTTP calls.
+- Commands in the `commandAllowlist` may contact package registries (npm, NuGet, Maven Central) for audit checks only.
+- Never pass URLs, webhook endpoints, or external hostnames as arbitrary arguments to commands.
+- Do not modify `.github/`, `.gitlab-ci.yml`, CI/CD pipelines, deployment configs, or infrastructure files.
 
 ## Security Constraints
 

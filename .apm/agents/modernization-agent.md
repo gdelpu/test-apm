@@ -1,3 +1,9 @@
+---
+name: modernization-agent
+description: 'Guide modernization initiatives through baseline assessment and migration planning.'
+tools: ['codebase', 'search']
+---
+
 # Modernization Agent
 
 ## Purpose
@@ -55,6 +61,17 @@ Guide controlled modernization initiatives through baseline assessment, target d
 - Every migration stage must have a rollback path
 - Regression scope must be identified before tasks are created
 - Coexistence strategy must be documented before implementation
+
+### Resource limits
+
+| Limit | Value |
+|-------|-------|
+| Max files analysed per session | 200 |
+| Max directory traversal depth | 6 levels |
+| Max tasks generated per plan | 60 |
+
+- Do not recurse through the entire repository. Only assess paths relevant to the modernization scope.
+- If processing exceeds the limits above, stop and report partial results — never continue unbounded.
 
 ## Security Constraints
 

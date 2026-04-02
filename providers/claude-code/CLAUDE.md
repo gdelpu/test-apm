@@ -48,6 +48,57 @@ Available as Claude Code commands:
 | `/workflow-bug-fixing` | Bug Fixing | 7 |
 | `/workflow-maturity-assessment` | Maturity Assessment | 6 |
 
+### SDLC Workflows
+
+| Command | Workflow | Stations |
+|---------|----------|----------|
+| `/sdlc-full` | SDLC Full | 11 |
+| `/sdlc-ba` | SDLC BA | 16 |
+| `/sdlc-tech` | SDLC Tech | 12 |
+| `/sdlc-steer` | SDLC Steer | 10 |
+| `/sdlc-test` | SDLC Test | 4 |
+
+### SDLC Sub-pipelines
+
+| Command | System | Description |
+|---------|--------|-------------|
+| `/sdlc-ba-0-audit` | S0 | Brownfield audit |
+| `/sdlc-ba-1-scoping` | S1 | Scoping (vision, glossary, actors, requirements) |
+| `/sdlc-ba-2-spec` | S2 | Specification (domain model, epics, features, rules) |
+| `/sdlc-ba-3-design` | S3 | Functional design per feature |
+| `/sdlc-tech-0-audit` | T0 | Technical audit |
+| `/sdlc-tech-1-archi` | T1 | Architecture (C4, ADRs, stack, enablers) |
+| `/sdlc-tech-2-design` | T2 | Design (data model, APIs, test strategy, impl plan) |
+| `/sdlc-tech-3-quality` | T3 | Continuous quality (drift, E2E) |
+| `/sdlc-steer-0-init` | P0 | Project initialization |
+| `/sdlc-steer-1-planning` | P1 | Sprint planning, roadmap, risks |
+| `/sdlc-steer-2-sprint` | P2 | Sprint tracking (recurring) |
+| `/sdlc-steer-3-copil` | P3 | COPIL & Go/No-Go |
+| `/sdlc-test-1-campaign` | E1 | E2E/UAT campaign |
+| `/sdlc-test-2-perf` | E2 | Performance campaign |
+
+### SDLC Agent Dispatch
+
+| Command | Description |
+|---------|-------------|
+| `/sdlc-ba-agent` | Execute a single BA agent by number |
+| `/sdlc-tech-agent` | Execute a single Tech agent by number |
+| `/sdlc-test-agent` | Execute a single Test agent by ID |
+| `/sdlc-steer-agent` | Execute a single Steer agent by number |
+
+### SDLC Tools
+
+| Command | Description |
+|---------|-------------|
+| `/sdlc-scaffold` | Create docs/ directory structure |
+| `/sdlc-validate` | Quality audit a deliverable (PASS/WARN/BLOCK) |
+| `/sdlc-coherence` | Cross-deliverable consistency check |
+| `/sdlc-impact` | Change impact analysis with amendment cascade |
+| `/sdlc-confluence-push` | Push deliverable to Confluence |
+| `/sdlc-confluence-pull` | Pull status/comments from Confluence |
+| `/sdlc-to-word` | Convert Markdown to Word |
+| `/sdlc-dast` | OWASP ZAP security scan |
+
 ## Prompts
 
 | Prompt | Purpose |

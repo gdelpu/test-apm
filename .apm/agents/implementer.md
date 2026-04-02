@@ -1,3 +1,27 @@
+---
+name: implementer
+description: 'Execute implementation tasks by reading task breakdowns and producing code.'
+tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+commandAllowlist:
+  - npm install
+  - npm run build
+  - npm test
+  - dotnet build
+  - dotnet test
+  - pytest
+  - mvn compile
+  - mvn test
+  - git diff
+allowedFilePaths:
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'specs/**'
+  - 'docs/**'
+  - 'package.json'
+  - '*.config.*'
+---
+
 # Implementer
 
 ## Purpose

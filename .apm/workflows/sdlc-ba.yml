@@ -1,0 +1,262 @@
+name: sdlc-ba
+description: Full business analysis pipeline from brownfield audit through scoping, specification, and per-feature functional design with fan-out/fan-in orchestration.
+type: delivery
+
+stations:
+  # ─── System S0: Brownfield Audit ───────────────────────────────────
+  - id: ba-audit-existing
+    name: Existing System Audit
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-audit
+    inputs: []
+    outputs:
+      - asis-001-existing-audit.md
+    optional: true  # brownfield only
+    gate:
+      criteria:
+        - "AS-IS functional snapshot covers all identified modules"
+        - "Integration points and constraints are documented"
+      severity: blocker
+
+  - id: ba-audit-delta
+    name: Delta Analysis
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-audit
+    inputs:
+      - asis-001-existing-audit.md
+    outputs:
+      - delta-001-delta-analysis.md
+    optional: true  # brownfield only
+    gate:
+      criteria:
+        - "Every functional area is classified as new/evolving/preserved/deprecated"
+      severity: blocker
+
+  # ─── System S1: Scoping ────────────────────────────────────────────
+  - id: ba-vision
+    name: Product Vision & Scope
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-scoping
+    inputs: []
+    outputs:
+      - vis-001-product-vision.md
+    gate:
+      criteria:
+        - "Measurable objectives defined"
+        - "Clear IN/OUT scope boundaries"
+      severity: blocker
+
+  - id: ba-glossary
+    name: Business Glossary
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-scoping
+    inputs: []
+    outputs:
+      - glo-001-glossary.md
+    parallel: true  # can run in parallel with vision
+    gate:
+      criteria:
+        - "Ubiquitous language terms defined with precise definitions"
+      severity: blocker
+
+  - id: ba-actors
+    name: Actors & Roles
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-scoping
+    inputs:
+      - glo-001-glossary.md
+    outputs:
+      - act-001-actors-roles.md
+    gate:
+      criteria:
+        - "All human and system actors identified"
+        - "Permissions matrix defined"
+      severity: blocker
+
+  - id: ba-requirements
+    name: Functional Requirements
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-scoping
+    inputs:
+      - vis-001-product-vision.md
+      - glo-001-glossary.md
+      - act-001-actors-roles.md
+    outputs:
+      - exf-001-functional-requirements.md
+    gate:
+      criteria:
+        - "Requirements are testable and traceable"
+        - "Traceability anchors for R4J are present"
+      severity: blocker
+
+  # ─── System S2: Specification ──────────────────────────────────────
+  - id: ba-domain-model
+    name: Domain Model
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-specification
+    inputs:
+      - vis-001-product-vision.md
+      - glo-001-glossary.md
+      - act-001-actors-roles.md
+    outputs:
+      - dom-001-domain-model.md
+    gate:
+      criteria:
+        - "Entities, attributes, and relationships are complete"
+        - "Mermaid ER diagram included"
+      severity: blocker
+
+  - id: ba-epics
+    name: Epic Decomposition
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-specification
+    inputs:
+      - dom-001-domain-model.md
+    outputs:
+      - epics/
+    gate:
+      criteria:
+        - "Epics cover all functional requirements"
+        - "Each epic has clear scope and boundaries"
+      severity: blocker
+
+  - id: ba-features
+    name: Feature Specification (per epic)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-specification
+    inputs:
+      - epics/
+    outputs:
+      - features/
+    gate:
+      criteria:
+        - "Each feature has a clear scope within its parent epic"
+        - "Feature identifiers are sequential and unique"
+      severity: blocker
+
+  - id: ba-business-rules
+    name: Business Rules Consolidation
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-specification
+    inputs:
+      - dom-001-domain-model.md
+      - features/
+    outputs:
+      - business-rules/
+    gate:
+      criteria:
+        - "Rules are deduplicated and classified by type"
+        - "Rules dispatched to per-feature directories"
+      severity: blocker
+
+  # ─── System S3: Functional Design (per feature) ───────────────────
+  - id: ba-user-stories
+    name: User Stories (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - features/
+      - business-rules/
+    outputs:
+      - user-stories/
+    gate:
+      criteria:
+        - "Atomic stories with GWT acceptance criteria"
+        - "Stories trace to feature requirements"
+      severity: blocker
+
+  - id: ba-user-journeys
+    name: User Journeys (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - user-stories/
+    outputs:
+      - user-journeys/
+    gate:
+      criteria:
+        - "Journeys chain stories into end-to-end flows"
+        - "Mermaid diagrams included"
+      severity: blocker
+
+  - id: ba-screen-specs
+    name: Screen Specifications (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - user-stories/
+    outputs:
+      - screen-specs/
+    optional: true  # conditional: has_screens
+    gate:
+      criteria:
+        - "Components, fields, and validation rules defined"
+      severity: blocker
+
+  - id: ba-test-scenarios
+    name: Test Scenarios (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - user-journeys/
+      - screen-specs/
+    outputs:
+      - test-scenarios/
+    gate:
+      criteria:
+        - "Gherkin-format scenarios cover stories and rules"
+        - "Coverage matrix included"
+      severity: blocker
+
+  - id: ba-e2e-plan
+    name: E2E Test Plan (project scope)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - test-scenarios/
+    outputs:
+      - e2e-plan-001.md
+    gate:
+      criteria:
+        - "Cross-feature E2E journeys defined"
+        - "Xray campaign structure prepared"
+      severity: blocker
+
+  # ─── Quality Gate ──────────────────────────────────────────────────
+  - id: ba-validation
+    name: BA Deliverable Validation
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-deliverable-validation
+    inputs:
+      - e2e-plan-001.md
+    outputs:
+      - ba-validation-report.md
+    gate:
+      criteria:
+        - "All deliverables pass quality audit"
+        - "Cross-deliverable coherence verified"
+        - "Traceability chain complete: EXF → EP → FT → US → BR → SCE"
+      severity: blocker
+
+config:
+  output_dir: docs/1-prd/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: true
