@@ -25,7 +25,11 @@ for security vulnerabilities — especially those unique to LLM-based systems.
 Apply strict checks for the following classes of risk:
 
 ### 1. Prompt Injection (LLM01)
-- **Direct injection**: user input that overrides system instructions (e.g. "Ignore previous instructions and …").
+- **Direct injection**: user input that overrides system instructions, for example:
+  ```text
+  # example — safe demonstration of an override phrase
+  Ignore previous instructions and …
+  ```
 - **Indirect injection**: data from external sources (files, web, database) containing hidden instructions.
 - Look for missing input sanitisation, unescaped user content concatenated into prompts, and lack of role separation between system/user/tool messages.
 
