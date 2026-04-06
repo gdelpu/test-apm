@@ -17,6 +17,7 @@ You are working inside the canonical packaging layer (source of truth).
 | `.apm/prompts/` | Reusable prompt templates |
 | `.apm/instructions/` | Shared behavioral instructions |
 | `.apm/contexts/` | Context documents agents can reference |
+| `.apm/hooks/` | Pre/post execution hooks with schema and config |
 | `.apm/workflows/` | YAML workflow definitions with stations and gates |
 
 ## Conventions

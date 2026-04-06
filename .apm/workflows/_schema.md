@@ -9,6 +9,12 @@ name: <string>                    # Unique workflow identifier (kebab-case)
 description: <string>             # One-line purpose statement
 type: <string>                    # Category: delivery | validation | modernization | assessment
 
+default_hooks:                    # Optional: hooks applied to all stations unless overridden
+  pre:                            #   Pre-hooks inherited by every station
+    - <path>
+  post:                           #   Post-hooks inherited by every station
+    - <path>
+
 stations:
   - id: <string>                  # Unique station identifier (kebab-case)
     name: <string>                # Human-readable station name
@@ -21,6 +27,12 @@ stations:
       - <string>
     optional: <boolean>           # If true, station can be skipped (default: false)
     parallel: <boolean>           # If true, can run in parallel with adjacent parallel stations (default: false)
+    pre_hooks:                    # Optional: hooks that fire BEFORE station execution
+      - hook: <string>            #   Path relative to .apm/hooks/ (e.g., pre/input-validation/ba)
+        severity: blocker | warning
+    post_hooks:                   # Optional: hooks that fire AFTER station, BEFORE gate evaluation
+      - hook: <string>            #   Path relative to .apm/hooks/ (e.g., post/quality-control)
+        severity: blocker | warning
     gate:                         # Quality gate evaluated after station completes
       criteria:                   # List of pass/fail conditions
         - <string>
@@ -46,6 +58,39 @@ config:
 - A station with `optional: true` and `gate.severity: warning` is fully skippable.
 - Stations with `parallel: true` can run concurrently (used in validation phases).
 - Nested workflows are referenced by a station that names another workflow.
+
+## Station Hooks
+
+Stations can declare `pre_hooks` and `post_hooks` arrays. Hooks fire as lightweight sub-stations around the main station execution. Each hook references a file under `.apm/hooks/` and declares a severity level.
+
+### Execution order
+
+```
+pre_hooks → station execution → post_hooks → gate evaluation
+```
+
+### Hook results
+
+Each hook returns `GO`, `WARN`, or `STOP`:
+
+| Hook type | Result | Effect |
+|-----------|--------|--------|
+| Pre-hook | `GO` | Station executes normally |
+| Pre-hook | `WARN` | Station executes; warning logged in state file |
+| Pre-hook | `STOP` (blocker) | Station skipped; workflow halted |
+| Pre-hook | `STOP` (warning) | Station skipped; workflow continues |
+| Post-hook | `GO` | Gate evaluation proceeds |
+| Post-hook | `WARN` | Gate evaluation proceeds; warning logged |
+| Post-hook | `STOP` (blocker) | Gate marked as failed; workflow halted |
+| Post-hook | `STOP` (warning) | Warning logged; gate evaluation proceeds |
+
+Hooks with `never_block: true` (defined in the hook file) always downgrade `STOP` to `WARN`.
+
+### Hook file references
+
+Hook paths are relative to `.apm/hooks/`. Example: `pre/input-validation/ba` resolves to `.apm/hooks/pre/input-validation/ba.md`.
+
+See `.apm/hooks/_schema.md` for the full hook contract definition.
 
 ## Resource Limits
 

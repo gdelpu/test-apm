@@ -63,7 +63,8 @@ const url = require('url');
 // ── Config ────────────────────────────────────────────────────────────────────
 
 const ENV_PATH = path.join(__dirname, '..', '.env');
-const PANDOC = 'C:/Users/vfady/AppData/Local/Pandoc/pandoc.exe';
+const PANDOC = process.env.PANDOC_PATH || 'pandoc';
+const MMDC = process.env.MMDC_PATH || 'mmdc';
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -599,7 +600,7 @@ function renderMermaidToPng(mmdContent, idx) {
   const mmdFile = `${tmpDir}/_mermaid_${idx}.mmd`;
   const pngFile = `${tmpDir}/_mermaid_${idx}.png`;
   fs.writeFileSync(mmdFile, mmdContent, 'utf8');
-  execSync(`mmdc -i "${mmdFile}" -o "${pngFile}" --backgroundColor white`, { stdio: 'pipe' });
+  execSync(`${MMDC} -i "${mmdFile}" -o "${pngFile}" --backgroundColor white`, { stdio: 'pipe' });
   return pngFile;
 }
 

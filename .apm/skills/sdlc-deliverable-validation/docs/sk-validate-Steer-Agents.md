@@ -44,6 +44,16 @@ A validation report `val-{deliverable-id}-{date}.md` with:
 
 If the `type` field is absent or unknown: BLOCK — the type must be declared to proceed.
 
+### Doc Depth Awareness
+
+This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential`, `standard`, or `full`). If absent, default to `full`.
+
+| Depth | Relaxations |
+|-------|-------------|
+| **essential** | Dual register verification is skipped (single version accepted). Actionability check relaxed: owner required, deadline optional. Sponsor accessibility check limited to critical sections only. |
+| **standard** | All checks apply. Dual register verification still required for COP and GNG types. |
+| **full** | All checks apply without relaxation. |
+
 ---
 
 ### Step 1: Structural analysis
@@ -65,7 +75,7 @@ Verify that the mandatory sections for this deliverable type are all present (no
 
 **1c — Dual register verification**
 
-For deliverables with a dual version (STA, COP):
+For deliverables with a dual version (STA, COP) — **skip if `doc_depth` is `essential`**:
 - SPONSOR VERSION present and structurally complete?
 - TECHNICAL VERSION present and structurally complete?
 - No paragraph starting with "To be added..."?
@@ -103,7 +113,7 @@ For each recommendation or proposed action:
 - Is there a deadline?
 - Is the action specific and measurable?
 
-Any recommendation without owner + deadline → **WARN**
+Any recommendation without owner + deadline → **WARN** — **At `essential` depth: deadline is optional, only owner is required**
 
 ---
 
