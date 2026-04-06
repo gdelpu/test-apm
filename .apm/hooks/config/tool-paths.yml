@@ -1,0 +1,30 @@
+# Hook Configuration — Tool Paths and Environment Variables
+#
+# All hooks reference tool paths and environment variables through this
+# centralized config file. Never hardcode paths in hook files.
+#
+# Variable syntax: ${VAR_NAME:-default_value}
+# At runtime, the coordinator resolves variables from this file before
+# injecting hook content into the agent prompt or executing station hooks.
+
+tools:
+  pandoc: ${PANDOC_PATH:-pandoc}           # Pandoc binary — fallback to PATH lookup
+  mmdc: ${MMDC_PATH:-mmdc}                 # mermaid-cli — optional, diagrams skip if absent
+  node: ${NODE_PATH:-node}                 # Node.js runtime for publish scripts
+
+# Environment variables required per integration.
+# Hooks check these at runtime; missing vars → WARN (never block).
+env_required:
+  confluence:
+    - CONFLUENCE_INSTANCE_URL              # e.g. https://myorg.atlassian.net/wiki
+    - CONFLUENCE_USER_EMAIL                # API authentication email
+    - CONFLUENCE_API_TOKEN                 # API token (never commit to repo)
+    - CONFLUENCE_SPACE_KEY                 # Target Confluence space
+
+# Project-level config files checked by hooks.
+# Paths are relative to the project root (not to this repo).
+project_files:
+  project_config: docs/project.yml         # Contains confluence_enabled, doc_depth, lang
+  env_file: .env                           # Contains secrets (loaded by publish scripts)
+  confluence_config: tools/confluence-config.yaml  # Confluence API settings
+  pages_registry: docs/confluence-pages.yaml       # Page ID mapping (auto-generated)

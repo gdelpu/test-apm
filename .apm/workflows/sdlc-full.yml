@@ -2,6 +2,14 @@ name: sdlc-full
 description: Composite SDLC pipeline orchestrating all four domains — BA specification, Tech architecture, Test campaigns, and Steer governance — with inter-domain quality gates.
 type: delivery
 
+# Hooks are inherited from sub-workflows (sdlc-ba, sdlc-tech, sdlc-steer).
+# Only the full-pipeline stations below declare hooks explicitly.
+default_hooks:
+  pre:
+    - .apm/hooks/pre/input-validation/base.md
+  post:
+    - .apm/hooks/post/quality-control.md
+
 stations:
   # ─── Phase 1: Project Initialization ───────────────────────────────
   - id: scaffold

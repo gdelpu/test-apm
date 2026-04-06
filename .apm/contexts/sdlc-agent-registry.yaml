@@ -19,11 +19,11 @@ shared:
 
   ba_hooks_standard: &ba_hooks_std
     pre:
-      - BA-Agents/hooks/pre-input-validation.md
-      - BA-Agents/hooks/pre-amendment-mode.md
+      - .apm/hooks/pre/input-validation/base.md
+      - .apm/hooks/pre/input-validation/ba.md
     post:
-      - BA-Agents/hooks/post-quality-control.md
-      - BA-Agents/hooks/post-confluence-push.md
+      - .apm/hooks/post/quality-control.md
+      - .apm/hooks/post/confluence-push.md
 
   ba_tools_base: &ba_tools_base
     required: [file-read, file-write]
@@ -35,21 +35,22 @@ shared:
 
   tech_hooks_standard: &tech_hooks_std
     pre:
-      - Tech-Agents/hooks/pre-input-validation.md
-      - Tech-Agents/hooks/pre-amendment-mode.md
+      - .apm/hooks/pre/input-validation/base.md
+      - .apm/hooks/pre/input-validation/tech.md
     post:
-      - Tech-Agents/hooks/post-quality-control.md
-      - Tech-Agents/hooks/post-confluence-push.md
+      - .apm/hooks/post/quality-control.md
+      - .apm/hooks/post/confluence-push.md
 
   test_conventions_base: &test_cv_base
     - Test-Agents/refs/conventions/cv-test-conventions.md
 
   test_hooks_standard: &test_hooks_std
     pre:
-      - Test-Agents/hooks/pre-input-validation.md
+      - .apm/hooks/pre/input-validation/base.md
+      - .apm/hooks/pre/input-validation/test.md
     post:
-      - Test-Agents/hooks/post-quality-control.md
-      - Test-Agents/hooks/post-confluence-push.md
+      - .apm/hooks/post/quality-control.md
+      - .apm/hooks/post/confluence-push.md
 
   steer_conventions_base: &steer_cv_base
     - Steer-Agents/refs/conventions/cv-pilotage-conventions.md
@@ -57,10 +58,11 @@ shared:
 
   steer_hooks_standard: &steer_hooks_std
     pre:
-      - Steer-Agents/hooks/pre-input-validation.md
+      - .apm/hooks/pre/input-validation/base.md
+      - .apm/hooks/pre/input-validation/steer.md
     post:
-      - Steer-Agents/hooks/post-quality-control.md
-      - Steer-Agents/hooks/post-confluence-push.md
+      - .apm/hooks/post/quality-control.md
+      - .apm/hooks/post/confluence-push.md
 
 # ─── BA Agents — System 0 (Audit) ───────────────────────────────────
 
@@ -70,6 +72,7 @@ agents:
     name: Existing Audit
     domain: BA
     system: S0
+    min_depth: standard
     skill: BA-Agents/skills/sk-0.1-existing-audit.md
     refs:
       conventions: *ba_cv_brownfield
@@ -87,6 +90,7 @@ agents:
     name: Delta Analysis
     domain: BA
     system: S0
+    min_depth: standard
     skill: BA-Agents/skills/sk-0.2-delta-analysis.md
     refs:
       conventions: *ba_cv_brownfield
@@ -106,6 +110,7 @@ agents:
     name: Product Vision & Scope
     domain: BA
     system: S1
+    min_depth: essential
     skill: BA-Agents/skills/sk-1.1-vision.md
     refs:
       conventions: *ba_cv_base
@@ -124,6 +129,7 @@ agents:
     name: Business Glossary
     domain: BA
     system: S1
+    min_depth: standard
     skill: BA-Agents/skills/sk-1.2-glossary.md
     refs:
       conventions: *ba_cv_base
@@ -143,6 +149,7 @@ agents:
     name: Actors & Roles
     domain: BA
     system: S1
+    min_depth: standard
     skill: BA-Agents/skills/sk-1.3-actors-roles.md
     refs:
       conventions: *ba_cv_base
@@ -163,6 +170,7 @@ agents:
     name: Functional Requirements
     domain: BA
     system: S1
+    min_depth: standard
     skill: BA-Agents/skills/sk-1.4-functional-requirements.md
     refs:
       conventions: *ba_cv_base
@@ -186,6 +194,7 @@ agents:
     name: Domain Model
     domain: BA
     system: S2
+    min_depth: standard
     skill: BA-Agents/skills/sk-2.1-domain-model.md
     refs:
       conventions: *ba_cv_base
@@ -210,6 +219,7 @@ agents:
     name: Epics
     domain: BA
     system: S2
+    min_depth: essential
     skill: BA-Agents/skills/sk-2.2-epics.md
     refs:
       conventions: *ba_cv_base
@@ -232,10 +242,14 @@ agents:
     name: Feature Specifications
     domain: BA
     system: S2
+    min_depth: essential
     skill: BA-Agents/skills/sk-2.2b-features.md
     refs:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-feature.md
+      template_variants:
+        essential: BA-Agents/refs/templates/tpl-feature-essential.md
+        standard: BA-Agents/refs/templates/tpl-feature-standard.md
       upstream_pattern: "docs/1-prd/3-epics/{epic}/ep-*.md"
     tools:
       <<: *ba_tools_base
@@ -250,6 +264,7 @@ agents:
     name: Business Rules (Consolidation)
     domain: BA
     system: S2
+    min_depth: full
     skill: BA-Agents/skills/sk-2.3-business-rules.md
     refs:
       conventions: *ba_cv_base
@@ -270,6 +285,7 @@ agents:
     name: Business Rules Dispatch & Confluence Push
     domain: BA
     system: S2
+    min_depth: full
     script: "tools/dispatch-rules-to-features.sh"
     tools:
       required: [file-read, file-write]
@@ -277,7 +293,7 @@ agents:
     hooks:
       pre: []
       post:
-        - BA-Agents/hooks/post-confluence-push.md
+        - .apm/hooks/post/confluence-push.md
     model: skip   # no LLM — script only
     output_pattern: "docs/1-prd/3-epics/{epic}/{feature}/business-rules.md"
     confluence_push: "docs/1-prd/3-epics/*/ft-*/business-rules.md"
@@ -288,10 +304,13 @@ agents:
     name: User Stories
     domain: BA
     system: S3
+    min_depth: standard
     skill: BA-Agents/skills/sk-3.1-user-stories.md
     refs:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-user-story.md
+      template_variants:
+        standard: BA-Agents/refs/templates/tpl-user-story-standard.md
       upstream_scope:
         - "{feature_path}/ft-*.md"
         - "{feature_path}/business-rules.md"   # per-feature business rules (dispatched by sk-2.3)
@@ -311,6 +330,7 @@ agents:
     name: User Journeys
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.2-user-journeys.md
     refs:
       conventions: *ba_cv_base
@@ -330,6 +350,7 @@ agents:
     name: Screen Specifications
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.3-screen-specs.md
     refs:
       conventions: *ba_cv_base
@@ -349,6 +370,7 @@ agents:
     name: HTML Prototypes
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.3b-figma-prototypes.md
     refs:
       conventions: *ba_cv_base
@@ -367,6 +389,7 @@ agents:
     name: Batch Specifications
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.3c-batch-specs.md
     refs:
       conventions: *ba_cv_base
@@ -385,6 +408,7 @@ agents:
     name: Notifications
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.4-notifications.md
     refs:
       conventions: *ba_cv_base
@@ -405,6 +429,7 @@ agents:
     name: Test Scenarios
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.5-test-scenarios.md
     refs:
       conventions: *ba_cv_base
@@ -422,10 +447,11 @@ agents:
       optional: [jira-mcp, xray-api]
     hooks:
       pre:
-        - BA-Agents/hooks/pre-input-validation.md
+        - .apm/hooks/pre/input-validation/base.md
+        - .apm/hooks/pre/input-validation/ba.md
       post:
-        - BA-Agents/hooks/post-quality-control.md
-        - BA-Agents/hooks/post-confluence-push.md
+        - .apm/hooks/post/quality-control.md
+        - .apm/hooks/post/confluence-push.md
     model: sonnet
     output_pattern: "{feature_path}/tests/"
 
@@ -433,6 +459,7 @@ agents:
     name: Test Data Seeds
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.6-test-data.md
     refs:
       conventions: *ba_cv_base
@@ -452,6 +479,7 @@ agents:
     name: E2E Test Plan
     domain: BA
     system: S3
+    min_depth: full
     skill: BA-Agents/skills/sk-3.6b-e2e-plan.md
     refs:
       conventions: *ba_cv_base
@@ -484,6 +512,7 @@ agents:
     name: Discovery Workshop
     domain: BA
     system: tool
+    min_depth: essential
     skill: BA-Agents/skills/tools/sk-discovery.md
     refs:
       conventions: *ba_cv_base
@@ -494,8 +523,8 @@ agents:
     hooks:
       pre: []
       post:
-        - BA-Agents/hooks/post-quality-control.md
-        - BA-Agents/hooks/post-confluence-push.md
+        - .apm/hooks/post/quality-control.md
+        - .apm/hooks/post/confluence-push.md
     model: sonnet
     output: docs/1-prd/1-scoping/dco-001-discovery.md
 
@@ -512,8 +541,8 @@ agents:
     hooks:
       pre: []
       post:
-        - BA-Agents/hooks/post-quality-control.md
-        - BA-Agents/hooks/post-confluence-push.md
+        - .apm/hooks/post/quality-control.md
+        - .apm/hooks/post/confluence-push.md
     model: sonnet
     output_pattern: "docs/1-prd/6-workshops/wrk-{NNN}-{scope-slug}-review.md"
 
@@ -635,6 +664,7 @@ agents:
     name: Technical Audit
     domain: Tech
     system: T0
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t0.1-technical-audit.md
     refs:
       conventions: *tech_cv_base
@@ -654,6 +684,7 @@ agents:
     name: Technical Gap
     domain: Tech
     system: T0
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t0.2-technical-gap.md
     refs:
       conventions: *tech_cv_base
@@ -671,6 +702,7 @@ agents:
     name: System Context
     domain: Tech
     system: T1
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t1.1-system-context.md
     refs:
       conventions: *tech_cv_base
@@ -692,6 +724,7 @@ agents:
     name: Architecture Decisions
     domain: Tech
     system: T1
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t1.2-architecture-decisions.md
     refs:
       conventions: *tech_cv_base
@@ -714,6 +747,7 @@ agents:
     name: Stack Extraction (per ADR)
     domain: Tech
     system: T1
+    min_depth: full
     skill: Tech-Agents/skills/sk-t1.3-stack-extraction.md
     refs:
       conventions: *tech_cv_base
@@ -729,6 +763,7 @@ agents:
     name: Stack Consolidation
     domain: Tech
     system: T1
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t1.3b-stack-consolidation.md
     refs:
       conventions: *tech_cv_base
@@ -744,6 +779,7 @@ agents:
     name: Enabler Extraction (per ADR)
     domain: Tech
     system: T1
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t1.4-enablers.md
     refs:
       conventions: *tech_cv_base
@@ -760,6 +796,7 @@ agents:
     name: Enabler Index & Wave Resolution
     domain: Tech
     system: T1
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t1.4b-enabler-index.md
     refs:
       conventions: *tech_cv_base
@@ -774,6 +811,7 @@ agents:
     name: Data Model
     domain: Tech
     system: T2
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t2.1-data-model.md
     refs:
       conventions: *tech_cv_base
@@ -791,6 +829,7 @@ agents:
     name: API Contracts
     domain: Tech
     system: T2
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t2.2-api-contracts.md
     refs:
       conventions: *tech_cv_base
@@ -808,6 +847,7 @@ agents:
     name: Test Strategy
     domain: Tech
     system: T2
+    min_depth: full
     skill: Tech-Agents/skills/sk-t2.4-test-strategy.md
     refs:
       conventions: *tech_cv_base
@@ -825,6 +865,7 @@ agents:
     name: Implementation Plan
     domain: Tech
     system: T2
+    min_depth: standard
     skill: Tech-Agents/skills/sk-t2.5-implementation-plan.md
     refs:
       conventions: *tech_cv_base
@@ -842,6 +883,7 @@ agents:
     name: Drift Detection
     domain: Tech
     system: T3
+    min_depth: full
     skill: Tech-Agents/skills/sk-t3.1-drift-detection.md
     refs:
       conventions: *tech_cv_base
@@ -856,6 +898,7 @@ agents:
     name: Automated Code Review
     domain: Tech
     system: T3
+    min_depth: full
     skill: Tech-Agents/skills/sk-t3.2-code-review.md
     refs:
       conventions: *tech_cv_base
@@ -894,8 +937,8 @@ agents:
     hooks:
       pre: []
       post:
-        - Tech-Agents/hooks/post-quality-control.md
-        - Tech-Agents/hooks/post-confluence-push.md
+        - .apm/hooks/post/quality-control.md
+        - .apm/hooks/post/confluence-push.md
     model: sonnet
     output_pattern: "docs/2-tech/4-workshops/wrk-tech-{NNN}-{scope-slug}-review.md"
 
@@ -945,6 +988,7 @@ agents:
     name: Tech Discovery Workshop
     domain: Tech
     system: tool
+    min_depth: essential
     skill: Tech-Agents/skills/tools/sk-tech-discovery.md
     refs:
       conventions: *tech_cv_base
@@ -960,8 +1004,8 @@ agents:
     hooks:
       pre: []
       post:
-        - Tech-Agents/hooks/post-quality-control.md
-        - Tech-Agents/hooks/post-confluence-push.md
+        - .apm/hooks/post/quality-control.md
+        - .apm/hooks/post/confluence-push.md
     model: sonnet
     output: docs/2-tech/1-architecture/dco-tech-001-discovery.md
 
@@ -1059,9 +1103,10 @@ agents:
       optional: [owasp-zap]
     hooks:
       pre:
-        - Test-Agents/hooks/pre-input-validation.md
+        - .apm/hooks/pre/input-validation/base.md
+        - .apm/hooks/pre/input-validation/test.md
       post:
-        - Test-Agents/hooks/post-quality-control.md
+        - .apm/hooks/post/quality-control.md
     model: sonnet
     output_pattern: "docs/1-prd/4-tests/dast-rpt-{NNN}.md"
 
@@ -1071,6 +1116,7 @@ agents:
     name: Project Sheet
     domain: Steer
     system: P0
+    min_depth: standard
     skill: Steer-Agents/skills/sk-p0.1-project-sheet.md
     refs:
       conventions: *steer_cv_base
@@ -1088,6 +1134,7 @@ agents:
     name: KPI Baseline
     domain: Steer
     system: P0
+    min_depth: full
     skill: Steer-Agents/skills/sk-p0.2-kpi-baseline.md
     refs:
       conventions: *steer_cv_base
@@ -1103,6 +1150,7 @@ agents:
     name: Sprint Planning (AI-Native)
     domain: Steer
     system: P1
+    min_depth: standard
     skill: Steer-Agents/skills/sk-p1.3-sprint-planning-design.md
     refs:
       conventions: *steer_cv_base
@@ -1120,6 +1168,7 @@ agents:
     name: Roadmap
     domain: Steer
     system: P1
+    min_depth: full
     skill: Steer-Agents/skills/sk-p1.1-roadmap.md
     refs:
       conventions: *steer_cv_base
@@ -1136,6 +1185,7 @@ agents:
     name: Initial Risk Register
     domain: Steer
     system: P1
+    min_depth: full
     skill: Steer-Agents/skills/sk-p1.2-risk-register.md
     refs:
       conventions: *steer_cv_base
@@ -1152,6 +1202,7 @@ agents:
     name: Sprint Progress
     domain: Steer
     system: P2
+    min_depth: full
     skill: Steer-Agents/skills/sk-p2.1-sprint-progress.md
     refs:
       conventions: *steer_cv_base
@@ -1168,6 +1219,7 @@ agents:
     name: System Health
     domain: Steer
     system: P2
+    min_depth: full
     skill: Steer-Agents/skills/sk-p2.2-system-health.md
     refs:
       conventions: *steer_cv_base
@@ -1182,6 +1234,7 @@ agents:
     name: Sprint Risks
     domain: Steer
     system: P2
+    min_depth: full
     skill: Steer-Agents/skills/sk-p2.3-sprint-risks.md
     refs:
       conventions: *steer_cv_base
@@ -1197,6 +1250,7 @@ agents:
     name: COPIL Preparation
     domain: Steer
     system: P3
+    min_depth: full
     skill: Steer-Agents/skills/sk-p3.1-copil.md
     refs:
       conventions: *steer_cv_base
@@ -1214,6 +1268,7 @@ agents:
     name: Release Go/No-Go
     domain: Steer
     system: P3
+    min_depth: full
     skill: Steer-Agents/skills/sk-p3.2-go-nogo.md
     refs:
       conventions: *steer_cv_base

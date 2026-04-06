@@ -235,14 +235,59 @@ agents:
       required: [file-read, file-write]
       optional: [jira-mcp, r4j-api]
     hooks:                                                     # HOOKS
-      pre: [BA-Agents/hooks/pre-input-validation.md]
-      post: [BA-Agents/hooks/post-quality-control.md,
-             BA-Agents/hooks/post-confluence-push.md]
+      pre: [.apm/hooks/pre/input-validation/base.md,
+            .apm/hooks/pre/input-validation/ba.md]
+      post: [.apm/hooks/post/quality-control.md,
+             .apm/hooks/post/confluence-push.md]
     model: opus
     output_pattern: "{feature_path}/user-stories/"
 ```
 
 Each agent = **skill + refs + tools + hooks**, assembled at runtime by the coordinator.
+
+**New fields (doc_depth):**
+- `min_depth` — minimum `doc_depth` required for this agent to run (`essential`, `standard`, or `full`; default `full`)
+- `template_variants` — map of `{depth: template_path}` overrides for the default template
+
+---
+
+## Doc depth filtering
+
+The coordinator applies `doc_depth` filtering before resolving the DAG into waves.
+
+1. Read `doc_depth` from `docs/project.yml` (default: `full`).
+2. Define the depth hierarchy: `essential` < `standard` < `full`.
+3. For each agent, read `min_depth` from the registry (default: `full`). If the agent's `min_depth` exceeds the current `doc_depth`, remove it from the DAG.
+4. For remaining agents with `template_variants.{depth}`, resolve the variant template instead of the default.
+5. Re-wire the DAG: remove references to filtered-out agents from `depends_on` lists. Orphaned agents become root nodes.
+6. Pass `doc_depth` as scope context to all agents.
+
+Example at `essential` depth: only ~12 agents run (vision, epics, features, system context, ADRs, sprint planning) out of ~40 total.
+
+---
+
+## Hook execution model
+
+Hooks operate at two levels:
+
+### Agent-level (prompt assembly)
+
+During prompt assembly (section 8), the coordinator injects hook content into the agent's prompt. The pre-hooks appear before the skill and the post-hooks appear after. The agent sees a single coherent instruction set.
+
+Hook files are resolved from `.apm/hooks/`:
+- **Pre:** `.apm/hooks/pre/input-validation/base.md` + domain-specific extension (e.g., `ba.md`)
+- **Post:** `.apm/hooks/post/quality-control.md` + `.apm/hooks/post/confluence-push.md`
+
+### Station-level (workflow YAML)
+
+Workflow stations can declare `pre_hooks` and `post_hooks` arrays. These fire as sub-stations in the workflow lifecycle — before/after the station's main action. See `.apm/workflows/_schema.md` for the station hook contract.
+
+Hook results use the GO/WARN/STOP protocol:
+- **GO**: proceed without modification
+- **WARN**: proceed, but log the warning in the station report
+- **STOP**: halt the station and escalate to the coordinator
+
+For the full hook contract, see `.apm/hooks/_schema.md`.
 
 ---
 

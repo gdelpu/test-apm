@@ -10,6 +10,7 @@ author: agent-stories
 epic: EP-001
 feature: FT-001
 priority: Must
+doc_depth: standard
 ---
 
 # [US-001] User Story Title
@@ -42,7 +43,6 @@ priority: Must
 - **Given** <!-- initial context with invalid data -->
 - **When** <!-- trigger action -->
 - **Then** <!-- exact error message -->
-- **And** <!-- system state after the error -->
 
 ---
 
@@ -62,25 +62,3 @@ priority: Must
 |------|---------|-------------|
 | Required story | [US-xxx] | <!-- Why this story is needed before --> |
 | Related story | [US-xxx] | <!-- Functional link without order dependency --> |
-
----
-
-## Definition of Ready
-
-- [ ] All acceptance criteria (CA-xxx) are in Given/When/Then format with concrete values
-- [ ] All referenced business rules [BR-xxx] exist in the business rules catalogue
-- [ ] Associated screen specification [SCR-xxx] is available (if UI story)
-- [ ] Preconditions are verifiable (no vague state descriptions)
-- [ ] No open question in Points of attention blocks the implementation
-
----
-
-## Traceability
-
-| Element | Detail |
-|---------|--------|
-| **Produced by** | agent-stories |
-| **Production date** | YYYY-MM-DD |
-| **Inputs used** | [DOM-001], [EP-001], [FT-001], [BRL-001] |
-| **Validated by** | Pending |
-| **Validation date** | Pending |

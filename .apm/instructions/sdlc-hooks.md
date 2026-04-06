@@ -1,12 +1,15 @@
 # SDLC Lifecycle Hooks
 
+> **Canonical hook definitions** live in `.apm/hooks/` (schema, config, pre/, post/).
+> This instruction file summarises the hook contract for quick reference.
+
 These hooks apply to all SDLC domain agents (BA, Tech, Steer, Test).
 They run at defined points in every skill execution cycle.
 
 ## Execution Order
 
 ```
-pre-input-validation → pre-amendment-mode → [SKILL EXECUTION] → post-quality-control → post-confluence-push
+pre-input-validation → [SKILL EXECUTION (includes amendment mode via sdlc-change-impact)] → post-quality-control → post-confluence-push
 ```
 
 ---

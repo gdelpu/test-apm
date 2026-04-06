@@ -2,6 +2,16 @@ name: sdlc-ba
 description: Full business analysis pipeline from brownfield audit through scoping, specification, and per-feature functional design with fan-out/fan-in orchestration.
 type: delivery
 
+# Default hooks applied to all production stations unless overridden.
+# Validation-only stations (ba-validation) override post_hooks to omit confluence-push.
+default_hooks:
+  pre:
+    - .apm/hooks/pre/input-validation/base.md
+    - .apm/hooks/pre/input-validation/ba.md
+  post:
+    - .apm/hooks/post/quality-control.md
+    - .apm/hooks/post/confluence-push.md
+
 stations:
   # ─── System S0: Brownfield Audit ───────────────────────────────────
   - id: ba-audit-existing
