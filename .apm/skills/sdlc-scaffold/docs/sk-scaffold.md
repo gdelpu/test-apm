@@ -62,13 +62,18 @@ When epics and features have been discovered (after agents `ba-2.2` / `ba-2.2b`)
 
 **Input:** list of feature paths discovered (e.g., `docs/1-prd/3-epics/ep-001-auth/ft-001-login/`)
 
-**For each feature path `{feature_path}`**, create:
+**For each feature path `{feature_path}`**, create directories based on the `doc_depth` setting in `docs/project.yml`:
 
 ```bash
-# Client input directory
+# Client input directory (all depths)
 docs/0-inputs/ba/3-design/{feature_id}/
 
-# Agent output directories
+# --- essential depth: no sub-directories (stories and BR are inline in the feature file) ---
+
+# --- standard depth: add user-stories only ---
+{feature_path}/user-stories/
+
+# --- full depth: all agent output directories ---
 {feature_path}/user-stories/
 {feature_path}/journeys/
 {feature_path}/screens/
@@ -79,6 +84,14 @@ docs/0-inputs/ba/3-design/{feature_id}/
 ```
 
 Where `{feature_id}` is the directory name of the feature (e.g., `ft-001-login`).
+
+**Summary by depth:**
+
+| Depth | Sub-directories created per feature |
+|-------|-------------------------------------|
+| `essential` | *(none — all content is inline in the feature file)* |
+| `standard` | `user-stories/` |
+| `full` | `user-stories/`, `journeys/`, `screens/`, `prototypes/`, `batches/`, `notifications/`, `tests/` |
 
 ## Execution
 
@@ -96,13 +109,23 @@ This file is the **persistent project configuration** — it stores the working 
 
 ### Collecting the values
 
-Before writing `docs/project.yml`, collect two pieces of information:
+Before writing `docs/project.yml`, collect three pieces of information:
 
 1. **`project_name`** — if not provided in the session prompt, ask the user: *"What is the project name?"*
 2. **`lang`** — determine using the following priority order:
    1. Explicit session declaration (e.g. `"Target language: English"`, `"Langue cible : français"`)
    2. `lang` field in an existing deliverable's YAML front matter (scan `docs/1-prd/`, `docs/2-tech/`)
    3. If neither available, ask the user: *"What is the working language for deliverables? (e.g. en, fr, de, es)"*
+3. **`doc_depth`** — determine using the following priority order:
+   1. Explicit session declaration (e.g. `"depth: standard"`)
+   2. `doc_depth` field in an existing `docs/project.yml`
+   3. If neither available, ask the user:
+      > *"What documentation depth do you need?"*
+      > - **essential** — Feature-centric, minimal docs. Ideal for POC, spike, or internal tool (~20 files)
+      > - **standard** — Features + User Stories + Architecture. Good balance for most projects (~60 files)
+      > - **full** — Complete SDLC documentation with journeys, screens, prototypes, test scenarios, enablers (~150+ files)
+
+   Default to `full` if the user does not answer or skips.
 
 ### File to create
 
@@ -110,6 +133,7 @@ Before writing `docs/project.yml`, collect two pieces of information:
 # docs/project.yml
 lang: {lang}              # ISO 639-1 code — en | fr | de | es | pt | nl | it | pl | ...
 project_name: {project_name}
+doc_depth: {doc_depth}    # essential | standard | full — controls agent selection and template verbosity
 confluence_enabled: true   # set to false to disable Confluence push globally
 ```
 
@@ -170,8 +194,6 @@ Verify that `tools/confluence-config.yaml` exists and contains a `confluence.ins
 ```yaml
 confluence:
   instance_url: "{CONFLUENCE_INSTANCE_URL}"
-  space_key: "{CONFLUENCE_SPACE_KEY}"
-  root_page_id: null
   publishing:
     publish_only_validated: false
     update_existing_pages: true
@@ -182,6 +204,8 @@ confluence:
     version: ""
     on_version_missing: "create"
 ```
+
+Note: `space_key` and `root_page_id` are **project-specific** — they are stored in `docs/confluence-pages.yaml` under the `target:` section, not in `tools/confluence-config.yaml`.
 
 **If it already exists:** do not modify it.
 
@@ -198,8 +222,8 @@ This command is **idempotent**: it looks up existing pages by ID (from `tools/co
 What it does:
 1. Creates a **root page** named after `project_name` from `docs/project.yml`
 2. Creates 3 child section pages (PRD, Tech, Steer) using the project language from `docs/project.yml`
-3. Writes page IDs to `tools/confluence-pages.yaml` (page registry)
-4. Updates `root_page_id` in `tools/confluence-config.yaml`
+3. Writes page IDs to `docs/confluence-pages.yaml` (page registry)
+4. Writes `space_key` and `root_page_id` to the `target:` section of `docs/confluence-pages.yaml`
 
 The sub-sections (Scoping, Specification, Architecture, etc.) are **not** created at scaffold time. They are created on demand when a deliverable is first published with `confluence-publish.js --file`.
 

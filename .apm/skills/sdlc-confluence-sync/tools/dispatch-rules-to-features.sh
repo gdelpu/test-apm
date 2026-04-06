@@ -203,3 +203,9 @@ done
 echo ""
 echo "Done. Dispatched rules to $assembled feature directories."
 echo "Output: {feature-dir}/business-rules.md"
+
+# ── Step 4: Remove staging directory ────────────────────────
+echo ""
+echo "Cleaning up staging directory..."
+rm -rf "$STAGING"
+echo "Removed: $STAGING"

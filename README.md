@@ -17,6 +17,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 | Agents | 22 | `.apm/agents/` |
 | Skills | 88 | `.apm/skills/` |
 | Workflows | 19 | `.apm/workflows/` |
+| Hooks | 8 | `.apm/hooks/` |
 | Prompts | 4 | `.apm/prompts/` |
 | Instructions | 7 | `.apm/instructions/` |
 | Knowledge areas | 4 | `knowledge/` |
@@ -71,8 +72,8 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 ┌─────────────────────────────────────────────────────────────┐
 │                     CANONICAL LAYER                         │
 │  .apm/agents/  .apm/skills/  .apm/workflows/  knowledge/    │
-│  .apm/templates/  .apm/scripts/  .apm/prompts/              │
-│  (22 agents)   (88 skills)   (19 workflows)   (principles,  │
+│  .apm/hooks/  .apm/templates/  .apm/scripts/  .apm/prompts/  │
+│  (22 agents)  (88 skills)  (19 workflows)  (8 hooks)        │
 │                                                governance,  │
 │                                                playbooks)   │
 └──────────────┬──────────────────────┬───────────────────────┘
@@ -115,6 +116,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 | `.apm/instructions/` | Shared behavioral instructions (7 files) |
 | `.apm/contexts/` | Reference documents for agents |
 | `.apm/workflows/` | YAML workflow definitions with stations + gates (19 workflows) |
+| `.apm/hooks/` | Pre/post execution hooks with schema and config (8 hooks) |
 | `.apm/templates/` | Spec-kit workflow templates (plan, spec, tasks, checklist, agent-file) |
 | `.apm/scripts/` | Workflow automation scripts (PowerShell) |
 | `knowledge/` | Constitution, governance, playbooks, brand |

@@ -28,12 +28,15 @@ Analyze the impact of a change request across all SDLC deliverables and produce 
 4. Produce an ordered amendment sequence respecting dependencies
 5. Write impact report with identifier `[IMPACT-xxx]`
 
-### Amendment execution (via pre-amendment-mode hook)
+### Amendment execution (via amendment-mode procedure)
 1. For each deliverable in the amendment sequence:
+   - Check if `[IMPACT-xxx]` is provided — if yes, activate amendment mode (see `docs/amendment-mode-base.md`)
+   - For Tech deliverables, apply additional cross-domain traceability rules (see `docs/amendment-mode-tech.md`)
    - Load the deliverable
    - Apply surgical delta: modify only affected sections
    - Preserve untouched sections exactly as-is
-   - Update YAML front matter (status → draft, revision incremented)
+   - Update YAML front matter (status → draft, amended_by, amendment_date)
+   - Append amendment log entry
 2. Verify post-amendment consistency with coherence check
 
 ## Output
@@ -53,3 +56,5 @@ Analyze the impact of a change request across all SDLC deliverables and produce 
 | Resource | Purpose |
 |----------|---------|
 | `docs/sk-change-impact.md` | Impact analysis procedure |
+| `docs/amendment-mode-base.md` | BA amendment mode rules (surgical delta, amendment log) |
+| `docs/amendment-mode-tech.md` | Tech amendment mode extension (cross-domain BA→Tech traceability) |

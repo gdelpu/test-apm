@@ -28,6 +28,16 @@ The `## Inputs` section of the agent that produced this deliverable.
 
 A Markdown report `[VAL-xxx]` named `val-[deliverable-id]-[date].md`.
 
+## Doc Depth Awareness
+
+This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential`, `standard`, or `full`). If absent, default to `full`.
+
+| Depth | Relaxations |
+|-------|-------------|
+| **essential** | BA→Tech traceability is relaxed to WARN-only (never BLOCK). Validate against template variants (`tpl-*-essential.md`) when available. |
+| **standard** | BA→Tech traceability remains mandatory but checks reference only produced BA deliverables. |
+| **full** | All checks apply without relaxation. |
+
 ## Detailed instructions
 
 ### Step 1: Structural analysis
@@ -41,7 +51,7 @@ A Markdown report `[VAL-xxx]` named `val-[deliverable-id]-[date].md`.
 
 ### Step 2: Semantic analysis
 
-1. **BA->Tech traceability**: is each technical element anchored in a BA deliverable?
+1. **BA->Tech traceability**: is each technical element anchored in a BA deliverable? — **At `essential` depth: downgrade BLOCK to WARN** (fewer BA deliverables exist to anchor against)
 2. **Technical completeness**: is the deliverable precise enough for implementation?
 3. **Inter-deliverable consistency**: are cross-references valid?
 4. **Actionability**: can Claude Code derive work directly?
@@ -57,6 +67,8 @@ Verify consistency between declared score and analyses.
 | **PASS** | No structural BLOCK, no semantic BLOCK, <= 2 non-critical WARNs |
 | **WARN** | No BLOCK, but > 2 WARNs or >= 1 WARN on BA traceability |
 | **BLOCK** | >= 1 missing structural section, or >= 1 INSUFFICIENT semantic section |
+
+> **Doc Depth adjustment:** At `essential` depth, BA traceability issues are capped at WARN (never BLOCK). At `standard` depth, BA traceability BLOCKs only when the referenced BA deliverable exists but the link is broken.
 
 ## Output format
 

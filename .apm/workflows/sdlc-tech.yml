@@ -2,6 +2,15 @@ name: sdlc-tech
 description: Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, and continuous quality monitoring.
 type: delivery
 
+# Default hooks applied to all production stations unless overridden.
+default_hooks:
+  pre:
+    - .apm/hooks/pre/input-validation/base.md
+    - .apm/hooks/pre/input-validation/tech.md
+  post:
+    - .apm/hooks/post/quality-control.md
+    - .apm/hooks/post/confluence-push.md
+
 stations:
   # ─── System T0: Brownfield Technical Audit ─────────────────────────
   - id: tech-audit

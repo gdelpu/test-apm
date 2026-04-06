@@ -1,7 +1,5 @@
 confluence:
   instance_url: "https://constellation-di.atlassian.net/wiki"
-  space_key: "~608ff00f000224006a74afea"
-  root_page_id: "121929730"
   publishing:
     publish_only_validated: false
     update_existing_pages: true

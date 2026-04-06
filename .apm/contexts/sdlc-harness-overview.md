@@ -37,7 +37,7 @@ Each agent is decomposed into 4 portable components:
 | **Skill** | Core production logic (what to produce, how to reason) | `{Domain}-Agents/skills/sk-*.md` |
 | **Refs** | Conventions and templates the agent must follow | `{Domain}-Agents/refs/conventions/` + `refs/templates/` |
 | **Tools** | External capabilities (Jira MCP, Pandoc, Xray API...) | Declared in `orchestration/agents.yaml` |
-| **Hooks** | Systematic actions before/after production | `{Domain}-Agents/hooks/` |
+| **Hooks** | Systematic actions before/after production | `.apm/hooks/` |
 
 The coordinator assembles these 4 components into a single prompt at runtime. The agent never knows it's decomposed — it receives a complete, coherent instruction set.
 
