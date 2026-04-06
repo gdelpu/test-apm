@@ -1,3 +1,9 @@
+---
+name: sk-dep3.1-launchpad-iac
+description: 'Analyse project system context and generate Terraform launchpad folder structure using DEP Launchpad IaC platform.'
+triggers: ['DEP Launchpad IaC', 'Terraform setup', 'infrastructure as code generation']
+---
+
 # Skill DEP-3.1: DEP Launchpad — Infrastructure as Code Setup
 
 ## Identity

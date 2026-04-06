@@ -1,4 +1,7 @@
 ---
+name: tpl-mw-config
+description: 'Template for Modern Workstation configuration deliverables produced by DEP agents.'
+triggers: ['Modern Workstation template', 'DEP MW deliverable template']
 id: MW-001
 title: "Modern Workstation Configuration"
 type: dep-mw

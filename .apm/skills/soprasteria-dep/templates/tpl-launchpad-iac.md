@@ -1,4 +1,7 @@
 ---
+name: tpl-launchpad-iac
+description: 'Template for DEP Launchpad Infrastructure as Code setup deliverables.'
+triggers: ['Launchpad IaC template', 'DEP IaC deliverable template']
 id: IAC-001
 title: "DEP Launchpad — Infrastructure as Code Setup"
 type: dep-iac

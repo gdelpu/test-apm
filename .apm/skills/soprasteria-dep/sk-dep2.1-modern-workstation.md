@@ -1,3 +1,9 @@
+---
+name: sk-dep2.1-modern-workstation
+description: 'Analyse the project stack and team composition to generate a ready-to-use mw-config.yml for Modern Workstation.'
+triggers: ['Modern Workstation setup', 'DEP workstation config', 'developer environment setup']
+---
+
 # Skill DEP-2.1: Modern Workstation Configuration
 
 ## Identity

@@ -1,3 +1,9 @@
+---
+name: sk-dep1.1-gitlab-ci-setup
+description: 'Analyse the project technology stack and generate a ready-to-use .gitlab-ci.yml leveraging the DEP CI Library.'
+triggers: ['GitLab CI setup', 'DEP CI pipeline', 'CI/CD pipeline generation']
+---
+
 # Skill DEP-1.1: GitLab CI/CD Pipeline Setup — DEP CI Library
 
 ## Identity

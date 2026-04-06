@@ -1,3 +1,9 @@
+---
+name: cv-dep-markdown
+description: 'Convention defining formatting and structural rules for all deliverables produced by the DEP-Agents domain.'
+triggers: ['DEP output format', 'DEP markdown convention', 'DEP deliverable structure']
+---
+
 # Convention: DEP Agents — Markdown & Output Format
 
 ## Purpose

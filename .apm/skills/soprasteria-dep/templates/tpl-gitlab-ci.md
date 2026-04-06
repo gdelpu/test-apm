@@ -1,4 +1,7 @@
 ---
+name: tpl-gitlab-ci
+description: 'Template for GitLab CI/CD pipeline setup deliverables using the DEP CI Library.'
+triggers: ['GitLab CI template', 'DEP CI deliverable template']
 id: CI-001
 title: "GitLab CI/CD Pipeline Setup — DEP CI Library"
 type: dep-ci

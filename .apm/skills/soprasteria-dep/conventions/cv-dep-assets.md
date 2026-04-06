@@ -1,3 +1,9 @@
+---
+name: cv-dep-assets
+description: 'Convention providing the DEP-Agents with structured knowledge about CI Library, Modern Workstation, and DEP Launchpad assets.'
+triggers: ['DEP asset reference', 'CI Library lookup', 'Modern Workstation module', 'Launchpad IaC resource']
+---
+
 # Convention: DEP Assets Knowledge Base
 
 ## Purpose
