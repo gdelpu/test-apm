@@ -11,7 +11,7 @@ compliance, and full-lifecycle SDLC support.
 ┌─────────────────────────────────────────────────────────────┐
 │                    CANONICAL LAYER                           │
 │  .apm/agents/  .apm/skills/  .apm/workflows/  knowledge/    │
-│  (22 agents)   (88 skills)   (19 workflows)   (principles,  │
+│  (23 agents)   (89 skills)   (19 workflows)   (principles,  │
 │                                                governance,   │
 │                                                playbooks)    │
 └──────────────┬──────────────────────┬───────────────────────┘
@@ -21,9 +21,9 @@ compliance, and full-lifecycle SDLC support.
   │                                                      │
   │  providers/github-copilot/   providers/claude-code/  │
   │    conventions.md              CLAUDE.md             │
-  │    sync-map.md                 commands/ (38)        │
-  │    agents/ (6)               providers/cli/          │
-  │    prompts/ (43)               lib/ (5)              │
+│    sync-map.md                 commands/ (40)        │
+│    agents/ (7)               providers/cli/          │
+│    prompts/ (45)               lib/ (5)              │
   │    instructions/ (6)           run-workflow.sh       │
   │                                                      │
   └──────────────────────┬───────────────────────────────┘
@@ -56,6 +56,13 @@ compliance, and full-lifecycle SDLC support.
 - `.apm/` and `knowledge/` are the **canonical sources** (Layer 1).
 - `providers/` holds adapter files — Copilot agents/prompts/instructions, Claude commands, CLI runner (Layer 2).
 - `.github/` is the Copilot runtime projection, generated from `providers/github-copilot/` via `project-copilot.ps1` (Layer 3).
+
+## Getting started
+
+Use the **Hub Orchestrator** (`@Hub Orchestrator` or `/hub-orchestrator`) as
+the entry point when you are unsure which workflow or agent to use. It reads
+the auto-generated catalog at `.apm/contexts/hub-catalog.yaml`, classifies
+your intent, and dispatches to the right workflow or agent.
 
 ## Working rules
 

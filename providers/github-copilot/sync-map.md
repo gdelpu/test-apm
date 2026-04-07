@@ -16,6 +16,7 @@ the corresponding provider file must be created or updated.
 | Canonical (`.apm/agents/`) | Provider (`providers/github-copilot/agents/`) | Status |
 |-----------------------------|------------------------------------------------|--------|
 | `brand-styler.md` | `brand-styler.agent.md` | synced |
+| `hub-orchestrator.md` | `hub-orchestrator.agent.md` | synced |
 | `repository-analyzer.md` | `repository-analyzer.agent.md` | synced |
 | `reverse-backlog.md` | `reverse-backlog.agent.md` | synced |
 | `reverse-user-story.md` | `reverse-user-story.agent.md` | synced |
@@ -30,6 +31,14 @@ the corresponding provider file must be created or updated.
 | `create-one-pager.md` | `create-one-pager.prompt.md` | synced |
 | `soprasteria-brand-audit.md` | `soprasteria-brand-audit.prompt.md` | synced |
 | `soprasteria-brand-refactor.md` | `soprasteria-brand-refactor.prompt.md` | synced |
+
+## Hub Orchestrator
+
+| Canonical | Provider | Status |
+|-----------|----------|--------|
+| `.apm/agents/hub-orchestrator.md` | `agents/hub-orchestrator.agent.md` | synced |
+| Hub classification skill | `prompts/hub-orchestrator.prompt.md` | synced |
+| `.apm/contexts/hub-catalog.yaml` | *(read at runtime by agent, not projected)* | synced |
 
 ## Workflows → Prompts
 
