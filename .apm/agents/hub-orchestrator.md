@@ -40,23 +40,15 @@ and propose the match directly.
 
 ### Interview path
 
-When intent is ambiguous or multiple workflows could match, ask the user
-structured questions to narrow the recommendation. Ask one question at a
-time. Stop as soon as a confident match is found — do not ask unnecessary
-questions. Use the structured interview from the `hub-classification` skill:
+When intent is ambiguous, use the structured interview from the
+`hub-classification` skill:
 
 1. **Goal category** — what the user is trying to achieve
 2. **Context** — greenfield vs brownfield, existing specs
 3. **Scope** — single feature vs program, sprint-scoped
 4. **Governance** — formal gates, human review, Confluence
 
-Never guess when the intent is unclear — always ask.
-
-### Fallback
-
-If still unclear after 4 questions, show the full catalog grouped by type
-(delivery, validation, assessment, modernization, SDLC harness) and let the
-user pick.
+Stop asking questions as soon as a confident match is found.
 
 ### Confirmation
 
