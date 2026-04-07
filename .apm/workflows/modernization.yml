@@ -121,7 +121,7 @@ stations:
 
   - id: implementation
     name: Implementation
-    agent: implementer
+    agent: refactor-implementer
     skills:
       - code-implementation
     inputs:
@@ -135,6 +135,23 @@ stations:
         - "Code compiles without errors"
         - "All existing tests pass"
       severity: blocker
+
+  - id: parity-validation
+    name: Parity Validation
+    agent: refactor-parity-checker
+    skills:
+      - parity-validation
+    inputs:
+      - implementation-log.md
+      - plan.md
+      - decisions.md
+    outputs:
+      - parity-report.md
+    gate:
+      criteria:
+        - "No critical parity violations between old and new systems"
+        - "API contract compatibility verified"
+      severity: warning
 
   - id: quality-validation
     name: Quality Validation
