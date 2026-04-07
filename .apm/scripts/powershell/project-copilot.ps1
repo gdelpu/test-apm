@@ -65,4 +65,14 @@ foreach ($type in $assetTypes) {
     Write-Host "  COPY  $type — $count files -> $dst"
 }
 
+# ── Refresh hub catalog ────────────────────────────────────────────────
+
+$catalogScript = Join-Path $PSScriptRoot 'refresh-hub-catalog.ps1'
+if (Test-Path $catalogScript) {
+    Write-Host ""
+    & $catalogScript
+} else {
+    Write-Host "`n  SKIP  hub-catalog — refresh-hub-catalog.ps1 not found"
+}
+
 Write-Host "`nProjection complete. Copilot will discover assets in .github/."
