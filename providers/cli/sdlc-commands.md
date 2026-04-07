@@ -3,6 +3,22 @@
 The generic `run-workflow.sh` runner supports all SDLC workflows directly.
 No additional scripts are needed — the runner discovers `.apm/workflows/*.yml` dynamically.
 
+## Hub orchestrator
+
+If you're unsure which workflow to run, consult the hub catalog:
+
+```bash
+# View the auto-generated catalog of all workflows and agents
+cat .apm/contexts/hub-catalog.yaml
+
+# Refresh the catalog after adding/changing agents or workflows
+./.apm/scripts/powershell/refresh-hub-catalog.ps1
+```
+
+The catalog lists every workflow (with description, type, station count, and
+"when to use" guidance) and every agent (with description and tools). Use it
+to select the right `run-workflow.sh` command.
+
 ## Composite workflows
 
 ```bash

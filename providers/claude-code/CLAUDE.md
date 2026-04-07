@@ -33,6 +33,14 @@ compliance, and full-lifecycle SDLC support.
 | `clients/` | Client-specific overlays |
 | `specs/` | Output artifacts |
 
+## Hub Orchestrator
+
+Start here if you're unsure which workflow or agent to use:
+
+| Command | Description |
+|---------|-------------|
+| `/hub-orchestrator` | Central triage — discover, classify intent, and dispatch to the right workflow or agent |
+
 ## Workflows
 
 Available as Claude Code commands:
