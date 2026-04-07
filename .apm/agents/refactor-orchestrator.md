@@ -1,7 +1,7 @@
 ---
 name: refactor-orchestrator
 description: 'Foundation orchestrator that gathers decisions, creates ADRs, plans, and delegates refactoring to sub-agents.'
-tools: ['codebase', 'search', 'agent/runSubagent']
+tools: ['codebase', 'search']
 ---
 
 # Refactor Orchestrator

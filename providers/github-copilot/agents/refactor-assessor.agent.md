@@ -2,7 +2,18 @@
 name: '1.1.refactor-assess'
 alias: refactor-assessor
 description: "Use when: analyze codebase, assess current state, detect tech stack, map project structure, identify code smells, evaluate architecture, measure complexity, inventory dependencies. Comprehensive codebase assessment that produces structured as-is documentation for refactoring planning."
-tools: [vscode, codebase, search, edit/editFiles, execute/runInTerminal, execute/getTerminalOutput, execute/awaitTerminal, todo]
+tools: [vscode, codebase, search, edit/editFiles, runCommands]
+commandAllowlist:
+  - npm test
+  - npm run build
+  - npm run lint
+  - dotnet test
+  - dotnet build
+  - pytest
+  - mvn test
+  - gradle test
+  - cargo test
+  - go test
 model: Claude Opus 4.6 (copilot)
 target: vscode
 user-invocable: false

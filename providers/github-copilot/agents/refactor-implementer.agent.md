@@ -2,7 +2,23 @@
 name: '1.3.refactor-implement'
 alias: refactor-implementer
 description: "Use when: execute migration task, implement phase, run migration plan, execute refactoring step, implement task, carry out migration, build target code, scaffold project, port code, migrate module. Executes individual migration tasks from the approved plan using the appropriate skill for each task."
-tools: [vscode, codebase, search, edit/editFiles, execute/runInTerminal, execute/getTerminalOutput, execute/awaitTerminal, web/fetch, todo]
+tools: [vscode, codebase, search, edit/editFiles, runCommands, fetch]
+commandAllowlist:
+  - npm test
+  - npm run build
+  - npm run lint
+  - npm install
+  - dotnet test
+  - dotnet build
+  - dotnet restore
+  - pytest
+  - mvn test
+  - mvn package
+allowedNetworkDomains:
+  - learn.microsoft.com
+  - nodejs.org
+  - docs.npmjs.com
+  - github.com
 model: Claude Opus 4.6 (copilot)
 target: vscode
 user-invocable: false

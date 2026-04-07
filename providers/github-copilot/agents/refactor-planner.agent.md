@@ -2,7 +2,12 @@
 name: '1.2.refactor-plan'
 alias: refactor-planner
 description: "Use when: create migration plan, plan refactoring steps, design migration phases, map dependencies, sequence refactoring work, estimate blast radius, identify risks, plan scaffold order. Reads ADRs and as-is assessment to produce a detailed, phased migration plan with dependency ordering and verification criteria."
-tools: [vscode, codebase, search, edit/editFiles, web/fetch, todo]
+tools: [vscode, codebase, search, edit/editFiles, fetch]
+allowedNetworkDomains:
+  - learn.microsoft.com
+  - nodejs.org
+  - docs.npmjs.com
+  - github.com
 model: Claude Opus 4.6 (copilot)
 target: vscode
 user-invocable: false

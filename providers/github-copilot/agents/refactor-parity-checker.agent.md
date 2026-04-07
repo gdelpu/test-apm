@@ -2,7 +2,19 @@
 name: '1.4.refactor-parity-check'
 alias: refactor-parity-checker
 description: "Use when: parity check, side-by-side comparison, visual regression, functional parity, pixel-perfect match, compare old vs new, verify migration, validate UX parity, check 1:1 match, run both apps, screenshot comparison, ux diff, compare as-is vs refactored. Runs the old (as-is) and new (refactored) applications side-by-side and performs a comprehensive visual and functional comparison to verify 1:1 parity."
-tools: [vscode, codebase, search, edit/editFiles, execute/runInTerminal, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, playwright-test, todo]
+tools: [vscode, codebase, search, edit/editFiles, runCommands]
+commandAllowlist:
+  - npm test
+  - npm run build
+  - npm start
+  - npm run dev
+  - npx playwright test
+  - dotnet test
+  - dotnet build
+  - dotnet run
+  - pytest
+  - mvn test
+  - git diff
 model: Claude Opus 4.6 (copilot)
 target: vscode
 user-invocable: false
