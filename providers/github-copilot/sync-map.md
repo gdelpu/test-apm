@@ -22,6 +22,11 @@ the corresponding provider file must be created or updated.
 | `reverse-user-story.md` | `reverse-user-story.agent.md` | synced |
 | `security-reviewer.md` | `security-reviewer.agent.md` | synced |
 | `soprasteria-branding.md` | `soprasteria-branding.agent.md` | synced |
+| `refactor-orchestrator.md` | `refactor-orchestrator.agent.md` | synced |
+| `refactor-assessor.md` | `refactor-assessor.agent.md` | synced |
+| `refactor-planner.md` | `refactor-planner.agent.md` | synced |
+| `refactor-implementer.md` | `refactor-implementer.agent.md` | synced |
+| `refactor-parity-checker.md` | `refactor-parity-checker.agent.md` | synced |
 
 ## Prompts (standalone)
 
