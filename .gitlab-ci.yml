@@ -286,6 +286,9 @@ release:tag-and-publish:
     - job: test:apm-smoke
       artifacts: false
 
+  dependencies:
+    - build:apm-bundles
+
   script:
     - apt-get update -qq && apt-get install -y -qq git curl
     - git config user.email "ci@${CI_SERVER_HOST}"
@@ -319,6 +322,12 @@ release:tag-and-publish:
         echo "✅ Tag ${TAG} created"
       fi
     - |
+      if [ ! -d "${APM_DIST_DIR}" ]; then
+        echo "⚠️  Artifacts not found — listing workspace for diagnostics:"
+        ls -la
+        echo "❌ Distribution directory not found: ${APM_DIST_DIR}"
+        exit 1
+      fi
       echo "Publishing ${TAG} to registry..."
       bash scripts/apm-publish.sh --version "${TAG}" --dist-dir "${APM_DIST_DIR}"
 
