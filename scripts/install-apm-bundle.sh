@@ -9,8 +9,10 @@
 #
 # Options:
 #   -v, --version <semver>     Version to install (required, or "latest")
-#   -t, --target <target>      Target bundle: copilot, claude, all (default: all)
+#   -t, --target <target>      Target bundle: copilot, claude, all (default: copilot)
 #   -d, --dest <dir>           Destination directory (default: ./.apm-dist)
+#   -m, --mode <mode>          Install mode: standard or expandable (default: standard)
+#   --provider <name>          Provider adapter (default: github-copilot)
 #   --registry-url <url>       Full Generic Package Registry URL
 #   --project-id <id>          GitLab project ID (alternative to --registry-url)
 #   --gitlab-url <url>         GitLab instance URL (default: https://gitlab.com)
@@ -29,8 +31,11 @@
 #   # Install from registry using project ID
 #   ./install-apm-bundle.sh -v 1.2.0 --project-id 12345 --token "$GITLAB_TOKEN"
 #
-#   # Install specific target
-#   ./install-apm-bundle.sh -v 2.0.0 -t copilot --project-id 12345
+#   # Install specific target with mode
+#   ./install-apm-bundle.sh -v 2.0.0 -t copilot -m expandable --project-id 12345
+#
+#   # Standard mode (default) — only runtime projection is installed
+#   ./install-apm-bundle.sh -v 1.0.0 -t copilot --project-id 12345
 #
 #   # Install with full registry URL
 #   ./install-apm-bundle.sh -v 1.0.0 \
@@ -40,14 +45,21 @@ set -euo pipefail
 
 # --- Defaults ---
 VERSION=""
-TARGET="all"
+TARGET="copilot"
 DEST_DIR="./.apm-dist"
+MODE="standard"
+PROVIDER="github-copilot"
 REGISTRY_URL="${APM_REGISTRY_URL:-}"
 PROJECT_ID="${APM_PROJECT_ID:-}"
 GITLAB_URL="${APM_GITLAB_URL:-https://gitlab.com}"
 AUTH_TOKEN="${GITLAB_TOKEN:-}"
 PACKAGE_NAME="ssg-ai-backbone"
 VERIFY_CHECKSUMS=true
+ACTUAL_CHECKSUM=""
+
+# --- Source lock-file helpers ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/apm-lock.sh"
 
 # --- Helpers ---
 log_info()  { echo "ℹ️  $*"; }
@@ -56,7 +68,7 @@ log_err()   { echo "❌ $*" >&2; }
 log_step()  { echo ""; echo "── $* ──"; }
 
 usage() {
-    head -36 "$0" | grep '^#' | sed 's/^# \?//'
+    head -42 "$0" | grep '^#' | sed 's/^# \?//'
     exit 0
 }
 
@@ -73,6 +85,8 @@ while [[ $# -gt 0 ]]; do
         -v|--version)       VERSION="$2"; shift 2 ;;
         -t|--target)        TARGET="$2"; shift 2 ;;
         -d|--dest)          DEST_DIR="$2"; shift 2 ;;
+        -m|--mode)          MODE="$2"; shift 2 ;;
+        --provider)         PROVIDER="$2"; shift 2 ;;
         --registry-url)     REGISTRY_URL="$2"; shift 2 ;;
         --project-id)       PROJECT_ID="$2"; shift 2 ;;
         --gitlab-url)       GITLAB_URL="$2"; shift 2 ;;
@@ -95,6 +109,11 @@ if [[ -z "${VERSION}" ]]; then
 fi
 
 VERSION="${VERSION#v}"
+
+if [[ "$MODE" != "standard" && "$MODE" != "expandable" ]]; then
+    log_err "Invalid mode: $MODE (must be 'standard' or 'expandable')"
+    exit 1
+fi
 
 if [[ -z "${REGISTRY_URL}" ]]; then
     if [[ -z "${PROJECT_ID}" ]]; then
@@ -140,10 +159,17 @@ if [[ "${VERIFY_CHECKSUMS}" == true ]]; then
         log_info "Verifying SHA-256 checksum"
         cd "${DEST_DIR}"
         if command -v sha256sum &>/dev/null; then
-            grep "${ARCHIVE_NAME}" SHA256SUMS | sha256sum --check --status
+            computed_hash=$(sha256sum "${ARCHIVE_NAME}" | awk '{print $1}')
         else
-            grep "${ARCHIVE_NAME}" SHA256SUMS | shasum -a 256 --check --status
+            computed_hash=$(shasum -a 256 "${ARCHIVE_NAME}" | awk '{print $1}')
         fi
+        expected_hash=$(grep "${ARCHIVE_NAME}" SHA256SUMS | awk '{print $1}')
+        if [[ "$computed_hash" != "$expected_hash" ]]; then
+            log_err "Checksum mismatch! Expected: ${expected_hash}, Got: ${computed_hash}"
+            cd - >/dev/null
+            exit 1
+        fi
+        ACTUAL_CHECKSUM="sha256:${computed_hash}"
         log_ok "Checksum verified"
         cd - >/dev/null
     else
@@ -156,7 +182,129 @@ log_step "Extracting to ${DEST_DIR}"
 tar -xzf "${DEST_DIR}/${ARCHIVE_NAME}" -C "${DEST_DIR}"
 log_ok "Extracted: ${ARCHIVE_NAME}"
 
+# --- Detect existing install ---
+if read_apm_lock "$DEST_DIR"; then
+    log_info "Existing install detected: v${APM_LOCK_VERSION} (${APM_LOCK_MODE} mode)"
+fi
+
+# --- Helper: parse provider runtime path from apm.yml ---
+get_provider_runtime() {
+    local apm_file="$1" provider="$2"
+    awk -v prov="$provider" '
+        /^providers:/ { in_providers=1; next }
+        in_providers && /^[^ ]/ { in_providers=0 }
+        in_providers && $0 ~ "^  " prov ":" { in_block=1; next }
+        in_block && /^  [^ ]/ { in_block=0 }
+        in_block && /^    runtime:/ { sub(/^[^:]+:[[:space:]]*/, ""); gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit }
+    ' "$apm_file"
+}
+
+# --- Install mode logic ---
+if [[ "$MODE" == "standard" ]]; then
+    # ── Standard mode: project to runtime dir only ──────────────────────
+    log_step "Standard mode — projecting runtime"
+
+    TEMP_DIR=$(mktemp -d "${DEST_DIR}/apm-install.XXXXXX")
+    trap 'rm -rf "$TEMP_DIR"' EXIT
+
+    # Move extracted content into temp working directory
+    find "$DEST_DIR" -mindepth 1 -maxdepth 1 \
+        ! -name "$(basename "$TEMP_DIR")" \
+        ! -name "${ARCHIVE_NAME}" \
+        ! -name "SHA256SUMS" \
+        ! -name "${APM_LOCK_FILENAME:-".apm.lock.yaml"}" \
+        -exec mv {} "$TEMP_DIR/" \;
+
+    # Run projection in the temp directory
+    PROJ_SCRIPT="${TEMP_DIR}/scripts/project-copilot.sh"
+    if [[ ! -f "$PROJ_SCRIPT" ]]; then
+        PROJ_SCRIPT="${SCRIPT_DIR}/project-copilot.sh"
+    fi
+    chmod +x "$PROJ_SCRIPT"
+    (cd "$TEMP_DIR" && bash "$PROJ_SCRIPT" --provider "$PROVIDER" --full --clean)
+
+    # Resolve runtime directory from apm.yml
+    RUNTIME_DIR=$(get_provider_runtime "$TEMP_DIR/apm.yml" "$PROVIDER")
+    RUNTIME_DIR="${RUNTIME_DIR:-.github}"
+
+    # Remove old runtime directory on update, then copy new one
+    if [[ -d "$DEST_DIR/$RUNTIME_DIR" ]]; then
+        log_info "Removing previous runtime directory: $RUNTIME_DIR"
+        rm -rf "${DEST_DIR:?}/$RUNTIME_DIR"
+    fi
+    mkdir -p "$DEST_DIR"
+    cp -r "$TEMP_DIR/$RUNTIME_DIR" "$DEST_DIR/$RUNTIME_DIR"
+
+    # Write lock file
+    write_apm_lock "$DEST_DIR" "$VERSION" "standard" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"
+
+    # Clean up temp dir (trap handles this, but be explicit)
+    rm -rf "$TEMP_DIR"
+    trap - EXIT
+
+elif [[ "$MODE" == "expandable" ]]; then
+    # ── Expandable mode: full content + local overrides ─────────────────
+    log_step "Expandable mode — full install with local overlay scaffold"
+
+    # On update: preserve providers-local, re-extract upstream already done above
+
+    # Scaffold providers-local directory
+    LOCAL_DIR="$DEST_DIR/providers-local/$PROVIDER"
+    mkdir -p "$LOCAL_DIR/agents"
+    mkdir -p "$LOCAL_DIR/prompts"
+    mkdir -p "$LOCAL_DIR/instructions"
+
+    if [[ ! -f "$LOCAL_DIR/README.md" ]]; then
+        cat > "$LOCAL_DIR/README.md" <<'README_EOF'
+# providers-local
+
+Local overrides for the APM provider layer.
+
+Files placed here will be overlaid on top of upstream provider assets during
+projection. To override an upstream file, place a file with the same name in
+the matching subdirectory.
+
+## Structure
+
+    providers-local/<provider>/
+      agents/       # Custom or overridden agent definitions
+      prompts/      # Custom or overridden prompt definitions
+      instructions/ # Custom or overridden instruction files
+
+## Re-projecting
+
+After adding or modifying local files, re-run the projection script:
+
+    ./scripts/project-copilot.sh --provider <provider> --clean
+README_EOF
+    fi
+
+    # Run projection (no --full for expandable — consumers extend in-place)
+    PROJ_SCRIPT="$DEST_DIR/scripts/project-copilot.sh"
+    chmod +x "$PROJ_SCRIPT"
+    (cd "$DEST_DIR" && bash "$PROJ_SCRIPT" --provider "$PROVIDER" --clean)
+
+    # Write lock file
+    write_apm_lock "$DEST_DIR" "$VERSION" "expandable" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"
+
+    # Generate .gitignore for runtime projection artefacts
+    RUNTIME_DIR=$(get_provider_runtime "$DEST_DIR/apm.yml" "$PROVIDER")
+    RUNTIME_DIR="${RUNTIME_DIR:-.github}"
+    if ! grep -qF "${RUNTIME_DIR}/agents/" "$DEST_DIR/.gitignore" 2>/dev/null; then
+        cat >> "$DEST_DIR/.gitignore" <<GITIGNORE
+
+# Generated by APM installer — runtime projection
+${RUNTIME_DIR}/agents/
+${RUNTIME_DIR}/prompts/
+${RUNTIME_DIR}/instructions/
+GITIGNORE
+    fi
+fi
+
+# --- Cleanup downloaded archive ---
+rm -f "${DEST_DIR}/${ARCHIVE_NAME}" "${DEST_DIR}/SHA256SUMS"
+
 # --- Summary ---
 log_step "Installation Complete"
-log_ok "${PACKAGE_NAME} v${VERSION} (${TARGET}) installed to ${DEST_DIR}"
+log_ok "${PACKAGE_NAME} v${VERSION} (${TARGET}, ${MODE} mode) installed to ${DEST_DIR}"
 ls -lh "${DEST_DIR}/"
