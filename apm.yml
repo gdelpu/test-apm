@@ -43,4 +43,26 @@ schemas:
 
 clients: clients
 
+install-modes:
+  standard:
+    description: >
+      Flat self-contained runtime directory with all assets projected inline.
+      Consumer commits only the runtime dir and .apm.lock.yaml.
+    default-target: copilot
+    delivers:
+      - .github/
+      - .apm.lock.yaml
+  expandable:
+    description: >
+      Full source tree with providers-local/ overlay for customisation.
+      Generated runtime directory is .gitignored; providers-local/ is committed.
+    default-target: copilot
+    delivers:
+      - .apm/
+      - providers/
+      - providers-local/
+      - knowledge/
+      - .github/
+      - .apm.lock.yaml
+
 dependencies: []
