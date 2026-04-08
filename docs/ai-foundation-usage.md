@@ -14,6 +14,119 @@ own repositories and use the agents and prompts it provides.
 
 ---
 
+## Table of Contents
+
+- [What is APM?](#what-is-apm)
+- [TL;DR — Install in 60 Seconds](#tldr--install-in-60-seconds)
+- [Which Install Mode Should I Use?](#which-install-mode-should-i-use)
+- [Quick Start — Standard Mode](#quick-start--standard-mode)
+- [Quick Start — Expandable Mode](#quick-start--expandable-mode)
+- [Working with `providers-local/`](#working-with-providers-local)
+  - [Directory Structure](#directory-structure)
+  - [How the Overlay Works](#how-the-overlay-works)
+  - [Adding a Custom Agent](#adding-a-custom-agent)
+  - [Overriding an Upstream Prompt](#overriding-an-upstream-prompt)
+  - [Adding a Custom Instruction](#adding-a-custom-instruction)
+- [Re-projection Guide](#re-projection-guide)
+- [Updating to a New Version](#updating-to-a-new-version)
+- [`.gitignore` Recommendations](#gitignore-recommendations)
+- [CI Integration Template](#ci-integration-template)
+- [Provider-Agnostic Design](#provider-agnostic-design)
+- [Troubleshooting](#troubleshooting)
+
+---
+
+## What is APM?
+
+**APM** (Agent Package Manager) is the packaging and distribution system for the
+AI SDLC Foundation. It works similarly to npm or pip, but for AI agent bundles:
+
+- The **source repo** (`ai-sdlc-foundation`) authors and publishes versioned
+  bundles to a GitLab Package Registry.
+- A **consumer repo** (your project) downloads and installs a bundle via the
+  bootstrap script.
+- The bundle is **projected** into a runtime directory (`.github/`) that
+  GitHub Copilot auto-discovers — giving you agents, prompts, and instructions
+  with zero manual wiring.
+- An **`.apm.lock.yaml`** file tracks the installed version, so updates are
+  deterministic and repeatable.
+
+You never need to interact with APM internals. The bootstrap script handles
+everything.
+
+---
+
+## TL;DR — Install in 60 Seconds
+
+> Set your token, download and run the bootstrap. Agents are live in Copilot immediately. Commit when you're ready (optional).
+
+### Before you start
+
+You only need one thing: a **GitLab Personal Access Token**.
+
+| Variable | What it is | Where to find it |
+|----------|-----------|------------------|
+| **`GITLAB_TOKEN`** | A GitLab **Personal Access Token** with `read_api` + `read_registry` scope | GitLab → click your avatar (top-right) → **Edit profile** → **Personal Access Tokens** → **Add new token** (scopes: `read_api`, `read_registry`) |
+
+### PowerShell (Windows)
+
+> **This is the only file you need to download.** Running it automatically
+> downloads the multi-part installer, runs it, and removes all temp files.
+> Nothing else is left behind except `.github/` and `.apm.lock.yaml`.
+
+```powershell
+# ── Step 1: Set your variables ──────────────────────────────────────
+$env:GITLAB_TOKEN = "glpat-xxxxxxxxxxxxxxxxxxxx"   # ← paste your token
+
+# ── Step 2: Download & run the bootstrap ────────────────────────────
+Invoke-WebRequest `
+  -Uri "https://innersource.soprasteria.com/api/v4/projects/545119/repository/files/scripts%2Fbootstrap-apm.ps1/raw?ref=main" `
+  -Headers @{ 'PRIVATE-TOKEN' = $env:GITLAB_TOKEN } -OutFile bootstrap-apm.ps1
+
+.\bootstrap-apm.ps1 -Version 0.0.1
+
+# ── Step 3: Commit (optional — do this when you're happy) ───────────
+git add .github/ .apm.lock.yaml
+git commit -m "feat: install AI SDLC Foundation v0.0.1"
+git push
+```
+
+### Bash (Linux / macOS)
+
+> **This is the only file you need to download.** Running it automatically
+> downloads the multi-part installer, runs it, and removes all temp files.
+> Nothing else is left behind except `.github/` and `.apm.lock.yaml`.
+
+```bash
+# ── Step 1: Set your variables ──────────────────────────────────────
+export GITLAB_TOKEN="glpat-xxxxxxxxxxxxxxxxxxxx"   # ← paste your token
+
+# ── Step 2: Download & run the bootstrap ────────────────────────────
+curl --fail --silent \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  -o bootstrap-apm.sh \
+  "https://innersource.soprasteria.com/api/v4/projects/545119/repository/files/scripts%2Fbootstrap-apm.sh/raw?ref=main"
+chmod +x bootstrap-apm.sh
+
+./bootstrap-apm.sh --version 0.0.1
+
+# ── Step 3: Commit (optional — do this when you're happy) ───────────
+git add .github/ .apm.lock.yaml
+git commit -m "feat: install AI SDLC Foundation v0.0.1"
+git push
+```
+
+### What happens next
+
+Copilot auto-discovers everything in `.github/`. Open the chat panel and try:
+- **`@hub-orchestrator`** — central triage that routes you to the right workflow
+- **`/workflow-feature`** — end-to-end feature delivery
+- **`/workflow-spec-kit`** — specification-only flow
+
+> Need to customize agents or prompts? Re-install with `-Mode expandable` — see [Expandable Mode](#quick-start--expandable-mode) below.
+
+---
+
 ## Which Install Mode Should I Use?
 
 ```
@@ -49,48 +162,46 @@ Standard mode gives you a ready-to-use runtime projection. Copilot discovers
 agents, prompts, and instructions from the `.github/` directory — no extra
 steps required.
 
-### 1. Download or curl the installer
+### 1. Set environment variables
 
-```bash
-# Download from the GitLab Generic Package Registry
-curl --fail --silent \
-  --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-  -o ssg-ai-backbone-copilot.tar.gz \
-  "${CI_API_V4_URL}/projects/<SOURCE_PROJECT_ID>/packages/generic/ssg-ai-backbone/<VERSION>/ssg-ai-backbone-copilot.tar.gz"
-
-tar -xzf ssg-ai-backbone-copilot.tar.gz -C .apm-dist/
+```powershell
+$env:GITLAB_TOKEN = "<your-personal-access-token>"
+$ProjectId = "<SOURCE_PROJECT_ID>"   # numeric GitLab project ID
 ```
 
-Or use the installer script directly if you have it locally:
-
-### 2. Run the installer
-
-**Bash (Linux / macOS):**
-```bash
-./scripts/install-apm-bundle.sh \
-  -v 1.2.0 \
-  --target copilot \
-  --project-id "$APM_PROJECT_ID" \
-  --token "$GITLAB_TOKEN"
-```
+### 2. Bootstrap (one command)
 
 **PowerShell (Windows):**
 ```powershell
-.\scripts\install-apm-bundle.ps1 `
-  -Version 1.2.0 `
-  -Target copilot `
-  -ProjectId $env:APM_PROJECT_ID `
-  -Token $env:GITLAB_TOKEN
+# Download bootstrap script
+Invoke-WebRequest `
+  -Uri "https://innersource.soprasteria.com/api/v4/projects/$ProjectId/repository/files/scripts%2Fbootstrap-apm.ps1/raw?ref=main" `
+  -Headers @{ 'PRIVATE-TOKEN' = $env:GITLAB_TOKEN } -OutFile bootstrap-apm.ps1
+
+# Install
+.\bootstrap-apm.ps1 -Version 0.0.1 -ProjectId $ProjectId
 ```
 
-The installer downloads the versioned archive, extracts it, runs projection,
-and writes `.apm.lock.yaml`.
+**Bash (Linux / macOS):**
+```bash
+# Download bootstrap script
+curl --fail --silent \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  -o bootstrap-apm.sh \
+  "https://innersource.soprasteria.com/api/v4/projects/${PROJECT_ID}/repository/files/scripts%2Fbootstrap-apm.sh/raw?ref=main"
+chmod +x bootstrap-apm.sh
+
+# Install
+./bootstrap-apm.sh --version 0.0.1 --project-id "${PROJECT_ID}"
+```
+
+The bootstrap script downloads the installer, runs it, and cleans up temp files.
 
 ### 3. Commit the result
 
 ```bash
 git add .github/ .apm.lock.yaml
-git commit -m "feat: install AI SDLC Foundation v1.2.0 (standard)"
+git commit -m "feat: install AI SDLC Foundation v0.0.1"
 ```
 
 ### 4. Done
@@ -312,50 +423,60 @@ To change the behavior of an existing upstream prompt (e.g., `workflow-feature`)
 
 ## Updating to a New Version
 
-### How Updates Work
+> **TL;DR — Update to latest:**
+> ```powershell
+> $env:GITLAB_TOKEN = "glpat-xxxx" ; .\bootstrap-apm.ps1 -Version 0.0.2
+> ```
+> ```bash
+> export GITLAB_TOKEN="glpat-xxxx" && ./bootstrap-apm.sh --version 0.0.2
+> ```
+> Commit `.github/` and `.apm.lock.yaml` when ready (optional).
 
-The installer reads `.apm.lock.yaml` to detect the current installation:
+Re-run the bootstrap script with the new version number. It detects the existing
+`.apm.lock.yaml`, replaces the runtime, and writes an updated lock file.
 
-- **Installed version** and mode
-- **Provider** used
-- **Archive checksum** for integrity
+### Standard Mode
 
-### Standard Mode Update
-
-Replace the runtime directory and write a new lock file:
-
-```bash
-./scripts/install-apm-bundle.sh \
-  -v 1.3.0 \
-  --target copilot \
-  --project-id "$APM_PROJECT_ID" \
-  --token "$GITLAB_TOKEN"
+**PowerShell (Windows):**
+```powershell
+$env:GITLAB_TOKEN = "glpat-xxxxxxxxxxxxxxxxxxxx"   # ← your token
+.\bootstrap-apm.ps1 -Version 0.0.2
 
 git add .github/ .apm.lock.yaml
-git commit -m "chore: update AI SDLC Foundation to v1.3.0"
+git commit -m "chore: update AI SDLC Foundation to v0.0.2"
+git push
 ```
 
-### Expandable Mode Update
-
-The installer preserves `providers-local/`, replaces the upstream source
-directories, and re-projects:
-
+**Bash (Linux / macOS):**
 ```bash
-./scripts/install-apm-bundle.sh \
-  -v 1.3.0 \
-  --mode expandable \
-  --target copilot \
-  --project-id "$APM_PROJECT_ID" \
-  --token "$GITLAB_TOKEN"
+export GITLAB_TOKEN="glpat-xxxxxxxxxxxxxxxxxxxx"   # ← your token
+./bootstrap-apm.sh --version 0.0.2
+
+git add .github/ .apm.lock.yaml
+git commit -m "chore: update AI SDLC Foundation to v0.0.2"
+git push
+```
+
+> Don't have the bootstrap script anymore? Re-download it the same way as
+> during initial install (see [TL;DR](#tldr--install-in-60-seconds)).
+
+### Expandable Mode
+
+The installer preserves `providers-local/` automatically — your customizations
+are never overwritten:
+
+```powershell
+$env:GITLAB_TOKEN = "glpat-xxxxxxxxxxxxxxxxxxxx"
+.\bootstrap-apm.ps1 -Version 0.0.2 -Mode expandable
 
 git add .apm/ providers/ knowledge/ .apm.lock.yaml
-git commit -m "chore: update AI SDLC Foundation to v1.3.0 (expandable)"
+git commit -m "chore: update AI SDLC Foundation to v0.0.2 (expandable)"
+git push
 ```
 
-> **Important:** Review the changelog before updating. If upstream renamed or
-> removed files that you overrode in `providers-local/`, your overrides may
-> become orphaned. Check that your local overlay files still match upstream
-> filenames after the update.
+> **Before updating:** Check the [CHANGELOG](https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation/-/blob/main/CHANGELOG.md)
+> for breaking changes. If upstream renamed files that you overrode in
+> `providers-local/`, your overrides may become orphaned.
 
 ---
 

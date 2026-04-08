@@ -99,6 +99,12 @@ Each has a Claude Code command in `providers/claude-code/commands/` and a Copilo
 | `sdlc-to-word.md` | `sdlc-to-word.prompt.md` | synced |
 | `sdlc-dast.md` | `sdlc-dast.prompt.md` | synced |
 
+## Bootstrap / Setup
+
+| Claude Command | Copilot Prompt (`providers/github-copilot/prompts/`) | Status |
+|----------------|--------------------------------------------------------|--------|
+| `setup-apm.md` | `setup-apm.prompt.md` | synced |
+
 ## Instructions
 
 | Canonical concept | Provider (`providers/github-copilot/instructions/`) | `applyTo` |
