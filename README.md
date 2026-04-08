@@ -61,6 +61,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 - [PR Validation Pipeline](#pr-validation-pipeline)
 - [Cross-Layer Validation](#cross-layer-validation)
 - [Distribution & Installation](#distribution--installation)
+  - [Quick Start — Consumers](#quick-start--consumers)
 - [Prerequisites](#prerequisites)
 - [Adding Capabilities](#adding-capabilities)
 - [Contributing](#contributing)
@@ -907,41 +908,48 @@ The build stage runs `apm pack` for three targets: **copilot**, **claude**, and 
 
 ### Quick Start — Consumers
 
-**Linux / macOS:**
+You need a **GitLab Personal Access Token** (scopes: `read_api`, `read_registry`).
+Create one at: GitLab → avatar → **Edit profile** → **Personal Access Tokens** → **Add new token** (scopes: `read_api`, `read_registry`).
 
-```bash
-./scripts/install-apm-bundle.sh \
-  --version 1.2.0 \
-  --target copilot \
-  --project-id <SOURCE_PROJECT_ID> \
-  --token "${GITLAB_TOKEN}"
-```
-
-**Windows (PowerShell):**
+**PowerShell (Windows):**
 
 ```powershell
-.\scripts\install-apm-bundle.ps1 `
-  -Version 1.2.0 `
-  -Target copilot `
-  -ProjectId <SOURCE_PROJECT_ID> `
-  -Token $env:GITLAB_TOKEN
+$env:GITLAB_TOKEN = "glpat-xxxxxxxxxxxxxxxxxxxx"   # your token
+
+# Download & run bootstrap
+Invoke-WebRequest `
+  -Uri "https://innersource.soprasteria.com/api/v4/projects/545119/repository/files/scripts%2Fbootstrap-apm.ps1/raw?ref=main" `
+  -Headers @{ 'PRIVATE-TOKEN' = $env:GITLAB_TOKEN } -OutFile bootstrap-apm.ps1
+
+.\bootstrap-apm.ps1 -Version 0.0.1
+
+# Commit
+git add .github/ .apm.lock.yaml
+git commit -m "feat: install AI SDLC Foundation v0.0.1"
 ```
 
-**In a consumer `.gitlab-ci.yml`:**
+**Bash (Linux / macOS):**
 
-```yaml
-install-apm:
-  stage: setup
-  script:
-    - |
-      curl --fail --silent \
-        --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-        -o ssg-ai-backbone-copilot.tar.gz \
-        "${CI_API_V4_URL}/projects/<SOURCE_PROJECT_ID>/packages/generic/ssg-ai-backbone/1.2.0/ssg-ai-backbone-copilot.tar.gz"
-    - tar -xzf ssg-ai-backbone-copilot.tar.gz -C .apm-dist/
+```bash
+export GITLAB_TOKEN="glpat-xxxxxxxxxxxxxxxxxxxx"   # your token
+
+# Download & run bootstrap
+curl --fail --silent \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  -o bootstrap-apm.sh \
+  "https://innersource.soprasteria.com/api/v4/projects/545119/repository/files/scripts%2Fbootstrap-apm.sh/raw?ref=main"
+chmod +x bootstrap-apm.sh
+./bootstrap-apm.sh --version 0.0.1
+
+# Commit
+git add .github/ .apm.lock.yaml
+git commit -m "feat: install AI SDLC Foundation v0.0.1"
 ```
 
-> **Full guide**: See [`docs/distribution.md`](docs/distribution.md) for upstream artifact examples, checksum verification, troubleshooting, and semver conventions.
+Then open Copilot and try `@hub-orchestrator` or `/workflow-feature`.
+
+> **Full guide**: See [`docs/ai-foundation-usage.md`](docs/ai-foundation-usage.md) for expandable mode, CI integration, customization, and updating.
+> **Distribution details**: See [`docs/distribution.md`](docs/distribution.md) for registry, checksums, CI/CD pipeline examples, and troubleshooting.
 
 ---
 

@@ -300,32 +300,83 @@ use-apm:
 > **Note**: Upstream artifact access requires the consuming project to be in
 > the same group hierarchy or have explicit CI/CD job token permissions.
 
-### Option 3: Install Scripts
+### Option 3: Bootstrap Script (Recommended for Developers)
 
-Pre-built install scripts simplify consumption for developers and CI pipelines.
+The **bootstrap script** is a single self-contained file that handles
+everything — downloading the installer, its dependencies, running the install,
+and cleaning up. No pre-existing files needed.
+
+#### Quick Start (one command)
+
+**PowerShell (Windows):**
+```powershell
+# 1. Download the bootstrap script
+$ProjectId = "545119"
+$GitLabUrl = "https://innersource.soprasteria.com"
+Invoke-WebRequest `
+  -Uri "$GitLabUrl/api/v4/projects/$ProjectId/repository/files/scripts%2Fbootstrap-apm.ps1/raw?ref=main" `
+  -Headers @{ 'PRIVATE-TOKEN' = $env:GITLAB_TOKEN } `
+  -OutFile bootstrap-apm.ps1
+
+# 2. Run it
+.\bootstrap-apm.ps1 -Version 0.0.1
+```
+
+**Bash (Linux / macOS):**
+```bash
+# 1. Download the bootstrap script
+PROJECT_ID="545119"
+GITLAB_URL="https://innersource.soprasteria.com"
+curl --fail --silent \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  -o bootstrap-apm.sh \
+  "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/repository/files/scripts%2Fbootstrap-apm.sh/raw?ref=main"
+chmod +x bootstrap-apm.sh
+
+# 2. Run it
+./bootstrap-apm.sh --version 0.0.1
+```
+
+#### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `-Version` / `--version` | `0.0.1` | Semver to install, or `latest` |
+| `-ProjectId` / `--project-id` | — | Source project numeric ID (required) |
+| `-GitLabUrl` / `--gitlab-url` | `https://innersource.soprasteria.com` | GitLab instance URL |
+| `-Token` / `--token` | `$GITLAB_TOKEN` | Personal access token |
+| `-Mode` / `--mode` | `standard` | `standard` or `expandable` |
+| `-Target` / `--target` | `copilot` | `copilot`, `claude`, or `all` |
+
+#### Expandable mode
+
+```powershell
+.\bootstrap-apm.ps1 -Version 0.0.1 -ProjectId $ProjectId -Mode expandable
+```
+
+### Option 4: Install Scripts (Advanced)
+
+For CI pipelines or custom setups, you can use the lower-level install scripts
+directly. These require downloading both the installer and the lock helper
+library separately.
 
 #### Linux / macOS
 
 ```bash
-# Download the installer (or copy from the source repo)
+# Download the installer and its dependency
 curl -o install-apm-bundle.sh \
   "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/repository/files/scripts%2Finstall-apm-bundle.sh/raw?ref=main" \
+  --header "PRIVATE-TOKEN: ${TOKEN}"
+mkdir -p lib
+curl -o lib/apm-lock.sh \
+  "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/repository/files/scripts%2Flib%2Fapm-lock.sh/raw?ref=main" \
   --header "PRIVATE-TOKEN: ${TOKEN}"
 
 chmod +x install-apm-bundle.sh
 
-# Standard mode (default) — runtime projection only
 ./install-apm-bundle.sh \
   --version 1.2.0 \
   --target copilot \
-  --project-id 12345 \
-  --token "${GITLAB_TOKEN}"
-
-# Expandable mode — full source with local override support
-./install-apm-bundle.sh \
-  --version 1.2.0 \
-  --target copilot \
-  --mode expandable \
   --project-id 12345 \
   --token "${GITLAB_TOKEN}"
 ```
@@ -333,23 +384,16 @@ chmod +x install-apm-bundle.sh
 #### Windows (PowerShell)
 
 ```powershell
-# Download the installer (or copy from the source repo)
+# Download the installer and its dependency
 Invoke-WebRequest -Uri "$GitLabUrl/api/v4/projects/$ProjectId/repository/files/scripts%2Finstall-apm-bundle.ps1/raw?ref=main" `
-  -Headers @{ 'PRIVATE-TOKEN' = $Token } `
-  -OutFile install-apm-bundle.ps1
+  -Headers @{ 'PRIVATE-TOKEN' = $Token } -OutFile install-apm-bundle.ps1
+New-Item -ItemType Directory -Path lib -Force | Out-Null
+Invoke-WebRequest -Uri "$GitLabUrl/api/v4/projects/$ProjectId/repository/files/scripts%2Flib%2Fapm-lock.ps1/raw?ref=main" `
+  -Headers @{ 'PRIVATE-TOKEN' = $Token } -OutFile lib/apm-lock.ps1
 
-# Standard mode (default)
 .\install-apm-bundle.ps1 `
   -Version 1.2.0 `
   -Target copilot `
-  -ProjectId 12345 `
-  -Token $env:GITLAB_TOKEN
-
-# Expandable mode
-.\install-apm-bundle.ps1 `
-  -Version 1.2.0 `
-  -Target copilot `
-  -Mode expandable `
   -ProjectId 12345 `
   -Token $env:GITLAB_TOKEN
 ```

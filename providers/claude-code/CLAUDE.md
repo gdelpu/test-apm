@@ -115,6 +115,7 @@ Available as Claude Code commands:
 | `create-one-pager` | Generate branded one-pager summaries |
 | `soprasteria-brand-audit` | Brand compliance audit |
 | `soprasteria-brand-refactor` | Brand refactoring guidance |
+| `setup-apm` | Install AI SDLC Foundation into a consumer repo |
 
 ## Security
 
