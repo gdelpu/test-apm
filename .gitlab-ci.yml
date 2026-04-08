@@ -282,8 +282,10 @@ publish:apm-registry:
   image: node:20-bookworm-slim
 
   needs:
-    - job: test:apm-smoke
+    - job: build:apm-bundles
       artifacts: true
+    - job: test:apm-smoke
+      artifacts: false
 
   before_script:
     - apt-get update -qq && apt-get install -y -qq curl
