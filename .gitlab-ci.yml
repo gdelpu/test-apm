@@ -13,7 +13,6 @@ stages:
   - stations
   - build
   - test
-  - release
   - publish
 
 # -----------------------------------------------------
@@ -55,10 +54,6 @@ default:
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/'
     - if: '$CI_COMMIT_BRANCH'
-
-.tag_only:
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/'
 
 .main_only:
   rules:
@@ -269,17 +264,21 @@ test:apm-smoke:
       echo "✅ All archives verified"
 
 # =====================================================
-# APM Registry Publish
+# Auto-Release: Tag + Publish
 # =====================================================
-# Publishes versioned archives to the GitLab Generic
-# Package Registry. Runs ONLY on semver tag pipelines.
-# Uses CI_JOB_TOKEN — no additional secrets needed.
+# Runs on pushes to main (i.e. after MR merge).
+# Reads version from apm.yml, creates git tag if needed,
+# then publishes bundles to the GitLab Generic Package
+# Registry — all in one job.
+#
+# Note: CI_JOB_TOKEN-created tags don't trigger new
+# pipelines, so tagging and publishing are combined.
 # =====================================================
 
-publish:apm-registry:
-  extends: .tag_only
+release:tag-and-publish:
+  extends: .main_only
   stage: publish
-  image: node:20-bookworm-slim
+  image: python:3.11-slim
 
   needs:
     - job: build:apm-bundles
@@ -287,38 +286,11 @@ publish:apm-registry:
     - job: test:apm-smoke
       artifacts: false
 
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq curl
-    - chmod +x scripts/apm-publish.sh
-
   script:
-    - bash scripts/apm-publish.sh --version "${CI_COMMIT_TAG}" --dist-dir "${APM_DIST_DIR}"
-
-# =====================================================
-# Auto-Release (tag creation)
-# =====================================================
-# Runs on pushes to main (i.e. after MR merge).
-# Reads version from apm.yml, checks if tag already
-# exists, and creates it via the GitLab API.
-# The new tag triggers a separate tag pipeline that
-# runs build → test → publish.
-# =====================================================
-
-release:auto-tag:
-  extends: .main_only
-  stage: release
-  image: python:3.11-slim
-
-  needs:
-    - job: build:apm-bundles
-      artifacts: false
-    - job: test:apm-smoke
-      artifacts: false
-
-  script:
-    - apt-get update -qq && apt-get install -y -qq git
+    - apt-get update -qq && apt-get install -y -qq git curl
     - git config user.email "ci@${CI_SERVER_HOST}"
     - git config user.name "GitLab CI"
+    - chmod +x scripts/apm-publish.sh
     - |
       VERSION=$(python3 -c "
       import re
@@ -336,19 +308,17 @@ release:auto-tag:
       TAG="v${VERSION}"
       echo "Version from apm.yml: ${VERSION}  →  Tag: ${TAG}"
     - |
-      if git tag -l "$TAG" | grep -q "$TAG"; then
-        echo "✅ Tag ${TAG} already exists locally — skipping"
-        exit 0
-      fi
       git remote set-url origin "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
       REMOTE_TAGS=$(git ls-remote --tags origin "refs/tags/${TAG}" 2>/dev/null)
       if [ -n "$REMOTE_TAGS" ]; then
-        echo "✅ Tag ${TAG} already exists on remote — skipping"
-        exit 0
+        echo "ℹ️  Tag ${TAG} already exists — skipping tag creation"
+      else
+        echo "Creating tag ${TAG} at ${CI_COMMIT_SHA}..."
+        git tag -a "${TAG}" -m "Release ${TAG}" "${CI_COMMIT_SHA}"
+        git push origin "${TAG}"
+        echo "✅ Tag ${TAG} created"
       fi
     - |
-      echo "Creating tag ${TAG} at ${CI_COMMIT_SHA}..."
-      git tag -a "${TAG}" -m "Release ${TAG}" "${CI_COMMIT_SHA}"
-      git push origin "${TAG}"
-      echo "✅ Tag ${TAG} pushed — tag pipeline will run build → test → publish"
+      echo "Publishing ${TAG} to registry..."
+      bash scripts/apm-publish.sh --version "${TAG}" --dist-dir "${APM_DIST_DIR}"
 
