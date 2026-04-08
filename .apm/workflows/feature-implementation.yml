@@ -163,3 +163,14 @@ config:
   allow_resume: true
   allow_skip_gate: true
   nestable: false
+  hooks:
+    enabled: true
+    pre:
+      - context-classification
+      - pii-scan
+      - injection-detection
+      - policy-authorization
+    post:
+      - output-pii-scan
+      - risk-scoring
+      - audit-trace

@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 # Station runner — executes a single workflow station by invoking the appropriate adapter
 #
-# For SDLC workflows (spec, plan, implement, etc.), stations require agent-based
-# execution via Copilot or Claude. The CLI runner handles quality-validation and
-# PR-validation stations that have deterministic tool adapters.
+# Supported scope:
+#   ✓ PR validation — fully functional via ci-gates/scripts/run_stations.sh
+#   ✓ Lint analysis — dispatches to eslint/pylint/clippy if adapter scripts exist
+#   ~ Quality validation — infrastructure exists but adapter scripts (sonarqube.sh,
+#     checkmarx.sh, owasp-zap.sh, trivy.sh, snyk.sh, istanbul.sh, jacoco.sh,
+#     coveragepy.sh) are NOT yet implemented. Missing adapters produce skip reports.
+#   ~ Agent-based stations (spec, plan, implement, etc.) — logged and skipped;
+#     require external agent execution via Copilot or Claude.
 #
 # For PR validation, delegates to ci-gates/scripts/run_stations.sh.
 
@@ -127,7 +132,10 @@ run_static_analysis() {
         source "${adapter_dir}/sonarqube.sh"
         run_sonar "$output_dir" "$repo_root" "$verbose"
     else
-        log_warn "No static analysis adapter available"
+        log_warn "No static analysis adapter available (adapter not installed)"
+        echo "# Static Analysis Report" > "${output_dir}/static-analysis-report.md"
+        echo "" >> "${output_dir}/static-analysis-report.md"
+        echo "- **Status**: skipped — no adapter installed (sonarqube.sh)" >> "${output_dir}/static-analysis-report.md"
     fi
 }
 
@@ -141,7 +149,10 @@ run_sast_scan() {
         source "${adapter_dir}/checkmarx.sh"
         run_checkmarx "$output_dir" "$repo_root" "$verbose"
     else
-        log_warn "No SAST adapter available"
+        log_warn "No SAST adapter available (adapter not installed)"
+        echo "# SAST Report" > "${output_dir}/sast-report.md"
+        echo "" >> "${output_dir}/sast-report.md"
+        echo "- **Status**: skipped — no adapter installed (checkmarx.sh)" >> "${output_dir}/sast-report.md"
     fi
 }
 
@@ -155,7 +166,10 @@ run_dast_scan() {
         source "${adapter_dir}/owasp-zap.sh"
         run_zap "$output_dir" "$repo_root" "$verbose"
     else
-        log_warn "No DAST adapter available"
+        log_warn "No DAST adapter available (adapter not installed)"
+        echo "# DAST Report" > "${output_dir}/dast-report.md"
+        echo "" >> "${output_dir}/dast-report.md"
+        echo "- **Status**: skipped — no adapter installed (owasp-zap.sh)" >> "${output_dir}/dast-report.md"
     fi
 }
 
@@ -175,7 +189,10 @@ run_dependency_audit() {
         source "${adapter_dir}/owasp-depcheck.sh"
         run_depcheck "$output_dir" "$repo_root" "$verbose"
     else
-        log_warn "No dependency audit adapter available"
+        log_warn "No dependency audit adapter available (adapter not installed)"
+        echo "# Dependency Audit Report" > "${output_dir}/dependency-report.md"
+        echo "" >> "${output_dir}/dependency-report.md"
+        echo "- **Status**: skipped — no adapter installed (trivy.sh, snyk.sh, or owasp-depcheck.sh)" >> "${output_dir}/dependency-report.md"
     fi
 }
 
@@ -195,7 +212,10 @@ run_coverage() {
         source "${adapter_dir}/jacoco.sh"
         run_jacoco "$output_dir" "$repo_root" "$verbose"
     else
-        log_warn "No coverage adapter available"
+        log_warn "No coverage adapter available (adapter not installed)"
+        echo "# Coverage Report" > "${output_dir}/coverage-report.md"
+        echo "" >> "${output_dir}/coverage-report.md"
+        echo "- **Status**: skipped — no adapter installed (istanbul.sh, coveragepy.sh, or jacoco.sh)" >> "${output_dir}/coverage-report.md"
     fi
 }
 

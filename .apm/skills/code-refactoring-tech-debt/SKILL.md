@@ -1,6 +1,6 @@
 ---
 name: code-refactoring-tech-debt
-description: "You are a technical debt expert specializing in identifying, quantifying, and prioritizing technical debt in software projects. Analyze the codebase to uncover debt, assess its impact, and create acti"
+description: "You are a technical debt expert specializing in identifying, quantifying, and prioritizing technical debt in software projects. Analyze the codebase to uncover debt, assess its impact, and create actionable remediation plans."
 triggers: ['technical debt', 'tech debt analysis', 'debt prioritization']
 risk: unknown
 source: community

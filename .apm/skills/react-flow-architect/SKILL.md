@@ -1,6 +1,6 @@
 ---
 name: react-flow-architect
-description: "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when Claude needs to create or..."
+description: "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when creating or refactoring ReactFlow graph applications."
 triggers: ['ReactFlow', 'graph applications', 'interactive graphs']
 risk: unknown
 source: community

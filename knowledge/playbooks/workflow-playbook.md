@@ -84,6 +84,29 @@ Use Claude commands:
 - **Warning** gates log findings and continue — review at your discretion.
 - Use `--skip-gate <station-id>` to force past a blocker (emergency only, audit trail logged).
 
+## Inter-station validation model
+
+Workflow stations declare entry/exit contracts in YAML (inputs, outputs, gate criteria).
+Validation is split across two layers:
+
+### CLI runner (structural checks)
+
+The CLI runner (`providers/cli/`) enforces:
+- **File existence**: output files must exist for non-optional stations.
+- **Frontmatter structure**: Markdown outputs are checked for `id` and `status` fields in YAML frontmatter.
+- **Failure indicators**: JSON and Markdown reports are scanned for explicit `"status": "fail"` or `"decision": "fail"` patterns.
+- **Blocker/warning enforcement**: blocker failures halt the pipeline; warnings are logged and continued.
+
+### Agent layer (semantic checks)
+
+Semantic validation (content correctness, traceability, completeness) is **agent-delegated** via the hook system in `.apm/hooks/`:
+- **Pre-hooks** verify that input files have the expected structure and content before a station runs.
+- **Post-hooks** run a quality checklist (frontmatter, cross-references, no ambiguity, structural conformance).
+
+These hooks are **injected into agent prompts**, not executed by the CLI runner. The agent is trusted to follow the protocol. The runner does not verify agent compliance programmatically.
+
+**Implication**: if an agent produces a malformed output, the next station may fail without a clear diagnostic. For critical workflows, use agent-based runners (Copilot, Claude) that execute hooks inline.
+
 ## Nesting
 
 Quality validation can be nested inside feature-implementation, modernization,

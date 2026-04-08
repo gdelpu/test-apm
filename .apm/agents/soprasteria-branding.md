@@ -1,5 +1,5 @@
 ---
-name: ssg-branding-agent
+name: soprasteria-branding
 description: 'Assess and refactor applications for Sopra Steria brand compliance.'
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:

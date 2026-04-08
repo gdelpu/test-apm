@@ -109,6 +109,15 @@ Each has a Claude Code command in `providers/claude-code/commands/` and a Copilo
 | README conventions | `readme.instructions.md` | `README.md` |
 | Corrections | `corrections.instructions.md` | `**` |
 | Provider parity | `provider-parity.instructions.md` | `providers/**` |
+| Audit tracing | `audit-tracing.instructions.md` | `**` |
+| Data anonymisation | `data-anonymisation.instructions.md` | `**` |
+
+## Skills → Prompts
+
+| Canonical (`.apm/skills/`) | Provider (`providers/github-copilot/prompts/`) | Status |
+|-----------------------------|--------------------------------------------------|--------|
+| `audit-tracing/SKILL.md` | `audit-trace.prompt.md` | synced |
+| `data-anonymisation/SKILL.md` | *(instruction-only, no slash command)* | synced |
 
 ## Hub-wide context
 

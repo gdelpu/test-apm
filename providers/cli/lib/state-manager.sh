@@ -20,6 +20,7 @@ init_state() {
         echo "**Feature**: ${feature}"
         echo "**Started**: $(now_utc)"
         echo "**Status**: in-progress"
+        echo "**Trace ID**: ${TRACE_ID:-unset}"
         echo ""
         echo "| Station | Status | Started | Completed | Gate |"
         echo "|---------|--------|---------|-----------|------|"
