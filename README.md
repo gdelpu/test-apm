@@ -60,6 +60,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 - [Provider Setup](#provider-setup)
 - [PR Validation Pipeline](#pr-validation-pipeline)
 - [Cross-Layer Validation](#cross-layer-validation)
+- [Distribution & Installation](#distribution--installation)
 - [Prerequisites](#prerequisites)
 - [Adding Capabilities](#adding-capabilities)
 - [Contributing](#contributing)
@@ -126,7 +127,8 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 | `providers/cli/` | CLI workflow runner (`run-workflow.sh` + `lib/`) |
 | `clients/` | Per-client overlay directories |
 | `ci-gates/` | PR validation station implementations (A0–A7) |
-| `scripts/` | Cross-layer validation scripts |
+| `scripts/` | Cross-layer validation scripts, APM build/publish/install helpers |
+| `docs/` | Distribution guide and supplementary documentation |
 
 ---
 
@@ -892,15 +894,68 @@ Scripts in `scripts/` verify canonical ↔ projection consistency:
 
 ---
 
+## Distribution & Installation
+
+APM bundles are built and distributed via the GitLab CI/CD pipeline. Two channels are available:
+
+| Channel | Trigger | Use Case |
+|---------|---------|----------|
+| **Job Artifacts** | Every branch/tag push | Short-lived CI consumption, previews |
+| **Package Registry** | Tag push (`v*`) | Versioned cross-project distribution |
+
+The build stage runs `apm pack` for three targets: **copilot**, **claude**, and **all**. Tag pushes additionally publish versioned packages to the [GitLab Generic Package Registry](https://docs.gitlab.com/ee/user/packages/generic_packages/).
+
+### Quick Start — Consumers
+
+**Linux / macOS:**
+
+```bash
+./scripts/install-apm-bundle.sh \
+  --version 1.2.0 \
+  --target copilot \
+  --project-id <SOURCE_PROJECT_ID> \
+  --token "${GITLAB_TOKEN}"
+```
+
+**Windows (PowerShell):**
+
+```powershell
+.\scripts\install-apm-bundle.ps1 `
+  -Version 1.2.0 `
+  -Target copilot `
+  -ProjectId <SOURCE_PROJECT_ID> `
+  -Token $env:GITLAB_TOKEN
+```
+
+**In a consumer `.gitlab-ci.yml`:**
+
+```yaml
+install-apm:
+  stage: setup
+  script:
+    - |
+      curl --fail --silent \
+        --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+        -o ssg-ai-backbone-copilot.tar.gz \
+        "${CI_API_V4_URL}/projects/<SOURCE_PROJECT_ID>/packages/generic/ssg-ai-backbone/1.2.0/ssg-ai-backbone-copilot.tar.gz"
+    - tar -xzf ssg-ai-backbone-copilot.tar.gz -C .apm-dist/
+```
+
+> **Full guide**: See [`docs/distribution.md`](docs/distribution.md) for upstream artifact examples, checksum verification, troubleshooting, and semver conventions.
+
+---
+
 ## Prerequisites
 
 | Tool | Version | Required For |
 |------|---------|-------------|
 | Python | 3.11+ | Validators, validation scripts |
 | Git | 2.x+ | Diff generation, validation |
-| Node.js | 20+ | Copilot CLI (AI stations) |
+| Node.js | 20+ | Copilot CLI (AI stations), APM |
+| APM CLI | latest | Bundle building and distribution |
 | GitHub Copilot CLI | 1.0.4 | AI station execution |
 | jq | 1.6+ | Gate enforcement |
+| curl | — | Package registry publishing / consumption |
 | Podman | — | Local pipeline execution (optional) |
 | Pandoc | — | Brand Styler document conversion (optional) |
 
