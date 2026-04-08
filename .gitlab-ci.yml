@@ -13,6 +13,7 @@ stages:
   - stations
   - build
   - test
+  - release
   - publish
 
 # -----------------------------------------------------
@@ -58,6 +59,10 @@ default:
 .tag_only:
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/'
+
+.main_only:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 # =====================================================
 # PR Validators
@@ -286,4 +291,61 @@ publish:apm-registry:
 
   script:
     - bash scripts/apm-publish.sh --version "${CI_COMMIT_TAG}" --dist-dir "${APM_DIST_DIR}"
+
+# =====================================================
+# Auto-Release (tag creation)
+# =====================================================
+# Runs on pushes to main (i.e. after MR merge).
+# Reads version from apm.yml, checks if tag already
+# exists, and creates it via the GitLab API.
+# The new tag triggers a separate tag pipeline that
+# runs build → test → publish.
+# =====================================================
+
+release:auto-tag:
+  extends: .main_only
+  stage: release
+  image: python:3.11-slim
+
+  needs:
+    - job: build:apm-bundles
+      artifacts: false
+    - job: test:apm-smoke
+      artifacts: false
+
+  script:
+    - apt-get update -qq && apt-get install -y -qq curl
+    - |
+      VERSION=$(python3 -c "
+      import re
+      with open('apm.yml') as f:
+          for line in f:
+              m = re.match(r'^version:\s*(.+)', line)
+              if m:
+                  print(m.group(1).strip())
+                  break
+      ")
+      if [ -z "$VERSION" ]; then
+        echo "❌ Could not read version from apm.yml"
+        exit 1
+      fi
+      TAG="v${VERSION}"
+      echo "Version from apm.yml: ${VERSION}  →  Tag: ${TAG}"
+    - |
+      STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags/${TAG}" \
+        --header "JOB-TOKEN: ${CI_JOB_TOKEN}")
+      if [ "$STATUS" = "200" ]; then
+        echo "✅ Tag ${TAG} already exists — skipping"
+        exit 0
+      fi
+    - |
+      echo "Creating tag ${TAG} at ${CI_COMMIT_SHA}..."
+      curl --fail --request POST \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags" \
+        --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data "{\"tag_name\":\"${TAG}\",\"ref\":\"${CI_COMMIT_SHA}\",\"message\":\"Release ${TAG}\"}"
+      echo ""
+      echo "✅ Tag ${TAG} created — tag pipeline will run build → test → publish"
 
