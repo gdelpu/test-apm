@@ -59,7 +59,7 @@ Configured via `hook-config.json` (or client overlay at `clients/<client>/hook-c
 Scan existing spec artifacts for PII without modifying them:
 
 ```bash
-python -m hooks --retroactive --path specs/features/my-feature/
+python -m engine --retroactive --path specs/features/my-feature/
 ```
 
 ## Rules

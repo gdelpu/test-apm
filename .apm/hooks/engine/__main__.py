@@ -2,10 +2,10 @@
 """
 CLI entry point for the hook framework.
 
-Called by the CLI workflow runner (station-runner.sh) as:
-    python -m hooks --phase pre  --trace-id <uuid> --station <id> --input <file> [options]
-    python -m hooks --phase post --trace-id <uuid> --station <id> --output <file> [options]
-    python -m hooks --retroactive --path <dir-or-file>    # scan existing artifacts
+Called by the CLI workflow runner (run-workflow.sh) as:
+    python -m engine --phase pre  --trace-id <uuid> --station <id> --input <file> [options]
+    python -m engine --phase post --trace-id <uuid> --station <id> --output <file> [options]
+    python -m engine --retroactive --path <dir-or-file>    # scan existing artifacts
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from .pii_scanner import scan_retroactive
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="SSG AI SDLC hook framework",
-        prog="python -m hooks",
+        prog="python -m engine",
     )
     parser.add_argument("--phase", choices=["pre", "post"], help="Hook phase")
     parser.add_argument("--trace-id", default="", help="Correlation ID (UUID)")

@@ -50,7 +50,7 @@ Each trace record captures:
 
 ## Schema
 
-Validated against `.apm/scripts/hooks/schemas/trace-record.schema.json`.
+Validated against `.apm/hooks/engine/schemas/trace-record.schema.json`.
 
 ## Rules
 

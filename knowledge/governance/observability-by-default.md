@@ -18,7 +18,7 @@ Critical flows should be observable from day one.
 - Trace records include sensitivity tags, risk scores, redaction status, and model metadata.
 - Local persistence as JSONL at `specs/features/<feature>/audit-trace.jsonl`.
 - Optional OTLP export to external collectors when configured.
-- Schema: `.apm/scripts/hooks/schemas/trace-record.schema.json`.
+- Schema: `.apm/hooks/engine/schemas/trace-record.schema.json`.
 
 ## Monitoring
 

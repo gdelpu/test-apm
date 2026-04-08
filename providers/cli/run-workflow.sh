@@ -163,7 +163,7 @@ for ((i=START_INDEX; i<${#STATIONS[@]}; i++)); do
             hook_input_file="${OUTPUT_DIR}/${_inp[0]}"
         fi
         local pre_args=(
-            python3 -m hooks --phase pre
+            python3 -m engine --phase pre
             --trace-id "$TRACE_ID"
             --workflow "$WORKFLOW"
             --station "$station_id"
@@ -176,7 +176,7 @@ for ((i=START_INDEX; i<${#STATIONS[@]}; i++)); do
             pre_args+=(--input "$hook_input_file")
         fi
 
-        pushd "${REPO_ROOT}/.apm/scripts" >/dev/null 2>&1 || true
+        pushd "${REPO_ROOT}/.apm/hooks" >/dev/null 2>&1 || true
         if ! "${pre_args[@]}" 2>/dev/null; then
             log_warn "Pre-hook flagged station ${station_id}"
             # Non-zero from pre-hook means blocked
@@ -206,7 +206,7 @@ for ((i=START_INDEX; i<${#STATIONS[@]}; i++)); do
                 hook_output_file="${OUTPUT_DIR}/${_outp[0]}"
             fi
             local post_args=(
-                python3 -m hooks --phase post
+                python3 -m engine --phase post
                 --trace-id "$TRACE_ID"
                 --workflow "$WORKFLOW"
                 --station "$station_id"
@@ -219,7 +219,7 @@ for ((i=START_INDEX; i<${#STATIONS[@]}; i++)); do
                 post_args+=(--output "$hook_output_file")
             fi
 
-            pushd "${REPO_ROOT}/.apm/scripts" >/dev/null 2>&1 || true
+            pushd "${REPO_ROOT}/.apm/hooks" >/dev/null 2>&1 || true
             "${post_args[@]}" 2>/dev/null || log_warn "Post-hook warning for ${station_id}"
             popd >/dev/null 2>&1 || true
         fi
