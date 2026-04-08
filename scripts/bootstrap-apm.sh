@@ -40,7 +40,7 @@
 set -euo pipefail
 
 # --- Defaults ---
-VERSION="0.0.1"
+VERSION="latest"
 PROJECT_ID="545119"
 GITLAB_URL="${APM_GITLAB_URL:-https://innersource.soprasteria.com}"
 AUTH_TOKEN="${GITLAB_TOKEN:-}"
