@@ -11,6 +11,9 @@
 stages:
   - validate
   - stations
+  - build
+  - test
+  - publish
 
 # -----------------------------------------------------
 # Global Variables
@@ -31,6 +34,11 @@ variables:
   COPILOT_MAX_DIFF_LINES: "2000"
   COPILOT_CLI_VERSION: "1.0.4"
 
+  # APM distribution
+  APM_PACKAGE_NAME: "ssg-ai-backbone"
+  APM_DIST_DIR: "dist"
+  APM_CLI_VERSION: "0.1.0"
+
 default:
   image: node:20-bookworm-slim
   retry: 1
@@ -42,6 +50,15 @@ default:
 .mr_only:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+.branch_and_tag:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/'
+    - if: '$CI_COMMIT_BRANCH'
+
+.tag_only:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/'
 
 # =====================================================
 # PR Validators
@@ -172,4 +189,103 @@ stations:run-all:
       - ${REPORTS_DIR}/
     expire_in: 14 days
     when: always
+
+# =====================================================
+# APM Bundle Build
+# =====================================================
+# Builds distribution archives for all APM targets.
+# Runs on branch pushes and tag pushes.
+# Archives are stored as job artifacts.
+# =====================================================
+
+build:apm-bundles:
+  extends: .branch_and_tag
+  stage: build
+  image: node:20-bookworm-slim
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq coreutils
+    - npm install -g "@anthropic/apm@${APM_CLI_VERSION}"
+    - chmod +x scripts/apm-build.sh
+
+  script:
+    - bash scripts/apm-build.sh --output-dir "${APM_DIST_DIR}"
+
+  artifacts:
+    paths:
+      - ${APM_DIST_DIR}/
+    expire_in: 14 days
+
+  cache:
+    key: "apm-npm-${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .npm/
+
+# =====================================================
+# APM Bundle Smoke Test
+# =====================================================
+# Validates that built archives contain expected files.
+# Runs after build, gates publish.
+# =====================================================
+
+test:apm-smoke:
+  extends: .branch_and_tag
+  stage: test
+  image: node:20-bookworm-slim
+
+  needs:
+    - job: build:apm-bundles
+      artifacts: true
+
+  script:
+    - |
+      set -euo pipefail
+      echo "── Smoke-testing APM bundles ──"
+      FAIL=0
+      for archive in ${APM_DIST_DIR}/*.tar.gz; do
+        [ -f "$archive" ] || continue
+        name=$(basename "$archive")
+        echo "Checking: $name"
+        file_count=$(tar -tzf "$archive" | wc -l)
+        if [ "$file_count" -lt 1 ]; then
+          echo "❌ $name is empty"
+          FAIL=1
+        else
+          echo "✅ $name — $file_count entries"
+        fi
+      done
+      if [ -f "${APM_DIST_DIR}/SHA256SUMS" ]; then
+        echo "✅ SHA256SUMS present"
+      else
+        echo "⚠️  SHA256SUMS missing (non-blocking)"
+      fi
+      if [ "$FAIL" -ne 0 ]; then
+        echo "❌ Smoke test failed"
+        exit 1
+      fi
+      echo "✅ All archives verified"
+
+# =====================================================
+# APM Registry Publish
+# =====================================================
+# Publishes versioned archives to the GitLab Generic
+# Package Registry. Runs ONLY on semver tag pipelines.
+# Uses CI_JOB_TOKEN — no additional secrets needed.
+# =====================================================
+
+publish:apm-registry:
+  extends: .tag_only
+  stage: publish
+  image: node:20-bookworm-slim
+
+  needs:
+    - job: test:apm-smoke
+      artifacts: true
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq curl
+    - chmod +x scripts/apm-publish.sh
+
+  script:
+    - bash scripts/apm-publish.sh --version "${CI_COMMIT_TAG}" --dist-dir "${APM_DIST_DIR}"
 

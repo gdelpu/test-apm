@@ -14,6 +14,9 @@
 station_out/
 .station_tmp/
 
+# APM distribution build output
+dist/
+
 # OS
 .DS_Store
 Thumbs.db
