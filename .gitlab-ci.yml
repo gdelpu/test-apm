@@ -37,7 +37,6 @@ variables:
   # APM distribution
   APM_PACKAGE_NAME: "ssg-ai-backbone"
   APM_DIST_DIR: "dist"
-  APM_CLI_VERSION: "0.1.0"
 
 default:
   image: node:20-bookworm-slim
@@ -205,7 +204,6 @@ build:apm-bundles:
 
   before_script:
     - apt-get update -qq && apt-get install -y -qq coreutils
-    - npm install -g "@anthropic/apm@${APM_CLI_VERSION}"
     - chmod +x scripts/apm-build.sh
 
   script:
@@ -217,9 +215,9 @@ build:apm-bundles:
     expire_in: 14 days
 
   cache:
-    key: "apm-npm-${CI_COMMIT_REF_SLUG}"
+    key: "apm-bundles-${CI_COMMIT_REF_SLUG}"
     paths:
-      - .npm/
+      - ${APM_DIST_DIR}/
 
 # =====================================================
 # APM Bundle Smoke Test
