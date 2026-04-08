@@ -137,12 +137,12 @@ try {
     $installerPath = Join-Path $tempDir 'install-apm-bundle.ps1'
 
     $installArgs = @{
-        Version  = $Version
-        Target   = $Target
-        Mode     = $Mode
-        ProjectId = $ProjectId
-        GitLabUrl = $GitLabUrl
-        Token    = $Token
+        Version     = $Version
+        Target      = $Target
+        Mode        = $Mode
+        ProjectId   = $ProjectId
+        GitLabUrl   = $GitLabUrl
+        Token       = $Token
     }
 
     & $installerPath @installArgs

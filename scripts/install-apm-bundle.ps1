@@ -254,13 +254,14 @@ if ($Mode -eq 'standard') {
             exit 1
         }
 
-        # Copy runtime directory to destination
-        $runtimeDst = Join-Path $Destination $runtimeDir
+        # Copy runtime directory to consumer repo root (not into staging dir)
+        $repoRoot = (Get-Location).Path
+        $runtimeDst = Join-Path $repoRoot $runtimeDir
         Copy-Item $runtimeSrc -Destination $runtimeDst -Recurse -Force
         Write-Ok "Copied runtime: $runtimeDir"
 
-        # Write lock file
-        Write-ApmLock -Path $Destination -Version $Version -Mode 'standard' -Provider $Provider -Archive $ArchiveName -Checksum $actualHash
+        # Write lock file at repo root
+        Write-ApmLock -Path $repoRoot -Version $Version -Mode 'standard' -Provider $Provider -Archive $ArchiveName -Checksum $actualHash
         Write-Ok 'Lock file written'
     }
     finally {
@@ -380,9 +381,19 @@ $runtimeDir/instructions/
         Set-Content -Path $gitignorePath -Value $gitignoreContent -Encoding UTF8
         Write-Ok "Generated .gitignore for runtime directory: $runtimeDir"
     }
+
+    # Promote all content from staging dir to repo root
+    $repoRoot = (Get-Location).Path
+    Get-ChildItem -Path $Destination -Force | Where-Object { $_.Name -ne $ArchiveName } | ForEach-Object {
+        $dst = Join-Path $repoRoot $_.Name
+        if (Test-Path $dst) { Remove-Item $dst -Recurse -Force }
+        Move-Item $_.FullName -Destination $dst -Force
+    }
+    Write-Ok "Promoted content to repo root"
 }
 
 # --- Summary ---
 Write-Step 'Installation Complete'
-Write-Ok "$PackageName v$Version ($Target, $Mode mode) installed to $Destination"
-Get-ChildItem -Path $Destination | Format-Table Name, Length, LastWriteTime -AutoSize
+$repoRoot = (Get-Location).Path
+Write-Ok "$PackageName v$Version ($Target, $Mode mode) installed to $repoRoot"
+Get-ChildItem -Path $repoRoot | Format-Table Name, Length, LastWriteTime -AutoSize

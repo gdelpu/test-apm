@@ -227,16 +227,17 @@ if [[ "$MODE" == "standard" ]]; then
     RUNTIME_DIR=$(get_provider_runtime "$TEMP_DIR/apm.yml" "$PROVIDER")
     RUNTIME_DIR="${RUNTIME_DIR:-.github}"
 
-    # Remove old runtime directory on update, then copy new one
-    if [[ -d "$DEST_DIR/$RUNTIME_DIR" ]]; then
+    # Copy runtime directory to consumer repo root (not into staging dir)
+    REPO_ROOT="$(pwd)"
+    if [[ -d "$REPO_ROOT/$RUNTIME_DIR" ]]; then
         log_info "Removing previous runtime directory: $RUNTIME_DIR"
-        rm -rf "${DEST_DIR:?}/$RUNTIME_DIR"
+        rm -rf "${REPO_ROOT:?}/$RUNTIME_DIR"
     fi
-    mkdir -p "$DEST_DIR"
-    cp -r "$TEMP_DIR/$RUNTIME_DIR" "$DEST_DIR/$RUNTIME_DIR"
+    cp -r "$TEMP_DIR/$RUNTIME_DIR" "$REPO_ROOT/$RUNTIME_DIR"
+    log_ok "Copied runtime: $RUNTIME_DIR"
 
-    # Write lock file
-    write_apm_lock "$DEST_DIR" "$VERSION" "standard" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"
+    # Write lock file at repo root
+    write_apm_lock "$REPO_ROOT" "$VERSION" "standard" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"
 
     # Clean up temp dir (trap handles this, but be explicit)
     rm -rf "$TEMP_DIR"
@@ -299,6 +300,14 @@ ${RUNTIME_DIR}/prompts/
 ${RUNTIME_DIR}/instructions/
 GITIGNORE
     fi
+
+    # Promote all content from staging dir to repo root
+    REPO_ROOT="$(pwd)"
+    find "$DEST_DIR" -mindepth 1 -maxdepth 1 \
+        ! -name "${ARCHIVE_NAME}" \
+        ! -name "SHA256SUMS" \
+        -exec mv -f {} "$REPO_ROOT/" \;
+    log_ok "Promoted content to repo root"
 fi
 
 # --- Cleanup downloaded archive ---
@@ -306,5 +315,5 @@ rm -f "${DEST_DIR}/${ARCHIVE_NAME}" "${DEST_DIR}/SHA256SUMS"
 
 # --- Summary ---
 log_step "Installation Complete"
-log_ok "${PACKAGE_NAME} v${VERSION} (${TARGET}, ${MODE} mode) installed to ${DEST_DIR}"
-ls -lh "${DEST_DIR}/"
+log_ok "${PACKAGE_NAME} v${VERSION} (${TARGET}, ${MODE} mode) installed to $(pwd)"
+ls -lh ./
