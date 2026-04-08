@@ -315,6 +315,8 @@ release:auto-tag:
 
   script:
     - apt-get update -qq && apt-get install -y -qq git
+    - git config user.email "ci@${CI_SERVER_HOST}"
+    - git config user.name "GitLab CI"
     - |
       VERSION=$(python3 -c "
       import re
