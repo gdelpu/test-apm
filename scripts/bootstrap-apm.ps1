@@ -16,8 +16,8 @@
       4. Deletes the temp directory
 
 .PARAMETER Version
-    Semantic version to install (default: 0.0.1). Use "latest" to fetch the
-    latest tag from the source project.
+    Semantic version to install (default: latest). Automatically resolves to
+    the latest published tag unless you pin a specific version.
 
 .PARAMETER ProjectId
     GitLab numeric project ID of the ai-sdlc-foundation source repo (required).
@@ -53,7 +53,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Version = '0.0.1',
+    [string]$Version = 'latest',
 
     [string]$ProjectId = '545119',
 

@@ -83,11 +83,11 @@ Invoke-WebRequest `
   -Uri "https://innersource.soprasteria.com/api/v4/projects/545119/repository/files/scripts%2Fbootstrap-apm.ps1/raw?ref=main" `
   -Headers @{ 'PRIVATE-TOKEN' = $env:GITLAB_TOKEN } -OutFile bootstrap-apm.ps1
 
-.\bootstrap-apm.ps1 -Version 0.0.1
+.\bootstrap-apm.ps1
 
 # ── Step 3: Commit (optional — do this when you're happy) ───────────
 git add .github/ .apm.lock.yaml
-git commit -m "feat: install AI SDLC Foundation v0.0.1"
+git commit -m "feat: install AI SDLC Foundation"
 git push
 ```
 
@@ -108,11 +108,11 @@ curl --fail --silent \
   "https://innersource.soprasteria.com/api/v4/projects/545119/repository/files/scripts%2Fbootstrap-apm.sh/raw?ref=main"
 chmod +x bootstrap-apm.sh
 
-./bootstrap-apm.sh --version 0.0.1
+./bootstrap-apm.sh
 
 # ── Step 3: Commit (optional — do this when you're happy) ───────────
 git add .github/ .apm.lock.yaml
-git commit -m "feat: install AI SDLC Foundation v0.0.1"
+git commit -m "feat: install AI SDLC Foundation"
 git push
 ```
 
@@ -425,11 +425,12 @@ To change the behavior of an existing upstream prompt (e.g., `workflow-feature`)
 
 > **TL;DR — Update to latest:**
 > ```powershell
-> $env:GITLAB_TOKEN = "glpat-xxxx" ; .\bootstrap-apm.ps1 -Version 0.0.2
+> $env:GITLAB_TOKEN = "glpat-xxxx" ; .\bootstrap-apm.ps1
 > ```
 > ```bash
-> export GITLAB_TOKEN="glpat-xxxx" && ./bootstrap-apm.sh --version 0.0.2
+> export GITLAB_TOKEN="glpat-xxxx" && ./bootstrap-apm.sh
 > ```
+> To pin a specific version, add `-Version 0.0.2` (PS) or `--version 0.0.2` (bash).
 > Commit `.github/` and `.apm.lock.yaml` when ready (optional).
 
 Re-run the bootstrap script with the new version number. It detects the existing
