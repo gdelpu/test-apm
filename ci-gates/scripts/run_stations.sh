@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # =============================================================================
-# run_stations.sh — Sequential AI Station Orchestrator
+# run_stations.sh — Hybrid Station Orchestrator
 # =============================================================================
 #
-# Dynamically discovers all station prompt/agent files in
-# ci-gates/stations/, sorts them by prefix (a0, a1, …), and
-# executes each via GitHub Copilot CLI sequentially.
+# Runs deterministic stations (A0, A1, A3, A6) as fast Python scripts and
+# only invokes Copilot CLI for stations that require LLM reasoning (A2, A4,
+# A5, A7).
+#
+# Phase 1: Deterministic Python stations run instantly (<2s total).
+# Phase 2: LLM stations run sequentially via Copilot CLI.
+# Phase 3: A6 gate aggregates all reports deterministically.
 #
 # The orchestrator is invoked as a single CI job AFTER the deterministic
 # Python validators pass. It keeps the .gitlab-ci.yml stable — adding or
@@ -30,6 +34,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 PROJECT_DIR="${CI_PROJECT_DIR:-.}"
 STATION_DIR="${PROJECT_DIR}/ci-gates/stations"
+SCRIPTS_DIR="${PROJECT_DIR}/ci-gates/scripts"
 STATION_OUT="${STATION_OUT:-station_out}"
 EXTRACT_JSON="${PROJECT_DIR}/ci-gates/scripts/extract_json.py"
 MAX_DIFF="${COPILOT_MAX_DIFF_LINES:-500}"
@@ -95,7 +100,71 @@ git diff "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}" \
     "${CI_COMMIT_SHA:-HEAD}" > "${DIFF_FILE}" 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
-# invoke_station — run a single station through Copilot CLI
+# Deterministic Python stations — prefix → script mapping
+# ---------------------------------------------------------------------------
+declare -A PYTHON_STATIONS=(
+  [a0]="${SCRIPTS_DIR}/a0_intake.py"
+  [a1]="${SCRIPTS_DIR}/a1_policy.py"
+  [a3]="${SCRIPTS_DIR}/a3_injection.py"
+  [a6]="${SCRIPTS_DIR}/a6_gate.py"
+)
+
+# ---------------------------------------------------------------------------
+# invoke_deterministic — run a Python station script (instant, no LLM)
+# ---------------------------------------------------------------------------
+invoke_deterministic() {
+  local prefix="$1"
+  local script="${PYTHON_STATIONS[$prefix]}"
+
+  echo ""
+  echo "════════════════════════════════════════"
+  echo " Running station: ${prefix} (deterministic Python)"
+  echo "════════════════════════════════════════"
+
+  local result_file="${STATION_OUT}/${prefix}_result.json"
+
+  case "${prefix}" in
+    a0)
+      python3 "${script}" \
+        --changed-files "${CHANGED_FILE}" \
+        --diff "${DIFF_FILE}" \
+        --out "${result_file}" \
+        --mr-iid "${CI_MERGE_REQUEST_IID:-0}"
+      ;;
+    a1)
+      python3 "${script}" \
+        --work-order "${STATION_OUT}/a0_result.json" \
+        --out "${result_file}" \
+        --repo-root "${PROJECT_DIR}"
+      ;;
+    a3)
+      python3 "${script}" \
+        --work-order "${STATION_OUT}/a0_result.json" \
+        --out "${result_file}" \
+        --repo-root "${PROJECT_DIR}"
+      ;;
+    a6)
+      python3 "${script}" \
+        --station-out "${STATION_OUT}" \
+        --out "${result_file}"
+      ;;
+  esac
+
+  echo "  → Output: ${result_file}"
+  cat "${result_file}"
+
+  # Gate check — fail-fast on critical stations
+  local status
+  status=$(jq -r '.status // "pass"' "${result_file}" 2>/dev/null || echo "pass")
+  if [ "${status}" = "fail" ]; then
+    echo ""
+    echo "❌ GATE FAILED at station ${prefix} — status: fail"
+    exit 1
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# invoke_station — run a single station through Copilot CLI (LLM-powered)
 # ---------------------------------------------------------------------------
 invoke_station() {
   local file="$1"
@@ -230,20 +299,68 @@ OUTPUT FORMAT: Respond with ONLY a raw JSON object, no markdown fences, no prose
 }
 
 # ---------------------------------------------------------------------------
-# Run each station sequentially with an inter-station throttle
+# Phase 1 — Deterministic Python stations (A0, A1, A3) — instant, no LLM
 # ---------------------------------------------------------------------------
-first_station=true
-for station_file in "${STATIONS[@]}"; do
-  if [ "${first_station}" = "true" ]; then
-    first_station=false
-  elif [ "${ENABLE}" = "true" ] && [ "${INTER_STATION_SLEEP}" -gt 0 ] 2>/dev/null; then
-    echo "  ⏱ Throttle: sleeping ${INTER_STATION_SLEEP}s between stations..."
-    sleep "${INTER_STATION_SLEEP}"
-  fi
-  invoke_station "${station_file}"
-done
+echo ""
+echo "╔══════════════════════════════════════════════════╗"
+echo "║  Phase 1: Deterministic stations (A0, A1, A3)   ║"
+echo "╚══════════════════════════════════════════════════╝"
+
+invoke_deterministic "a0"
+invoke_deterministic "a1"
+invoke_deterministic "a3"
+
+# Check if A0 scope is non-agent — if so, skip LLM stations entirely
+A0_SCOPE=$(jq -r '.scope // "agent-change"' "${STATION_OUT}/a0_result.json" 2>/dev/null || echo "agent-change")
+
+# ---------------------------------------------------------------------------
+# Phase 2 — LLM-powered stations (A2, A4, A5, A7) — only if needed
+# ---------------------------------------------------------------------------
+echo ""
+echo "╔══════════════════════════════════════════════════╗"
+echo "║  Phase 2: LLM-powered stations (A2, A4, A5, A7) ║"
+echo "╚══════════════════════════════════════════════════╝"
+
+# LLM stations to run (A7 is handled separately by invoke_station's own skip logic)
+LLM_STATIONS=("a2" "a4" "a5" "a7")
+
+if [ "${A0_SCOPE}" = "non-agent" ]; then
+  echo "  ℹ Scope is non-agent — writing skip reports for LLM stations."
+  for prefix in "${LLM_STATIONS[@]}"; do
+    echo "{\"station\":\"${prefix^^}\",\"status\":\"skipped\",\"findings\":[],\"summary\":\"Non-agent scope.\"}" \
+      > "${STATION_OUT}/${prefix}_result.json"
+  done
+else
+  first_llm=true
+  for station_file in "${STATIONS[@]}"; do
+    prefix=$(echo "${station_file}" | grep -oP '^a\d+' || echo "unknown")
+
+    # Skip Python stations — already ran in Phase 1
+    if [[ -v "PYTHON_STATIONS[${prefix}]" ]]; then
+      continue
+    fi
+
+    if [ "${first_llm}" = "true" ]; then
+      first_llm=false
+    elif [ "${ENABLE}" = "true" ] && [ "${INTER_STATION_SLEEP}" -gt 0 ] 2>/dev/null; then
+      echo "  ⏱ Throttle: sleeping ${INTER_STATION_SLEEP}s between LLM stations..."
+      sleep "${INTER_STATION_SLEEP}"
+    fi
+    invoke_station "${station_file}"
+  done
+fi
+
+# ---------------------------------------------------------------------------
+# Phase 3 — Deterministic gate (A6) — aggregates all reports
+# ---------------------------------------------------------------------------
+echo ""
+echo "╔══════════════════════════════════════════════════╗"
+echo "║  Phase 3: Policy Gate (A6) — deterministic       ║"
+echo "╚══════════════════════════════════════════════════╝"
+
+invoke_deterministic "a6"
 
 echo ""
 echo "========================================"
-echo " All ${#STATIONS[@]} stations completed successfully"
+echo " All stations completed successfully"
 echo "========================================"
