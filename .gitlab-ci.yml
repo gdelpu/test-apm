@@ -204,9 +204,11 @@ build:apm-bundles:
 
   before_script:
     - apt-get update -qq && apt-get install -y -qq coreutils
-    - chmod +x scripts/apm-build.sh
+    - chmod +x scripts/apm-build.sh scripts/project-copilot.sh
 
   script:
+    # Always re-project before packing so .github/ is never stale in the bundle
+    - bash scripts/project-copilot.sh --provider github-copilot --full --clean
     - bash scripts/apm-build.sh --output-dir "${APM_DIST_DIR}"
 
   artifacts:
@@ -250,6 +252,27 @@ test:apm-smoke:
           FAIL=1
         else
           echo "✅ $name — $file_count entries"
+        fi
+        # Verify agent count in copilot bundle
+        if echo "$name" | grep -q "copilot"; then
+          agent_count=$(tar -tzf "$archive" | grep -E '\.github/agents/.*\.md$' | wc -l)
+          provider_agent_count=$(tar -tzf "$archive" | grep -E 'providers/github-copilot/agents/.*\.agent\.md$' | wc -l)
+          prompt_count=$(tar -tzf "$archive" | grep -E '\.github/prompts/.*\.md$' | wc -l)
+          echo "  Agents projected:       $agent_count"
+          echo "  Provider agent files:   $provider_agent_count"
+          echo "  Prompts projected:      $prompt_count"
+          if [ "$agent_count" -lt 20 ]; then
+            echo "❌ Expected at least 20 projected agents, got $agent_count"
+            FAIL=1
+          fi
+          if [ "$provider_agent_count" -lt 20 ]; then
+            echo "❌ Expected at least 20 provider agent files, got $provider_agent_count"
+            FAIL=1
+          fi
+          if [ "$prompt_count" -lt 10 ]; then
+            echo "❌ Expected at least 10 projected prompts, got $prompt_count"
+            FAIL=1
+          fi
         fi
       done
       if [ -f "${APM_DIST_DIR}/SHA256SUMS" ]; then
