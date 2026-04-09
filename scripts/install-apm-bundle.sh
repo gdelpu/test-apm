@@ -310,8 +310,9 @@ GITIGNORE
     log_ok "Promoted content to repo root"
 fi
 
-# --- Cleanup downloaded archive ---
+# --- Cleanup downloaded archive and staging dir ---
 rm -f "${DEST_DIR}/${ARCHIVE_NAME}" "${DEST_DIR}/SHA256SUMS"
+rm -rf "${DEST_DIR}"
 
 # --- Summary ---
 log_step "Installation Complete"

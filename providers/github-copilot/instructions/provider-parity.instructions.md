@@ -19,11 +19,12 @@ This is a mandatory rule — follow it whenever adding, renaming, or removing co
 
 ## Rules
 
-1. **Adding a workflow**: Create `.apm/workflows/<name>.yml` + `.md` (canonical) → create `providers/claude-code/commands/workflow-<name>.md` → create `providers/github-copilot/prompts/workflow-<name>.prompt.md` → run `project-copilot.ps1` → verify CLI runner discovers it automatically.
-2. **Adding a command** (sub-pipeline, agent dispatch, or tool): Create in `providers/claude-code/commands/<name>.md` → create matching `providers/github-copilot/prompts/<name>.prompt.md` → run `project-copilot.ps1` → if the command maps to a station, add it to `providers/cli/sdlc-commands.md`.
-3. **Renaming or removing**: Apply the same change in all three providers simultaneously.
-4. **Sync map**: Update `providers/github-copilot/sync-map.md` with any new mappings.
-5. **CLAUDE.md**: Update `providers/claude-code/CLAUDE.md` command table with new entries.
+1. **Adding an agent**: Create `.apm/agents/<name>.md` (canonical) → create `providers/github-copilot/agents/<name>.agent.md` (Copilot frontmatter: `name`, `description`, `tools`, `commandAllowlist` if runCommands, `allowedFilePaths`) → if the agent is user-invocable (has a slash-command), create `providers/claude-code/commands/<name>.md` and update `providers/claude-code/CLAUDE.md` → if the agent wraps a workflow, document it in `providers/cli/sdlc-commands.md` → run `project-copilot.ps1` → confirm no parity warning in output.
+2. **Adding a workflow**: Create `.apm/workflows/<name>.yml` + `.md` (canonical) → create `providers/claude-code/commands/workflow-<name>.md` → create `providers/github-copilot/prompts/workflow-<name>.prompt.md` → run `project-copilot.ps1` → verify CLI runner discovers it automatically.
+3. **Adding a command** (sub-pipeline, agent dispatch, or tool): Create in `providers/claude-code/commands/<name>.md` → create matching `providers/github-copilot/prompts/<name>.prompt.md` → run `project-copilot.ps1` → if the command maps to a station, add it to `providers/cli/sdlc-commands.md`.
+4. **Renaming or removing**: Apply the same change in all three providers simultaneously.
+5. **Sync map**: Update `providers/github-copilot/sync-map.md` with any new mappings.
+6. **CLAUDE.md**: Update `providers/claude-code/CLAUDE.md` command table with new entries.
 
 ## Naming conventions
 
@@ -35,7 +36,19 @@ This is a mandatory rule — follow it whenever adding, renaming, or removing co
 
 ## Checklist for new commands
 
-When adding any new command, verify all items before considering the task complete:
+When adding any new command or agent, verify all items before considering the task complete:
+
+### Agent checklist (when adding a new agent)
+- [ ] Canonical agent file exists in `.apm/agents/<name>.md`
+- [ ] Provider agent file exists in `providers/github-copilot/agents/<name>.agent.md`
+- [ ] Agent frontmatter includes correct `tools`, `commandAllowlist` (if `runCommands`), `allowedFilePaths`
+- [ ] If user-invocable: Claude Code command file exists in `providers/claude-code/commands/<name>.md`
+- [ ] If user-invocable: `providers/claude-code/CLAUDE.md` command table updated
+- [ ] If workflow-backed: `providers/cli/sdlc-commands.md` updated
+- [ ] `project-copilot.ps1` run — no parity warning in output
+- [ ] `python scripts/validate_copilot_assets.py` passes with no errors
+
+### Command/workflow checklist (when adding a new command)
 
 - [ ] Claude Code command file exists in `providers/claude-code/commands/`
 - [ ] GitHub Copilot prompt file exists in `providers/github-copilot/prompts/`

@@ -135,7 +135,7 @@ Each has a Claude Code command in `providers/claude-code/commands/` and a Copilo
 
 ## Sync rules
 
-1. **Adding an agent**: Create `.apm/agents/<name>.md` (canonical) → create `providers/github-copilot/agents/<name>.agent.md` (provider, with Copilot frontmatter) → run `project-copilot.ps1`
+1. **Adding an agent**: Create `.apm/agents/<name>.md` (canonical) → create `providers/github-copilot/agents/<name>.agent.md` (provider, with Copilot frontmatter) → run `project-copilot.ps1` → verify parity warning is gone
 2. **Adding a prompt**: Create `.apm/prompts/<name>.md` → create `providers/github-copilot/prompts/<name>.prompt.md` → run `project-copilot.ps1`
 3. **Adding a workflow**: Create `.apm/workflows/<name>.yml` → create `providers/github-copilot/prompts/workflow-<name>.prompt.md` → run `project-copilot.ps1`
 4. **Adding a command**: Create `providers/claude-code/commands/<name>.md` → create `providers/github-copilot/prompts/<name>.prompt.md` → update CLI docs → run `project-copilot.ps1`
