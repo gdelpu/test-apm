@@ -263,3 +263,20 @@ if (Test-Path $catalogScript) {
 }
 
 Write-Host "`nProjection complete. Runtime assets written to $targetPath."
+
+# ── Parity check: canonical agents vs provider agents ─────────────────
+$canonicalAgentDir = Join-Path $repoRoot '.apm/agents'
+$providerAgentDir  = Join-Path $repoRoot "$adapterValue/agents"
+if ((Test-Path $canonicalAgentDir) -and (Test-Path $providerAgentDir)) {
+    $canonicalNames = (Get-ChildItem $canonicalAgentDir -Filter '*.md').BaseName
+    $providerNames  = (Get-ChildItem $providerAgentDir -Filter '*.agent.md').BaseName | ForEach-Object { $_ -replace '\.agent$', '' }
+    $missing = $canonicalNames | Where-Object { $_ -notin $providerNames }
+    if ($missing) {
+        Write-Host ""
+        Write-Host "  ⚠️  PARITY WARNING — canonical agents without provider projection:" -ForegroundColor Yellow
+        foreach ($m in $missing) {
+            Write-Host "      - $m  →  add $adapterValue/agents/$m.agent.md" -ForegroundColor Yellow
+        }
+        Write-Host "  Run: python scripts/validate_copilot_assets.py  to confirm." -ForegroundColor Yellow
+    }
+}

@@ -57,6 +57,8 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
     - [sdlc-full](#sdlc-full-11-stations)
 - [Prompts (4)](#prompts-4)
 - [Knowledge Base](#knowledge-base)
+- [Quick Start Guide](#quick-start-guide)
+- [Concepts & Glossary](#concepts--glossary)
 - [Provider Setup](#provider-setup)
 - [PR Validation Pipeline](#pr-validation-pipeline)
 - [Cross-Layer Validation](#cross-layer-validation)
@@ -129,7 +131,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 | `clients/` | Per-client overlay directories |
 | `ci-gates/` | PR validation station implementations (A0–A7) |
 | `scripts/` | Cross-layer validation scripts, APM build/publish/install helpers |
-| `docs/` | Distribution guide and supplementary documentation |
+| `docs/` | [Quick Start](docs/quick-start.md), [Concepts](docs/concepts.md), [APM Consumer Guide](docs/apm-consumer-guide.md), [Distribution](docs/distribution.md) |
 
 ---
 
@@ -782,6 +784,27 @@ Canonical definitions: `.apm/prompts/`. Copilot projection: `.github/prompts/` (
 
 ---
 
+## Quick Start Guide
+
+See [`docs/quick-start.md`](docs/quick-start.md) — a hands-on guide covering:
+
+- **Install in 60 seconds** — one script, one command
+- **Updating** — re-run the bootstrap
+- **Hub Orchestrator** — the single entry point that routes you to the right workflow
+- **Common workflows** — invocation table across all providers
+- **Using agents directly** — key agents and when to use them
+- **Per-provider usage** — GitHub Copilot, CLI, and Claude Code
+
+---
+
+## Concepts & Glossary
+
+See [`docs/concepts.md`](docs/concepts.md) — explains each building block:
+
+Agents, Workflows, Skills, Knowledge, Prompts, Instructions, Hooks, Templates, Contexts, Scripts — what they are, where to find them, and how they fit together.
+
+---
+
 ## Provider Setup
 
 ### GitHub Copilot (three-layer)
@@ -908,6 +931,9 @@ The build stage runs `apm pack` for three targets: **copilot**, **claude**, and 
 
 ### Quick Start — Consumers
 
+> **Hands-on guide**: See [`docs/quick-start.md`](docs/quick-start.md) for step-by-step install, usage with Hub Orchestrator, per-provider examples (Copilot, CLI, Claude Code), and how to use agents directly.
+> **New to the concepts?** See [`docs/concepts.md`](docs/concepts.md) for an overview of agents, workflows, skills, and other building blocks.
+
 You need a **GitLab Personal Access Token** (scopes: `read_api`, `read_registry`).
 Create one at: GitLab → avatar → **Edit profile** → **Personal Access Tokens** → **Add new token** (scopes: `read_api`, `read_registry`).
 
@@ -948,7 +974,8 @@ git commit -m "feat: install AI SDLC Foundation v0.0.1"
 
 Then open Copilot and try `@hub-orchestrator` or `/workflow-feature`.
 
-> **Full guide**: See [`docs/ai-foundation-usage.md`](docs/ai-foundation-usage.md) for expandable mode, CI integration, customization, and updating.
+> **Quick start**: See [`docs/quick-start.md`](docs/quick-start.md) for hands-on install, usage, and per-provider examples.
+> **Full guide**: See [`docs/apm-consumer-guide.md`](docs/apm-consumer-guide.md) for expandable mode, CI integration, customization, and updating.
 > **Distribution details**: See [`docs/distribution.md`](docs/distribution.md) for registry, checksums, CI/CD pipeline examples, and troubleshooting.
 
 ---

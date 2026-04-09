@@ -38,7 +38,7 @@ if (APM / 'agents').is_dir() and (PROVIDER / 'agents').is_dir():
     provider_agents = {p.stem.replace('.agent', '') for p in (PROVIDER / 'agents').glob('*.agent.md')}
     missing = canonical_agents - provider_agents
     for a in missing:
-        warnings.append(f'Canonical agent without runtime projection: {a}')
+        errors.append(f'Canonical agent without provider projection: {a}  — add providers/github-copilot/agents/{a}.agent.md')
 
 # --- Canonical prompts must be projected to provider layer ---
 if (APM / 'prompts').is_dir() and (PROVIDER / 'prompts').is_dir():
