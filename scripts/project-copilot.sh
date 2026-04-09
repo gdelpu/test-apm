@@ -151,7 +151,7 @@ for type in "${ASSET_TYPES[@]}"; do
   for file in "$src"/*; do
     [[ -f "$file" ]] || continue
     cp -f "$file" "$dst/"
-    (( count++ ))
+    (( ++count ))
   done
   echo "  COPY  $type — $count files -> $dst"
 done
@@ -169,7 +169,7 @@ if [[ -d "$LOCAL_DIR" ]]; then
     for file in "$dir"/*; do
       [[ -f "$file" ]] || continue
       cp -f "$file" "$dst/"
-      (( count++ ))
+      (( ++count ))
     done
     if (( count > 0 )); then
       echo "  OVERLAY   $type — $count files from providers-local/"
@@ -207,7 +207,7 @@ if [[ "$FULL" == true ]]; then
       target_file="$dst/$rel"
       mkdir -p "$(dirname "$target_file")"
       cp -f "$file" "$target_file"
-      (( count++ ))
+      (( ++count ))
     done < <(find "$src" -type f -print0)
     echo "  FULL-COPY $type — $count files -> $dst"
   done
@@ -246,7 +246,7 @@ if [[ "$FULL" == true ]]; then
       fi
     done
     if [[ "$modified" == true ]]; then
-      (( rewrite_count++ ))
+      (( ++rewrite_count ))
     fi
   done < <(find "$TARGET_DIR" -name '*.md' -type f -print0)
 
