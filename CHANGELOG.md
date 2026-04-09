@@ -7,6 +7,30 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.4] — 2026-04-09
+
+### Fixed
+- All 27 canonical agents now projected to `providers/github-copilot/agents/` (15 were missing in v0.0.2)
+- Consumer install: `.github/` and `.apm.lock.yaml` now land at repo root in both standard and expandable modes (previously nested inside `.apm-dist/`)
+- Consumer install: `.apm-dist/` staging directory removed after install (no longer left behind)
+- Bundle now includes `.apm/scripts/` and `scripts/project-copilot.sh` (projection script was missing, causing "Projection script not found" error)
+- Bootstrap default version changed from `0.0.1` to `latest`
+
+### Added
+- `project-copilot.ps1` parity check: warns when canonical agents lack provider counterparts
+- `validate_copilot_assets.py`: missing agent projection is now a blocking error (was a warning)
+- `provider-parity.instructions.md`: explicit agent parity rules and checklist for all three providers
+
+## [0.0.3] — 2026-04-09
+
+Released via separate branch. See that branch's history for details.
+
+## [0.0.2] — 2026-04-08
+
+### Added
+- Usage documentation (`docs/ai-foundation-usage.md`) with TL;DR install guide and updating instructions
+- Consumer bootstrap scripts: `scripts/bootstrap-apm.ps1` and `scripts/bootstrap-apm.sh`
+
 ## [0.0.1] — 2026-04-08
 
 Initial release of the SSG AI SDLC Foundation.
