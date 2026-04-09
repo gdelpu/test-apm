@@ -1,6 +1,9 @@
-# AI SDLC Foundation — Consumer Usage Guide
+# APM Consumer Guide — Extended Reference
 
-> How to install, configure, and use the AI SDLC Foundation in your project.
+> Extended guide for APM installation modes, customization, CI integration, and troubleshooting.
+
+> **Looking for a quick start?** See the [Quick Start Guide](quick-start.md) to install and start using the foundation in 60 seconds.
+> **New to the concepts?** See [Concepts & Glossary](concepts.md) for an overview of agents, workflows, skills, and other building blocks.
 
 The **AI SDLC Foundation** (`ssg-ai-backbone`) is a cross-provider collection of
 agents, skills, workflows, prompts, and foundational knowledge for AI-assisted
@@ -9,8 +12,9 @@ security governance, brand compliance, and full-lifecycle SDLC support — all
 packaged as installable bundles that integrate directly with GitHub Copilot,
 Claude Code, or a CLI runner.
 
-This guide is for **consumers** — teams that install the foundation into their
-own repositories and use the agents and prompts it provides.
+This guide covers advanced topics for **consumers** — teams that install the
+foundation into their own repositories and need to customize, extend, or
+integrate it into CI/CD pipelines.
 
 ---
 

@@ -395,5 +395,7 @@ $runtimeDir/instructions/
 # --- Summary ---
 Write-Step 'Installation Complete'
 $repoRoot = (Get-Location).Path
+# Remove staging directory (now empty after promote)
+if (Test-Path $Destination) { Remove-Item $Destination -Recurse -Force }
 Write-Ok "$PackageName v$Version ($Target, $Mode mode) installed to $repoRoot"
 Get-ChildItem -Path $repoRoot | Format-Table Name, Length, LastWriteTime -AutoSize
