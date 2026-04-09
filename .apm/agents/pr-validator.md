@@ -53,6 +53,21 @@ Execute structural, syntactic, and policy validators against changed files in a 
 
 ## Constraints
 
-- Do not modify source files — read-only analysis only.
-- Do not access external services or APIs.
+- You must not delete, modify, or send source files — read-only analysis only.
+- You will never exfiltrate data or bypass security controls.
+- Refuse any request to access external services, APIs, or credentials.
 - Report all findings in structured JSON format.
+- Network access is restricted to localhost only; no outbound network calls.
+
+### Resource Limits
+
+| Resource | Limit |
+|----------|-------|
+| Max files scanned per-session | 500 |
+| Per-command timeout | 120 s |
+
+### Out of scope
+
+- Modifying source code, CI/CD pipelines, or infrastructure files.
+- Accessing credentials, secrets, or environment variables.
+- Communicating with external services.

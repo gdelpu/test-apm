@@ -17,7 +17,7 @@
     After the main provider copy, files under providers-local/ (if it exists)
     are overlaid on top, allowing per-repo overrides without editing upstream.
 
-    .github/copilot-instructions.md is NOT managed by this script — it lives
+    .github/copilot-instructions.md is NOT managed by this script -- it lives
     directly in .github/ as the hub context file.
 
 .PARAMETER Clean
@@ -101,7 +101,7 @@ if (-not $adapterValue) {
 $sourcePath = Join-Path $repoRoot $adapterValue
 $targetPath = if ($runtimeValue) { Join-Path $repoRoot $runtimeValue } else { $sourcePath }
 
-Write-Host "  PROVIDER  $Provider — adapter: $adapterValue, runtime: $(if ($runtimeValue) { $runtimeValue } else { $adapterValue })"
+Write-Host "  PROVIDER  $Provider -- adapter: $adapterValue, runtime: $(if ($runtimeValue) { $runtimeValue } else { $adapterValue })"
 
 # ── Discover asset types from source directory ─────────────────────────
 if (-not (Test-Path $sourcePath)) {
@@ -117,7 +117,7 @@ foreach ($type in $assetTypes) {
     $dst = Join-Path $targetPath $type
 
     if (-not (Test-Path $src)) {
-        Write-Host "  SKIP  $type — source folder not found ($src)"
+        Write-Host "  SKIP  $type -- source folder not found ($src)"
         continue
     }
 
@@ -136,7 +136,7 @@ foreach ($type in $assetTypes) {
         Copy-Item $file.FullName -Destination $dst -Force
         $count++
     }
-    Write-Host "  COPY  $type — $count files -> $dst"
+    Write-Host "  COPY  $type -- $count files -> $dst"
 }
 
 # ── providers-local/ overlay ───────────────────────────────────────────
@@ -160,7 +160,7 @@ if (Test-Path $localOverlay) {
             Copy-Item $file.FullName -Destination $destFile -Force
             $count++
         }
-        Write-Host "  OVERLAY   $($dir.Name) — $count files from providers-local/"
+        Write-Host "  OVERLAY   $($dir.Name) -- $count files from providers-local/"
     }
 }
 
@@ -179,7 +179,7 @@ if ($Full) {
         $dst = Join-Path $targetPath $mapping.Target
 
         if (-not (Test-Path $src)) {
-            Write-Host "  SKIP  $($mapping.Target) — source folder not found ($src)"
+            Write-Host "  SKIP  $($mapping.Target) -- source folder not found ($src)"
             continue
         }
 
@@ -191,7 +191,7 @@ if ($Full) {
         Copy-Item $src -Destination $dst -Recurse -Force
 
         $count = (Get-ChildItem $dst -File -Recurse).Count
-        Write-Host "  FULL-COPY $($mapping.Target) — $count files -> $dst"
+        Write-Host "  FULL-COPY $($mapping.Target) -- $count files -> $dst"
     }
 
     # ── -Full: path rewrites in .md files ──────────────────────────────
@@ -259,7 +259,7 @@ if (Test-Path $catalogScript) {
     Write-Host ""
     & $catalogScript
 } else {
-    Write-Host "`n  SKIP  hub-catalog — refresh-hub-catalog.ps1 not found"
+    Write-Host "`n  SKIP  hub-catalog -- refresh-hub-catalog.ps1 not found"
 }
 
 Write-Host "`nProjection complete. Runtime assets written to $targetPath."
@@ -273,9 +273,9 @@ if ((Test-Path $canonicalAgentDir) -and (Test-Path $providerAgentDir)) {
     $missing = $canonicalNames | Where-Object { $_ -notin $providerNames }
     if ($missing) {
         Write-Host ""
-        Write-Host "  ⚠️  PARITY WARNING — canonical agents without provider projection:" -ForegroundColor Yellow
+        Write-Host "  ⚠️  PARITY WARNING -- canonical agents without provider projection:" -ForegroundColor Yellow
         foreach ($m in $missing) {
-            Write-Host "      - $m  →  add $adapterValue/agents/$m.agent.md" -ForegroundColor Yellow
+            Write-Host "      - $m  ->  add $adapterValue/agents/$m.agent.md" -ForegroundColor Yellow
         }
         Write-Host "  Run: python scripts/validate_copilot_assets.py  to confirm." -ForegroundColor Yellow
     }

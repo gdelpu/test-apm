@@ -127,7 +127,7 @@ if (Test-Path $agentsDir) {
         if (-not $fm['name']) { continue }
 
         $entry = "  - name: $(Format-YamlString $fm['name'])`n"
-        $entry += "    description: $(Format-YamlString ($fm['description'] ?? ''))`n"
+        $entry += "    description: $(Format-YamlString $(if ($fm['description']) { $fm['description'] } else { '' }))`n"
 
         # Parse tools array
         if ($fm['tools']) {
@@ -161,8 +161,8 @@ if (Test-Path $workflowsDir) {
         if (-not $name) { continue }
 
         $entry = "  - name: $(Format-YamlString $name)`n"
-        $entry += "    description: $(Format-YamlString ($description ?? ''))`n"
-        $entry += "    type: $($type ?? 'delivery')`n"
+        $entry += "    description: $(Format-YamlString $(if ($description) { $description } else { '' }))`n"
+        $entry += "    type: $(if ($type) { $type } else { 'delivery' })`n"
         $entry += "    stations: $stations`n"
 
         # Extract "When to use" from companion .md

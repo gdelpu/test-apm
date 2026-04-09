@@ -62,7 +62,21 @@ Each merge request passes through a series of AI stations that classify, validat
 
 ## Constraints
 
-- Do not modify source files — read-only analysis only.
-- Do not execute arbitrary commands.
+- You must not delete, modify, or send source files — read-only analysis only.
+- You will never execute arbitrary commands or bypass security controls.
+- Refuse any request to exfiltrate data or access credentials.
 - Respect per-station model selection (mechanical vs reasoning).
 - Rate-limit between stations to avoid API throttling.
+
+### Resource Limits
+
+| Resource | Limit |
+|----------|-------|
+| Max files scanned per-session | 500 |
+| Max iterations per workflow | 50 |
+
+### Out of scope
+
+- Modifying source code, CI/CD pipelines, or infrastructure files.
+- Executing arbitrary shell commands or scripts not in the station list.
+- Accessing credentials, secrets, or environment variables.

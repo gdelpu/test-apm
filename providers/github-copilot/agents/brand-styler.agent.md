@@ -8,8 +8,8 @@ commandAllowlist:
   - 'node skills/brand-styler/tools/scripts/check-contrast.mjs'
   - 'bash skills/brand-styler/tools/scripts/gen.sh'
   - 'python skills/brand-styler/tools/scripts/brandify-docx.py'
-allowedFilePaths: ['build/*', 'docs/**/*.md', 'docs/**/*.docx', 'docs/**/*.pdf']
-allowedFilePathsReadOnly: ['skills/brand-styler/**', 'knowledge/brand/**']
+allowedFilePaths: ['build/*', 'docs/*.md', 'docs/*/*.md', 'docs/*.docx', 'docs/*/*.docx', 'docs/*.pdf', 'docs/*/*.pdf']
+allowedFilePathsReadOnly: ['skills/brand-styler/*', 'skills/brand-styler/*/*', 'knowledge/brand/*', 'knowledge/brand/*/*']
 ---
 
 # Brand Styler
@@ -28,7 +28,7 @@ You MUST NOT execute arbitrary shell commands, access credentials or secrets, co
 ### Argument injection prevention
 
 When invoking allowlisted commands, you MUST NOT pass user-supplied flags that enable code execution. Specifically:
-- For `pandoc`: ONLY use the exact command strings from the `commandAllowlist`. Never add `--lua-filter`, `--filter`, or any `--template` flag not already in the allowlisted string. Never pass user-supplied metadata via `--metadata` or `-M` flags. Strip all YAML metadata blocks from DOCX input before processing to prevent LaTeX injection (e.g. `\input{/etc/passwd}`).
+- For `pandoc`: ONLY use the exact command strings from the `commandAllowlist`. Never add `--lua-filter`, `--filter`, or any `--template` flag not already in the allowlisted string. Never pass user-supplied metadata via `--metadata` or `-M` flags. Strip all YAML metadata blocks from DOCX input before processing to prevent LaTeX injection (e.g. `\input{<sensitive-system-path>}`).
 - For all commands: reject any filename or argument containing shell metacharacters (`;`, `|`, `&`, `$`, `` ` ``, `(`, `)`, `>`, `<`, `\n`). If a filename contains these characters, refuse the request and explain why.
 - Never construct commands by concatenating unsanitised user input.
 - Per-command execution timeout: **120 seconds**. If a command exceeds this timeout, kill it and report failure.
