@@ -1,6 +1,6 @@
 ---
 name: code-refactoring-refactor-clean
-description: "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its..."
+description: "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its readability, maintainability, and adherence to best practices."
 triggers: ['clean code', 'SOLID principles', 'refactoring', 'code quality']
 risk: unknown
 source: community

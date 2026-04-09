@@ -1,6 +1,6 @@
 ---
 name: react-flow-node-ts
-description: "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing no..."
+description: "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing node-based interfaces."
 triggers: ['React Flow nodes', 'TypeScript', 'Zustand', 'flow components']
 risk: unknown
 source: community

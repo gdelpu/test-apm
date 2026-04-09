@@ -125,4 +125,26 @@ All agents follow security hardening rules from `.apm/instructions/security-hard
 - Only use listed tools
 - Never read sensitive files (.env, *.pem, *.key, .aws/, .ssh/)
 
+## Audit tracing
+
+Every workflow execution must maintain a structured audit trail:
+
+- **Correlation ID**: A UUID `trace_id` propagates from workflow start through all stations.
+- **Trace records**: Each station emits a JSONL record to `specs/features/<feature>/audit-trace.jsonl`.
+- **Content hashing**: Input/output stored as SHA-256 hashes only — never raw content in traces.
+- **Risk scoring**: Weighted risk score computed per station; human review required when score ≥ 30.
+- **Query**: Use `/audit-trace <feature>` to review a feature's execution history.
+
+## Data anonymisation
+
+Before processing user-provided content (tickets, logs, customer documents, UAT evidence):
+
+1. **Scan** for PII: emails, phone numbers, SSNs, credit cards, IPs, IBANs, API keys.
+2. **Redact** using typed placeholders: `[REDACTED:email]`, `[REDACTED:phone]`, etc.
+3. **Never** reproduce real customer data in generated test scenarios — use synthetic data only.
+4. **Classify** output sensitivity: public / internal / confidential / restricted.
+5. **Report** PII types found (not values) in output metadata.
+
+See `knowledge/governance/secure-by-default.md` for full anonymisation policy.
+
 See `knowledge/playbooks/workflow-playbook.md` for workflow execution details.

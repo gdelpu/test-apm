@@ -53,6 +53,24 @@ now_utc() {
     date -u +%Y-%m-%dT%H:%M:%SZ
 }
 
+# --- Trace ID generation ---
+generate_trace_id() {
+    # Generate a UUID v4 correlation ID
+    if command -v python3 &>/dev/null; then
+        python3 -c "import uuid; print(uuid.uuid4())"
+    elif command -v uuidgen &>/dev/null; then
+        uuidgen | tr '[:upper:]' '[:lower:]'
+    else
+        # Fallback: pseudo-UUID from /dev/urandom or date-based
+        cat /proc/sys/kernel/random/uuid 2>/dev/null || \
+            echo "$(date +%s)-$(od -x /dev/urandom 2>/dev/null | head -1 | awk '{print $2$3"-"$4"-"$5"-"$6$7$8}')"
+    fi
+}
+
+generate_span_id() {
+    generate_trace_id
+}
+
 # --- Field extraction from pipe-delimited station strings ---
 # Station format: id|name|agent|skills|inputs|outputs|optional|gate_criteria|gate_severity|gate_reviewer
 get_station_field() {

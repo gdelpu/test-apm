@@ -1,5 +1,45 @@
 #!/usr/bin/env bash
 # Gate checker — evaluates quality gate criteria for a station
+#
+# Checks:
+# 1. Output file existence (mandatory for non-optional stations)
+# 2. YAML frontmatter structure (id, status fields when present)
+# 3. Explicit failure indicators in JSON/Markdown reports
+
+# Validate YAML frontmatter in a Markdown file.
+# Returns 0 if valid or no frontmatter, 1 if malformed.
+check_frontmatter() {
+    local file="$1"
+    local station_id="$2"
+
+    # Only check .md files
+    [[ "$file" != *.md ]] && return 0
+
+    # Check if file starts with frontmatter delimiter
+    local first_line
+    first_line=$(head -n 1 "$file" 2>/dev/null)
+    [[ "$first_line" != "---" ]] && return 0
+
+    # Extract frontmatter block
+    local frontmatter
+    frontmatter=$(sed -n '2,/^---$/p' "$file" 2>/dev/null | head -n -1)
+    if [[ -z "$frontmatter" ]]; then
+        log_warn "Malformed frontmatter (no closing ---): ${file} (station: ${station_id})"
+        return 1
+    fi
+
+    # Check for id field if frontmatter exists
+    if ! echo "$frontmatter" | grep -q "^id:" 2>/dev/null; then
+        log_warn "Frontmatter missing 'id' field: ${file} (station: ${station_id})"
+    fi
+
+    # Check for status field if frontmatter exists
+    if ! echo "$frontmatter" | grep -q "^status:" 2>/dev/null; then
+        log_warn "Frontmatter missing 'status' field: ${file} (station: ${station_id})"
+    fi
+
+    return 0
+}
 
 # Check the quality gate for a station.
 # Returns 0 if gate passes, 1 if gate fails.
@@ -55,6 +95,9 @@ check_gate() {
     for ofile in "${output_files[@]}"; do
         local report="${output_dir}/${ofile}"
         if [[ -f "$report" ]]; then
+            # Validate frontmatter structure on Markdown outputs
+            check_frontmatter "$report" "$station_id"
+
             # Check for explicit failure in JSON reports
             if grep -qi '"decision"[[:space:]]*:[[:space:]]*"fail\|"status"[[:space:]]*:[[:space:]]*"fail' "$report" 2>/dev/null; then
                 log_error "Gate check failed — report indicates failure: ${ofile}"

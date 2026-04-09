@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trace-record.schema.json",
+  "title": "SSG AI SDLC Audit Trace Record",
+  "description": "Schema for structured audit trace records emitted by the hook framework.",
+  "type": "object",
+  "required": ["trace_id", "span_id", "timestamp", "workflow", "station"],
+  "properties": {
+    "trace_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Correlation ID for the entire workflow run."
+    },
+    "span_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique ID for this hook/station invocation."
+    },
+    "parent_span_id": {
+      "type": ["string", "null"],
+      "description": "Links to parent span (workflow → station → tool call)."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp."
+    },
+    "workflow": {
+      "type": "string",
+      "description": "Workflow name (e.g. feature-implementation)."
+    },
+    "station": {
+      "type": "string",
+      "description": "Station ID (e.g. implement)."
+    },
+    "agent": {
+      "type": "string",
+      "description": "Agent role name."
+    },
+    "skill": {
+      "type": "string",
+      "description": "Skill name being invoked."
+    },
+    "hook_phase": {
+      "type": "string",
+      "enum": ["pre", "post"],
+      "description": "Whether this span is from a pre-hook or post-hook."
+    },
+    "hook_name": {
+      "type": "string",
+      "description": "Name of the hook that emitted this span."
+    },
+    "tool_invoked": {
+      "type": "string",
+      "description": "Tool name if this trace is for a tool invocation."
+    },
+    "input_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the input content (never raw content)."
+    },
+    "output_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the output content (never raw content)."
+    },
+    "sensitivity": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["public", "internal", "confidential", "restricted"],
+          "default": "internal"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Sensitivity tags (e.g. pii, credentials, production-data)."
+        },
+        "pii_types": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Types of PII found (e.g. email, phone, ssn)."
+        },
+        "redaction_applied": {
+          "type": "boolean",
+          "description": "Whether redaction was applied to the content."
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Numeric risk score (0–100)."
+        },
+        "level": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "factors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Contributing risk factor labels."
+        },
+        "human_review_required": {
+          "type": "boolean"
+        },
+        "human_review_reason": {
+          "type": "string"
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "decision": {
+          "type": ["string", "null"],
+          "enum": ["approved", "rejected", null]
+        },
+        "reviewer": { "type": ["string", "null"] },
+        "timestamp": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "description": "Provider name (github-copilot, claude-code, cli)."
+        },
+        "name": {
+          "type": ["string", "null"],
+          "description": "Model name (e.g. claude-opus-4.6)."
+        },
+        "tokens_in": {
+          "type": ["integer", "null"],
+          "description": "Input tokens (null when unavailable)."
+        },
+        "tokens_out": {
+          "type": ["integer", "null"],
+          "description": "Output tokens (null when unavailable)."
+        },
+        "cost_usd": {
+          "type": ["number", "null"],
+          "description": "Estimated cost in USD (null when unavailable)."
+        },
+        "latency_ms": {
+          "type": ["integer", "null"],
+          "description": "Latency in milliseconds (null when unavailable)."
+        }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["applied", "skipped", "not-required"]
+        },
+        "patterns_matched": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "types_redacted": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

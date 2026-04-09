@@ -1,6 +1,6 @@
 ---
 name: frontend-ui-dark-ts
-description: "Build dark-themed React applications using Tailwind CSS with custom theming, glassmorphism effects, and Framer Motion animations. Use when creating dashboards, admin panels, or data-rich interfaces..."
+description: "Build dark-themed React applications using Tailwind CSS with custom theming, glassmorphism effects, and Framer Motion animations. Use when creating dashboards, admin panels, or data-rich interfaces with dark UI patterns."
 triggers: ['dark theme', 'Tailwind CSS', 'React theming', 'UI components']
 risk: unknown
 source: community

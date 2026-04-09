@@ -148,3 +148,25 @@ Use `--station <id>` to execute a single station from any workflow:
 | Track | `sprint-tracking` | Sprint tracking |
 | QV | `quality-validation` | Quality validation |
 | Gov | `copil` | COPIL & Go/No-Go |
+
+## Audit tracing and data anonymisation
+
+```bash
+# Review audit traces for a feature
+python -m engine --retroactive --path specs/features/my-feature/
+
+# Run hooks manually (pre-phase) on a file
+cd .apm/hooks
+python -m engine --phase pre --trace-id $(python3 -c "import uuid;print(uuid.uuid4())") \
+  --workflow compliance-check --station pii-scan --input ../../specs/features/my-feature/pii-report.md \
+  --trace-file ../../specs/features/my-feature/audit-trace.jsonl --json
+
+# Retroactive PII scan of existing artifacts
+cd .apm/hooks
+python -m engine --retroactive --path ../../specs/
+```
+
+Hooks run automatically when using `run-workflow.sh`. The audit trace is
+written to `specs/features/<feature>/audit-trace.jsonl`.
+
+Configure hooks via `hook-config.json` (copy template from `.apm/templates/hook-config.json`).

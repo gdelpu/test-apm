@@ -88,10 +88,16 @@ fi
 OUTPUT_DIR="${REPO_ROOT}/specs/features/${FEATURE}"
 mkdir -p "$OUTPUT_DIR"
 
+# --- Generate trace correlation ID ---
+export TRACE_ID
+TRACE_ID=$(generate_trace_id)
+TRACE_FILE="${OUTPUT_DIR}/audit-trace.jsonl"
+
 # --- Load workflow ---
 log_header "Workflow: ${WORKFLOW}"
 log_info "Feature: ${FEATURE}"
 log_info "Output: ${OUTPUT_DIR}"
+log_info "Trace ID: ${TRACE_ID}"
 
 STATIONS=()
 parse_workflow "$WORKFLOW_FILE" STATIONS
@@ -141,9 +147,82 @@ for ((i=START_INDEX; i<${#STATIONS[@]}; i++)); do
     # Update state: running
     update_station_state "$STATE_FILE" "$station_id" "running" "" ""
 
+    # --- Pre-hooks ---
+    local hook_blocked=false
+    local station_skills
+    station_skills=$(get_station_field "$station" "skills")
+    local station_agent
+    station_agent=$(get_station_field "$station" "agent")
+    local station_inputs
+    station_inputs=$(get_station_field "$station" "inputs")
+
+    if check_command python3; then
+        local hook_input_file=""
+        if [[ -n "$station_inputs" ]]; then
+            IFS=',' read -ra _inp <<< "$station_inputs"
+            hook_input_file="${OUTPUT_DIR}/${_inp[0]}"
+        fi
+        local pre_args=(
+            python3 -m engine --phase pre
+            --trace-id "$TRACE_ID"
+            --workflow "$WORKFLOW"
+            --station "$station_id"
+            --agent "$station_agent"
+            --skill "$station_skills"
+            --provider cli
+            --trace-file "$TRACE_FILE"
+        )
+        if [[ -n "$hook_input_file" && -f "$hook_input_file" ]]; then
+            pre_args+=(--input "$hook_input_file")
+        fi
+
+        pushd "${REPO_ROOT}/.apm/hooks" >/dev/null 2>&1 || true
+        if ! "${pre_args[@]}" 2>/dev/null; then
+            log_warn "Pre-hook flagged station ${station_id}"
+            # Non-zero from pre-hook means blocked
+            hook_blocked=true
+        fi
+        popd >/dev/null 2>&1 || true
+    fi
+
+    if [[ "$hook_blocked" == true ]]; then
+        OVERALL_RESULT="failed"
+        update_station_state "$STATE_FILE" "$station_id" "failed" "$(now_utc)" "blocked-by-hook"
+        log_error "Station blocked by pre-hook: ${station_name}"
+        break
+    fi
+
     # Run station
     if run_station "$station" "$OUTPUT_DIR" "$REPO_ROOT" "$VERBOSE"; then
         log_success "Station completed: ${station_name}"
+
+        # --- Post-hooks ---
+        if check_command python3; then
+            local station_outputs
+            station_outputs=$(get_station_field "$station" "outputs")
+            local hook_output_file=""
+            if [[ -n "$station_outputs" ]]; then
+                IFS=',' read -ra _outp <<< "$station_outputs"
+                hook_output_file="${OUTPUT_DIR}/${_outp[0]}"
+            fi
+            local post_args=(
+                python3 -m engine --phase post
+                --trace-id "$TRACE_ID"
+                --workflow "$WORKFLOW"
+                --station "$station_id"
+                --agent "$station_agent"
+                --skill "$station_skills"
+                --provider cli
+                --trace-file "$TRACE_FILE"
+            )
+            if [[ -n "$hook_output_file" && -f "$hook_output_file" ]]; then
+                post_args+=(--output "$hook_output_file")
+            fi
+
+            pushd "${REPO_ROOT}/.apm/hooks" >/dev/null 2>&1 || true
+            "${post_args[@]}" 2>/dev/null || log_warn "Post-hook warning for ${station_id}"
+            popd >/dev/null 2>&1 || true
+        fi
 
         # Check gate
         gate_result="pass"
