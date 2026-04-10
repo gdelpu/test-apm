@@ -35,7 +35,7 @@ Compute an aggregate risk score from PII scan results, security review findings,
 
 ## Output
 
-`risk-score.md`
+Use `edit/editFiles` to write: `outputs/specs/features/<feature>/risk-score.md`
 
 ## Gate criteria
 

@@ -11,7 +11,7 @@ Execute the **BA System S2 — Specification** pipeline.
    - 2.2 (epic decomposition) — produces `epics/`.
    - 2.2b (feature spec) per epic — fan-out, up to max_concurrency in parallel.
    - 2.3 (business rules) — fan-in, waits for all features.
-4. Write to `outputs/docs/1-prd/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/1-prd/`. Do not merely display content in chat — use file-writing tools to create each file.
 5. Suggest `/sdlc-validate`.
 
 Prerequisites: S1 (scoping) deliverables must exist with status `validated`.

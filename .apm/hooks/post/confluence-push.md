@@ -6,7 +6,7 @@
 
 ## Objective
 
-Executed **after the quality control hook**, as the last step before returning to the coordinator. Pushes the produced deliverable to Confluence by delegating to the `sdlc-confluence-sync` skill's publish tooling.
+Executed **after the quality control hook**, as the last step before returning to the coordinator. Pushes the produced deliverable to Confluence by delegating to the `sdlc-confluence-sync` skill's publish tooling. All front matter updates (`confluence_id`, `confluence_sync_hash`, `status` changes) **must be written to disk** using the `edit/editFiles` tool.
 
 **Principle:** Confluence push is best-effort. It must NEVER block deliverable production.
 

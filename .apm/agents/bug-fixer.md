@@ -56,6 +56,10 @@ analysis, fix planning, implementation, and regression testing.
 6. **Regression test** — Verify fix resolves bug without side effects
 7. **Quality validation** — Run quality-validation workflow
 
+## File creation mandate
+
+All deliverables — including triage reports, root cause analyses, fix plans, and regression reports — **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat. Always create or update the file at the specified output path. Create parent directories as needed.
+
 ## Guardrails
 
 - Never skip reproduction — fixes without reproduction are untestable

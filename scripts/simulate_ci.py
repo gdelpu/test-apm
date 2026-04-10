@@ -541,12 +541,52 @@ def check_a5():
 
 
 # ══════════════════════════════════════════════════════════════
+# A1-CL — Changelog / Version Sync
+# ══════════════════════════════════════════════════════════════
+def check_changelog():
+    """Verify CHANGELOG.md has a proper entry for the version in apm.yml."""
+    apm_path = root / 'apm.yml'
+    changelog_path = root / 'CHANGELOG.md'
+
+    if not apm_path.exists() or not changelog_path.exists():
+        return
+
+    apm_text = apm_path.read_text(encoding='utf-8')
+    m = re.search(r'^version:\s*(.+)', apm_text, re.M)
+    if not m:
+        add('A1', 'CL-01', 'critical', apm_path, 'No version field in apm.yml')
+        return
+    version = m.group(1).strip().strip('"').strip("'")
+
+    changelog_text = changelog_path.read_text(encoding='utf-8')
+
+    # CL-01: Entry exists
+    heading_pattern = re.compile(r'^## \[' + re.escape(version) + r'\]', re.M)
+    if not heading_pattern.search(changelog_text):
+        add('A1', 'CL-01', 'critical', changelog_path,
+            f'No changelog entry for version {version} (from apm.yml)')
+        return
+
+    # CL-02: Entry has ### subsections (not a stub)
+    section_pattern = re.compile(
+        r'## \[' + re.escape(version) + r'\][^\n]*\n(.*?)(?=\n## \[|\Z)', re.S)
+    section_match = section_pattern.search(changelog_text)
+    if section_match:
+        body = section_match.group(1).strip()
+        if not re.search(r'^###\s', body, re.M):
+            add('A1', 'CL-02', 'critical', changelog_path,
+                f'Changelog entry for {version} is a stub — '
+                f'needs ### Added/Changed/Fixed subsections')
+
+
+# ══════════════════════════════════════════════════════════════
 # Run all checks
 # ══════════════════════════════════════════════════════════════
 check_a1()
 check_a2()
 check_a3()
 check_a5()
+check_changelog()
 
 
 # ══════════════════════════════════════════════════════════════

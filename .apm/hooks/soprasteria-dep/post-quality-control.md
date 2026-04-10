@@ -2,7 +2,7 @@
 
 ## Objective
 
-This hook runs **after** every DEP Agent finishes producing its deliverable. It performs a self-verification pass and fills the `## Production confidence` section of the output template.
+This hook runs **after** every DEP Agent finishes producing its deliverable. It performs a self-verification pass and fills the `## Production confidence` section of the output template. All modifications (confidence scores, attention points, front matter updates) **must be written to disk** using the `edit/editFiles` tool — do not merely display corrections in chat.
 
 ---
 

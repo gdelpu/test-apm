@@ -9,7 +9,8 @@ Execute the **full Test pipeline** (campaign + performance) without human gates.
 3. Execute with `gate_mode: skip`:
    - Campaign system: camp.1 (launch) + camp.2 (report).
    - Performance system: perf.1 (execution) + perf.2 (report).
-4. Display full summary with cumulative Go/No-Go.
+4. **Write every report as an actual file on disk.** Do not merely display content in chat — use file-writing tools to create each file.
+5. Display full summary with cumulative Go/No-Go.
 
 If $ARGUMENTS contains "gated", use `gate_mode: pause` between campaign and performance.
 

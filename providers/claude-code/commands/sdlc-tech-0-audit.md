@@ -9,7 +9,7 @@ Execute the **Tech System T0 — Brownfield Technical Audit** pipeline.
 3. Execute:
    - Wave 1: t0.1 (Technical Stack Audit — reverse-engineering AS-IS).
    - Wave 2: t0.2 (Gap Analysis — migration paths, zero-downtime strategy).
-4. Write to `outputs/docs/2-tech/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/2-tech/`. Do not merely display content in chat — use file-writing tools to create each file.
 5. Suggest `/sdlc-validate`.
 
 This pipeline is for brownfield projects only.

@@ -33,4 +33,4 @@ Run static analysis tools to detect code quality issues, bugs, code smells, and 
 
 ## Output
 
-`static-analysis-report.md` following the quality-validator report format.
+Use `edit/editFiles` to write: `outputs/specs/features/<feature>/static-analysis-report.md`

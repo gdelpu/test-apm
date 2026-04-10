@@ -233,6 +233,21 @@ def main() -> None:
     for changed_file in changed:
         validate_file(changed_file, blocking, warnings, fix_suggestions)
 
+    # Cross-file check: apm.yml version bump requires CHANGELOG.md update.
+    if "apm.yml" in changed and "CHANGELOG.md" not in changed:
+        blocking.append(
+            "apm.yml was changed but CHANGELOG.md was not — "
+            "every version bump requires a corresponding changelog entry"
+        )
+        fix_suggestions.append({
+            "file": "CHANGELOG.md",
+            "issue": "Missing changelog entry for new version",
+            "proposed_fix": (
+                "Add a '## [X.Y.Z] — YYYY-MM-DD' section below '## [Unreleased]' "
+                "with ### Added/Changed/Fixed subsections"
+            ),
+        })
+
     status = "fail" if blocking else ("warn" if warnings else "pass")
     report = {
         "status": status,

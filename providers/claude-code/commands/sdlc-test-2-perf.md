@@ -8,7 +8,8 @@ Execute the **Test Performance System**.
 2. Execute:
    - Wave 1: perf.1 (Performance Campaign Execution — k6/Artillery scripts).
    - Wave 2: perf.2 (Performance Report — analysis vs thresholds, baseline comparison).
-3. Display summary with metrics and Go/No-Go Perf recommendation.
+3. **Write every report as an actual file on disk.** Do not merely display content in chat — use file-writing tools to create each file.
+4. Display summary with metrics and Go/No-Go Perf recommendation.
 
 Prerequisites: Tech deliverables (NFR test specs, k6/ZAP scripts) must exist. Application must be deployed on qualification/staging environment.
 

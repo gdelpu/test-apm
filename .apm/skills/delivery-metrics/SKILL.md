@@ -32,7 +32,7 @@ Collect and analyze delivery metrics to identify performance trends, bottlenecks
 
 ## Output
 
-`specs/retrospectives/<sprint>/metrics.md`
+Use `edit/editFiles` to write: `outputs/retrospectives/<sprint>/metrics.md`
 
 ## Rules
 

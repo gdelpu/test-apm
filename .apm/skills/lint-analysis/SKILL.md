@@ -35,4 +35,4 @@ Run language-specific linters to detect code style violations, syntax errors, an
 
 ## Output
 
-`lint-report.md` following the quality-validator report format.
+Use `edit/editFiles` to write: `outputs/specs/features/<feature>/lint-report.md`

@@ -10,7 +10,7 @@ Execute the **Steer System P2 — Sprint Tracking** pipeline (recurring).
    - Wave 1: p2.1 (Sprint Progress).
    - Wave 2: p2.2 (System Health).
    - Wave 3: p2.3 (Sprint Risks).
-4. Write to `outputs/docs/3-steer/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/3-steer/`. Do not merely display content in chat — use file-writing tools to create each file.
 
 $ARGUMENTS: sprint number (e.g., "3" for Sprint 3). Sets the sprint context.
 

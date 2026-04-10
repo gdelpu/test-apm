@@ -48,5 +48,6 @@ Run security scanning tools (SAST and/or DAST) to detect vulnerabilities in sour
 
 ## Output
 
-- `sast-report.md` (for SAST station)
-- `dast-report.md` (for DAST station)
+Use `edit/editFiles` to write:
+- `outputs/specs/features/<feature>/sast-report.md` (for SAST station)
+- `outputs/specs/features/<feature>/dast-report.md` (for DAST station)

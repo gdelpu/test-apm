@@ -9,7 +9,7 @@ compliance, and full-lifecycle SDLC support.
 
 - Use `knowledge/` for principles, governance, and playbooks.
 - Use `.apm/` for canonical agent/skill/prompt definitions.
-- Write outputs under `specs/`.
+- **Write all generated artifacts to disk under `outputs/` using file-writing tools (Write, create_file).** Never display deliverable content only in chat — every output must be an actual file on the file system.
 - Follow the spec-kit sequence:
   constitution → spec → clarify → plan → tasks → quality gate.
 

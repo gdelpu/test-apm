@@ -15,7 +15,7 @@ allowedFilePathsReadOnly:
 handoffs:
   - label: Run Feature Implementation
     agent: copilot
-    prompt: 'Read .apm/workflows/feature-implementation.yml and execute the feature-implementation workflow. Write all artifacts to outputs/specs/features/<feature>/. Feature:'
+    prompt: 'Read .apm/workflows/feature-implementation.yml and execute the feature-implementation workflow. Start at station 1 (constitution) — do NOT skip ahead. First determine whether this is a brownfield (existing system) or greenfield (new) project: if brownfield, run the brownfield-context station to extract codebase context before specification. Write all artifacts to outputs/specs/features/<feature>/. Project context:'
   - label: Run Bug Fixing
     agent: copilot
     prompt: 'Read .apm/workflows/bug-fixing.yml and execute the bug-fixing workflow. Write all artifacts to outputs/specs/features/<feature>/. Bug:'
@@ -24,10 +24,10 @@ handoffs:
     prompt: 'Read .apm/workflows/modernization.yml and execute the modernization workflow. Write all artifacts to outputs/specs/features/<feature>/. Target:'
   - label: Run SDLC Full
     agent: copilot
-    prompt: 'Read .apm/workflows/sdlc-full.yml and execute the full SDLC pipeline. Write all artifacts to outputs/. Project:'
+    prompt: 'Read .apm/workflows/sdlc-full.yml and execute the full SDLC pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, execute S0/T0 audit stations. If greenfield, skip audit stations and start from S1/T1. Write all artifacts to outputs/. Project context:'
   - label: Run Spec Kit
     agent: copilot
-    prompt: 'Read .apm/workflows/spec-kit.yml and execute the spec-kit workflow. Write all artifacts to outputs/specs/features/<feature>/. Feature:'
+    prompt: 'Read .apm/workflows/spec-kit.yml and execute the spec-kit workflow. Start at station 1 (constitution) — do NOT skip ahead to feature specification. First determine whether this is a brownfield (existing system) or greenfield (new) project: if brownfield, run the brownfield-context station to extract codebase context before specification. Write all artifacts to outputs/specs/features/<feature>/. Project context:'
   - label: Run Quality Validation
     agent: copilot
     prompt: 'Read .apm/workflows/quality-validation.yml and execute the quality-validation workflow. Target:'
@@ -41,7 +41,7 @@ handoffs:
     prompt: 'Read .apm/workflows/incident-resolution.yml and execute the incident-resolution workflow. Write all artifacts to outputs/specs/features/<feature>/. Incident:'
   - label: Run SDLC BA
     agent: copilot
-    prompt: 'Read .apm/workflows/sdlc-ba.yml and execute the full BA pipeline. Write all artifacts to outputs/. Project:'
+    prompt: 'Read .apm/workflows/sdlc-ba.yml and execute the full BA pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, start with S0 audit stations. If greenfield, skip S0 audit and start from S1 scoping. Write all artifacts to outputs/. Project context:'
   - label: Run Security Review
     agent: Security Reviewer
     prompt: 'Review this repository for prompt injection, data exfiltration, privilege escalation, and other LLM security risks.'

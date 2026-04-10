@@ -34,4 +34,4 @@ Scan project dependencies for known vulnerabilities (CVEs). Select the appropria
 
 ## Output
 
-`dependency-report.md` following the quality-validator report format.
+Use `edit/editFiles` to write: `outputs/specs/features/<feature>/dependency-report.md`
