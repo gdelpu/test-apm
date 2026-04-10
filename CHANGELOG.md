@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Changed
+- Enhance workflows and enforce file output requirements
+
+
 ## [0.0.5] — 2026-04-10
 
 ### Added
