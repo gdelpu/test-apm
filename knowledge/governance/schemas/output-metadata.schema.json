@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Output Document Metadata",
+  "description": "JSON Schema for the YAML frontmatter of all files produced by agents and workflows under outputs/.",
+  "type": "object",
+  "required": [
+    "workflow",
+    "trigger",
+    "date",
+    "status",
+    "inputDocuments",
+    "changeHistory"
+  ],
+  "properties": {
+    "workflow": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of the workflow that created this file (e.g., 'spec-kit', 'feature-implementation', 'quality-validation')."
+    },
+    "trigger": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What triggered the workflow execution (e.g., 'user', 'hub-orchestrator', 'spec-kit/station-3', 'pr-validation')."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Creation date in ISO 8601 format (YYYY-MM-DD)."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "validated",
+        "superseded",
+        "archived"
+      ],
+      "description": "Document lifecycle status. Starts as 'draft' on creation, moves to 'review' when submitted for review, 'validated' after approval, 'superseded' when replaced, 'archived' when retired."
+    },
+    "inputDocuments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of document paths (relative to repo root) used by the workflow to produce this document."
+    },
+    "changeHistory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/changeEntry"
+      },
+      "minItems": 1,
+      "description": "Chronological log of changes. First entry is the initial creation."
+    },
+    "holisticQualityRating": {
+      "type": "string",
+      "enum": [
+        "excellent",
+        "good",
+        "adequate",
+        "poor",
+        "insufficient",
+        "not-rated"
+      ],
+      "default": "not-rated",
+      "description": "Quality rating assigned after agent review. 'excellent' = exceeds expectations, 'good' = meets expectations, 'adequate' = acceptable with minor gaps, 'poor' = below expectations, 'insufficient' = does not meet minimum standards."
+    },
+    "overallStatus": {
+      "type": "string",
+      "enum": [
+        "good",
+        "warning",
+        "critical",
+        "not-reviewed"
+      ],
+      "default": "not-reviewed",
+      "description": "Overall health verdict after review. 'good' = no issues, 'warning' = minor issues acceptable with caveats, 'critical' = significant issues requiring rework, 'not-reviewed' = not yet evaluated."
+    }
+  },
+  "definitions": {
+    "changeEntry": {
+      "type": "object",
+      "required": [
+        "date",
+        "description",
+        "changes"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of the change (YYYY-MM-DD)."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short summary of what changed."
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "List of individual changes made by agents on the document."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

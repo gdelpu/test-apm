@@ -60,6 +60,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 - [Knowledge Base](#knowledge-base)
 - [Quick Start Guide](#quick-start-guide)
 - [Concepts & Glossary](#concepts--glossary)
+- [Output File Metadata](#output-file-metadata)
 - [Provider Setup](#provider-setup)
 - [PR Validation Pipeline](#pr-validation-pipeline)
 - [Cross-Layer Validation](#cross-layer-validation)
@@ -132,7 +133,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 | `clients/` | Per-client overlay directories |
 | `ci-gates/` | PR validation station implementations (A0–A7) |
 | `scripts/` | Cross-layer validation scripts, APM build/publish/install helpers |
-| `docs/` | [Quick Start](docs/quick-start.md), [Concepts](docs/concepts.md), [APM Consumer Guide](docs/apm-consumer-guide.md), [Distribution](docs/distribution.md) |
+| `docs/` | [Quick Start](docs/quick-start.md), [Concepts](docs/concepts.md), [Output Metadata](docs/output-metadata.md), [APM Consumer Guide](docs/apm-consumer-guide.md), [Distribution](docs/distribution.md) |
 | `outputs/` | All generated workflow and agent output artifacts |
 
 ---
@@ -896,6 +897,20 @@ See [`docs/quick-start.md`](docs/quick-start.md) — a hands-on guide covering:
 See [`docs/concepts.md`](docs/concepts.md) — explains each building block:
 
 Agents, Workflows, Skills, Knowledge, Prompts, Instructions, Hooks, Templates, Contexts, Scripts — what they are, where to find them, and how they fit together.
+
+---
+
+## Output File Metadata
+
+See [`docs/output-metadata.md`](docs/output-metadata.md) — defines the mandatory YAML frontmatter for all files produced under `outputs/`:
+
+- **Provenance** — `workflow` and `trigger` fields trace which pipeline produced the file
+- **Lineage** — `inputDocuments` lists all source documents consumed
+- **Lifecycle** — `status` (`draft` → `review` → `validated` → `superseded` | `archived`) and `changeHistory` with append-only entries
+- **Quality** — `holisticQualityRating` and `overallStatus` are set by reviewing agents, never by the producing agent
+
+Schema: [`knowledge/governance/schemas/output-metadata.schema.json`](knowledge/governance/schemas/output-metadata.schema.json)  
+Instruction: [`.apm/instructions/output-metadata.md`](.apm/instructions/output-metadata.md)
 
 ---
 
