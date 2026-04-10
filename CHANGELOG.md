@@ -7,8 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.6] — 2026-04-10
+
 ### Changed
 - Enhance workflows and enforce file output requirements
+
+### Fixed
+- Update version to 0.0.6 and enhance README for CI pipeline clarity
 
 
 ## [0.0.5] — 2026-04-10
