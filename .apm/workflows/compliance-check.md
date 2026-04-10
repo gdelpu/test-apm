@@ -23,7 +23,7 @@ Validate compliance, privacy, and AI governance requirements including PII scann
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `pii-report.md` — PII scan results and data classification
 - `prompt-injection-report.md` — Prompt template and AI input analysis
 - `policy-report.md` — Policy compliance evaluation

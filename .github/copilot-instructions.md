@@ -29,7 +29,7 @@ compliance, and full-lifecycle SDLC support.
   └──────────────────────┬───────────────────────────────┘
                          │
             ┌────────────▼──────────────┐
-            │      Outputs: specs/      │
+            │    Outputs: outputs/      │
             │  features/  decisions/    │
             └───────────────────────────┘
 ```
@@ -50,6 +50,7 @@ compliance, and full-lifecycle SDLC support.
 | `ci-gates/` | PR validation station implementations (A0–A7) |
 | `clients/` | Client-specific overlays |
 | `specs/` | Generated specification artifacts |
+| `outputs/` | All generated workflow and agent output artifacts |
 
 ## Source of truth
 
@@ -66,7 +67,7 @@ your intent, and dispatches to the right workflow or agent.
 
 ## Working rules
 
-- Write all generated artifacts under `specs/`.
+- Write all generated artifacts under `outputs/`.
 - For brownfield work, start with a reverse brief.
 - Do not create implementation tasks before a plan exists.
 - Prefer the local skills and templates over inventing new structures.

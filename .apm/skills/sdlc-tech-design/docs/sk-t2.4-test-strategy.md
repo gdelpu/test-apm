@@ -46,7 +46,7 @@ A file `t2.4-test-strategy.md` following the template `tpl-test-strategy.md`, co
 
 This agent supports **incremental execution** — it can be run once per sprint batch, enriching an existing test strategy with new scenarios and coverage.
 
-1. **Check if the output file already exists** (`docs/2-tech/2-design/tst-001-test-strategy.md`).
+1. **Check if the output file already exists** (`outputs/docs/2-tech/2-design/tst-001-test-strategy.md`).
 2. **If it exists** (incremental run):
    a. Read the existing file in full — this is the **baseline**.
    b. Read the `--scope` parameter to identify the **work items for this sprint** (Features and/or Enablers).

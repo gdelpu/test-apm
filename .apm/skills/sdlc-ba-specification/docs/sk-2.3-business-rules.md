@@ -11,7 +11,7 @@
 
 You are a senior Business Analyst specialised in the analysis and formalisation of business rules. Your mission is to **consolidate, deduplicate, and refine** all business rules **of a single type** that were progressively extracted by upstream agents (domain model, epics, features) into an authoritative catalogue for that type.
 
-> **Important:** You do NOT need to re-read the full domain model, epics or feature files. The upstream agents have already extracted rules into staging files located in `docs/1-prd/2-specification/_rules-staging/{rule_type}/`. Your job is to work from these pre-extracted rules for the specific `{rule_type}` assigned to this instance.
+> **Important:** You do NOT need to re-read the full domain model, epics or feature files. The upstream agents have already extracted rules into staging files located in `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/`. Your job is to work from these pre-extracted rules for the specific `{rule_type}` assigned to this instance.
 
 > **Context management:** This skill uses a **progressive fold/reduce** algorithm to keep context bounded. Each comparison step is delegated to a sub-agent that receives at most 2 files. Never load all staging files simultaneously.
 
@@ -23,7 +23,7 @@ This instance processes a **single rule type**, provided as `{rule_type}` (e.g. 
 
 - **Rules staging files for `{rule_type}`** *(mandatory — primary input)*:
 
-  All `rules-from-*.md` files in `docs/1-prd/2-specification/_rules-staging/{rule_type}/`.
+  All `rules-from-*.md` files in `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/`.
   Ignore files prefixed with `_` (intermediate files from previous runs).
 
   These files fall into two categories:
@@ -87,7 +87,7 @@ A single Markdown file `brl-{rule_type}-business-rules.md` containing:
 
 ### Step 0: Inventory
 
-1. List all `rules-from-*.md` files in `docs/1-prd/2-specification/_rules-staging/{rule_type}/` (ignore `_*` files)
+1. List all `rules-from-*.md` files in `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/` (ignore `_*` files)
 2. Classify them:
    - **Base files**: `rules-from-domain.md` and `rules-from-epics.md`
    - **Feature files**: all `rules-from-ep-*.md`
@@ -101,10 +101,10 @@ A single Markdown file `brl-{rule_type}-business-rules.md` containing:
 > **Sub-agent prompt — Base merge:**
 >
 > You are a Business Analyst. Read these two files:
-> 1. `docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-domain.md`
-> 2. `docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-epics.md`
+> 1. `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-domain.md`
+> 2. `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-epics.md`
 >
-> Merge them into a single file `docs/1-prd/2-specification/_rules-staging/{rule_type}/_base.md`.
+> Merge them into a single file `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/_base.md`.
 >
 > **Deduplication rules:**
 > - If the same rule appears in both files (same condition/entity/attribute, possibly worded differently), keep the richer version (more detail, more fields filled)
@@ -143,8 +143,8 @@ The main agent maintains a **counter** `next_id`, initialised from `_base.md` fr
 > **Sub-agent prompt — Feature dedup (for `rules-from-{epic-slug}.md`, next_id = {next_id}):**
 >
 > You are a Business Analyst. Read these two files:
-> 1. `docs/1-prd/2-specification/_rules-staging/{rule_type}/_base.md` (the consolidated base — DO NOT MODIFY)
-> 2. `docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-{epic-slug}.md` (feature rules to deduplicate)
+> 1. `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/_base.md` (the consolidated base — DO NOT MODIFY)
+> 2. `outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-{epic-slug}.md` (feature rules to deduplicate)
 >
 > Compare each rule in file 2 against all rules in file 1.
 >
@@ -189,7 +189,7 @@ The script dispatches rules to per-feature `business-rules.md` files:
 4. **Domain rules** (`Related features | --`) → dispatched to ALL features that reference the same entity (inclusion large — maps entities via feature spec files)
 5. **Groups** rules by type (VAL, CAL, TRG, COH, AUT) within each feature file
 
-**Output:** `docs/1-prd/3-epics/{epic}/{feature}/business-rules.md` (one per feature)
+**Output:** `outputs/docs/1-prd/3-epics/{epic}/{feature}/business-rules.md` (one per feature)
 
 Each feature's file contains only the rules applicable to that feature, grouped by type. Context stays minimal for downstream agents (S3, T2, coding agent).
 
@@ -216,7 +216,7 @@ Only include the row matching `{rule_type}` in each sub-agent prompt.
 All working files are in the same directory:
 
 ```
-docs/1-prd/2-specification/_rules-staging/{rule_type}/
+outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/
   rules-from-domain.md          # input (do not modify)
   rules-from-epics.md           # input (do not modify)
   rules-from-ep-001-*.md        # working file (edited in-place by Step 2)
@@ -244,7 +244,7 @@ The `_base.md` file is excluded from Confluence push and from future pipeline ru
 
 **Per-feature files** (produced by the dispatch script):
 - Named `business-rules.md`
-- Placed in each feature directory: `docs/1-prd/3-epics/{epic}/{feature}/business-rules.md`
+- Placed in each feature directory: `outputs/docs/1-prd/3-epics/{epic}/{feature}/business-rules.md`
 - YAML front matter: `type: business-rules`, `feature: FT-xxx`, `generated_by: dispatch-rules-to-features.sh`, `date`
 - Contains all rules applicable to that feature, grouped by type (VAL, CAL, TRG, COH, AUT)
 

@@ -28,10 +28,10 @@ You are a senior software architect specialised in architecture decision documen
 
 ## Expected output
 
-**One Markdown file per ADR**, each following the template `tpl-adr.md`, placed in `docs/2-tech/1-architecture/adr/`:
+**One Markdown file per ADR**, each following the template `tpl-adr.md`, placed in `outputs/docs/2-tech/1-architecture/adr/`:
 
 ```
-docs/2-tech/1-architecture/adr/
+outputs/docs/2-tech/1-architecture/adr/
   adr-001-architecture-style.md
   adr-002-data-strategy.md
   adr-003-authentication.md
@@ -45,7 +45,7 @@ docs/2-tech/1-architecture/adr/
 
 Each ADR contains: context, decision, options considered, consequences (including **Required enablers**), and Fitness Functions.
 
-A summary index file `docs/2-tech/1-architecture/adr/adr-000-index.md` lists all ADRs with their category and status.
+A summary index file `outputs/docs/2-tech/1-architecture/adr/adr-000-index.md` lists all ADRs with their category and status.
 
 ## Detailed instructions
 
@@ -197,12 +197,12 @@ Rules for Fitness Functions:
 
 **Per-ADR files:**
 - Named `adr-{NNN}-{slug}.md` (e.g. `adr-001-architecture-style.md`, `adr-010-security-defence-in-depth.md`)
-- Placed in `docs/2-tech/1-architecture/adr/`
+- Placed in `outputs/docs/2-tech/1-architecture/adr/`
 - Each follows the template `tpl-adr.md`
 - YAML front matter includes: `id`, `title`, `category` (one of: architecture, data, auth, comm, environment, stubs, cicd, deployment, security, observability, testing, other), `status: draft`
 
 **Index file:**
 - Named `adr-000-index.md`
-- Placed in `docs/2-tech/1-architecture/adr/`
+- Placed in `outputs/docs/2-tech/1-architecture/adr/`
 - Contains a summary table of all ADRs with: ID, title, category, status, enablers count
 - YAML front matter: `id: ADR-INDEX`, `type: adr-index`, `total_adrs: {N}`

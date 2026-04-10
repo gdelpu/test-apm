@@ -19,7 +19,7 @@ stations:
       - sdlc-scaffold
     inputs: []
     outputs:
-      - docs/
+      - outputs/
     gate:
       criteria:
         - "Directory structure created"
@@ -31,7 +31,7 @@ stations:
     skills:
       - sdlc-steer-init
     inputs:
-      - docs/
+      - outputs/
     outputs:
       - pil-001-project-sheet.md
       - kpi-001-baseline.md
@@ -198,7 +198,7 @@ stations:
       severity: blocker
 
 config:
-  output_dir: docs/
+  output_dir: outputs/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

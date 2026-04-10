@@ -5,8 +5,8 @@ tools: [codebase, search]
 allowedFilePathsReadOnly:
   - 'logs/**'
   - 'traces/**'
-  - 'station_out/**'
-  - 'specs/**'
+  - 'outputs/station_out/**'
+  - 'outputs/**'
   - 'docs/**'
 ---
 
@@ -19,7 +19,7 @@ Read the full agent definition from `.apm/agents/analysis-agent.md`.
 - Reconstruct incident timelines from logs, traces, and monitoring data
 - Identify affected services, components, and failure boundaries
 - Form root cause hypotheses with supporting evidence
-- Produce structured incident analysis reports under `specs/` or `station_out/`
+- Produce structured incident analysis reports under `outputs/` or `outputs/station_out/`
 
 ## Security Constraints
 

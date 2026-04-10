@@ -32,7 +32,7 @@ Create or refine `specs/constitution.md` so the team and the agent work from cle
 2. If greenfield: load `resources/constitution-template.md` and `resources/greenfield-constitution-example.md`
 3. If brownfield: load `resources/constitution-template.md` and `resources/brownfield-constitution-example.md`
 4. Fill each minimum coverage section with project-specific decisions
-5. Write or update `specs/constitution.md`
+5. Use the `edit/editFiles` tool to write or update `specs/constitution.md`
 
 ## Output
 

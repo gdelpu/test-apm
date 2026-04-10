@@ -11,8 +11,8 @@ $ARGUMENTS = optional domain scope:
 
 1. Read `.apm/contexts/sdlc-agent-registry.yaml`.
 2. **Route by scope:**
-   - `ba` (default): load `.apm/skills/sdlc-deliverable-validation/docs/sk-coherence-check.md`. Scan `docs/1-prd/`.
-   - `tech`: load `.apm/skills/sdlc-deliverable-validation/docs/sk-coherence-check-tech.md`. Scan `docs/2-tech/` + key BA files for traceability.
+   - `ba` (default): load `.apm/skills/sdlc-deliverable-validation/docs/sk-coherence-check.md`. Scan `outputs/docs/1-prd/`.
+   - `tech`: load `.apm/skills/sdlc-deliverable-validation/docs/sk-coherence-check-tech.md`. Scan `outputs/docs/2-tech/` + key BA files for traceability.
    - `all`: run both sequentially — BA first, then Tech.
 3. Load conventions from `.apm/contexts/sdlc-conventions/`.
 4. Execute: build identifier registry, check referential integrity, orphans, coverage, terminology, status consistency, diagram consistency.

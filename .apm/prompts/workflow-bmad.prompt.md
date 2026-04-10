@@ -11,4 +11,4 @@ Run the BMAD workflow.
 1. Read `.apm/workflows/bmad.yml` for the station sequence.
 2. Execute each station: build → measure → analyze → decide.
 3. If the decision is "retry", loop back to the build station.
-4. Write all artifacts to `specs/features/<feature>/`.
+4. Write all artifacts to `outputs/specs/features/<feature>/`.

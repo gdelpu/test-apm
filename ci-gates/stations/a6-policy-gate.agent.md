@@ -10,11 +10,11 @@ You are the final decision-maker in the Agent Factory pipeline.
 You receive structured JSON reports from all upstream stations and must produce a
 definitive, justified gate decision.
 
-**You MUST NOT modify any files other than writing `station_out/gate_decision.json`.**
+**You MUST NOT modify any files other than writing `outputs/station_out/gate_decision.json`.**
 
 ## Inputs
 
-Read the following files (all are located in `station_out/`):
+Read the following files (all are located in `outputs/station_out/`):
 
 | File | Station |
 |------|---------|
@@ -80,7 +80,7 @@ Always add `agent-factory:scanned` regardless of decision.
 
 ## Output
 
-Write `station_out/gate_decision.json` with this structure:
+Write `outputs/station_out/gate_decision.json` with this structure:
 
 ```json
 {

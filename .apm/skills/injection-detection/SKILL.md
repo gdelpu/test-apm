@@ -101,7 +101,7 @@ Pattern: `(read|process|execute|follow).{0,40}(file|document|webpage|url).{0,40}
 
 ## Output
 
-Structured JSON report following `station_out/promptsec_report.json` schema:
+Structured JSON report following `outputs/station_out/promptsec_report.json` schema:
 
 ```json
 {

@@ -85,9 +85,9 @@ $PackageName = 'ssg-ai-backbone'
 
 # --- Helpers ---
 function Write-Step  { param([string]$msg) Write-Host "`n── $msg ──" -ForegroundColor Cyan }
-function Write-Ok    { param([string]$msg) Write-Host "✅ $msg" -ForegroundColor Green }
-function Write-Info  { param([string]$msg) Write-Host "ℹ️  $msg" }
-function Write-Err   { param([string]$msg) Write-Host "❌ $msg" -ForegroundColor Red }
+function Write-Ok    { param([string]$msg) Write-Host "[OK] $msg" -ForegroundColor Green }
+function Write-Info  { param([string]$msg) Write-Host "[..] $msg" }
+function Write-Err   { param([string]$msg) Write-Host "[!!] $msg" -ForegroundColor Red }
 
 # --- Dot-source lock file helper ---
 . (Join-Path $PSScriptRoot 'lib/apm-lock.ps1')

@@ -39,7 +39,7 @@ A single Markdown file following the template `tpl-data-model.md`, containing:
 
 This agent supports **incremental execution** — it can be run once per sprint batch, adding new tables to an existing data model.
 
-1. **Check if the output file already exists** (`docs/2-tech/2-design/dat-001-data-model.md`).
+1. **Check if the output file already exists** (`outputs/docs/2-tech/2-design/dat-001-data-model.md`).
 2. **If it exists** (incremental run):
    a. Read the existing file in full — this is the **baseline**.
    b. Read the `--scope` parameter to identify the **work items for this sprint** (Features and/or Enablers).

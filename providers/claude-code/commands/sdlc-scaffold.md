@@ -12,10 +12,10 @@ $ARGUMENTS = (optional) none for base scaffold, or "features" to scaffold per-fe
    - The user can declare the language in the prompt (e.g., `/sdlc-scaffold use English`). If undeclared, ask.
 3. **Mode 1 — Base scaffold** (always):
    - Create client input directories: `docs/0-inputs/ba/_source/`, `docs/0-inputs/tech/_source/`, etc.
-   - Create deliverable directories: `docs/1-prd/`, `docs/2-tech/`, `docs/3-steer/`, `output/word/`.
+   - Create deliverable directories: `outputs/docs/1-prd/`, `outputs/docs/2-tech/`, `outputs/docs/3-steer/`, `output/word/`.
    - Idempotent — safe to run multiple times.
 4. **Mode 2 — Feature scaffold** (if $ARGUMENTS contains "features"):
-   - Scan `docs/1-prd/3-epics/` for existing feature directories.
+   - Scan `outputs/docs/1-prd/3-epics/` for existing feature directories.
    - For each feature, create design subdirectories (`user-stories/`, `journeys/`, `screens/`, etc.).
 5. Report created directories.
 6. Remind: "Deposit client documents in `docs/0-inputs/` before launching a pipeline."

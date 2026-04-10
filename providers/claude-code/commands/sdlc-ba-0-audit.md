@@ -9,7 +9,7 @@ Execute the **BA System S0 — Brownfield Audit** pipeline.
 3. Execute:
    - Wave 1: agent 0.1 (Existing System Audit) — uses brownfield conventions.
    - Wave 2: agent 0.2 (Delta Analysis) — depends on 0.1 output.
-4. Write to `docs/1-prd/`.
+4. Write to `outputs/docs/1-prd/`.
 5. Suggest `/sdlc-validate` on both deliverables.
 
 This pipeline is for brownfield projects only. Skip to `/sdlc-ba-1-scoping` for greenfield.

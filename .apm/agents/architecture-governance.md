@@ -1,7 +1,9 @@
 ---
 name: architecture-governance
 description: 'Review specifications and plans against architecture principles and guardrails.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
 ---
 
 # Architecture Governance

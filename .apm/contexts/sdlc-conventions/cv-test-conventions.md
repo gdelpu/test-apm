@@ -39,5 +39,5 @@ Defines identifier prefixes, reporting conventions, and execution rules for Test
 
 ## Report output location
 
-All Test reports go to `docs/1-prd/4-tests/` (campaign/perf) or `docs/1-prd/5-tools/` (DAST).
+All Test reports go to `outputs/docs/1-prd/4-tests/` (campaign/perf) or `outputs/docs/1-prd/5-tools/` (DAST).
 Raw test results go to `tests/results/` (gitignored for JSON/XML, kept for Markdown).

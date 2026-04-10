@@ -23,34 +23,34 @@ Build the domain model, decompose into epics and features, and consolidate busin
 2. Read upstream: `[VIS-001]`, `[GLO-001]`, `[ACT-001]`, `[DELTA-001]` (if brownfield)
 3. Build functional domain model with entities, attributes, relationships, and lifecycle diagrams
 4. Generate Mermaid ER diagram
-5. Write `docs/1-prd/2-specification/dom-001-domain-model.md` with identifier `[DOM-001]`
+5. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/2-specification/dom-001-domain-model.md` with identifier `[DOM-001]`
 
 ### Phase 2 — Epic Decomposition (agent 2.2)
 1. Load the epic template from `resources/`
 2. Read upstream: `[DOM-001]` domain model
 3. Decompose into N epic files with hierarchical structure
-4. Write `docs/1-prd/3-epics/ep-{id}-{slug}/ep-{id}-{slug}.md` per epic with identifier `[EP-xxx]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/ep-{id}-{slug}/ep-{id}-{slug}.md` per epic with identifier `[EP-xxx]`
 5. Register the `epics` collection for downstream fan-out
 
 ### Phase 3 — Feature Specification (agent 2.2b) — fan-out per epic
 1. Load the feature template from `resources/`
 2. For each epic in the `epics` collection, produce feature specifications
-3. Write `docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/ft-{id}-{slug}.md` per feature with identifier `[FT-xxx]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/ft-{id}-{slug}.md` per feature with identifier `[FT-xxx]`
 4. Register the `features` collection for S3 fan-out
 
 ### Phase 4 — Business Rules Consolidation (agent 2.3) — fan-out per rule type
-1. Discover rule types from staging directory: `docs/1-prd/2-specification/_rules-staging/*/`
+1. Discover rule types from staging directory: `outputs/docs/1-prd/2-specification/_rules-staging/*/`
 2. Rule types: VAL (validation), CAL (calculation), TRG (trigger), COH (coherence), AUT (authorization)
 3. For each rule type, consolidate and deduplicate rules across all features
-4. Write `docs/1-prd/2-specification/brl-{type}-business-rules.md` per type with identifier `[BRL-{type}]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/2-specification/brl-{type}-business-rules.md` per type with identifier `[BRL-{type}]`
 5. Dispatch consolidated rules back to per-feature directories (via script)
 
 ## Output
 
-- `docs/1-prd/2-specification/dom-001-domain-model.md` — `[DOM-001]`
-- `docs/1-prd/3-epics/ep-{id}-{slug}/ep-{id}-{slug}.md` — `[EP-xxx]` (N epics)
-- `docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/ft-{id}-{slug}.md` — `[FT-xxx]` (N features)
-- `docs/1-prd/2-specification/brl-{type}-business-rules.md` — `[BRL-{type}]` (per rule type)
+- `outputs/docs/1-prd/2-specification/dom-001-domain-model.md` — `[DOM-001]`
+- `outputs/docs/1-prd/3-epics/ep-{id}-{slug}/ep-{id}-{slug}.md` — `[EP-xxx]` (N epics)
+- `outputs/docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/ft-{id}-{slug}.md` — `[FT-xxx]` (N features)
+- `outputs/docs/1-prd/2-specification/brl-{type}-business-rules.md` — `[BRL-{type}]` (per rule type)
 
 ## Rules
 

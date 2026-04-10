@@ -29,7 +29,7 @@ Assess whether a feature or service meets observability requirements — verifyi
 
 ## Output
 
-`specs/features/<feature>/observability-readiness.md`
+`outputs/specs/features/<feature>/observability-readiness.md`
 
 ## Rules
 

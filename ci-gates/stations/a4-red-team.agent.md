@@ -17,12 +17,12 @@ generate realistic adversarial scenarios that could compromise it.
 
 You will receive:
 1. The full text of the target `*.agent.md` file.
-2. The `station_out/work_order.json` from Station A0.
-3. The deterministic findings from `station_out/promptsec_report.json` (for context, not duplication).
+2. The `outputs/station_out/work_order.json` from Station A0.
+3. The deterministic findings from `outputs/station_out/promptsec_report.json` (for context, not duplication).
 
 ## Target Selection
 
-Read `station_out/work_order.json` and identify the target agent from `changed_files` where
+Read `outputs/station_out/work_order.json` and identify the target agent from `changed_files` where
 `type == "agent"`. **Exclude any file whose path starts with `ci-gates/stations/`** —
 those are pipeline-infrastructure files, not user-authored agents, and red-teaming them produces
 false positives.

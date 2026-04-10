@@ -22,32 +22,32 @@ Define the product scope through vision statement, business glossary (DDD ubiqui
 1. Load the vision template from `resources/`
 2. Read discovery document `[DCO-001]` and client inputs from `docs/0-inputs/ba/1-scoping/`
 3. Define measurable objectives, clear IN/OUT scope, success criteria
-4. Write `docs/1-prd/1-scoping/vis-001-product-vision.md` with identifier `[VIS-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/1-scoping/vis-001-product-vision.md` with identifier `[VIS-001]`
 
 ### Phase 2 — Business Glossary (agent 1.2)
 1. Load the glossary template from `resources/`
 2. Read vision `[VIS-001]` and discovery `[DCO-001]` as upstream
 3. Build the ubiquitous language (DDD) with precise term definitions, synonyms, and relationships
-4. Write `docs/1-prd/1-scoping/glo-001-glossary.md` with identifier `[GLO-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/1-scoping/glo-001-glossary.md` with identifier `[GLO-001]`
 
 ### Phase 3 — Actors & Roles (agent 1.3)
 1. Load the actors template from `resources/`
 2. Read upstream: `[VIS-001]`, `[GLO-001]`, `[DCO-001]`
 3. Identify human and system actors, define roles, and build the permissions matrix
-4. Write `docs/1-prd/1-scoping/act-001-actors-roles.md` with identifier `[ACT-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/1-scoping/act-001-actors-roles.md` with identifier `[ACT-001]`
 
 ### Phase 4 — Functional Requirements (agent 1.4)
 1. Load the requirements template from `resources/`
 2. Read upstream: `[VIS-001]`, `[GLO-001]`, `[ACT-001]`
 3. Produce the structured requirements catalogue with traceability anchors (R4J Jira compatible)
-4. Write `docs/1-prd/1-scoping/exf-001-functional-requirements.md` with identifier `[EXF-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/1-scoping/exf-001-functional-requirements.md` with identifier `[EXF-001]`
 
 ## Output
 
-- `docs/1-prd/1-scoping/vis-001-product-vision.md` — `[VIS-001]`
-- `docs/1-prd/1-scoping/glo-001-glossary.md` — `[GLO-001]`
-- `docs/1-prd/1-scoping/act-001-actors-roles.md` — `[ACT-001]`
-- `docs/1-prd/1-scoping/exf-001-functional-requirements.md` — `[EXF-001]`
+- `outputs/docs/1-prd/1-scoping/vis-001-product-vision.md` — `[VIS-001]`
+- `outputs/docs/1-prd/1-scoping/glo-001-glossary.md` — `[GLO-001]`
+- `outputs/docs/1-prd/1-scoping/act-001-actors-roles.md` — `[ACT-001]`
+- `outputs/docs/1-prd/1-scoping/exf-001-functional-requirements.md` — `[EXF-001]`
 
 ## Rules
 

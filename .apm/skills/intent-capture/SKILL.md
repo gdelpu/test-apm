@@ -29,7 +29,7 @@ Transform a raw idea or business goal into a structured intent document that cle
 
 ## Output
 
-`specs/features/<feature>/intent.md`
+`outputs/specs/features/<feature>/intent.md`
 
 ## Rules
 

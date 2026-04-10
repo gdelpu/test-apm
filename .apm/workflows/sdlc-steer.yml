@@ -163,7 +163,7 @@ stations:
       severity: blocker
 
 config:
-  output_dir: docs/3-steer/
+  output_dir: outputs/docs/3-steer/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

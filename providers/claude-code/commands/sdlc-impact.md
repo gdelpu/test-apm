@@ -14,4 +14,4 @@ $ARGUMENTS = description of the change (free text, meeting transcript, or path t
 6. Display the impact summary with severity counts.
 7. **Ask the user**: "Proceed with amendment? (yes / no)"
    - **yes**: trigger the re-execution sequence, then run `/sdlc-coherence` automatically.
-   - **no**: save the report to `docs/1-prd/5-tools/impact-{NNN}-{slug}.md` for later use.
+   - **no**: save the report to `outputs/docs/1-prd/5-tools/impact-{NNN}-{slug}.md` for later use.

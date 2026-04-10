@@ -10,7 +10,7 @@ Review the structured audit trace for a feature's workflow execution.
 
 ## Steps
 
-1. Read `specs/features/<feature>/audit-trace.jsonl`
+1. Read `outputs/specs/features/<feature>/audit-trace.jsonl`
 2. Parse each JSONL line as a trace record
 3. Summarise:
    - Correlation ID (trace_id)

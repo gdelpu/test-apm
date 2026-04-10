@@ -62,9 +62,9 @@ The full workflow maintains traceability across domains:
 
 Artifacts are distributed across domain output directories:
 - `docs/` — directory scaffold (root)
-- `docs/3-steer/` — project sheet, KPIs, sprint plans, roadmap, risks, COPIL, Go/No-Go
-- `docs/1-prd/` — all BA deliverables (via nested `sdlc-ba`)
-- `docs/2-tech/` — all Tech deliverables (via nested `sdlc-tech`)
+- `outputs/docs/3-steer/` — project sheet, KPIs, sprint plans, roadmap, risks, COPIL, Go/No-Go
+- `outputs/docs/1-prd/` — all BA deliverables (via nested `sdlc-ba`)
+- `outputs/docs/2-tech/` — all Tech deliverables (via nested `sdlc-tech`)
 - `implementation-log.md` — code implementation record
 - `campaign-report.md` — E2E/UAT campaign results
 - `performance-report.md` — performance test results

@@ -16,14 +16,14 @@ You are a senior tech lead. Your mission is to read **a single ADR** and its `##
 
 | Input | Source | Required |
 |-------|--------|----------|
-| **One ADR file** | `docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md` — provided by the foreach orchestrator | Yes |
+| **One ADR file** | `outputs/docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md` — provided by the foreach orchestrator | Yes |
 | **`[STK-001]`** | Stack & conventions — for technology context when specifying enablers | Yes |
 
 No other input. Do not read other ADRs or BA deliverables.
 
 ## Expected output
 
-**One Markdown file per enabler** listed in the ADR's `### Required enablers` section, following the template `tpl-enabler.md`, placed in `docs/2-tech/2-design/enablers/`.
+**One Markdown file per enabler** listed in the ADR's `### Required enablers` section, following the template `tpl-enabler.md`, placed in `outputs/docs/2-tech/2-design/enablers/`.
 
 If the ADR's `### Required enablers` section says "None", produce no files and exit.
 
@@ -78,6 +78,6 @@ Based on the enabler's dependencies (inferred from the ADR context):
 ## Output format
 
 - Files: `enb-{number}-{short-name}.md` (e.g. `enb-sec-001-auth-guard.md`)
-- Placed in `docs/2-tech/2-design/enablers/`
+- Placed in `outputs/docs/2-tech/2-design/enablers/`
 - Template: `tpl-enabler.md`
 - YAML front matter: `id`, `title`, `adr_source: ADR-{id}`, `wave: {0-3}`, `status: draft`

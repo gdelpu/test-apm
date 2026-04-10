@@ -28,8 +28,8 @@ Plan a minimal, targeted fix for a confirmed bug or incident — assessing blast
 
 ## Output
 
-- `specs/features/<feature>/plan.md`
-- `specs/features/<feature>/tasks.md`
+- `outputs/specs/features/<feature>/plan.md`
+- `outputs/specs/features/<feature>/tasks.md`
 
 ## Rules
 

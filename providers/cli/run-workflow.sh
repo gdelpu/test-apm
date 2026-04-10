@@ -85,7 +85,7 @@ if [[ ! -f "$WORKFLOW_FILE" ]]; then
     exit 1
 fi
 
-OUTPUT_DIR="${REPO_ROOT}/specs/features/${FEATURE}"
+OUTPUT_DIR="${REPO_ROOT}/outputs/specs/features/${FEATURE}"
 mkdir -p "$OUTPUT_DIR"
 
 # --- Generate trace correlation ID ---

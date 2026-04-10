@@ -10,4 +10,4 @@ Run the Steer planning pipeline.
 
 1. Read `.apm/workflows/sdlc-steer.yml` — stations `steer-sprint-plan` through `steer-risk-register`.
 2. Execute: sprint planning → roadmap → risk register (6 agentic risk types).
-3. Write to `docs/3-steer/`. Requires P0 deliverables.
+3. Write to `outputs/docs/3-steer/`. Requires P0 deliverables.

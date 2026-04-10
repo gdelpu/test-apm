@@ -78,7 +78,7 @@ Check: Does the agent body include recursion guards, depth limits, or per-sessio
 
 ## Output
 
-Structured JSON report following `station_out/sim_report.json` schema:
+Structured JSON report following `outputs/station_out/sim_report.json` schema:
 
 ```json
 {

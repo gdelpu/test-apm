@@ -24,17 +24,17 @@ Produce per-feature functional design deliverables: user stories, user journeys,
 1. Load the user story template from `resources/`
 2. Read upstream: feature spec `[FT-xxx]`, business rules `[BRL-*]`, actors `[ACT-001]`
 3. Produce atomic user stories with Given-When-Then acceptance criteria
-4. Write `docs/1-prd/3-epics/{epic}/{feature}/us-{id}-{slug}.md` with identifier `[US-xxx]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/{feature}/us-{id}-{slug}.md` with identifier `[US-xxx]`
 
 #### Phase 2 — User Journeys (agent 3.2) — depends on 3.1
 1. Load the journey template from `resources/`
 2. Chain user stories into end-to-end flows with Mermaid diagrams
-3. Write `docs/1-prd/3-epics/{epic}/{feature}/uf-{id}-{slug}.md` with identifier `[UF-xxx]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/{feature}/uf-{id}-{slug}.md` with identifier `[UF-xxx]`
 
 #### Phase 3 — Screen Specifications (agent 3.3) — conditional: `has_screens`
 1. Load the screen spec template from `resources/`
 2. Define components, fields, validation rules, and actions per screen
-3. Write `docs/1-prd/3-epics/{epic}/{feature}/scr-{id}-{slug}.md` with identifier `[SCR-xxx]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/{feature}/scr-{id}-{slug}.md` with identifier `[SCR-xxx]`
 
 #### Phase 4 — Figma Prototypes (agent 3.3b) — conditional: `has_screens`, depends on 3.3
 1. Generate interactive HTML prototypes from screen specifications
@@ -51,18 +51,18 @@ Produce per-feature functional design deliverables: user stories, user journeys,
 #### Phase 7 — Test Scenarios (agent 3.5) — depends on 3.2, 3.3, 3.3c, 3.4
 1. Load the test scenario template from `resources/`
 2. Produce Gherkin-format functional test scenarios with coverage matrices
-3. Write `docs/1-prd/3-epics/{epic}/{feature}/sce-{id}-{slug}.md` with identifier `[SCE-xxx]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/{feature}/sce-{id}-{slug}.md` with identifier `[SCE-xxx]`
 
 #### Phase 8 — Test Data (agent 3.6) — depends on 3.5
 1. Build structured test dataset catalogue with pre-conditions for each scenario
-2. Write `docs/1-prd/4-tests/dat-test-001-seeds.md` with identifier `[DAT-TEST-001]`
+2. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/4-tests/dat-test-001-seeds.md` with identifier `[DAT-TEST-001]`
 
 ### Project-scope consolidation (fan-in):
 
 #### Phase 9 — E2E Test Plan (agent 3.6b) — depends on all 3.5 instances
 1. Consolidate cross-US, cross-feature E2E test journeys
 2. Prepare Xray campaign structure
-3. Write `docs/1-prd/4-tests/e2e-plan-001.md` with identifier `[E2E-PLAN-001]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/4-tests/e2e-plan-001.md` with identifier `[E2E-PLAN-001]`
 
 ## Output
 

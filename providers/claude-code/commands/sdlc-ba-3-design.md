@@ -7,7 +7,7 @@ Execute the **BA System S3 — Functional Design** pipeline (per feature).
 1. Read `.apm/workflows/sdlc-ba.yml` — stations `ba-user-stories` through `ba-e2e-plan`.
 2. Read `.apm/contexts/sdlc-agent-registry.yaml` — agent compositions for ba-3.1 through ba-3.6b.
 3. Execute:
-   - Discover all features from `docs/1-prd/3-epics/*/ft-*/`.
+   - Discover all features from `outputs/docs/1-prd/3-epics/*/ft-*/`.
    - For each feature, run the per-feature sub-pipeline:
      Wave 1: 3.1 (user stories)
      Wave 2: 3.2 // 3.3 // 3.3c // 3.4 (parallel, with conditions)
@@ -16,7 +16,7 @@ Execute the **BA System S3 — Functional Design** pipeline (per feature).
      Wave 5: 3.6 (test data)
    - Features processed up to max_concurrency in parallel.
    - Fan-in: 3.6b (E2E test plan) at project scope.
-4. Write to `docs/1-prd/`.
+4. Write to `outputs/docs/1-prd/`.
 5. Suggest `/sdlc-validate` + `/sdlc-coherence`.
 
 Prerequisites: S2 (specification) deliverables must exist with status `validated`.

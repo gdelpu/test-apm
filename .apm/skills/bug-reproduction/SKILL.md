@@ -29,7 +29,7 @@ Produce a reliable reproduction scenario for a bug, documenting exact steps, env
 
 ## Output
 
-`specs/features/<feature>/reproduction.md`
+`outputs/specs/features/<feature>/reproduction.md`
 
 ## Rules
 

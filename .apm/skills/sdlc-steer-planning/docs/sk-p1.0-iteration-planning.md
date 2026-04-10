@@ -103,7 +103,7 @@ The **Test campaign** (E2E + performance) starts after the last dev iteration de
 
 ### Step 4: Create review-tracking.md
 
-**Git is the source of truth for review tracking.** Create the file `docs/3-steer/review-tracking.md` containing all human review tasks for the entire project, pre-populated in `backlog` status.
+**Git is the source of truth for review tracking.** Create the file `outputs/docs/3-steer/review-tracking.md` containing all human review tasks for the entire project, pre-populated in `backlog` status.
 
 Each producing agent will update its own row (status `backlog` → `to-do`) when its deliverable is ready for review. P2.1 reads this file each sprint to assess gate progress.
 
@@ -131,28 +131,28 @@ last_updated: YYYY-MM-DD
 
 | ID | Deliverable | File | Reviewer | Planned sprint | Due date | Status |
 |----|------------|------|---------|----------------|----------|--------|
-| REVUE-VIS-001 | Product Vision | docs/1-prd/1-scoping/vis-001-*.md | Sponsor + BA Lead | | | backlog |
-| REVUE-GLO-001 | Glossary | docs/1-prd/1-scoping/glo-001-*.md | BA Lead | | | backlog |
-| REVUE-ACT-001 | Actors & Roles | docs/1-prd/1-scoping/act-001-*.md | Product Owner | | | backlog |
-| REVUE-EXF-001 | Functional Requirements | docs/1-prd/1-scoping/exf-001-*.md | Sponsor + BA Lead | | | backlog |
+| REVUE-VIS-001 | Product Vision | outputs/docs/1-prd/1-scoping/vis-001-*.md | Sponsor + BA Lead | | | backlog |
+| REVUE-GLO-001 | Glossary | outputs/docs/1-prd/1-scoping/glo-001-*.md | BA Lead | | | backlog |
+| REVUE-ACT-001 | Actors & Roles | outputs/docs/1-prd/1-scoping/act-001-*.md | Product Owner | | | backlog |
+| REVUE-EXF-001 | Functional Requirements | outputs/docs/1-prd/1-scoping/exf-001-*.md | Sponsor + BA Lead | | | backlog |
 
 #### Gate S2 — Specification
 
 | ID | Deliverable | File | Reviewer | Planned sprint | Due date | Status |
 |----|------------|------|---------|----------------|----------|--------|
-| REVUE-DOM-001 | Domain Model | docs/1-prd/2-specification/dom-001-*.md | BA Lead + Architect | | | backlog |
-| REVUE-EP-xxx | Epics (one row per Epic) | docs/1-prd/3-epics/ep-xxx-*.md | Product Owner | | | backlog |
-| REVUE-FT-xxx | Features (one row per Feature) | docs/1-prd/3-epics/{epic}/ft-xxx-*.md | Product Owner | | | backlog |
-| REVUE-BRL | Business Rules | docs/1-prd/2-specification/brl-*-business-rules.md | BA Lead | | | backlog |
+| REVUE-DOM-001 | Domain Model | outputs/docs/1-prd/2-specification/dom-001-*.md | BA Lead + Architect | | | backlog |
+| REVUE-EP-xxx | Epics (one row per Epic) | outputs/docs/1-prd/3-epics/ep-xxx-*.md | Product Owner | | | backlog |
+| REVUE-FT-xxx | Features (one row per Feature) | outputs/docs/1-prd/3-epics/{epic}/ft-xxx-*.md | Product Owner | | | backlog |
+| REVUE-BRL | Business Rules | outputs/docs/1-prd/2-specification/brl-*-business-rules.md | BA Lead | | | backlog |
 
 #### Gate T1 — Architecture
 
 | ID | Deliverable | File | Reviewer | Planned sprint | Due date | Status |
 |----|------------|------|---------|----------------|----------|--------|
-| REVUE-CTX-001 | System Context | docs/2-tech/1-architecture/ctx-001-*.md | Architect | | | backlog |
-| REVUE-STK-001 | Stack & Conventions | docs/2-tech/1-architecture/stk-001-*.md | Architect + Tech Lead | | | backlog |
-| REVUE-ADR-xxx | Architecture Decisions (one row per ADR) | docs/2-tech/1-architecture/adr-xxx-*.md | Architect + Sponsor | | | backlog |
-| REVUE-SEC-001 | Security Architecture | docs/2-tech/1-architecture/sec-001-*.md | Architect + Security | | | backlog |
+| REVUE-CTX-001 | System Context | outputs/docs/2-tech/1-architecture/ctx-001-*.md | Architect | | | backlog |
+| REVUE-STK-001 | Stack & Conventions | outputs/docs/2-tech/1-architecture/stk-001-*.md | Architect + Tech Lead | | | backlog |
+| REVUE-ADR-xxx | Architecture Decisions (one row per ADR) | outputs/docs/2-tech/1-architecture/adr-xxx-*.md | Architect + Sponsor | | | backlog |
+| REVUE-SEC-001 | Security Architecture | outputs/docs/2-tech/1-architecture/sec-001-*.md | Architect + Security | | | backlog |
 
 #### Gate Design Iter-N (repeat block for each iteration)
 
@@ -160,29 +160,29 @@ For each iteration N, add one row per S3 agent per feature in scope:
 
 | ID | Deliverable | File | Reviewer | Planned sprint | Due date | Status |
 |----|------------|------|---------|----------------|----------|--------|
-| REVUE-US-xxx-iterN | User Stories FT-xxx Iter-N | docs/1-prd/3-epics/{epic}/ft-xxx/us-xxx-*.md | Product Owner | | | backlog |
-| REVUE-UF-xxx-iterN | User Journeys FT-xxx Iter-N | docs/1-prd/3-epics/{epic}/ft-xxx/uf-xxx-*.md | Product Owner | | | backlog |
-| REVUE-SCR-xxx-iterN | Screen Specs FT-xxx Iter-N | docs/1-prd/3-epics/{epic}/ft-xxx/scr-xxx-*.md | UX Lead | | | backlog |
-| REVUE-SCE-xxx-iterN | Test Scenarios FT-xxx Iter-N | docs/1-prd/3-epics/{epic}/ft-xxx/sce-xxx-*.md | QA Lead | | | backlog |
-| REVUE-DAT-TEST-xxx-iterN | Test Data FT-xxx Iter-N | docs/1-prd/3-epics/{epic}/ft-xxx/dat-test-*.md | QA Lead | | | backlog |
-| REVUE-E2E-PLAN-001 | E2E Plan (last iteration only) | docs/1-prd/4-tests/e2e-plan-001.md | QA Lead + Sponsor | | | backlog |
+| REVUE-US-xxx-iterN | User Stories FT-xxx Iter-N | outputs/docs/1-prd/3-epics/{epic}/ft-xxx/us-xxx-*.md | Product Owner | | | backlog |
+| REVUE-UF-xxx-iterN | User Journeys FT-xxx Iter-N | outputs/docs/1-prd/3-epics/{epic}/ft-xxx/uf-xxx-*.md | Product Owner | | | backlog |
+| REVUE-SCR-xxx-iterN | Screen Specs FT-xxx Iter-N | outputs/docs/1-prd/3-epics/{epic}/ft-xxx/scr-xxx-*.md | UX Lead | | | backlog |
+| REVUE-SCE-xxx-iterN | Test Scenarios FT-xxx Iter-N | outputs/docs/1-prd/3-epics/{epic}/ft-xxx/sce-xxx-*.md | QA Lead | | | backlog |
+| REVUE-DAT-TEST-xxx-iterN | Test Data FT-xxx Iter-N | outputs/docs/1-prd/3-epics/{epic}/ft-xxx/dat-test-*.md | QA Lead | | | backlog |
+| REVUE-E2E-PLAN-001 | E2E Plan (last iteration only) | outputs/docs/1-prd/4-tests/e2e-plan-001.md | QA Lead + Sponsor | | | backlog |
 
 #### Gate Tech Iter-N (repeat block for each iteration)
 
 | ID | Deliverable | File | Reviewer | Planned sprint | Due date | Status |
 |----|------------|------|---------|----------------|----------|--------|
-| REVUE-DAT-001-iterN | Data Model Iter-N | docs/2-tech/2-design/dat-001-*.md | Architect + Tech Lead | | | backlog |
-| REVUE-API-xxx-iterN | API Contracts Iter-N | docs/2-tech/2-design/api-xxx-*.md | Tech Lead | | | backlog |
-| REVUE-TST-001-iterN | Test Strategy Iter-N | docs/2-tech/2-design/tst-001-*.md | QA Lead | | | backlog |
-| REVUE-OBS-001-iterN | Observability Iter-N | docs/2-tech/2-design/obs-001-*.md | Tech Lead | | | backlog |
-| REVUE-IMP-001-iterN | Implementation Plan Iter-N | docs/2-tech/2-design/imp-001-*.md | Architect + Sponsor | | | backlog |
+| REVUE-DAT-001-iterN | Data Model Iter-N | outputs/docs/2-tech/2-design/dat-001-*.md | Architect + Tech Lead | | | backlog |
+| REVUE-API-xxx-iterN | API Contracts Iter-N | outputs/docs/2-tech/2-design/api-xxx-*.md | Tech Lead | | | backlog |
+| REVUE-TST-001-iterN | Test Strategy Iter-N | outputs/docs/2-tech/2-design/tst-001-*.md | QA Lead | | | backlog |
+| REVUE-OBS-001-iterN | Observability Iter-N | outputs/docs/2-tech/2-design/obs-001-*.md | Tech Lead | | | backlog |
+| REVUE-IMP-001-iterN | Implementation Plan Iter-N | outputs/docs/2-tech/2-design/imp-001-*.md | Architect + Sponsor | | | backlog |
 
 #### Gate Tests
 
 | ID | Deliverable | File | Reviewer | Planned sprint | Due date | Status |
 |----|------------|------|---------|----------------|----------|--------|
-| REVUE-CAMP-RPT-001 | Test Campaign Report | docs/1-prd/4-tests/camp-rpt-001-*.md | QA Lead + Sponsor | | | backlog |
-| REVUE-PERF-RPT-001 | Performance Report | docs/1-prd/4-tests/perf-rpt-001-*.md | Tech Lead + Sponsor | | | backlog |
+| REVUE-CAMP-RPT-001 | Test Campaign Report | outputs/docs/1-prd/4-tests/camp-rpt-001-*.md | QA Lead + Sponsor | | | backlog |
+| REVUE-PERF-RPT-001 | Performance Report | outputs/docs/1-prd/4-tests/perf-rpt-001-*.md | Tech Lead + Sponsor | | | backlog |
 
 Reviewers are assigned from `[PIL-001]` — replace placeholder roles with named individuals.
 
@@ -206,5 +206,5 @@ If Jira MCP is available, create the equivalent Fix Versions and review tasks in
 
 - **File:** `plan-iter-001-iteration-planning.md`
 - **YAML front matter:** `id: PLAN-ITER-001`, `status: draft`, `date`, `nb_iterations`, `total_features`
-- **Also produces:** `docs/3-steer/review-tracking.md` (new file, all rows in `backlog`)
+- **Also produces:** `outputs/docs/3-steer/review-tracking.md` (new file, all rows in `backlog`)
 - **Initial status:** `draft` — validated at Gate P1 together with `[RDP-001]`

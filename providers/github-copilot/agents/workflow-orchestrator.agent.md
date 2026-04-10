@@ -3,9 +3,9 @@ name: Workflow Orchestrator
 description: 'Orchestrate station-based workflow pipelines by delegating work to station agents.'
 tools: []
 allowedFilePaths:
-  - 'specs/**'
+  - 'outputs/**'
   - '.apm/workflows/**'
-  - 'station_out/**'
+  - 'outputs/station_out/**'
 default_sub_agent_posture: deny-all
 ---
 
@@ -19,7 +19,7 @@ Read the full agent definition from `.apm/agents/workflow-orchestrator.md`.
 - Resolve station sequence and dependency graph
 - Dispatch each station to the appropriate agent with an explicit tool scope
 - Collect station outputs and enforce quality gates before advancing
-- Write workflow state to `station_out/` and `specs/features/<feature>/workflow-state.md`
+- Write workflow state to `outputs/station_out/` and `outputs/specs/features/<feature>/workflow-state.md`
 
 > All station declarations in workflow YAML MUST include an explicit `allowed_tools` list. Stations without one inherit `[]` (no tools).
 

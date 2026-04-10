@@ -1,7 +1,7 @@
 # Agent Factory — Station-Gate Workflow
 
 An MR-driven, multi-station pipeline that validates every **agent** and **skill** change before merge.
-Each _station_ runs its own checks and writes a structured JSON report to `station_out/`.
+Each _station_ runs its own checks and writes a structured JSON report to `outputs/station_out/`.
 The **Policy Gate (A6)** aggregates all reports and either approves, blocks, or escalates for human review.
 
 ## Architecture
@@ -39,7 +39,7 @@ the file in `stations/` and the orchestrator picks it up automatically.
 
 ## Station Outputs
 
-All station outputs are written to `station_out/` (created by A0).
+All station outputs are written to `outputs/station_out/` (created by A0).
 
 | File | Station | Purpose |
 |------|---------|---------|
@@ -155,7 +155,7 @@ Advisory only — findings appear in the report but never block the pipeline.
 
 Stations run **sequentially** via the `run_stations.sh` orchestrator, which discovers all
 `*.prompt.md` / `*.agent.md` files in `stations/`, sorts by prefix, and invokes each through
-GitHub Copilot CLI. Each station reads inputs from `station_out/` and writes its own JSON report.
+GitHub Copilot CLI. Each station reads inputs from `outputs/station_out/` and writes its own JSON report.
 
 #### A0 — Intake
 
@@ -172,7 +172,7 @@ Bootstraps the pipeline by producing a structured work order from the MR.
    - `eval-usage` — `eval()` calls
    - `agent-removed` — deleted `*.agent.md` file
 3. **Determine scope** — if no agent/skill/prompt/instruction files changed, sets `scope: "non-agent"` so downstream stations can skip.
-4. **Write output** — `station_out/work_order.json` containing PR metadata, classified file list, risk hints, and diff summary.
+4. **Write output** — `outputs/station_out/work_order.json` containing PR metadata, classified file list, risk hints, and diff summary.
 
 #### A1 — Policy & Structure Validation
 
@@ -253,7 +253,7 @@ Five attack categories are evaluated:
 | **RT-04 · Privilege Escalation via Chaining** | Searches the workspace for other agents that could be chained to escalate privileges. Identifies the most dangerous 2-agent combination. |
 | **RT-05 · Denial of Service** | Describes inputs that could cause infinite loops, excessive token usage, or unbounded tool calls. Checks for rate limits or recursion guards. |
 
-Red team findings are appended to `station_out/promptsec_report.json` under `"red_team_findings"` and use the same severity schema. Findings must not duplicate those already flagged by A3.
+Red team findings are appended to `outputs/station_out/promptsec_report.json` under `"red_team_findings"` and use the same severity schema. Findings must not duplicate those already flagged by A3.
 
 #### A5 — Sandbox Simulation
 

@@ -10,4 +10,4 @@ Run the Steer governance pipeline.
 
 1. Read `.apm/workflows/sdlc-steer.yml` — stations `steer-copil` and `steer-go-nogo`.
 2. Execute: COPIL preparation (dual-register summary) → Go/No-Go decision.
-3. Write to `docs/3-steer/`.
+3. Write to `outputs/docs/3-steer/`.

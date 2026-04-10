@@ -23,11 +23,11 @@ Break down the implementation plan into reviewable, sequenced tasks.
 4. Include test tasks using `resources/test-strategy-template.md` as reference
 5. Sequence tasks respecting dependencies
 6. Mark each task with type: implementation, testing, documentation, or rollout
-7. Write `specs/features/<feature>/tasks.md`
+7. Use the `edit/editFiles` tool to create `outputs/specs/features/<feature>/tasks.md`
 
 ## Output
 
-`specs/features/<feature>/tasks.md`
+`outputs/specs/features/<feature>/tasks.md`
 
 ## Rules
 

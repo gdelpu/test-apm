@@ -71,7 +71,7 @@ This mirrors the original SDLC Harness DAG orchestration with S3 running once pe
 
 ## Outputs
 
-All artifacts are written to `docs/1-prd/`:
+All artifacts are written to `outputs/docs/1-prd/`:
 - `asis-001-existing-audit.md` — brownfield functional snapshot (optional)
 - `delta-001-delta-analysis.md` — brownfield delta analysis (optional)
 - `vis-001-product-vision.md` — vision, objectives, scope

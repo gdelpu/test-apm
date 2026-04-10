@@ -21,7 +21,7 @@ Track sprint progress, monitor system health metrics, and assess evolving risks 
 ### Phase 1 — Sprint Progress (agent p2.1)
 1. Read completed deliverables across BA, Tech, and Test domains
 2. Calculate velocity metrics: planned vs delivered, throughput, blockers
-3. Write `docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-progress.md` with identifier `[STA-NNN]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-progress.md` with identifier `[STA-NNN]`
 
 ### Phase 2 — System Health (agent p2.2) — depends on Phase 1
 1. Read code quality metrics, technical debt indicators, and test coverage data
@@ -32,12 +32,12 @@ Track sprint progress, monitor system health metrics, and assess evolving risks 
 1. Read sprint progress and system health data
 2. Assess current sprint risks against the agentic risk taxonomy
 3. Generate escalation decisions `[DEC-NNN]` if thresholds are breached
-4. Write `docs/3-steer/0-sprint-reports/rsk-{NNN}-sprint-risks.md` with identifier `[RSK-NNN]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/0-sprint-reports/rsk-{NNN}-sprint-risks.md` with identifier `[RSK-NNN]`
 
 ## Output
 
-- `docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-progress.md` — `[STA-NNN]`
-- `docs/3-steer/0-sprint-reports/rsk-{NNN}-sprint-risks.md` — `[RSK-NNN]`
+- `outputs/docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-progress.md` — `[STA-NNN]`
+- `outputs/docs/3-steer/0-sprint-reports/rsk-{NNN}-sprint-risks.md` — `[RSK-NNN]`
 - `[DEC-NNN]` decisions (when escalation is triggered)
 
 ## Rules

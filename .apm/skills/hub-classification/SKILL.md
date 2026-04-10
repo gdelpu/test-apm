@@ -21,7 +21,7 @@ ai-sdlc-foundation catalog.
 - **Hub catalog**: `.apm/contexts/hub-catalog.yaml` — the cached index of all
   workflows (name, description, type, stations, when_to_use) and agents
   (name, description, tools).
-- **In-progress state** (optional): any `specs/features/*/workflow-state.md`
+- **In-progress state** (optional): any `outputs/specs/features/*/workflow-state.md`
   files indicating workflows that can be resumed.
 
 ## Classification Protocol
@@ -34,7 +34,7 @@ and `.apm/agents/*.md` (frontmatter: name, description).
 
 ### Step 2 — Check for in-progress work
 
-Scan `specs/features/*/workflow-state.md` for existing workflow executions.
+Scan `outputs/specs/features/*/workflow-state.md` for existing workflow executions.
 If any exist, include in the response: "You have in-progress work on [feature].
 Would you like to resume?"
 

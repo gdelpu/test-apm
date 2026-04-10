@@ -11,7 +11,7 @@ stations:
       - ai-backbone-pr-checks
     inputs: []
     outputs:
-      - reports/pr-auto-validator.json
+      - outputs/reports/pr-auto-validator.json
     parallel: true
     gate:
       criteria:
@@ -27,7 +27,7 @@ stations:
       - ai-backbone-pr-checks
     inputs: []
     outputs:
-      - reports/yaml-workflow-linter.json
+      - outputs/reports/yaml-workflow-linter.json
     parallel: true
     gate:
       criteria:
@@ -43,7 +43,7 @@ stations:
       - ai-backbone-pr-checks
     inputs: []
     outputs:
-      - reports/test-gap-detector.json
+      - outputs/reports/test-gap-detector.json
     parallel: true
     optional: true
     gate:
@@ -58,7 +58,7 @@ stations:
     skills: []
     inputs: []
     outputs:
-      - station_out/work_order.json
+      - outputs/station_out/work_order.json
     gate:
       criteria:
         - "Work order generated with PR metadata and diff"
@@ -70,9 +70,9 @@ stations:
     skills:
       - soprasteria-agent-policy-guard
     inputs:
-      - station_out/work_order.json
+      - outputs/station_out/work_order.json
     outputs:
-      - station_out/policy_report.json
+      - outputs/station_out/policy_report.json
     gate:
       criteria:
         - "All policy rules (P-01 to P-06) evaluated"
@@ -85,9 +85,9 @@ stations:
     skills:
       - secret-scan
     inputs:
-      - station_out/work_order.json
+      - outputs/station_out/work_order.json
     outputs:
-      - station_out/security_report.json
+      - outputs/station_out/security_report.json
     gate:
       criteria:
         - "No secrets, API keys, or credentials detected"
@@ -101,9 +101,9 @@ stations:
     skills:
       - injection-detection
     inputs:
-      - station_out/work_order.json
+      - outputs/station_out/work_order.json
     outputs:
-      - station_out/promptsec_report.json
+      - outputs/station_out/promptsec_report.json
     gate:
       criteria:
         - "No jailbreak phrases or instruction overrides"
@@ -118,11 +118,11 @@ stations:
     skills:
       - red-team-simulation
     inputs:
-      - station_out/policy_report.json
-      - station_out/security_report.json
-      - station_out/promptsec_report.json
+      - outputs/station_out/policy_report.json
+      - outputs/station_out/security_report.json
+      - outputs/station_out/promptsec_report.json
     outputs:
-      - station_out/a4_result.json
+      - outputs/station_out/a4_result.json
     optional: true
     gate:
       criteria:
@@ -136,9 +136,9 @@ stations:
     skills:
       - sandbox-execution
     inputs:
-      - station_out/work_order.json
+      - outputs/station_out/work_order.json
     outputs:
-      - station_out/sim_report.json
+      - outputs/station_out/sim_report.json
     gate:
       criteria:
         - "Sandbox simulation completed without escapes"
@@ -151,13 +151,13 @@ stations:
     skills:
       - policy-gate
     inputs:
-      - station_out/policy_report.json
-      - station_out/security_report.json
-      - station_out/promptsec_report.json
-      - station_out/a4_result.json
-      - station_out/sim_report.json
+      - outputs/station_out/policy_report.json
+      - outputs/station_out/security_report.json
+      - outputs/station_out/promptsec_report.json
+      - outputs/station_out/a4_result.json
+      - outputs/station_out/sim_report.json
     outputs:
-      - station_out/gate_decision.json
+      - outputs/station_out/gate_decision.json
     gate:
       criteria:
         - "Final gate decision is PASS or CONDITIONAL_PASS"
@@ -169,7 +169,7 @@ stations:
     agent: station-orchestrator
     skills: []
     inputs:
-      - station_out/gate_decision.json
+      - outputs/station_out/gate_decision.json
     outputs: []
     optional: true
     gate:
@@ -178,7 +178,7 @@ stations:
       severity: warning
 
 config:
-  output_dir: station_out/
+  output_dir: outputs/station_out/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: false

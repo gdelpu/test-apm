@@ -46,15 +46,15 @@ You are the sprint planner for an **AI-native** SDLC pipeline. Your mission is t
 
 | Input | Source | Required |
 |-------|--------|----------|
-| **Epic files** `[EP-xxx]` | `docs/1-prd/3-epics/ep-*/ep-*.md` — Feature Index tables contain ID, MoSCoW, Complexity, Dependencies | Yes |
-| **Enabler files** `[ENB-xxx]` | `docs/2-tech/2-design/enablers/enb-*.md` — if they exist (produced by T1.4). If not yet produced, infer the enabler categories from T1 ADRs' `### Required enablers` sections. | If available |
+| **Epic files** `[EP-xxx]` | `outputs/docs/1-prd/3-epics/ep-*/ep-*.md` — Feature Index tables contain ID, MoSCoW, Complexity, Dependencies | Yes |
+| **Enabler files** `[ENB-xxx]` | `outputs/docs/2-tech/2-design/enablers/enb-*.md` — if they exist (produced by T1.4). If not yet produced, infer the enabler categories from T1 ADRs' `### Required enablers` sections. | If available |
 | **max_concurrency** | `orchestration/pipelines.yaml` → `defaults.max_concurrency` (default: 5) | Yes |
 
 No other input is required.
 
 ## Expected output
 
-A single file `docs/3-steer/plan-001-sprint-planning.md` containing:
+A single file `outputs/docs/3-steer/plan-001-sprint-planning.md` containing:
 1. Consolidated work item inventory (Features from Epics + Enablers)
 2. Dependency graph (Mermaid)
 3. Sprint batches with work items assigned, type annotated (Feature / Enabler)
@@ -66,7 +66,7 @@ A single file `docs/3-steer/plan-001-sprint-planning.md` containing:
 
 ### Step 1: Extract the consolidated work item inventory
 
-**Features:** Read all Epic files (`docs/1-prd/3-epics/ep-*/ep-*.md`). From each Epic's **Feature Index** table, extract:
+**Features:** Read all Epic files (`outputs/docs/1-prd/3-epics/ep-*/ep-*.md`). From each Epic's **Feature Index** table, extract:
 
 | Field | Column in Feature Index |
 |-------|------------------------|
@@ -77,7 +77,7 @@ A single file `docs/3-steer/plan-001-sprint-planning.md` containing:
 | Complexity | Complexity |
 | Dependencies | Dependencies (feature IDs and cross-epic refs) |
 
-**Enablers:** If enabler files exist in `docs/2-tech/2-design/enablers/`, read their YAML front matter to extract ID, name, wave, and dependencies. If enablers are not yet produced, infer the main enabler categories from the project context:
+**Enablers:** If enabler files exist in `outputs/docs/2-tech/2-design/enablers/`, read their YAML front matter to extract ID, name, wave, and dependencies. If enablers are not yet produced, infer the main enabler categories from the project context:
 - Infrastructure / CI-CD setup
 - Authentication / authorization
 - Database initial migration
@@ -271,7 +271,7 @@ Note: durations are indicative — in an agentic pipeline, a sprint may take hou
 
 ## Output format
 
-- **File:** `docs/3-steer/plan-001-sprint-planning.md`
+- **File:** `outputs/docs/3-steer/plan-001-sprint-planning.md`
 - **YAML front matter:**
   ```yaml
   ---

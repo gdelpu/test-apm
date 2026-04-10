@@ -11,7 +11,7 @@ Validate that a feature meets all release criteria across spec completeness, tes
 
 ## Prerequisites
 
-Expects a completed implementation with these artifacts in `specs/features/<feature>/`:
+Expects a completed implementation with these artifacts in `outputs/specs/features/<feature>/`:
 - `spec.md`, `clarifications.md`, `plan.md`, `tasks.md`
 - `test-strategy.md`, `nfr-review.md` (recommended)
 - `rollout-strategy.md`, `implementation-log.md`
@@ -29,7 +29,7 @@ Expects a completed implementation with these artifacts in `specs/features/<feat
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `spec-completeness.md` — Spec coherence evaluation
 - `test-completeness.md` — Test coverage and acceptance criteria mapping
 - `security-report.md` — SAST + dependency audit results

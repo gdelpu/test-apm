@@ -83,7 +83,7 @@ After the user confirms, dispatch immediately:
 
 Delegate to `workflow-orchestrator` with:
 - Workflow name (e.g., `feature-implementation`)
-- Feature path (e.g., `specs/features/<feature>/`)
+- Feature path (e.g., `outputs/specs/features/<feature>/`)
 - Any pass-through flags: `--resume`, `--station <id>`, `--skip-gate <id>`,
   `--dry-run`
 

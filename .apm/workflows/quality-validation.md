@@ -35,7 +35,7 @@ Validate code quality, security, and compliance using external tool adapters.
 
 ## Outputs
 
-All reports are written to `specs/features/<feature>/`:
+All reports are written to `outputs/specs/features/<feature>/`:
 - `lint-report.md` — linting violations with severity
 - `static-analysis-report.md` — code smells, complexity, maintainability issues
 - `sast-report.md` — source code vulnerabilities

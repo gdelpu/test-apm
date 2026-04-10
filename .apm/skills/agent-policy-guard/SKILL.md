@@ -98,7 +98,7 @@ A deleted `*.agent.md` file MUST reference a GitHub/GitLab issue number in the P
 
 ## Output
 
-Structured JSON report following `station_out/policy_report.json` schema:
+Structured JSON report following `outputs/station_out/policy_report.json` schema:
 
 ```json
 {

@@ -9,7 +9,7 @@ Execute the **Steer System P0 — Project Initialization** pipeline.
 3. Execute:
    - Wave 1: p0.1 (Project Sheet — team, capacity, LLM budget).
    - Wave 2: p0.2 (KPI Baseline — effort + token budgets per phase).
-4. Write to `docs/3-steer/`.
+4. Write to `outputs/docs/3-steer/`.
 
 This is typically run once at the start of the project.
 

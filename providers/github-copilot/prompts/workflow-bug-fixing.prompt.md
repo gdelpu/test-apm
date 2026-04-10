@@ -11,4 +11,4 @@ Run the Bug Fixing workflow.
 1. Read `.apm/workflows/bug-fixing.yml` for the station sequence.
 2. Execute each station: triage → reproduce → root cause → fix →
    regression testing → quality validation → summary.
-3. Write all artifacts to `specs/features/<bug>/`.
+3. Write all artifacts to `outputs/specs/bugs/<bug>/`.

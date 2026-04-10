@@ -12,7 +12,7 @@ Execute the **full Steer pipeline** (Systems P0 through P3) without human gates.
    - P1: Sprint planning, roadmap, risk register.
    - P2: Sprint progress, system health, sprint risks (recurring).
    - P3: COPIL preparation, Go/No-Go decision.
-5. Write all artifacts to `docs/3-steer/`.
+5. Write all artifacts to `outputs/docs/3-steer/`.
 
 If $ARGUMENTS contains "gated", use `gate_mode: pause` at each system boundary.
 
@@ -23,4 +23,4 @@ If $ARGUMENTS contains "gated", use `gate_mode: pause` at each system boundary.
 
 ## Outputs
 
-- `docs/3-steer/` — all Steer deliverables (project sheet, KPIs, sprint plans, roadmap, risk register, COPIL, Go/No-Go)
+- `outputs/docs/3-steer/` — all Steer deliverables (project sheet, KPIs, sprint plans, roadmap, risk register, COPIL, Go/No-Go)

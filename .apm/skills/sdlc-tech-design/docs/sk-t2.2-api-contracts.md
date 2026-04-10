@@ -39,7 +39,7 @@ A single Markdown file following the template `tpl-api-contract.md`, containing:
 
 This agent supports **incremental execution** — it can be run once per sprint batch, adding new endpoints to an existing API contract.
 
-1. **Check if the output file already exists** (`docs/2-tech/2-design/api/`).
+1. **Check if the output file already exists** (`outputs/docs/2-tech/2-design/api/`).
 2. **If API contract files exist** (incremental run):
    a. Read the existing files in full — this is the **baseline**.
    b. Read the `--scope` parameter to identify the **work items for this sprint** (User Stories from Features, or Enabler specs).

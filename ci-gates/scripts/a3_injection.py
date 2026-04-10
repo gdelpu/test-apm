@@ -4,12 +4,12 @@ Station A3 — Prompt Injection & Exfil Hardening Checks (deterministic).
 
 Scans changed agent/skill/prompt files for jailbreak phrases, missing safety
 constraints, unconstrained tool scope, exfiltration vectors, and indirect
-injection patterns.  Writes station_out/a3_result.json.
+injection patterns.  Writes outputs/station_out/a3_result.json.
 
 Usage:
     python3 a3_injection.py \
-        --work-order station_out/a0_result.json \
-        --out station_out/a3_result.json \
+        --work-order outputs/station_out/a0_result.json \
+        --out outputs/station_out/a3_result.json \
         [--repo-root .]
 """
 

@@ -3,12 +3,12 @@
 Station A6 — Policy Gate (deterministic).
 
 Aggregates all upstream station reports and produces a gate decision:
-APPROVE, REVIEW, or BLOCK.  Writes station_out/a6_result.json.
+APPROVE, REVIEW, or BLOCK.  Writes outputs/station_out/a6_result.json.
 
 Usage:
     python3 a6_gate.py \
         --station-out station_out \
-        --out station_out/a6_result.json
+        --out outputs/station_out/a6_result.json
 """
 
 import argparse

@@ -138,7 +138,7 @@ Risk indicators to check:
 
 ### Step 6: Update review-tracking.md — activate tech review tasks
 
-In `docs/3-steer/review-tracking.md`, for each `[REVUE-xxx]` row corresponding to this iteration's tech scope (rows with IDs matching `REVUE-*-iter{N}` in the "Gate Tech" section):
+In `outputs/docs/3-steer/review-tracking.md`, for each `[REVUE-xxx]` row corresponding to this iteration's tech scope (rows with IDs matching `REVUE-*-iter{N}` in the "Gate Tech" section):
 
 1. Set `Status` → `to-do`
 2. Set `Planned sprint` → the sprint in which the deliverable is planned (e.g. `Dev-Iter-{N}.1`)
