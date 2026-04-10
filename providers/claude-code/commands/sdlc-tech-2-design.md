@@ -11,7 +11,7 @@ Execute the **Tech System T2 — Technical Design** pipeline.
    - Wave 2: t2.2 // t2.3 // t2.6 (API + Enablers + Observability, parallel).
    - Wave 3: t2.4 (Test Strategy).
    - Wave 4: t2.5 (Implementation Plan + CLAUDE.md compilation).
-4. Write to `outputs/docs/2-tech/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/2-tech/`. Do not merely display content in chat — use file-writing tools to create each file.
 5. Suggest `/sdlc-validate`.
 
 Prerequisites: T1 (architecture) deliverables must exist with status `validated`.

@@ -7,7 +7,7 @@ Run the Quality Validation workflow against the current codebase.
 1. Read `.apm/workflows/quality-validation.yml` for the station sequence.
 2. Execute each station: lint → static analysis → SAST → dependency audit →
    coverage → DAST → report.
-3. Write reports to `specs/quality/`.
+3. **Write every report as an actual file on disk** under `outputs/specs/quality/`. Do not merely display content in chat — use file-writing tools to create each file.
 4. Report overall pass/fail with gate results.
 
 ## Outputs

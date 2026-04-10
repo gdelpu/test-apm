@@ -12,4 +12,4 @@ Run the PR Validation workflow.
 2. Phase 1 (parallel): PR auto-validator → YAML workflow linter → test gap detector.
 3. Phase 2 (sequential): A0 intake → A1 policy → A2 security → A3 prompt injection →
    A4 red team → A5 sandbox → A6 policy gate → A7 platform update.
-4. Write reports to `outputs/station_out/`.
+4. **Use `edit/editFiles` or `create_file` to write reports as actual files on disk** to `outputs/station_out/`. Do not merely display content in chat.

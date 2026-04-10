@@ -10,5 +10,6 @@ Run the Steer pipeline (Systems P0 through P3).
 
 1. Read `.apm/workflows/sdlc-steer.yml` for the station sequence.
 2. Execute all 10 stations: init (project sheet, KPIs) → planning (sprints, roadmap, risks) → tracking (progress, health, risks) → governance (COPIL, Go/No-Go).
-3. Write all artifacts to `outputs/docs/3-steer/`.
+3. **Use `edit/editFiles` or `create_file` to write every artifact as an actual file on disk** under `outputs/docs/3-steer/`. Do not merely display content in chat.
 4. Track state in `outputs/docs/3-steer/workflow-state.md`.
+5. After each station, verify that declared output files exist on disk before proceeding.

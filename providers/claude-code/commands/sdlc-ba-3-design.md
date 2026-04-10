@@ -16,7 +16,7 @@ Execute the **BA System S3 — Functional Design** pipeline (per feature).
      Wave 5: 3.6 (test data)
    - Features processed up to max_concurrency in parallel.
    - Fan-in: 3.6b (E2E test plan) at project scope.
-4. Write to `outputs/docs/1-prd/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/1-prd/`. Do not merely display content in chat — use file-writing tools to create each file.
 5. Suggest `/sdlc-validate` + `/sdlc-coherence`.
 
 Prerequisites: S2 (specification) deliverables must exist with status `validated`.

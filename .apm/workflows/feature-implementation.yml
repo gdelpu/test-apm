@@ -1,6 +1,13 @@
 name: feature-implementation
-description: End-to-end feature delivery from constitution through specification, planning, implementation, and quality validation.
+description: End-to-end feature delivery from constitution through specification, planning, implementation, and quality validation (brownfield and greenfield).
 type: delivery
+
+when_to_use:
+  - Starting a new feature (greenfield or brownfield)
+  - Delivering a complete feature with specification, implementation, and quality assurance
+  - When the full spec-kit flow plus actual code generation and testing is needed
+  - Brownfield feature work requiring context extraction and constraint mapping before specification
+  - Features requiring formal architecture review and capacity planning
 
 stations:
   - id: constitution
@@ -16,6 +23,22 @@ stations:
         - "Constitution covers architecture, quality, security, testing, observability"
       severity: blocker
 
+  - id: brownfield-context
+    name: Brownfield Context Extraction
+    agent: spec-orchestrator
+    skills:
+      - brownfield-context
+    inputs:
+      - constitution.md
+    outputs:
+      - context-brief.md
+    gate:
+      criteria:
+        - "Existing architecture, patterns, and constraints documented"
+        - "Do-not-break constraints identified"
+      severity: blocker
+    condition: brownfield
+
   - id: specification
     name: Feature Specification
     agent: spec-orchestrator
@@ -23,6 +46,7 @@ stations:
       - spec-feature
     inputs:
       - constitution.md
+      - context-brief.md?
     outputs:
       - spec.md
     gate:

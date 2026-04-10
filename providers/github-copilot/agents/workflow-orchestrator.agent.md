@@ -23,6 +23,14 @@ Read the full agent definition from `.apm/agents/workflow-orchestrator.md`.
 
 > All station declarations in workflow YAML MUST include an explicit `allowed_tools` list. Stations without one inherit `[]` (no tools).
 
+## File Output Enforcement
+
+This orchestrator must verify that station agents **actually write output files to disk** — not just display content in chat. After each station completes:
+
+1. Check that all declared output files exist on disk at their expected paths
+2. If a station's outputs were only displayed in chat but not written to disk, treat the station as **incomplete** and retry with explicit instruction: "Use `edit/editFiles` or `create_file` to write the deliverable to disk"
+3. Do not advance to the next station until all output files are confirmed on disk
+
 ## Security Constraints
 
 - You must not delete, modify, or send data to external services without explicit user approval.

@@ -2,13 +2,19 @@
 
 Execute the **full SDLC pipeline** (BA + Tech + Test + Steer) without human gates.
 
+## Pre-flight: detect project context
+
+Before executing any station, determine whether this is a **brownfield** (existing system) or **greenfield** (new project). Ask the user if not already clear. This affects:
+- BA pipeline: brownfield runs S0 audit; greenfield skips to S1 scoping.
+- Tech pipeline: brownfield runs T0 audit; greenfield skips to T1 architecture.
+
 ## Steps
 
 1. Read `.apm/workflows/sdlc-full.yml` for the station sequence.
 2. Read `.apm/contexts/sdlc-agent-registry.yaml` for agent compositions.
 3. Read `.apm/contexts/sdlc-system-context.md` for orchestration conventions.
-4. Execute all 11 stations: scaffold → project init → BA pipeline (S0-S3) → sprint planning → Tech pipeline (T0-T3) → implementation → test campaigns → sprint tracking → quality validation → COPIL/Go-No-Go.
-5. Write all artifacts to `docs/`.
+4. Execute all 11 stations: scaffold → project init → BA pipeline (S0-S3, skipping S0 if greenfield) → sprint planning → Tech pipeline (T0-T3, skipping T0 if greenfield) → implementation → test campaigns → sprint tracking → quality validation → COPIL/Go-No-Go.
+5. **Write every artifact as an actual file on disk** under `outputs/docs/`. Do not merely display content in chat — use file-writing tools to create each file.
 6. Track state in `docs/workflow-state.md`.
 
 If $ARGUMENTS contains "gated", pause at each phase boundary for human review.

@@ -7,7 +7,7 @@ Run the Modernization workflow for migrating an existing system.
 1. Read `.apm/workflows/modernization.yml` for the station sequence.
 2. Execute each station: baseline assessment → target state → architecture review →
    migration plan → risk clarification → task breakdown → quality validation.
-3. Write all artifacts to `outputs/specs/features/<initiative>/`.
+3. **Write every artifact as an actual file on disk** under `outputs/specs/features/<initiative>/`. Do not merely display content in chat — use file-writing tools to create each file.
 4. Track state in workflow-state.md.
 
 ## Inputs

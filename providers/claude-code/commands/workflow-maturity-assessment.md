@@ -7,7 +7,7 @@ Run the Maturity Assessment workflow to evaluate project or team maturity.
 1. Read `.apm/workflows/maturity-assessment.yml` for the station sequence.
 2. Execute each station: scope definition → analysis → scoring →
    report generation → roadmap → stakeholder review.
-3. Write artifacts to `outputs/specs/assessments/<name>/`.
+3. **Write every artifact as an actual file on disk** under `outputs/specs/assessments/<name>/`. Do not merely display content in chat — use file-writing tools to create each file.
 
 ## Inputs
 

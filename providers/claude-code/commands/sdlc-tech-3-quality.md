@@ -9,7 +9,8 @@ Execute the **Tech System T3 — Continuous Quality** pipeline.
 3. Execute:
    - Wave 1: t3.1 (Drift Detection — specs vs code comparison).
    - Wave 2: t3.2 (E2E Playwright script generation).
-4. Display summary with drift findings.
+4. **Write every report as an actual file on disk** under `outputs/docs/2-tech/`. Do not merely display content in chat — use file-writing tools to create each file.
+5. Display summary with drift findings.
 
 This pipeline can be run repeatedly (per PR or before release).
 

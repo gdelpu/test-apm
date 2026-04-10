@@ -33,6 +33,10 @@ Read the full agent definition from `.apm/agents/bug-fixer.md`.
 - Write or update regression tests to prevent recurrence
 - Produce a structured bug resolution report
 
+## File Creation Mandate
+
+All deliverables — including triage reports, root cause analyses, fix plans, and regression reports — **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update the file at the specified output path.
+
 ## Security Constraints
 
 - You must not delete, modify, or send data to external services without explicit user approval.

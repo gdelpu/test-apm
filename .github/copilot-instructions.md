@@ -67,7 +67,7 @@ your intent, and dispatches to the right workflow or agent.
 
 ## Working rules
 
-- Write all generated artifacts under `outputs/`.
+- **Write all generated artifacts to disk under `outputs/` using file-writing tools (`edit/editFiles` or `create_file`).** Never display deliverable content only in chat — every output must be an actual file on the file system. This is the single most important rule for producing useful artifacts.
 - For brownfield work, start with a reverse brief.
 - Do not create implementation tasks before a plan exists.
 - Prefer the local skills and templates over inventing new structures.
@@ -83,14 +83,14 @@ Workflow pipelines are available, each with stations and quality gates:
 
 | Workflow | Stations | Type | Purpose |
 |----------|----------|------|---------|
-| Feature Implementation | 10 | Delivery | End-to-end: constitution → spec → plan → implement → quality → gate |
+| Feature Implementation | 10 | Delivery | End-to-end: constitution → brownfield context (if brownfield) → spec → plan → implement → quality → gate |
 | Modernization | 10 | Delivery | Baseline → decisions → target → review → plan → risk → tasks → implement → quality |
 | Bug Fixing | 7 | Delivery | Triage → reproduce → root-cause → fix → regression → quality → close |
 | Incident Resolution | 7 | Delivery | Analysis → root-cause → reproduction → fix → regression → validation → knowledge |
 | BMAD | 4 | Delivery | Build → measure → analyze → decide (loop) |
 | Implementation Loop | 6 | Delivery | Task selection → code → review → test → validate → commit |
 | Idea to Spec | 7 | Specification | Intent → context → spec → clarify → NFR → architecture → gate |
-| Spec Kit | 8 | Specification | Constitution → spec → clarify → review → plan → tasks → test-strategy → gate |
+| Spec Kit | 9 | Specification | Constitution → brownfield context (if brownfield) → spec → clarify → review → plan → tasks → test-strategy → gate |
 | Spec to Execution | 6 | Specification | Plan → risk → rollout → tasks → test-strategy → readiness |
 | Quality Validation | 7 | Validation | Lint → static → SAST → deps → coverage → DAST → report |
 | PR Validation | 11 | Validation | PR auto ∥ YAML lint ∥ test gaps → A0–A7 stations |

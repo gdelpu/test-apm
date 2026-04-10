@@ -8,7 +8,8 @@ Execute the **Test Campaign System** (E2E/UAT).
 2. Execute:
    - Wave 1: camp.1 (Campaign Launch — prerequisites check, seeds, Xray creation).
    - Wave 2: camp.2 (Campaign Report — anomaly classification, Go/No-Go Test).
-3. Display summary with pass/fail/blocked counts and Go/No-Go recommendation.
+3. **Write every report as an actual file on disk.** Do not merely display content in chat — use file-writing tools to create each file.
+4. Display summary with pass/fail/blocked counts and Go/No-Go recommendation.
 
 Prerequisites: BA deliverables (E2E plan, test data) and Tech deliverables (Playwright scripts) must exist. Application must be deployed on qualification/staging environment.
 

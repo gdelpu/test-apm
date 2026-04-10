@@ -10,4 +10,5 @@ Run the Test pipeline (campaign + performance).
 
 1. Read `.apm/contexts/sdlc-agent-registry.yaml` for Test agent compositions.
 2. Execute campaign system (launch + report) then performance system (execution + report).
-3. Display cumulative Go/No-Go recommendation.
+3. **Use `edit/editFiles` or `create_file` to write all test reports as actual files on disk.** Do not merely display content in chat.
+4. Display cumulative Go/No-Go recommendation.
