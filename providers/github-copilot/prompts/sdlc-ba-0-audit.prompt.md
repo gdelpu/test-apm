@@ -10,4 +10,4 @@ Run the BA brownfield audit pipeline.
 
 1. Read `.apm/workflows/sdlc-ba.yml` — stations `ba-audit-existing` and `ba-audit-delta`.
 2. Execute: existing system audit → delta analysis.
-3. Write to `docs/1-prd/`. Brownfield only — skip for greenfield.
+3. Write to `outputs/docs/1-prd/`. Brownfield only — skip for greenfield.

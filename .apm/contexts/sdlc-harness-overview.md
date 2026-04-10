@@ -258,8 +258,8 @@ To migrate to another tool (Cursor, Aider, Agent SDK...):
 /ba-1-scoping path/to/cahier-des-charges.md
 
 # 2. Validate the scoping deliverables
-/validate docs/1-prd/1-scoping/vis-001-product-vision.md
-/validate docs/1-prd/1-scoping/glo-001-glossary.md
+/validate outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+/validate outputs/docs/1-prd/1-scoping/glo-001-glossary.md
 
 # 3. Continue with specification (fan-out: epics then features)
 /ba-2-spec

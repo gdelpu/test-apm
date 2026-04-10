@@ -75,9 +75,9 @@ $ErrorActionPreference = 'Stop'
 
 # --- Helpers ---
 function Write-Step  { param([string]$msg) Write-Host "`n── $msg ──" -ForegroundColor Cyan }
-function Write-Ok    { param([string]$msg) Write-Host "✅ $msg" -ForegroundColor Green }
-function Write-Info  { param([string]$msg) Write-Host "ℹ️  $msg" }
-function Write-Err   { param([string]$msg) Write-Host "❌ $msg" -ForegroundColor Red }
+function Write-Ok    { param([string]$msg) Write-Host "[OK] $msg" -ForegroundColor Green }
+function Write-Info  { param([string]$msg) Write-Host "[..] $msg" }
+function Write-Err   { param([string]$msg) Write-Host "[!!] $msg" -ForegroundColor Red }
 
 # --- Validate token ---
 if (-not $Token) {
@@ -129,6 +129,9 @@ try {
         $dest = Join-Path $tempDir $file.Local
         Write-Info "Downloading $($file.Local)..."
         Invoke-WebRequest -Uri $url -Headers $headers -OutFile $dest -UseBasicParsing
+        # Re-encode with UTF-8 BOM so PowerShell 5.1 parses the file correctly
+        $rawContent = [System.IO.File]::ReadAllText($dest, [System.Text.Encoding]::UTF8)
+        Set-Content -Path $dest -Value $rawContent -Encoding UTF8
     }
     Write-Ok 'Installer scripts downloaded'
 

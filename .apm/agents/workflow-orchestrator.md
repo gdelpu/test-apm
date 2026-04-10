@@ -3,9 +3,9 @@ name: workflow-orchestrator
 description: 'Orchestrate station-based workflow pipelines by delegating work to station agents.'
 tools: []
 allowedFilePaths:
-  - 'specs/**'
+  - 'outputs/**'
   - '.apm/workflows/**'
-  - 'station_out/**'
+  - 'outputs/station_out/**'
 default_sub_agent_posture: deny-all
 ---
 
@@ -24,7 +24,7 @@ Execute workflow definitions by driving stations sequentially, evaluating qualit
 - Pass file-based state between stations (outputs of station N become inputs of station N+1)
 - Evaluate quality gates after each station completes
 - Block on blocker gates, log and continue on warning gates
-- Write and maintain workflow state in `specs/features/<feature>/workflow-state.md`
+- Write and maintain workflow state in `outputs/specs/features/<feature>/workflow-state.md`
 - Support nested workflows (a station can reference another workflow)
 
 ## Execution modes

@@ -31,26 +31,26 @@ docs/0-inputs/tech/1-archi/
 docs/0-inputs/tech/2-design/
 docs/0-inputs/steer/
 
-# BA deliverables (docs/1-prd/)
-docs/1-prd/0-audit/
-docs/1-prd/1-scoping/
-docs/1-prd/2-specification/
-docs/1-prd/3-epics/
-docs/1-prd/4-tests/
-docs/1-prd/5-tools/
-docs/1-prd/6-workshops/
+# BA deliverables (outputs/docs/1-prd/)
+outputs/docs/1-prd/0-audit/
+outputs/docs/1-prd/1-scoping/
+outputs/docs/1-prd/2-specification/
+outputs/docs/1-prd/3-epics/
+outputs/docs/1-prd/4-tests/
+outputs/docs/1-prd/5-tools/
+outputs/docs/1-prd/6-workshops/
 
-# Tech deliverables (docs/2-tech/)
-docs/2-tech/0-audit/
-docs/2-tech/1-architecture/adr/
-docs/2-tech/2-design/api/
-docs/2-tech/2-design/enablers/
-docs/2-tech/3-quality/
-docs/2-tech/4-workshops/
+# Tech deliverables (outputs/docs/2-tech/)
+outputs/docs/2-tech/0-audit/
+outputs/docs/2-tech/1-architecture/adr/
+outputs/docs/2-tech/2-design/api/
+outputs/docs/2-tech/2-design/enablers/
+outputs/docs/2-tech/3-quality/
+outputs/docs/2-tech/4-workshops/
 
-# Steer deliverables (docs/3-steer/)
-docs/3-steer/0-sprint-reports/
-docs/3-steer/1-committees/
+# Steer deliverables (outputs/docs/3-steer/)
+outputs/docs/3-steer/0-sprint-reports/
+outputs/docs/3-steer/1-committees/
 
 # Word output
 output/word/
@@ -60,7 +60,7 @@ output/word/
 
 When epics and features have been discovered (after agents `ba-2.2` / `ba-2.2b`), create per-feature directories for both client inputs and agent outputs.
 
-**Input:** list of feature paths discovered (e.g., `docs/1-prd/3-epics/ep-001-auth/ft-001-login/`)
+**Input:** list of feature paths discovered (e.g., `outputs/docs/1-prd/3-epics/ep-001-auth/ft-001-login/`)
 
 **For each feature path `{feature_path}`**, create directories based on the `doc_depth` setting in `docs/project.yml`:
 
@@ -114,7 +114,7 @@ Before writing `docs/project.yml`, collect three pieces of information:
 1. **`project_name`** — if not provided in the session prompt, ask the user: *"What is the project name?"*
 2. **`lang`** — determine using the following priority order:
    1. Explicit session declaration (e.g. `"Target language: English"`, `"Langue cible : français"`)
-   2. `lang` field in an existing deliverable's YAML front matter (scan `docs/1-prd/`, `docs/2-tech/`)
+   2. `lang` field in an existing deliverable's YAML front matter (scan `outputs/docs/1-prd/`, `outputs/docs/2-tech/`)
    3. If neither available, ask the user: *"What is the working language for deliverables? (e.g. en, fr, de, es)"*
 3. **`doc_depth`** — determine using the following priority order:
    1. Explicit session declaration (e.g. `"depth: standard"`)

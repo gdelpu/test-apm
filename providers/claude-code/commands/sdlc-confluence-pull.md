@@ -3,8 +3,8 @@
 Pull **status changes and comments** from Confluence pages linked to local deliverables.
 
 $ARGUMENTS = optional scope + options:
-- A file path: `docs/1-prd/1-scoping/glo-001-glossary.md`
-- A directory: `docs/1-prd/1-scoping/`
+- A file path: `outputs/docs/1-prd/1-scoping/glo-001-glossary.md`
+- A directory: `outputs/docs/1-prd/1-scoping/`
 - No argument: all files with a `confluence_id`
 - `--since YYYY-MM-DD`: only comments after this date
 - `--out feedback.txt`: write comments to file instead of stdout

@@ -20,9 +20,9 @@ If $ARGUMENTS contains "gated", pause at each phase boundary for human review.
 
 ## Outputs
 
-- `docs/1-prd/` — BA deliverables (via nested `sdlc-ba`)
-- `docs/2-tech/` — Tech deliverables (via nested `sdlc-tech`)
-- `docs/3-steer/` — Steer deliverables (project sheet, KPIs, sprint plans, COPIL, Go/No-Go)
+- `outputs/docs/1-prd/` — BA deliverables (via nested `sdlc-ba`)
+- `outputs/docs/2-tech/` — Tech deliverables (via nested `sdlc-tech`)
+- `outputs/docs/3-steer/` — Steer deliverables (project sheet, KPIs, sprint plans, COPIL, Go/No-Go)
 - `campaign-report.md`, `performance-report.md` — test results
 - `quality-report.md` — from nested quality-validation
 - `gng-001-go-nogo.md` — final Go/No-Go decision

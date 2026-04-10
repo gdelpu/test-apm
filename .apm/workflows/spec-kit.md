@@ -25,7 +25,7 @@ Specification-only pipeline producing a complete spec package without implementa
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `constitution.md` — foundational principles and constraints
 - `spec.md` — feature specification with acceptance criteria
 - `clarifications.md` — resolved questions and edge cases

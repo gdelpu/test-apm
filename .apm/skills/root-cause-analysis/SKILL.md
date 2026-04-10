@@ -32,7 +32,7 @@ Systematically investigate a failure, incident, or bug to identify its root caus
 
 ## Output
 
-`specs/features/<feature>/root-cause.md`
+`outputs/specs/features/<feature>/root-cause.md`
 
 ## Rules
 

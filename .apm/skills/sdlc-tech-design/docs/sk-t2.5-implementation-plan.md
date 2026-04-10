@@ -54,7 +54,7 @@ An operational file for Claude Code, structured by reference.
 
 This agent supports **incremental execution** — it can be run once per sprint batch, extending an existing implementation plan with new work items.
 
-1. **Check if the output file already exists** (`docs/2-tech/2-design/imp-001-implementation-plan.md`).
+1. **Check if the output file already exists** (`outputs/docs/2-tech/2-design/imp-001-implementation-plan.md`).
 2. **If it exists** (incremental run):
    a. Read the existing file in full — this is the **baseline**. Note the last wave number and last IMP item number.
    b. Read the `--scope` parameter to identify the **work items for this sprint** (User Stories from Features, and/or Enabler specs).

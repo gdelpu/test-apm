@@ -8,11 +8,11 @@ description: 'Validate agent and skill manifests against JSON Schema; enforce to
 ## Goal
 
 Validate every changed agent and skill manifest against workspace policy rules.
-Emit `station_out/policy_report.json`.
+Emit `outputs/station_out/policy_report.json`.
 
 ## Inputs
 
-- `station_out/work_order.json`
+- `outputs/station_out/work_order.json`
 - Changed files where `type == "agent"` or `type == "skill"`
 - `knowledge/governance/schemas/agent-manifest.schema.json`
 - `knowledge/governance/schemas/skill-manifest.schema.json`

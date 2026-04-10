@@ -41,7 +41,7 @@ Each feature file is the **entry point** for System 3 agents (user stories, jour
 
 One Markdown file per Feature, conforming to template `tpl-feature.md`, located at:
 ```
-docs/1-prd/3-epics/ep-xxx-{slug}/ft-xxx-{slug}/ft-xxx-{slug}.md
+outputs/docs/1-prd/3-epics/ep-xxx-{slug}/ft-xxx-{slug}/ft-xxx-{slug}.md
 ```
 
 Each file contains:
@@ -56,7 +56,7 @@ Each file contains:
 
 ## Rules-only mode
 
-**Activation condition:** feature files already exist in `docs/1-prd/3-epics/ep-*/ft-*/ft-*.md`.
+**Activation condition:** feature files already exist in `outputs/docs/1-prd/3-epics/ep-*/ft-*/ft-*.md`.
 
 When this condition is met:
 
@@ -138,11 +138,11 @@ Write **one file per rule type** that has at least one rule, using the paths bel
 
 | Rule type | Output file |
 |-----------|-------------|
-| Validation (`BR-VAL`) | `docs/1-prd/2-specification/_rules-staging/VAL/rules-from-{epic-slug}.md` |
-| Calculation (`BR-CAL`) | `docs/1-prd/2-specification/_rules-staging/CAL/rules-from-{epic-slug}.md` |
-| Trigger (`BR-TRG`) | `docs/1-prd/2-specification/_rules-staging/TRG/rules-from-{epic-slug}.md` |
-| Consistency (`BR-COH`) | `docs/1-prd/2-specification/_rules-staging/COH/rules-from-{epic-slug}.md` |
-| Authorisation (`BR-AUT`) | `docs/1-prd/2-specification/_rules-staging/AUT/rules-from-{epic-slug}.md` |
+| Validation (`BR-VAL`) | `outputs/docs/1-prd/2-specification/_rules-staging/VAL/rules-from-{epic-slug}.md` |
+| Calculation (`BR-CAL`) | `outputs/docs/1-prd/2-specification/_rules-staging/CAL/rules-from-{epic-slug}.md` |
+| Trigger (`BR-TRG`) | `outputs/docs/1-prd/2-specification/_rules-staging/TRG/rules-from-{epic-slug}.md` |
+| Consistency (`BR-COH`) | `outputs/docs/1-prd/2-specification/_rules-staging/COH/rules-from-{epic-slug}.md` |
+| Authorisation (`BR-AUT`) | `outputs/docs/1-prd/2-specification/_rules-staging/AUT/rules-from-{epic-slug}.md` |
 
 Each file has the following front matter:
 
@@ -182,7 +182,7 @@ For each feature of this epic, extract business rules from the feature descripti
 
 - **Business language only**: no technical mention in feature names or descriptions
 - **One file per feature**: never merge multiple features into one file
-- **Path compliance**: always place files at `docs/1-prd/3-epics/ep-xxx-{slug}/ft-xxx-{slug}/ft-xxx-{slug}.md`
+- **Path compliance**: always place files at `outputs/docs/1-prd/3-epics/ep-xxx-{slug}/ft-xxx-{slug}/ft-xxx-{slug}.md`
 - **R4J traceability**: `requirements` field in front matter must list all `EX-xxx` identifiers this feature covers — used by `agent-sync-r4j.md`
 - **Flag** grey areas in "Points of attention", never silently drop ambiguities
 
@@ -191,11 +191,11 @@ For each feature of this epic, extract business rules from the feature descripti
 The produced files must:
 
 1. **Primary output** — Feature files:
-   - Be named `ft-{NNN}-{slug}.md` and placed inside the corresponding epic folder: `docs/1-prd/3-epics/ep-{NNN}-{epic-slug}/ft-{NNN}-{feature-slug}/ft-{NNN}-{feature-slug}.md`
+   - Be named `ft-{NNN}-{slug}.md` and placed inside the corresponding epic folder: `outputs/docs/1-prd/3-epics/ep-{NNN}-{epic-slug}/ft-{NNN}-{feature-slug}/ft-{NNN}-{feature-slug}.md`
    - Conform exactly to the structure of template `tpl-feature.md`
    - Have the YAML front matter with `type: feature`, `epic: EP-xxx`, `requirements: [...]`
    - Have status `draft`
 
-2. **Secondary output** — `docs/1-prd/2-specification/_rules-staging/{TYPE}/rules-from-{epic-slug}.md` (one file per rule type):
+2. **Secondary output** — `outputs/docs/1-prd/2-specification/_rules-staging/{TYPE}/rules-from-{epic-slug}.md` (one file per rule type):
    - Business rules extracted from all features of this epic (see Step 5), split by type (`VAL/`, `CAL/`, `TRG/`, `COH/`, `AUT/`)
    - Uses temporary IDs (`BR-VAL-F001`, etc.)

@@ -16,13 +16,13 @@ You are a senior tech lead. Your mission is to consolidate all enabler files pro
 
 | Input | Source | Required |
 |-------|--------|----------|
-| **Enabler files** | `docs/2-tech/2-design/enablers/enb-*.md` — all files produced by t1.4 | Yes |
-| **ADR index** | `docs/2-tech/1-architecture/adr/adr-000-index.md` — to verify coverage | Yes |
+| **Enabler files** | `outputs/docs/2-tech/2-design/enablers/enb-*.md` — all files produced by t1.4 | Yes |
+| **ADR index** | `outputs/docs/2-tech/1-architecture/adr/adr-000-index.md` — to verify coverage | Yes |
 | **`[GAP-001]`** | Technical gap — brownfield only, for Wave 0 BF enablers | Optional |
 
 ## Expected output
 
-A single index file `docs/2-tech/2-design/enablers/enb-000-index.md` containing:
+A single index file `outputs/docs/2-tech/2-design/enablers/enb-000-index.md` containing:
 
 1. **Complete enabler inventory** — all enablers with ID, title, source ADR, wave, dependencies
 2. **Wave summary** — enablers grouped by wave with dependency arrows
@@ -34,7 +34,7 @@ A single index file `docs/2-tech/2-design/enablers/enb-000-index.md` containing:
 
 ### Step 1: Inventory
 
-Read the YAML front matter of each enabler file in `docs/2-tech/2-design/enablers/`. Extract: `id`, `title`, `adr_source`, `wave`.
+Read the YAML front matter of each enabler file in `outputs/docs/2-tech/2-design/enablers/`. Extract: `id`, `title`, `adr_source`, `wave`.
 
 ### Step 2: Cross-ADR dependency resolution
 
@@ -72,5 +72,5 @@ Produce a Mermaid `graph TD` showing all enablers grouped by wave with dependenc
 
 ## Output format
 
-- File: `docs/2-tech/2-design/enablers/enb-000-index.md`
+- File: `outputs/docs/2-tech/2-design/enablers/enb-000-index.md`
 - YAML front matter: `id: ENB-INDEX`, `type: enabler-index`, `total_enablers: {N}`, `total_waves: {N}`, `status: draft`

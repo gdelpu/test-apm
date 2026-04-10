@@ -1,13 +1,13 @@
 ---
 name: 'A0 – Intake'
-description: 'Extract PR context (metadata, changed files, diff) and emit station_out/work_order.json for all downstream stations.'
+description: 'Extract PR context (metadata, changed files, diff) and emit outputs/station_out/work_order.json for all downstream stations.'
 ---
 
 # Station A0 — Intake
 
 ## Goal
 
-Produce `station_out/work_order.json` summarising everything downstream stations need to know about this PR.
+Produce `outputs/station_out/work_order.json` summarising everything downstream stations need to know about this PR.
 
 ## Inputs
 
@@ -55,7 +55,7 @@ to `risk_hints[]` (deduplicated):
 
 ### 4 — Write output
 
-Create `station_out/` if it does not exist, then write `station_out/work_order.json`.
+Create `outputs/station_out/` if it does not exist, then write `outputs/station_out/work_order.json`.
 
 ## Output Schema
 

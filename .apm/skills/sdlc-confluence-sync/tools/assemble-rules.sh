@@ -5,15 +5,15 @@
 # Example: bash tools/assemble-rules.sh CAL
 #
 # Prerequisites: Step 0–2 completed (all staging files have dedup_done: true)
-# Input:  docs/1-prd/2-specification/_rules-staging/<RULE_TYPE>/
-# Output: docs/1-prd/2-specification/brl-<RULE_TYPE>-business-rules.md
+# Input:  outputs/docs/1-prd/2-specification/_rules-staging/<RULE_TYPE>/
+# Output: outputs/docs/1-prd/2-specification/brl-<RULE_TYPE>-business-rules.md
 # Stdout: summary (total rules, duplicates, conflicts)
 
 set -euo pipefail
 
 RULE_TYPE="${1:?Usage: assemble-rules.sh <RULE_TYPE>}"
-STAGING_DIR="docs/1-prd/2-specification/_rules-staging/$RULE_TYPE"
-OUTPUT="docs/1-prd/2-specification/brl-${RULE_TYPE}-business-rules.md"
+STAGING_DIR="outputs/docs/1-prd/2-specification/_rules-staging/$RULE_TYPE"
+OUTPUT="outputs/docs/1-prd/2-specification/brl-${RULE_TYPE}-business-rules.md"
 TODAY=$(date +%Y-%m-%d)
 
 # ── Validate prerequisites ───────────────────────────────────────────

@@ -68,7 +68,7 @@ stations:
       severity: blocker
 
 config:
-  output_dir: specs/assessments/<assessment-id>/
+  output_dir: outputs/specs/assessments/<assessment-id>/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

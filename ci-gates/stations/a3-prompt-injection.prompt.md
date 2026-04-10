@@ -11,11 +11,11 @@ Detect prompt injection vulnerabilities and data exfiltration vectors in agent/s
 using deterministic (regex / keyword) scanners. The optional Red Team Agent (`a4-red-team.agent.md`)
 runs separately and appends its structured findings to the same report.
 
-Emit `station_out/promptsec_report.json`.
+Emit `outputs/station_out/promptsec_report.json`.
 
 ## Inputs
 
-- `station_out/work_order.json`
+- `outputs/station_out/work_order.json`
 - Full text of changed `*.agent.md`, `SKILL.md`, and `*.prompt.md` files
 
 ## Target Selection

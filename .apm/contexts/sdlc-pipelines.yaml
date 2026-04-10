@@ -24,7 +24,7 @@ pipelines:
     system: S1
     gate_after: true
     prerequisites:
-      - file: docs/1-prd/1-scoping/dco-001-discovery.md
+      - file: outputs/docs/1-prd/1-scoping/dco-001-discovery.md
         agent: ba-discovery
         description: "Discovery Workshop — produces [DCO-001] from raw source documents"
     agents:
@@ -42,24 +42,24 @@ pipelines:
       "2.2":
         depends_on: ["2.1"]
         produces: epics
-        output_pattern: "docs/1-prd/3-epics/ep-{id}-{slug}/"
+        output_pattern: "outputs/docs/1-prd/3-epics/ep-{id}-{slug}/"
       "2.2b":
         depends_on: ["2.2"]
         foreach: epics
         produces: features
-        output_pattern: "docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
+        output_pattern: "outputs/docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
       "2.3":
         depends_on: ["2.1", "2.2b"]
         foreach: rule_types
         discover:
           rule_types:
-            pattern: "docs/1-prd/2-specification/_rules-staging/*/"
+            pattern: "outputs/docs/1-prd/2-specification/_rules-staging/*/"
             extract: dirname   # use subdirectory names as collection items
       "2.3b":
         depends_on: ["2.3"]
         scope: project
         script: "tools/dispatch-rules-to-features.sh"
-        confluence_push: "docs/1-prd/3-epics/*/ft-*/business-rules.md"
+        confluence_push: "outputs/docs/1-prd/3-epics/*/ft-*/business-rules.md"
 
   ba-3-design:
     domain: BA
@@ -121,7 +121,7 @@ pipelines:
     system: T1
     gate_after: true
     prerequisites:
-      - file: docs/2-tech/1-architecture/dco-tech-001-discovery.md
+      - file: outputs/docs/2-tech/1-architecture/dco-tech-001-discovery.md
         agent: tech-discovery
         description: "Tech Discovery Workshop — structures technical constraints into [DCO-TECH-001] before architecture"
     agents:
@@ -129,7 +129,7 @@ pipelines:
       "t1.2":
         depends_on: ["t1.1"]
         produces: adrs
-        output_pattern: "docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md"
+        output_pattern: "outputs/docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md"
       "t1.3":
         depends_on: ["t1.2"]
         foreach: adrs

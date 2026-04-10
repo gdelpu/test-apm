@@ -18,4 +18,4 @@ $ARGUMENTS = agent number (e.g., "1.2", "2.1", "3.5")
 4. Display the result and output file path.
 
 For per-feature agents (3.x), specify the feature path as a second argument:
-  `/sdlc-ba-agent 3.1 docs/1-prd/3-epics/ep-001/ft-001`
+  `/sdlc-ba-agent 3.1 outputs/docs/1-prd/3-epics/ep-001/ft-001`

@@ -19,11 +19,11 @@ Aggregate structured JSON reports from all upstream CI-gate stations and produce
 
 | File | Station |
 |------|---------|
-| `station_out/work_order.json` | A0 |
-| `station_out/policy_report.json` | A1 |
-| `station_out/security_report.json` | A2 |
-| `station_out/promptsec_report.json` | A3/A4 |
-| `station_out/sim_report.json` | A5 |
+| `outputs/station_out/work_order.json` | A0 |
+| `outputs/station_out/policy_report.json` | A1 |
+| `outputs/station_out/security_report.json` | A2 |
+| `outputs/station_out/promptsec_report.json` | A3/A4 |
+| `outputs/station_out/sim_report.json` | A5 |
 
 ## Decision Rules
 
@@ -85,7 +85,7 @@ Always add `agent-factory:scanned` regardless of decision.
 
 ## Output
 
-Structured JSON report following `station_out/gate_decision.json` schema:
+Structured JSON report following `outputs/station_out/gate_decision.json` schema:
 
 ```json
 {

@@ -36,7 +36,7 @@ Review and define non-functional requirements ensuring that security, performanc
 
 ## Output
 
-`specs/features/<feature>/nfr-review.md`
+`outputs/specs/features/<feature>/nfr-review.md`
 
 ## Gate criteria
 

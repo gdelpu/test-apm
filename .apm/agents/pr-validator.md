@@ -47,9 +47,9 @@ Execute structural, syntactic, and policy validators against changed files in a 
 
 ## Required Outputs
 
-- `reports/pr-auto-validator.json`
-- `reports/yaml-workflow-linter.json`
-- `reports/test-gap-detector.json`
+- `outputs/reports/pr-auto-validator.json`
+- `outputs/reports/yaml-workflow-linter.json`
+- `outputs/reports/test-gap-detector.json`
 
 ## Constraints
 

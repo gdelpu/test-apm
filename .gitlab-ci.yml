@@ -22,9 +22,9 @@ variables:
   ENABLE_COPILOT_CLI: "false"
 
   VALIDATORS_DIR: ".apm/skills/ai-backbone-pr-checks/tools/scripts"
-  REPORTS_DIR: "reports"
+  REPORTS_DIR: "outputs/reports"
 
-  STATION_OUT: "station_out"
+  STATION_OUT: "outputs/station_out"
   STATION_DIR: "ci-gates/stations"
   STATION_TIMEOUT: "900"
 

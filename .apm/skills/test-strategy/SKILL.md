@@ -34,7 +34,7 @@ Define a risk-aligned test strategy that specifies what to test, how to test it,
 
 ## Output
 
-`specs/features/<feature>/test-strategy.md`
+`outputs/specs/features/<feature>/test-strategy.md`
 
 ## Gate criteria
 

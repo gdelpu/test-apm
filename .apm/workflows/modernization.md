@@ -31,7 +31,7 @@ Station 10 invokes the `quality-validation` workflow as a nested sub-workflow fo
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `reverse-brief.md` — baseline assessment with current-state snapshot and constraints
 - `decisions.md` — architecture decision summary (detailed ADRs in `refactor/docs/adr/`)
 - `spec.md` — target state specification

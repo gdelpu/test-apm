@@ -1,7 +1,10 @@
 ---
 name: spec-orchestrator
 description: 'Lead structured specification-driven flow for software changes and initiatives.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
+  - 'specs/**'
 ---
 
 # Spec Orchestrator
@@ -37,12 +40,16 @@ This agent is the default entry point for greenfield and brownfield work.
 ## Required outputs
 
 For each feature, produce or update:
-- `specs/features/<feature>/reverse-brief.md` for brownfield
-- `specs/features/<feature>/spec.md`
-- `specs/features/<feature>/clarifications.md`
-- `specs/features/<feature>/plan.md`
-- `specs/features/<feature>/tasks.md`
-- `specs/features/<feature>/quality-gate.md`
+- `outputs/specs/features/<feature>/reverse-brief.md` for brownfield
+- `outputs/specs/features/<feature>/spec.md`
+- `outputs/specs/features/<feature>/clarifications.md`
+- `outputs/specs/features/<feature>/plan.md`
+- `outputs/specs/features/<feature>/tasks.md`
+- `outputs/specs/features/<feature>/quality-gate.md`
+
+## File creation mandate
+
+All deliverables listed above **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update the file at the specified output path. Create parent directories as needed. Each output file must include YAML front matter with artifact identifiers where applicable.
 
 ## Skills to invoke
 

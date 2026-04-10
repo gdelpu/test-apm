@@ -2,7 +2,7 @@
 
 Convert a Markdown deliverable to **Word** format using Pandoc.
 
-$ARGUMENTS = path to the Markdown file to convert (e.g., "docs/1-prd/1-scoping/vis-001-product-vision.md")
+$ARGUMENTS = path to the Markdown file to convert (e.g., "outputs/docs/1-prd/1-scoping/vis-001-product-vision.md")
 
 ## Steps
 

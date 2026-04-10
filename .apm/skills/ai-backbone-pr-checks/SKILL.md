@@ -33,13 +33,13 @@ Test validators locally before pushing changes:
 
 ```bash
 # Lint all workflow files (no git diff needed)
-python .apm/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py --root . --out reports/yaml-workflow-linter.json
+python .apm/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py --root . --out outputs/reports/yaml-workflow-linter.json
 
 # Validate changed files between HEAD~1 and HEAD
-python .apm/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py --base-ref HEAD~1 --head-ref HEAD --out reports/pr-auto-validator.json
+python .apm/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py --base-ref HEAD~1 --head-ref HEAD --out outputs/reports/pr-auto-validator.json
 
 # Detect documentation gaps
-python .apm/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py --base-ref HEAD~1 --head-ref HEAD --out reports/test-gap-detector.json
+python .apm/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py --base-ref HEAD~1 --head-ref HEAD --out outputs/reports/test-gap-detector.json
 ```
 
 ## CI Usage (GitLab)
@@ -48,7 +48,7 @@ The GitLab CI pipeline (`.gitlab-ci.yml` at repository root) automatically runs 
 
 1. **Pipeline trigger**: Merge request events (opened, synchronized, ready_for_review)
 2. **Execution**: Runs on `python:3.11` image with PyYAML dependency
-3. **Output**: Writes reports to `reports/` directory and uploads as artifacts (14-day retention)
+3. **Output**: Writes reports to `outputs/reports/` directory and uploads as artifacts (14-day retention)
 4. **Comment**: Posts aggregated summary comment on the merge request
 5. **Gating**: Only blocking issues cause MR to fail; warnings are advisory only
 

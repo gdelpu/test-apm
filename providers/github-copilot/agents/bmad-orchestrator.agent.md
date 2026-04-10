@@ -3,8 +3,8 @@ name: BMAD Orchestrator
 description: 'Drive BMAD feedback loop with quality scoring and adaptive decision-making.'
 tools: [codebase, search]
 allowedFilePathsReadOnly:
-  - 'specs/**'
-  - 'station_out/**'
+  - 'outputs/**'
+  - 'outputs/station_out/**'
   - '.apm/workflows/**'
   - 'docs/**'
 ---

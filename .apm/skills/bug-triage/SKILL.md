@@ -29,7 +29,7 @@ Classify and prioritize a bug report by assigning severity, priority, identifyin
 
 ## Output
 
-`specs/bugs/<bug-id>/triage.md`
+`outputs/specs/bugs/<bug-id>/triage.md`
 
 ## Rules
 

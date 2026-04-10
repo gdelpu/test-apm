@@ -30,7 +30,7 @@ The BMAD cycle supports up to 3 retry iterations based on the Decide station out
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `hypothesis.md` (input, initial hypothesis statement)
 - `build-log.md` (from Build)
 - `metrics.md` (from Measure)

@@ -60,6 +60,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 - [Knowledge Base](#knowledge-base)
 - [Quick Start Guide](#quick-start-guide)
 - [Concepts & Glossary](#concepts--glossary)
+- [Output File Metadata](#output-file-metadata)
 - [Provider Setup](#provider-setup)
 - [PR Validation Pipeline](#pr-validation-pipeline)
 - [Cross-Layer Validation](#cross-layer-validation)
@@ -97,7 +98,7 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
   └──────────────────────┬───────────────────────────────┘
                          │
             ┌────────────▼──────────────┐
-            │      Outputs: specs/      │
+            │   Outputs: outputs/      │
             │  features/  decisions/    │
             └───────────────────────────┘
 ```
@@ -132,7 +133,8 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 | `clients/` | Per-client overlay directories |
 | `ci-gates/` | PR validation station implementations (A0–A7) |
 | `scripts/` | Cross-layer validation scripts, APM build/publish/install helpers |
-| `docs/` | [Quick Start](docs/quick-start.md), [Concepts](docs/concepts.md), [APM Consumer Guide](docs/apm-consumer-guide.md), [Distribution](docs/distribution.md) |
+| `docs/` | [Quick Start](docs/quick-start.md), [Concepts](docs/concepts.md), [Output Metadata](docs/output-metadata.md), [APM Consumer Guide](docs/apm-consumer-guide.md), [Distribution](docs/distribution.md) |
+| `outputs/` | All generated workflow and agent output artifacts |
 
 ---
 
@@ -341,7 +343,7 @@ Workflows that drive end-to-end feature or fix delivery from specification throu
 
 **Flow**: Constitution → Specification → Clarification → Architecture Review → Plan → Tasks → Implementation → Quality Validation → PR Validation → Final Gate
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -364,7 +366,7 @@ Workflows that drive end-to-end feature or fix delivery from specification throu
 
 **Flow**: Baseline → Decisions → Target State → Architecture Review → Migration Plan → Risk Clarification → Tasks → Implementation → Quality Validation → PR Validation
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -384,7 +386,7 @@ Workflows that drive end-to-end feature or fix delivery from specification throu
 
 **Flow**: Triage → Reproduce → Root Cause → Fix → Regression → Quality Validation → Close
 
-**Output directory**: `specs/bugs/<bug-id>/`
+**Output directory**: `outputs/specs/bugs/<bug-id>/`
 
 ---
 
@@ -404,7 +406,7 @@ Workflows that drive end-to-end feature or fix delivery from specification throu
 
 **Flow**: Incident Analysis → Root Cause Hypothesis → Reproduction → Fix Proposal → Regression Tests → Patch Validation → Knowledge Update
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -421,7 +423,7 @@ Workflows that drive end-to-end feature or fix delivery from specification throu
 
 **Flow**: Build → Measure → Analyze → Decide (iterate)
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -440,7 +442,7 @@ Workflows that drive end-to-end feature or fix delivery from specification throu
 
 **Flow**: Task Selection → Code Generation → Self-Review → Test Generation → Local Validation → Commit Readiness
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -466,7 +468,7 @@ Workflows that focus on producing validated specification artifacts without impl
 
 **Flow**: Intent Capture → Domain Enrichment → Specification → Clarification → NFRs → Architecture Sketch → Quality Gate
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -487,7 +489,7 @@ Workflows that focus on producing validated specification artifacts without impl
 
 **Flow**: Constitution → Specification → Clarification → Architecture Review → Plan → Tasks → Test Strategy → Quality Gate
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -506,7 +508,7 @@ Workflows that focus on producing validated specification artifacts without impl
 
 **Flow**: Plan → Risk Analysis → Rollout/Rollback → Tasks → Test Strategy → Execution Readiness
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -544,21 +546,21 @@ Workflows that validate quality, security, compliance, or release readiness. Can
 
 | # | Station | Agent | Skills | Outputs | Gate Severity | Parallel |
 |---|---------|-------|--------|---------|---------------|----------|
-| 1 | **PR Auto Validator** | `pr-validator` | `ai-backbone-pr-checks` | `reports/pr-auto-validator.json` | Blocker | ✅ |
-| 2 | **YAML Workflow Linter** | `pr-validator` | `ai-backbone-pr-checks` | `reports/yaml-workflow-linter.json` | Blocker | ✅ |
-| 3 | **Test Gap Detector** *(optional)* | `pr-validator` | `ai-backbone-pr-checks` | `reports/test-gap-detector.json` | Warning | ✅ |
+| 1 | **PR Auto Validator** | `pr-validator` | `ai-backbone-pr-checks` | `outputs/reports/pr-auto-validator.json` | Blocker | ✅ |
+| 2 | **YAML Workflow Linter** | `pr-validator` | `ai-backbone-pr-checks` | `outputs/reports/yaml-workflow-linter.json` | Blocker | ✅ |
+| 3 | **Test Gap Detector** *(optional)* | `pr-validator` | `ai-backbone-pr-checks` | `outputs/reports/test-gap-detector.json` | Warning | ✅ |
 
 **Phase 2 — AI stations (sequential)**:
 
 | # | Station | Agent | Skills | Outputs | Gate Severity |
 |---|---------|-------|--------|---------|---------------|
-| 4 | **A0 Intake** | `station-orchestrator` | — | `station_out/work_order.json` | Warning |
-| 5 | **A1 Policy Validation** | `station-orchestrator` | `soprasteria-agent-policy-guard` | `station_out/policy_report.json` | Blocker |
-| 6 | **A2 Security Static** | `station-orchestrator` | `secret-scan` | `station_out/security_report.json` | Blocker |
-| 7 | **A3 Prompt Injection** | `station-orchestrator` | `injection-detection` | `station_out/promptsec_report.json` | Blocker |
-| 8 | **A4 Red Team** *(optional)* | `station-orchestrator` | `red-team-simulation` | `station_out/a4_result.json` | Warning |
-| 9 | **A5 Sandbox Simulation** | `station-orchestrator` | `sandbox-execution` | `station_out/sim_report.json` | Blocker |
-| 10 | **A6 Policy Gate** | `station-orchestrator` | `policy-gate` | `station_out/gate_decision.json` | Blocker |
+| 4 | **A0 Intake** | `station-orchestrator` | — | `outputs/station_out/work_order.json` | Warning |
+| 5 | **A1 Policy Validation** | `station-orchestrator` | `soprasteria-agent-policy-guard` | `outputs/station_out/policy_report.json` | Blocker |
+| 6 | **A2 Security Static** | `station-orchestrator` | `secret-scan` | `outputs/station_out/security_report.json` | Blocker |
+| 7 | **A3 Prompt Injection** | `station-orchestrator` | `injection-detection` | `outputs/station_out/promptsec_report.json` | Blocker |
+| 8 | **A4 Red Team** *(optional)* | `station-orchestrator` | `red-team-simulation` | `outputs/station_out/a4_result.json` | Warning |
+| 9 | **A5 Sandbox Simulation** | `station-orchestrator` | `sandbox-execution` | `outputs/station_out/sim_report.json` | Blocker |
+| 10 | **A6 Policy Gate** | `station-orchestrator` | `policy-gate` | `outputs/station_out/gate_decision.json` | Blocker |
 | 11 | **A7 Platform Update** *(optional)* | `station-orchestrator` | — | — | Warning |
 
 **Flow**: PR Auto ∥ YAML Lint ∥ Test Gaps → A0 → A1 → A2 → A3 → A4 → A5 → A6 → A7
@@ -582,7 +584,7 @@ Workflows that validate quality, security, compliance, or release readiness. Can
 
 **Flow**: PII Scan → Injection Detection → Policy Validation → Risk Scoring → Human Approval → Compliance Report
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -601,7 +603,7 @@ Workflows that validate quality, security, compliance, or release readiness. Can
 
 **Flow**: Spec Completeness → Test Completeness → Security → Observability → Deployment Readiness → Go/No-Go
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -624,7 +626,7 @@ Workflows that assess maturity, patterns, and process health without producing i
 
 **Flow**: Assessment → Scoring → Report → Roadmap
 
-**Output directory**: `specs/assessments/<assessment-id>/`
+**Output directory**: `outputs/specs/assessments/<assessment-id>/`
 
 ---
 
@@ -642,7 +644,7 @@ Workflows that assess maturity, patterns, and process health without producing i
 
 **Flow**: Cycle Time Analysis → Defect Analysis → Bottleneck Identification → Improvement Suggestions → Constitution/Playbook Update
 
-**Output directory**: `specs/features/<feature>/`
+**Output directory**: `outputs/specs/features/<feature>/`
 
 ---
 
@@ -679,7 +681,7 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 
 **Nestable**: Yes
 
-**Output directory**: `docs/ba/`
+**Output directory**: `outputs/ba/`
 
 ---
 
@@ -706,7 +708,7 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 
 **Nestable**: Yes
 
-**Output directory**: `docs/tech/`
+**Output directory**: `outputs/tech/`
 
 ---
 
@@ -731,7 +733,7 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 
 **Nestable**: Yes
 
-**Output directory**: `docs/steer/`
+**Output directory**: `outputs/steer/`
 
 ---
 
@@ -741,11 +743,11 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 
 | # | Station | Agent | Skills | Outputs | Gate Severity |
 |---|---------|-------|--------|---------|---------------|
-| 1 | **Scaffold** | `sdlc-coordinator` | `sdlc-scaffold` | `docs/project.yml` | Blocker |
+| 1 | **Scaffold** | `sdlc-coordinator` | `sdlc-scaffold` | `outputs/docs/project.yml` | Blocker |
 | 2 | **Project Init** | `sdlc-steer-manager` | `sdlc-steer-init` | `project-sheet.md`, `kpi-baseline.md` | Blocker |
-| 3 | **BA Pipeline** *(nested)* | `sdlc-ba-analyst` | `sdlc-ba-*` | `docs/ba/` | Blocker |
+| 3 | **BA Pipeline** *(nested)* | `sdlc-ba-analyst` | `sdlc-ba-*` | `outputs/ba/` | Blocker |
 | 4 | **Sprint Planning** | `sdlc-steer-manager` | `sdlc-steer-planning` | `sprint-plan.md`, `roadmap.md` | Blocker |
-| 5 | **Tech Pipeline** *(nested)* | `sdlc-tech-architect` | `sdlc-tech-*` | `docs/tech/` | Blocker |
+| 5 | **Tech Pipeline** *(nested)* | `sdlc-tech-architect` | `sdlc-tech-*` | `outputs/tech/` | Blocker |
 | 6 | **Implementation** | `implementer` | `code-implementation` | implementation artifacts | Blocker |
 | 7 | **Test Campaign** | `sdlc-test-executor` | `sdlc-test-campaign` | `test-campaign-report.md` | Blocker |
 | 8 | **Performance Tests** | `sdlc-test-executor` | `sdlc-test-performance` | `perf-report.md` | Blocker |
@@ -755,7 +757,7 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 
 **Flow**: Scaffold → Project Init → BA Pipeline → Sprint Planning → Tech Pipeline → Implementation → Test Campaign → Performance → Sprint Tracking → Quality Validation → COPIL
 
-**Output directory**: `docs/`
+**Output directory**: `outputs/`
 
 ---
 
@@ -842,7 +844,7 @@ These are **not separate hooks** — they are weighted inputs to the risk scorer
 cd .apm/hooks
 python -m engine --phase pre --trace-id <uuid> --station <id> --input <file> --json
 python -m engine --phase post --trace-id <uuid> --station <id> --output <file> --json
-python -m engine --retroactive --path specs/features/my-feature/   # scan existing artifacts
+python -m engine --retroactive --path outputs/specs/features/my-feature/   # scan existing artifacts
 ```
 
 **Schema**: `engine/schemas/trace-record.schema.json` · **Config template**: `.apm/templates/hook-config.json`
@@ -895,6 +897,20 @@ See [`docs/quick-start.md`](docs/quick-start.md) — a hands-on guide covering:
 See [`docs/concepts.md`](docs/concepts.md) — explains each building block:
 
 Agents, Workflows, Skills, Knowledge, Prompts, Instructions, Hooks, Templates, Contexts, Scripts — what they are, where to find them, and how they fit together.
+
+---
+
+## Output File Metadata
+
+See [`docs/output-metadata.md`](docs/output-metadata.md) — defines the mandatory YAML frontmatter for all files produced under `outputs/`:
+
+- **Provenance** — `workflow` and `trigger` fields trace which pipeline produced the file
+- **Lineage** — `inputDocuments` lists all source documents consumed
+- **Lifecycle** — `status` (`draft` → `review` → `validated` → `superseded` | `archived`) and `changeHistory` with append-only entries
+- **Quality** — `holisticQualityRating` and `overallStatus` are set by reviewing agents, never by the producing agent
+
+Schema: [`knowledge/governance/schemas/output-metadata.schema.json`](knowledge/governance/schemas/output-metadata.schema.json)  
+Instruction: [`.apm/instructions/output-metadata.md`](.apm/instructions/output-metadata.md)
 
 ---
 
@@ -977,11 +993,11 @@ Scripts: `ci-gates/scripts/` (orchestrator, extract, sanitize).
 ```bash
 # Deterministic validators
 python .apm/skills/ai-backbone-pr-checks/tools/scripts/pr_auto_validator.py \
-  --base-ref HEAD~1 --head-ref HEAD --out reports/pr-auto-validator.json
+  --base-ref HEAD~1 --head-ref HEAD --out outputs/reports/pr-auto-validator.json
 python .apm/skills/ai-backbone-pr-checks/tools/scripts/yaml_workflow_linter.py \
-  --root . --out reports/yaml-workflow-linter.json
+  --root . --out outputs/reports/yaml-workflow-linter.json
 python .apm/skills/ai-backbone-pr-checks/tools/scripts/test_gap_detector.py \
-  --base-ref HEAD~1 --head-ref HEAD --out reports/test-gap-detector.json
+  --base-ref HEAD~1 --head-ref HEAD --out outputs/reports/test-gap-detector.json
 
 # Cross-layer validation
 python scripts/validate_all.py

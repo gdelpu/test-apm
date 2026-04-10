@@ -113,7 +113,7 @@ and invokes `ci-gates/scripts/run_stations.sh`, which:
 
 ## Station Outputs
 
-All outputs are written to `station_out/`:
+All outputs are written to `outputs/station_out/`:
 
 | File | Station | Content |
 |------|---------|---------|
@@ -128,7 +128,7 @@ All outputs are written to `station_out/`:
 | `changed_files.txt` | Shared | Git diff name-status |
 | `diff.patch` | Shared | Full diff fed to stations |
 
-Validator reports are written to `reports/`:
+Validator reports are written to `outputs/reports/`:
 
 | File | Validator |
 |------|-----------|

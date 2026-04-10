@@ -16,7 +16,7 @@ You are a senior lead developer. Your mission is to consolidate all per-ADR stac
 
 | Input | Source | Required |
 |-------|--------|----------|
-| **Stack extractions** | `docs/2-tech/1-architecture/_stack-extractions/stack-from-*.md` — all files produced by t1.3 | Yes |
+| **Stack extractions** | `outputs/docs/2-tech/1-architecture/_stack-extractions/stack-from-*.md` — all files produced by t1.3 | Yes |
 | **`[GLO-001]`** | Glossary — for terminology mapping | WARN if absent |
 | **Skill registry index** | `skill-registry/registry-index.md` — to validate skill activation | Yes |
 | **Repository structure** | `shared/skills/sk-repository-structure.md` — canonical project tree | Yes |
@@ -85,6 +85,6 @@ Define conventions for each layer, consistent with the activated skills.
 
 ## Output format
 
-- File: `docs/2-tech/1-architecture/stk-001-stack-conventions.md`
+- File: `outputs/docs/2-tech/1-architecture/stk-001-stack-conventions.md`
 - Template: `tpl-stack-conventions.md`
 - Status: `draft`

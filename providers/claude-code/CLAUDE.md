@@ -130,7 +130,7 @@ All agents follow security hardening rules from `.apm/instructions/security-hard
 Every workflow execution must maintain a structured audit trail:
 
 - **Correlation ID**: A UUID `trace_id` propagates from workflow start through all stations.
-- **Trace records**: Each station emits a JSONL record to `specs/features/<feature>/audit-trace.jsonl`.
+- **Trace records**: Each station emits a JSONL record to `outputs/specs/features/<feature>/audit-trace.jsonl`.
 - **Content hashing**: Input/output stored as SHA-256 hashes only — never raw content in traces.
 - **Risk scoring**: Weighted risk score computed per station; human review required when score ≥ 30.
 - **Query**: Use `/audit-trace <feature>` to review a feature's execution history.

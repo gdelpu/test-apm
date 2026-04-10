@@ -10,7 +10,7 @@ Execute the **Tech System T1 — Architecture** pipeline.
    - Wave 1: t1.1 (System Context — C4 Level 1-2).
    - Wave 2: t1.2 (Architecture Decision Records).
    - Wave 3: t1.3 // t1.4 (Stack Extraction & Enablers, parallel).
-4. Write to `docs/2-tech/`.
+4. Write to `outputs/docs/2-tech/`.
 5. Suggest `/sdlc-validate`.
 
 Prerequisites: BA deliverables (scoping + specification) must exist with status `validated`.

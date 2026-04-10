@@ -18,7 +18,7 @@ The report has **two versions**: a technical version for the team and a sponsor 
 - **`[KPI-001]`** (mandatory, `validated`): budgets and reference targets *Criteria: status `validated`, alert thresholds defined → BLOCK if absent*
 - **`[RDP-001]`** (mandatory, `validated`): roadmap with planned milestones *Criteria: status `validated`, ≥ 1 milestone defined for the sprint → BLOCK if absent*
 - **`[STA-NNN-1]`** *(previous sprint report, if exists)*: trends and deferred open decisions *Criteria: optional for sprint 1 → WARN if absent from sprint 2 onwards*
-- **`docs/3-steer/review-tracking.md`** (mandatory): gate status per deliverable *Criteria: file present → BLOCK if absent (run P1.0 first)*
+- **`outputs/docs/3-steer/review-tracking.md`** (mandatory): gate status per deliverable *Criteria: file present → BLOCK if absent (run P1.0 first)*
 - **`.claude/orchestration-log.jsonl`** (mandatory if available): tokens per agent and per session *Criteria: file present and non-empty → WARN if absent*
 - **`[RSK-NNN]`** (mandatory): current state of active risks *Criteria: ≥ 1 risk record present → WARN if absent*
 
@@ -44,7 +44,7 @@ Calculate the **gate velocity**: average number of days late on sprint gates.
 
 #### Step 1b: Read review task status from review-tracking.md
 
-From `docs/3-steer/review-tracking.md`, filter rows for the current sprint and upcoming sprints:
+From `outputs/docs/3-steer/review-tracking.md`, filter rows for the current sprint and upcoming sprints:
 
 For each row with status `to-do`, `in-progress`, or `overdue`, determine:
 - **On track**: status `to-do` or `in-progress`, due date in the future

@@ -15,7 +15,7 @@ Review the audit trace for a feature's workflow execution.
 
 ## What this does
 
-1. Reads the audit trace file at `specs/features/<feature>/audit-trace.jsonl`
+1. Reads the audit trace file at `outputs/specs/features/<feature>/audit-trace.jsonl`
 2. Summarises the workflow execution:
    - Total stations executed
    - Correlation ID (trace_id)

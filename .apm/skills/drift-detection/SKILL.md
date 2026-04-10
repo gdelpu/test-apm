@@ -30,7 +30,7 @@ Detect drift between the approved specification/plan and the current implementat
 
 ## Output
 
-`specs/features/<feature>/drift-report.md`
+`outputs/specs/features/<feature>/drift-report.md`
 
 ## Rules
 

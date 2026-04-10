@@ -135,7 +135,7 @@ Workflows are multi-station pipelines with quality gates at each step. Here are 
 | **Modernization** | `/workflow-modernization` | `/workflow-modernization` | `./providers/cli/run-workflow.sh modernization my-feature` |
 | **PR Validation** | `/workflow-pr-validation` | `/workflow-pr-validation` | `./providers/cli/run-workflow.sh pr-validation my-feature` |
 
-All workflow outputs are written to `specs/features/<feature-name>/`.
+All workflow outputs are written to `outputs/specs/features/<feature-name>/`.
 
 > **Full list**: See the [README](../README.md#workflows-19) for all 19 workflows.
 

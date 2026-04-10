@@ -20,16 +20,16 @@ Create the sprint plan (batching features for parallel execution), project roadm
 
 ### Phase 1 — Sprint Planning (agent p1.3)
 1. Load the sprint planning template from `resources/`
-2. Read only epic files (NOT full BA deliverables) from `docs/1-prd/3-epics/`
+2. Read only epic files (NOT full BA deliverables) from `outputs/docs/1-prd/3-epics/`
 3. Batch features into parallel sprints based on dependencies, complexity, and capacity
 4. Produce unified BA+Tech sprint plan with scope_items YAML front matter
-5. Write `docs/3-steer/plan-001-sprint-planning.md` with identifier `[PLAN-001]`
+5. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/plan-001-sprint-planning.md` with identifier `[PLAN-001]`
 
 ### Phase 2 — Roadmap (agent p1.1) — depends on Phase 1
 1. Load the roadmap template from `resources/`
 2. Read sprint plan `[PLAN-001]` for phase structure
 3. Define phases, milestones, and quality gates
-4. Write `docs/3-steer/rdp-001-roadmap.md` with identifier `[RDP-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/rdp-001-roadmap.md` with identifier `[RDP-001]`
 
 ### Phase 3 — Risk Register (agent p1.2) — depends on Phase 2
 1. Load the risk register template from `resources/`
@@ -37,13 +37,13 @@ Create the sprint plan (batching features for parallel execution), project roadm
 3. Assess initial risks using the agentic risk taxonomy:
    - Review bottleneck, scope drift, quality regression
    - Hallucination propagation, token budget overrun, integration debt
-4. Write `docs/3-steer/rsk-001-risk-register.md` with identifier `[RSK-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/rsk-001-risk-register.md` with identifier `[RSK-001]`
 
 ## Output
 
-- `docs/3-steer/plan-001-sprint-planning.md` — `[PLAN-001]`
-- `docs/3-steer/rdp-001-roadmap.md` — `[RDP-001]`
-- `docs/3-steer/rsk-001-risk-register.md` — `[RSK-001]`
+- `outputs/docs/3-steer/plan-001-sprint-planning.md` — `[PLAN-001]`
+- `outputs/docs/3-steer/rdp-001-roadmap.md` — `[RDP-001]`
+- `outputs/docs/3-steer/rsk-001-risk-register.md` — `[RSK-001]`
 
 ## Rules
 

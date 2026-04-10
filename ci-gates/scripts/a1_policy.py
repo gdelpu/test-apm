@@ -3,12 +3,12 @@
 Station A1 — Policy & Structure Validation (deterministic).
 
 Validates YAML frontmatter of changed agent/skill files against policy rules
-P-01 through P-06.  Writes station_out/a1_result.json.
+P-01 through P-06.  Writes outputs/station_out/a1_result.json.
 
 Usage:
     python3 a1_policy.py \
-        --work-order station_out/a0_result.json \
-        --out station_out/a1_result.json \
+        --work-order outputs/station_out/a0_result.json \
+        --out outputs/station_out/a1_result.json \
         [--repo-root .]
 """
 

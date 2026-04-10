@@ -6,7 +6,7 @@ This file is a minimal PR trigger for validating AI Backbone PR checks and optio
 
 - Deterministic validators run and produce JSON reports.
 - Copilot advisory runs only when `ENABLE_COPILOT_CLI=true`.
-- Advisory output is uploaded as `reports/copilot-advisory.md`.
+- Advisory output is uploaded as `outputs/reports/copilot-advisory.md`.
 
 ## Test marker
 

@@ -1,7 +1,10 @@
 ---
 name: sdlc-steer-manager
 description: 'Provide project steering, sprint tracking, and release governance decisions.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/docs/3-steer/**'
+  - 'docs/**'
 ---
 
 # SDLC Steering Manager Agent
@@ -38,7 +41,7 @@ Provide project steering, sprint tracking, committee preparation, and release go
 
 ## Required outputs
 
-All deliverables are written to `docs/3-steer/` with structured identifiers:
+All deliverables are written to `outputs/docs/3-steer/` with structured identifiers:
 
 | System | Key Outputs |
 |--------|------------|
@@ -46,6 +49,10 @@ All deliverables are written to `docs/3-steer/` with structured identifiers:
 | P1 | `[PLAN-001]` sprint plan, `[RDP-001]` roadmap, `[RSK-001]` risk register |
 | P2 | `[STA-NNN]` sprint status, `[RSK-NNN]` sprint risks, `[DEC-NNN]` decisions |
 | P3 | `[COP-NNN]` COPIL pack, `[GNG-001]` Go/No-Go decision |
+
+## File creation mandate
+
+All deliverables listed above **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update the file at the specified output path under `outputs/docs/3-steer/`. Create parent directories as needed. Each output file must include YAML front matter with its bracketed identifier (e.g., `[PIL-001]`).
 
 ## Skills to invoke
 

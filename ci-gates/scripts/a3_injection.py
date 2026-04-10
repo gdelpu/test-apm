@@ -4,12 +4,12 @@ Station A3 — Prompt Injection & Exfil Hardening Checks (deterministic).
 
 Scans changed agent/skill/prompt files for jailbreak phrases, missing safety
 constraints, unconstrained tool scope, exfiltration vectors, and indirect
-injection patterns.  Writes station_out/a3_result.json.
+injection patterns.  Writes outputs/station_out/a3_result.json.
 
 Usage:
     python3 a3_injection.py \
-        --work-order station_out/a0_result.json \
-        --out station_out/a3_result.json \
+        --work-order outputs/station_out/a0_result.json \
+        --out outputs/station_out/a3_result.json \
         [--repo-root .]
 """
 
@@ -54,8 +54,8 @@ PI06_PATTERN = r"(read|process|execute|follow).{0,40}(file|document|webpage|url)
 
 
 def is_in_safe_codeblock(text: str, match_start: int) -> bool:
-    """Check if a match position is inside a fenced code block with a safety comment."""
-    # Find all code blocks
+    """Check if a match position is inside a fenced code block with a safety comment or an inline code span."""
+    # Find all fenced code blocks
     code_blocks = list(re.finditer(r"```[^\n]*\n(.*?)```", text, re.DOTALL))
     safety_comments = re.compile(
         r"#\s*(example|do\s+not\s+follow|do\s+not\s+interpret|detection\s+patterns)",
@@ -65,6 +65,12 @@ def is_in_safe_codeblock(text: str, match_start: int) -> bool:
         if block.start() <= match_start <= block.end():
             if safety_comments.search(block.group(0)):
                 return True
+
+    # Check if match is inside an inline backtick code span (e.g. `pattern text`)
+    for inline in re.finditer(r"`[^`\n]+`", text):
+        if inline.start() <= match_start < inline.end():
+            return True
+
     return False
 
 
@@ -75,7 +81,7 @@ def scan_pi01(path: str, text: str) -> list[dict]:
     for pattern, description in PI01_PATTERNS:
         for i, line in enumerate(lines, 1):
             m = re.search(pattern, line, re.IGNORECASE)
-            if m and not is_in_safe_codeblock(text, text.find(line)):
+            if m and not is_in_safe_codeblock(text, text.find(line) + m.start()):
                 findings.append({
                     "check": "PI-01",
                     "severity": "critical" if "override" in description.lower() or "delimiter" in description.lower() else "high",
@@ -195,7 +201,7 @@ def scan_pi05(path: str, text: str) -> list[dict]:
     for pattern, description, severity in PI05_PATTERNS:
         for i, line in enumerate(lines, 1):
             m = re.search(pattern, line, re.IGNORECASE)
-            if m and not is_in_safe_codeblock(text, text.find(line)):
+            if m and not is_in_safe_codeblock(text, text.find(line) + m.start()):
                 findings.append({
                     "check": "PI-05",
                     "severity": severity,
@@ -213,7 +219,7 @@ def scan_pi06(path: str, text: str) -> list[dict]:
     lines = text.splitlines()
     for i, line in enumerate(lines, 1):
         m = re.search(PI06_PATTERN, line, re.IGNORECASE)
-        if m and not is_in_safe_codeblock(text, text.find(line)):
+        if m and not is_in_safe_codeblock(text, text.find(line) + m.start()):
             findings.append({
                 "check": "PI-06",
                 "severity": "critical",

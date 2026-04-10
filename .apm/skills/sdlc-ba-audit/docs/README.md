@@ -163,10 +163,10 @@ BA-Agents/
 
 ## Output structure
 
-All BA deliverables are written to `docs/1-prd/`:
+All BA deliverables are written to `outputs/docs/1-prd/`:
 
 ```
-docs/1-prd/
+outputs/docs/1-prd/
   0-audit/                       S0: asis-001, delta-001
   scoping/                       S1: dco-001, vis-001, glo-001, act-001, exf-001
   specification/                 S2: dom-001, brl-{type} (one per rule type)
@@ -236,8 +236,8 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate audit | `/validate docs/1-prd/0-audit/asis-001-*.md` | Sources cited, assumptions flagged with "To validate" |
-| Validate delta | `/validate docs/1-prd/0-audit/delta-001-*.md` | All ASIS elements covered, NOUVEAU/MODIFIE/PRESERVE justified |
+| Validate audit | `/validate outputs/docs/1-prd/0-audit/asis-001-*.md` | Sources cited, assumptions flagged with "To validate" |
+| Validate delta | `/validate outputs/docs/1-prd/0-audit/delta-001-*.md` | All ASIS elements covered, NOUVEAU/MODIFIE/PRESERVE justified |
 
 **Key question:** Is the understanding of the existing system sufficient to start scoping?
 
@@ -245,10 +245,10 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate vision | `/validate docs/1-prd/1-scoping/vis-001-*.md` | IN/OUT scope clear, objectives measurable |
-| Validate glossary | `/validate docs/1-prd/1-scoping/glo-001-*.md` | No circular definitions, forbidden synonyms listed |
-| Validate actors | `/validate docs/1-prd/1-scoping/act-001-*.md` | Rights matrix complete, system actors included |
-| Validate requirements | `/validate docs/1-prd/1-scoping/exf-001-*.md` | MoSCoW priorities set, each requirement testable |
+| Validate vision | `/validate outputs/docs/1-prd/1-scoping/vis-001-*.md` | IN/OUT scope clear, objectives measurable |
+| Validate glossary | `/validate outputs/docs/1-prd/1-scoping/glo-001-*.md` | No circular definitions, forbidden synonyms listed |
+| Validate actors | `/validate outputs/docs/1-prd/1-scoping/act-001-*.md` | Rights matrix complete, system actors included |
+| Validate requirements | `/validate outputs/docs/1-prd/1-scoping/exf-001-*.md` | MoSCoW priorities set, each requirement testable |
 | Cross-check | `/coherence` | All terms in glossary used consistently, requirements traceable |
 
 **Key question:** Is the scope sufficiently defined to structure epics and features?
@@ -257,10 +257,10 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate domain model | `/validate docs/1-prd/2-specification/dom-001-*.md` | Cardinalities specified, state diagrams for lifecycle entities |
-| Validate epics | `/validate docs/1-prd/3-epics/ep-xxx-*/ep-xxx-*.md` | EAC-xxx criteria are concrete and testable, all EX-xxx covered |
-| Validate features | `/validate docs/1-prd/3-epics/ep-xxx-*/ft-xxx-*/ft-xxx-*.md` | FAC-xxx criteria are concrete, functional boundaries clear |
-| Validate rules | `/validate docs/1-prd/2-specification/brl-*-business-rules.md` | IF/THEN complete, calculation rules have examples |
+| Validate domain model | `/validate outputs/docs/1-prd/2-specification/dom-001-*.md` | Cardinalities specified, state diagrams for lifecycle entities |
+| Validate epics | `/validate outputs/docs/1-prd/3-epics/ep-xxx-*/ep-xxx-*.md` | EAC-xxx criteria are concrete and testable, all EX-xxx covered |
+| Validate features | `/validate outputs/docs/1-prd/3-epics/ep-xxx-*/ft-xxx-*/ft-xxx-*.md` | FAC-xxx criteria are concrete, functional boundaries clear |
+| Validate rules | `/validate outputs/docs/1-prd/2-specification/brl-*-business-rules.md` | IF/THEN complete, calculation rules have examples |
 | Cross-check | `/coherence` | EX → EP → FT coverage complete, no orphan features |
 
 **Key question:** Is the specification detailed enough to start writing user stories?
@@ -269,8 +269,8 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate features (DoR) | `/validate docs/1-prd/3-epics/ep-xxx-*/ft-xxx-*/ft-xxx-*.md` | **DoR READY**: all US validated, FAC covered by SCE, BR covered |
-| Validate E2E plan | `/validate docs/1-prd/4-tests/e2e-plan-001.md` | All EAC/FAC covered by E2E flows, traceability matrix complete |
+| Validate features (DoR) | `/validate outputs/docs/1-prd/3-epics/ep-xxx-*/ft-xxx-*/ft-xxx-*.md` | **DoR READY**: all US validated, FAC covered by SCE, BR covered |
+| Validate E2E plan | `/validate outputs/docs/1-prd/4-tests/e2e-plan-001.md` | All EAC/FAC covered by E2E flows, traceability matrix complete |
 | Cross-check | `/coherence` | Full traceability chain EXF → EP → FT → US → BR → SCE |
 | Confluence review | `/confluence-pull` then `/impact` | Expert feedback analyzed and applied |
 

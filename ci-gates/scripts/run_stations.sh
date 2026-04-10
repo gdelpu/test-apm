@@ -35,7 +35,7 @@ set -euo pipefail
 PROJECT_DIR="${CI_PROJECT_DIR:-.}"
 STATION_DIR="${PROJECT_DIR}/ci-gates/stations"
 SCRIPTS_DIR="${PROJECT_DIR}/ci-gates/scripts"
-STATION_OUT="${STATION_OUT:-station_out}"
+STATION_OUT="${STATION_OUT:-outputs/station_out}"
 EXTRACT_JSON="${PROJECT_DIR}/ci-gates/scripts/extract_json.py"
 MAX_DIFF="${COPILOT_MAX_DIFF_LINES:-500}"
 TIMEOUT_SECS="${STATION_TIMEOUT:-900}"

@@ -59,7 +59,7 @@ The Risk Register (station 5) and Sprint Risks (station 8) assess risks across 6
 
 ## Outputs
 
-All artifacts are written to `docs/3-steer/`:
+All artifacts are written to `outputs/docs/3-steer/`:
 - `pil-001-project-sheet.md` — team, capacity, budget structure
 - `kpi-001-baseline.md` — effort and token baselines, velocity targets
 - `plan-001-sprint-planning.md` — feature-to-sprint batching

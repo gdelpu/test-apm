@@ -52,7 +52,7 @@ You are a senior Business Analyst specialised in functional structuring of softw
 ## Expected output
 
 One Markdown file per Epic, conforming to the template `tpl-epic.md`, located at:
-`docs/1-prd/3-epics/ep-xxx-{slug}/ep-xxx-{slug}.md`
+`outputs/docs/1-prd/3-epics/ep-xxx-{slug}/ep-xxx-{slug}.md`
 
 Each file contains:
 1. The Epic description with its business objective, actors and concerned entities
@@ -67,7 +67,7 @@ Each file contains:
 
 ## Rules-only mode
 
-**Activation condition:** at least one epic file already exists in `docs/1-prd/3-epics/ep-*/ep-*.md`.
+**Activation condition:** at least one epic file already exists in `outputs/docs/1-prd/3-epics/ep-*/ep-*.md`.
 
 When this condition is met:
 
@@ -188,11 +188,11 @@ Write **one file per rule type** that has at least one rule, using the paths bel
 
 | Rule type | Output file |
 |-----------|-------------|
-| Validation (`BR-VAL`) | `docs/1-prd/2-specification/_rules-staging/VAL/rules-from-epics.md` |
-| Calculation (`BR-CAL`) | `docs/1-prd/2-specification/_rules-staging/CAL/rules-from-epics.md` |
-| Trigger (`BR-TRG`) | `docs/1-prd/2-specification/_rules-staging/TRG/rules-from-epics.md` |
-| Consistency (`BR-COH`) | `docs/1-prd/2-specification/_rules-staging/COH/rules-from-epics.md` |
-| Authorisation (`BR-AUT`) | `docs/1-prd/2-specification/_rules-staging/AUT/rules-from-epics.md` |
+| Validation (`BR-VAL`) | `outputs/docs/1-prd/2-specification/_rules-staging/VAL/rules-from-epics.md` |
+| Calculation (`BR-CAL`) | `outputs/docs/1-prd/2-specification/_rules-staging/CAL/rules-from-epics.md` |
+| Trigger (`BR-TRG`) | `outputs/docs/1-prd/2-specification/_rules-staging/TRG/rules-from-epics.md` |
+| Consistency (`BR-COH`) | `outputs/docs/1-prd/2-specification/_rules-staging/COH/rules-from-epics.md` |
+| Authorisation (`BR-AUT`) | `outputs/docs/1-prd/2-specification/_rules-staging/AUT/rules-from-epics.md` |
 
 Each file has the following front matter:
 
@@ -235,12 +235,12 @@ For each Epic, scan the feature index and acceptance criteria (EAC-xxx) for impl
 The produced files must:
 
 1. **Primary output** — Epic files:
-   - Be named `ep-{NNN}-{slug}.md` and placed at `docs/1-prd/3-epics/ep-{NNN}-{slug}/ep-{NNN}-{slug}.md`
+   - Be named `ep-{NNN}-{slug}.md` and placed at `outputs/docs/1-prd/3-epics/ep-{NNN}-{slug}/ep-{NNN}-{slug}.md`
    - Conform exactly to the structure of template `tpl-epic.md`
    - Have the YAML front matter with `type: epic`, correct `dependencies` and `requirements` fields
    - Have status `draft`
 
-2. **Secondary output** — `docs/1-prd/2-specification/_rules-staging/{TYPE}/rules-from-epics.md` (one file per rule type):
+2. **Secondary output** — `outputs/docs/1-prd/2-specification/_rules-staging/{TYPE}/rules-from-epics.md` (one file per rule type):
    - Business rules extracted at epic level (see Step 7), split by type (`VAL/`, `CAL/`, `TRG/`, `COH/`, `AUT/`)
    - Uses temporary IDs (`BR-VAL-E001`, etc.)
 

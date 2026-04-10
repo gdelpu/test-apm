@@ -27,7 +27,7 @@ Station 6 invokes the `quality-validation` workflow as a nested sub-workflow for
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `triage.md` — severity, priority, affected components
 - `reproduction-log.md` — how to reproduce the bug
 - `root-cause.md` — root cause analysis with evidence
