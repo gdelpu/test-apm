@@ -56,7 +56,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - `file-output.instructions.md`: mandate that document-producing agents write deliverables to disk as files
 - `output-metadata.instructions.md`: structured YAML frontmatter metadata required on all `outputs/` files
 - Canonical instructions: `.apm/instructions/file-output.md` and `.apm/instructions/output-metadata.md`
-- Output metadata JSON schema (`.apm/knowledge/governance/schemas/output-metadata.schema.json`)
+- Output metadata JSON schema (`knowledge/governance/schemas/output-metadata.schema.json`)
 - CI gate: changelog enforcement — `release:tag-and-publish` now fails if `CHANGELOG.md` has no entry for the releasing version
 
 ### Changed
