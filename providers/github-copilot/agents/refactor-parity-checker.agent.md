@@ -23,7 +23,7 @@ allowedFilePaths:
   - 'docs/**'
   - 'package.json'
   - '*.config.*'
-model: Claude Opus 4.6 (copilot)
+model: '{{DEFAULT_MODEL}}'
 target: vscode
 user-invocable: false
 ---

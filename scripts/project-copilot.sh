@@ -253,6 +253,57 @@ if [[ "$FULL" == true ]]; then
   echo "  REWRITE   $rewrite_count files updated with runtime path references"
 fi
 
+# ── Config-driven placeholder substitution ───────────────────────────────────
+# Read provider config.yml (with providers-local/ override) and substitute
+# {{KEY}} placeholders in all projected .md files.
+CONFIG_FILE="$REPO_ROOT/providers-local/$PROVIDER/config.yml"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  CONFIG_FILE="$SOURCE_DIR/config.yml"
+fi
+
+if [[ -f "$CONFIG_FILE" ]]; then
+  # Parse defaults section: extract key-value pairs under 'defaults:'
+  declare -A CONFIG_VALUES
+  in_defaults=false
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^[[:space:]]*defaults:[[:space:]]*$ ]]; then
+      in_defaults=true
+      continue
+    fi
+    if [[ "$in_defaults" == true && "$line" =~ ^[^[:space:]] ]]; then
+      in_defaults=false
+    fi
+    if [[ "$in_defaults" == true && "$line" =~ ^[[:space:]]+([a-zA-Z_]+):[[:space:]]*\"?([^\"]+)\"?[[:space:]]*$ ]]; then
+      key="${BASH_REMATCH[1]^^}"  # uppercase
+      value="${BASH_REMATCH[2]}"
+      CONFIG_VALUES["{{DEFAULT_${key}}}"]="$value"
+    fi
+  done < "$CONFIG_FILE"
+
+  if [[ ${#CONFIG_VALUES[@]} -gt 0 ]]; then
+    subst_count=0
+    while IFS= read -r -d '' mdfile; do
+      modified=false
+      for placeholder in "${!CONFIG_VALUES[@]}"; do
+        value="${CONFIG_VALUES[$placeholder]}"
+        if grep -qF "$placeholder" "$mdfile" 2>/dev/null; then
+          # Escape sed special chars in value
+          escaped_value="$(printf '%s' "$value" | sed 's/[&/\]/\\&/g')"
+          escaped_placeholder="$(printf '%s' "$placeholder" | sed 's/[{}\[\].*^$]/\\&/g')"
+          sed_inplace "s|${escaped_placeholder}|${escaped_value}|g" "$mdfile"
+          modified=true
+        fi
+      done
+      if [[ "$modified" == true ]]; then
+        (( ++subst_count ))
+      fi
+    done < <(find "$TARGET_DIR" -name '*.md' -type f -print0)
+    echo "  CONFIG  $subst_count files updated with provider config substitutions (${#CONFIG_VALUES[@]} keys)"
+  fi
+else
+  echo "  SKIP  config — no provider config.yml found"
+fi
+
 # ── Refresh hub catalog ─────────────────────────────────────────────────────
 echo ""
 CATALOG_SCRIPT="$REPO_ROOT/.apm/scripts/powershell/refresh-hub-catalog.ps1"

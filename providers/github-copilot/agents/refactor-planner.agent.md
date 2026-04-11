@@ -13,7 +13,7 @@ allowedFilePaths:
   - 'docs/**'
   - '.apm/skills/**'
   - '.apm/agents/**'
-model: Claude Opus 4.6 (copilot)
+model: '{{DEFAULT_MODEL}}'
 target: vscode
 user-invocable: false
 ---
