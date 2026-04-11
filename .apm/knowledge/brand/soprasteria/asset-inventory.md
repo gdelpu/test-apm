@@ -17,7 +17,7 @@ Generated or approximated branding elements must **never replace official assets
 
 # Repository Brand Asset Structure
 
-knowledge/brand/soprasteria/
+.apm/knowledge/brand/soprasteria/
 │
 ├─ guidelines/
 ├─ logos/
@@ -31,7 +31,7 @@ knowledge/brand/soprasteria/
 
 Location
 
-knowledge/brand/soprasteria/guidelines/
+.apm/knowledge/brand/soprasteria/guidelines/
 
 Files
 
@@ -61,7 +61,7 @@ Agents must consult this document when:
 
 Location
 
-knowledge/brand/soprasteria/logos/
+.apm/knowledge/brand/soprasteria/logos/
 
 Files
 
@@ -94,7 +94,7 @@ White logo → dark backgrounds
 
 Location
 
-knowledge/brand/soprasteria/templates/
+.apm/knowledge/brand/soprasteria/templates/
 
 Files
 
@@ -122,7 +122,7 @@ Agents must **never recreate layouts manually if a template exists**.
 
 Location
 
-knowledge/brand/soprasteria/icons/
+.apm/knowledge/brand/soprasteria/icons/
 
 Files
 

@@ -1,6 +1,6 @@
 ---
 name: brand-assets
-description: 'Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for other client brands via knowledge/brand/<client>/.'
+description: 'Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<client>/.'
 triggers: ['brand resources', 'logo files', 'brand inventory', 'asset discovery', 'official branding', 'brand materials', 'official templates', 'logo usage']
 version: '2.0.0'
 ---
@@ -18,7 +18,7 @@ The agent must always rely on **official assets** provided in the repository or 
 Brand resources are located at a well-known path within the repository:
 
 ```
-knowledge/brand/<client>/
+.apm/knowledge/brand/<client>/
 ```
 
 The agent must check for an asset inventory file before applying branding changes.
@@ -107,10 +107,10 @@ If branding cannot be verified, request clarification.
 All official Sopra Steria branding resources are located in:
 
 ```
-knowledge/brand/soprasteria/
+.apm/knowledge/brand/soprasteria/
 ```
 
-Asset inventory: `knowledge/brand/soprasteria/asset-inventory.md`
+Asset inventory: `.apm/knowledge/brand/soprasteria/asset-inventory.md`
 
 The agent must read the inventory before applying branding changes.
 
@@ -118,10 +118,10 @@ The agent must read the inventory before applying branding changes.
 
 | Category | Path |
 |----------|------|
-| Brand guidelines | `knowledge/brand/soprasteria/guidelines/` |
-| Logos | `knowledge/brand/soprasteria/logos/` |
-| Templates | `knowledge/brand/soprasteria/templates/` |
-| Icons | `knowledge/brand/soprasteria/icons/` |
+| Brand guidelines | `.apm/knowledge/brand/soprasteria/guidelines/` |
+| Logos | `.apm/knowledge/brand/soprasteria/logos/` |
+| Templates | `.apm/knowledge/brand/soprasteria/templates/` |
+| Icons | `.apm/knowledge/brand/soprasteria/icons/` |
 
 ### Available Assets
 

@@ -10,8 +10,8 @@
     provider, then copies all asset-type subdirectories from source to target.
 
     When -Full is specified the script additionally copies canonical content
-    (.apm/skills, .apm/workflows, .apm/contexts, .apm/templates, knowledge/)
-    into the runtime tree and rewrites .apm/ and knowledge/ path references
+    (.apm/skills, .apm/workflows, .apm/contexts, .apm/templates, .apm/knowledge/)
+    into the runtime tree and rewrites .apm/ path references
     inside every .md file so they point to their new runtime locations.
 
     After the main provider copy, files under providers-local/ (if it exists)
@@ -171,7 +171,7 @@ if ($Full) {
         @{ Source = '.apm/workflows';  Target = 'workflows' }
         @{ Source = '.apm/contexts';   Target = 'contexts' }
         @{ Source = '.apm/templates';  Target = 'templates' }
-        @{ Source = 'knowledge';       Target = 'knowledge' }
+        @{ Source = '.apm/knowledge';   Target = 'knowledge' }
     )
 
     foreach ($mapping in $canonicalMappings) {
@@ -205,7 +205,7 @@ if ($Full) {
         ,@('.apm/templates/',     "$runtimePrefix/templates/")
         ,@('.apm/prompts/',       "$runtimePrefix/prompts/")
         ,@('.apm/instructions/',  "$runtimePrefix/instructions/")
-        ,@('knowledge/',          "$runtimePrefix/knowledge/")
+        ,@('.apm/knowledge/',      "$runtimePrefix/knowledge/")
     )
 
     # Only rewrite .apm/agents/ if the runtime is different from the source

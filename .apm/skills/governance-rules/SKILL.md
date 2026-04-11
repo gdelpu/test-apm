@@ -18,7 +18,7 @@ Evaluate artifacts and source code against organizational governance policies, c
 
 ## Procedure
 
-1. Load applicable governance policies from `knowledge/governance/`.
+1. Load applicable governance policies from `.apm/knowledge/governance/`.
 2. Scan source files for PII patterns (email, phone, SSN, IP addresses, names in datasets).
 3. Check prompt templates for unescaped user inputs and injection vectors.
 4. Verify data classification labels are applied where required.

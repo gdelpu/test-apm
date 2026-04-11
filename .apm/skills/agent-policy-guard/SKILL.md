@@ -19,8 +19,8 @@ Use `soprasteria-agent-policy-guard` for the extended ruleset that also covers A
 
 ## Reference Schemas
 
-- Agent manifest: `knowledge/governance/schemas/agent-manifest.schema.json`
-- Skill manifest: `knowledge/governance/schemas/skill-manifest.schema.json`
+- Agent manifest: `.apm/knowledge/governance/schemas/agent-manifest.schema.json`
+- Skill manifest: `.apm/knowledge/governance/schemas/skill-manifest.schema.json`
 
 ## Policy Rules
 

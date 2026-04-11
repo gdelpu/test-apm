@@ -1,7 +1,7 @@
 ---
 name: refactor-implementer
 description: 'Execute individual migration tasks from the approved plan using the appropriate skill for each task.'
-tools: ['codebase', 'search', 'edit/editFiles', 'runCommands']
+tools: ['codebase', 'search', 'edit/editFiles', 'runCommands', 'fetch']
 commandAllowlist:
   - npm test
   - npm run build
@@ -20,6 +20,11 @@ commandAllowlist:
   - go test
   - go build
   - git diff
+allowedNetworkDomains:
+  - learn.microsoft.com
+  - nodejs.org
+  - docs.npmjs.com
+  - github.com
 allowedFilePaths:
   - 'src/**'
   - 'tests/**'

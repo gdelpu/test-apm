@@ -13,7 +13,7 @@ The AI SDLC Foundation is built from a set of composable concepts. This page exp
 | [Agents](#agents) | `.apm/agents/` | 23 | Autonomous roles that execute tasks |
 | [Workflows](#workflows) | `.apm/workflows/` | 19 | Multi-station pipelines with quality gates |
 | [Skills](#skills) | `.apm/skills/` | 89 | Reusable knowledge packages consumed by agents |
-| [Knowledge](#knowledge) | `knowledge/` | 4 areas | Constitution, governance, playbooks, brand |
+| [Knowledge](#knowledge) | `.apm/knowledge/` | 4 areas | Constitution, governance, playbooks, brand |
 | [Prompts](#prompts) | `.apm/prompts/` | 4 | Slash-command templates that trigger workflows |
 | [Instructions](#instructions) | `.apm/instructions/` | 7 | Behavioral rules auto-applied to matching files |
 | [Hooks](#hooks) | `.apm/hooks/` | 8 | Pre/post lifecycle hooks around stations |
@@ -84,13 +84,13 @@ If a gate fails, the workflow pauses and reports what needs to be fixed.
 
 **What**: The knowledge base contains foundational documents that define principles, governance rules, playbooks, and brand guidelines. These are reference materials that agents and skills consult — they establish the "what" and "why" behind decisions.
 
-**Where**: `knowledge/`
+**Where**: `.apm/knowledge/`
 
 **Areas**:
-- `knowledge/constitution/` — Engineering constitutions (architecture, quality, security, testing, observability principles)
-- `knowledge/governance/` — Architecture principles, testing policy, secure-by-default rules, observability requirements
-- `knowledge/playbooks/` — Step-by-step playbooks for greenfield, brownfield, modernization, and workflow execution
-- `knowledge/brand/` — Brand guidelines, asset inventories, templates (e.g., Sopra Steria brand)
+- `.apm/knowledge/constitution/` — Engineering constitutions (architecture, quality, security, testing, observability principles)
+- `.apm/knowledge/governance/` — Architecture principles, testing policy, secure-by-default rules, observability requirements
+- `.apm/knowledge/playbooks/` — Step-by-step playbooks for greenfield, brownfield, modernization, and workflow execution
+- `.apm/knowledge/brand/` — Brand guidelines, asset inventories, templates (e.g., Sopra Steria brand)
 
 **Examples**:
 - `speckit-constitution.md` — The master constitution template covering architecture decisions, quality standards, and testing requirements
@@ -125,7 +125,7 @@ If a gate fails, the workflow pauses and reports what needs to be fixed.
 **Examples**:
 - `apm-layer.instructions.md` (`applyTo: ".apm/**"`) — Rules for working inside the canonical APM packaging layer
 - `workflow.instructions.md` (`applyTo: ".apm/workflows/**"`) — Rules for defining station-based workflow pipelines
-- `knowledge-base.instructions.md` (`applyTo: "knowledge/**"`) — Rules for working inside the foundational knowledge base
+- `knowledge-base.instructions.md` (`applyTo: ".apm/knowledge/**"`) — Rules for working inside the foundational knowledge base
 
 ---
 

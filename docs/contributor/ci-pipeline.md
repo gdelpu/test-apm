@@ -38,7 +38,7 @@ merge_request_event
 | A7 GitLab Update | Prompt | MR status update | Info |
 
 Station implementations: `ci-gates/stations/`.
-Schemas: `knowledge/governance/schemas/` (agent-manifest, skill-manifest).
+Schemas: `.apm/knowledge/governance/schemas/` (agent-manifest, skill-manifest).
 Scripts: `ci-gates/scripts/` (orchestrator, extract, sanitize).
 
 ## Local Validation

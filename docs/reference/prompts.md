@@ -23,7 +23,7 @@ The knowledge base provides foundational reference material consumed by agents a
 
 | Directory | Content |
 |-----------|---------|
-| `knowledge/constitution/` | Principles, greenfield/brownfield rules, enterprise defaults, SpecKit constitution |
-| `knowledge/governance/` | Architecture principles, security, testing, observability, schemas |
-| `knowledge/playbooks/` | Workflow, greenfield, brownfield, modernization playbooks |
-| `knowledge/brand/` | Brand guidelines (Sopra Steria) |
+| `.apm/knowledge/constitution/` | Principles, greenfield/brownfield rules, enterprise defaults, SpecKit constitution |
+| `.apm/knowledge/governance/` | Architecture principles, security, testing, observability, schemas |
+| `.apm/knowledge/playbooks/` | Workflow, greenfield, brownfield, modernization playbooks |
+| `.apm/knowledge/brand/` | Brand guidelines (Sopra Steria) |

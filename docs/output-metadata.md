@@ -177,7 +177,7 @@ When modifying an existing output file:
 The formal JSON Schema is at:
 
 ```
-knowledge/governance/schemas/output-metadata.schema.json
+.apm/knowledge/governance/schemas/output-metadata.schema.json
 ```
 
 The instruction enforcing this metadata is at:
@@ -233,7 +233,7 @@ trigger: user
 date: '2026-04-10'
 status: draft
 inputDocuments:
-  - knowledge/constitution/speckit-constitution.md
+  - .apm/knowledge/constitution/speckit-constitution.md
 changeHistory:
   - date: '2026-04-10'
     description: 'Initial creation by Spec Orchestrator'
@@ -253,7 +253,7 @@ trigger: user
 date: '2026-04-10'
 status: review
 inputDocuments:
-  - knowledge/constitution/speckit-constitution.md
+  - .apm/knowledge/constitution/speckit-constitution.md
 changeHistory:
   - date: '2026-04-10'
     description: 'Initial creation by Spec Orchestrator'
@@ -278,7 +278,7 @@ trigger: user
 date: '2026-04-10'
 status: validated
 inputDocuments:
-  - knowledge/constitution/speckit-constitution.md
+  - .apm/knowledge/constitution/speckit-constitution.md
 changeHistory:
   - date: '2026-04-10'
     description: 'Initial creation by Spec Orchestrator'

@@ -25,7 +25,7 @@ Staged migration guide for legacy system modernization.
 
 ### Phase 3: Architecture review
 
-- Review target against `knowledge/governance/architecture-principles.md`.
+- Review target against `.apm/knowledge/governance/architecture-principles.md`.
 - Verify migration path maintains security posture.
 - Confirm observability is preserved or improved.
 

@@ -57,13 +57,13 @@ if not prompts:
     errors.append('No prompts found in .apm/prompts/')
 
 # --- Knowledge base ---
-knowledge = ROOT / 'knowledge'
+knowledge = ROOT / '.apm' / 'knowledge'
 for subdir in ['constitution', 'governance', 'playbooks']:
     kb_dir = knowledge / subdir
     if not kb_dir.is_dir():
-        errors.append(f'Missing knowledge directory: knowledge/{subdir}/')
+        errors.append(f'Missing knowledge directory: .apm/knowledge/{subdir}/')
     elif not list(kb_dir.glob('*.md')):
-        errors.append(f'Empty knowledge directory: knowledge/{subdir}/')
+        errors.append(f'Empty knowledge directory: .apm/knowledge/{subdir}/')
 
 # --- Report ---
 if errors:

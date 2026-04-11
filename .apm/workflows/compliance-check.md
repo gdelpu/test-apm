@@ -34,10 +34,10 @@ All artifacts are written to `outputs/specs/features/<feature>/`:
 ## Governance references
 
 This workflow validates against rules defined in:
-- `knowledge/governance/secure-by-default.md`
-- `knowledge/governance/architecture-principles.md`
-- `knowledge/governance/observability-by-default.md`
-- `knowledge/constitution/principles.md`
+- `.apm/knowledge/governance/secure-by-default.md`
+- `.apm/knowledge/governance/architecture-principles.md`
+- `.apm/knowledge/governance/observability-by-default.md`
+- `.apm/knowledge/constitution/principles.md`
 
 ## Composition
 

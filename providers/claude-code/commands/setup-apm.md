@@ -41,7 +41,7 @@ Install the AI SDLC Foundation into the current consumer repository.
 
 4. Instruct the user to commit:
    - **Standard:** `git add .github/ .apm.lock.yaml`
-   - **Expandable:** `git add .apm/ providers/ knowledge/ providers-local/ .apm.lock.yaml apm.yml`
+   - **Expandable:** `git add .apm/ providers/ providers-local/ .apm.lock.yaml apm.yml`
 
 5. Confirm agents are available (`@hub-orchestrator`, `/workflow-feature`).
 

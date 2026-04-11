@@ -1,7 +1,7 @@
 ---
 name: knowledge-base
 description: 'Rules for working inside the foundational knowledge base.'
-applyTo: knowledge/**
+applyTo: .apm/knowledge/**
 ---
 
 # Knowledge Base Instructions
@@ -11,11 +11,11 @@ You are working inside the foundational knowledge base.
 ## Structure
 
 | Folder | Content |
-|--------|---------|
-| `knowledge/constitution/` | Core engineering principles |
-| `knowledge/governance/` | Architecture, security, testing guardrails |
-| `knowledge/playbooks/` | Step-by-step delivery and workflow playbooks |
-| `knowledge/brand/` | Brand guidelines and references |
+|--------|--------|
+| `.apm/knowledge/constitution/` | Core engineering principles |
+| `.apm/knowledge/governance/` | Architecture, security, testing guardrails |
+| `.apm/knowledge/playbooks/` | Step-by-step delivery and workflow playbooks |
+| `.apm/knowledge/brand/` | Brand guidelines and references |
 
 ## Editing Rules
 

@@ -1,6 +1,6 @@
 ---
 name: brand-core
-description: 'Reusable core rules of a visual identity: logo, colors, typography, icons, imagery, and layout. Foundation for every brand audit or refactor. Default brand: Sopra Steria. Extensible for other client brands via knowledge/brand/<client>/.'
+description: 'Reusable core rules of a visual identity: logo, colors, typography, icons, imagery, and layout. Foundation for every brand audit or refactor. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<client>/.'
 triggers: ['brand rules', 'brand guidelines', 'visual identity', 'color palette', 'typography', 'branding foundation', 'Sopra Steria branding']
 version: '2.0.0'
 ---
@@ -9,7 +9,7 @@ version: '2.0.0'
 
 ## Purpose
 
-Contains the reusable core structure for defining a visual identity. Use this as the foundation for every brand audit or refactor. Default brand values are for Sopra Steria. To override for a different client, provide assets in `knowledge/brand/<client>/` and reference a client-specific section.
+Contains the reusable core structure for defining a visual identity. Use this as the foundation for every brand audit or refactor. Default brand values are for Sopra Steria. To override for a different client, provide assets in `.apm/knowledge/brand/<client>/` and reference a client-specific section.
 
 ## Source of Truth
 
@@ -87,7 +87,7 @@ Define the brand's composition system:
 
 ## Default Brand: Sopra Steria
 
-The following concrete values apply when the target brand is Sopra Steria (the default). Official guideline and assets are in `knowledge/brand/soprasteria/`.
+The following concrete values apply when the target brand is Sopra Steria (the default). Official guideline and assets are in `.apm/knowledge/brand/soprasteria/`.
 
 ### Logo
 

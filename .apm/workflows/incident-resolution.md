@@ -42,4 +42,4 @@ All artifacts are written to `outputs/specs/features/<feature>/`:
 ## Composition
 
 Can trigger `quality-validation` as a nested workflow in station 6 for thorough validation.
-The knowledge update feeds back into `knowledge/` and `outputs/specs/decisions/` for organizational learning.
+The knowledge update feeds back into `.apm/knowledge/` and `outputs/specs/decisions/` for organizational learning.

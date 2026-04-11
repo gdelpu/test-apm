@@ -7,7 +7,7 @@ version: '2.0.0'
 
 # Skill: Brand Audit Checklist
 
-Use this checklist whenever auditing an app, slide deck, document, or communication asset against the target brand. Default brand: Sopra Steria. For other clients, adjust brand-specific values from `knowledge/brand/<client>/`.
+Use this checklist whenever auditing an app, slide deck, document, or communication asset against the target brand. Default brand: Sopra Steria. For other clients, adjust brand-specific values from `.apm/knowledge/brand/<client>/`.
 
 ## A. Logo
 - Is an official logo file used?

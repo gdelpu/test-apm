@@ -34,7 +34,7 @@ All gates are `warning` severity — this is an advisory workflow. Findings are 
 
 ## Composition
 
-Runs standalone after any delivery workflow. Outputs feed back into `knowledge/` and `outputs/specs/decisions/` for the next cycle.
+Runs standalone after any delivery workflow. Outputs feed back into `.apm/knowledge/` and `outputs/specs/decisions/` for the next cycle.
 
 ## Data sources
 

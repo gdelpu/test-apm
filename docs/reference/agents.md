@@ -39,6 +39,6 @@ Canonical definitions: `.apm/agents/`. Copilot runtime projection: `.github/agen
 
 The **`branding`** agent is designed for standalone use in any project — no workflow required. Point it at an application, document, or presentation and it will audit brand compliance, refactor styling, generate design tokens, or convert Markdown into branded DOCX/PDF files. It ships with full Office document manipulation capabilities: create and edit Word documents (tracked changes, comments), build PowerPoint decks from scratch or from templates, process PDFs (merge, split, fill forms), and validate OOXML output — all via the `docx`, `pptx`, `pdf`, and `office-common` skills.
 
-**Default brand: Sopra Steria.** Out of the box the agent loads the official Sopra Steria visual identity — colours, typography, logo rules, PowerPoint/Word templates, and WCAG 2.1 AA contrast matrix — from `knowledge/brand/soprasteria/`. The brand is extensible: add a `knowledge/brand/<client>/` directory with client-specific assets and the agent adapts automatically.
+**Default brand: Sopra Steria.** Out of the box the agent loads the official Sopra Steria visual identity — colours, typography, logo rules, PowerPoint/Word templates, and WCAG 2.1 AA contrast matrix — from `.apm/knowledge/brand/soprasteria/`. The brand is extensible: add a `.apm/knowledge/brand/<client>/` directory with client-specific assets and the agent adapts automatically.
 
 > **Quick start**: `@branding audit this application for brand compliance` or `@branding convert docs/spec.md to a branded Word document`.

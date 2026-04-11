@@ -14,8 +14,8 @@ Emit `outputs/station_out/policy_report.json`.
 
 - `outputs/station_out/work_order.json`
 - Changed files where `type == "agent"` or `type == "skill"`
-- `knowledge/governance/schemas/agent-manifest.schema.json`
-- `knowledge/governance/schemas/skill-manifest.schema.json`
+- `.apm/knowledge/governance/schemas/agent-manifest.schema.json`
+- `.apm/knowledge/governance/schemas/skill-manifest.schema.json`
 
 ## Target Selection
 

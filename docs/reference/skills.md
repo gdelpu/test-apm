@@ -138,3 +138,24 @@ Canonical definitions: `.apm/skills/<name>/SKILL.md`.
 | `sdlc-change-impact` | Impact analysis and amendment flow |
 | `sdlc-confluence-sync` | Confluence push/pull with Pandoc conversion |
 | `sdlc-scaffold` | Project directory scaffolding |
+
+## MCP Skills
+
+Optional skills powered by MCP (Model Context Protocol) servers. All have graceful fallbacks when MCP is unavailable. See [MCP Setup Guide](../consumer/mcp-setup-guide.md) for configuration.
+
+| Skill | MCP Server | Description |
+|-------|-----------|-------------|
+| `mcp-configuration` | — | Configure MCP servers: auto-detect platform, recommend profiles, generate config, verify connectivity |
+| `mcp-fallback` | — | Canonical fallback behavior reference for all MCP-dependent features |
+| `azure-resource-query` | Azure | Query Azure resources, validate IaC against live state, check service health |
+| `aws-resource-query` | AWS | Query AWS resources, validate CloudFormation/CDK, check service quotas |
+| `github-ops` | GitHub | Issue/PR management, code search, Actions status, releases |
+| `gitlab-ops` | GitLab | MR management, pipeline status, container registry, wiki |
+| `azdo-ops` | Azure DevOps | Work items, boards, pipelines, artifact feeds (local + remote) |
+| `atlassian-ops` | Atlassian | Jira CRUD, Confluence pages, Bitbucket (formalises existing jira-mcp) |
+| `m365-data-query` | Work-iq | M365 emails, meetings, Teams messages, OneDrive, people |
+| `mslearn-docs-lookup` | MsLearn | Microsoft Learn .NET/Azure/M365 documentation |
+| `context7-docs` | Context7 | Up-to-date library/framework docs — recommended for all consumers |
+| `playwright-browser-automation` | Playwright | Browser automation via accessibility snapshots, test recording |
+| `semgrep-analysis` | SemGrep | SAST rules, rule registry queries, fix suggestions |
+| `figma-design-sync` | Figma | Design import, token extraction, prototype sync |

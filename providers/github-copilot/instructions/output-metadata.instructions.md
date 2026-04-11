@@ -8,7 +8,7 @@ applyTo: 'outputs/**'
 
 ## Rule
 
-Every file written under `outputs/` by an agent or workflow **must** include YAML frontmatter conforming to the schema at `knowledge/governance/schemas/output-metadata.schema.json`.
+Every file written under `outputs/` by an agent or workflow **must** include YAML frontmatter conforming to the schema at `.apm/knowledge/governance/schemas/output-metadata.schema.json`.
 
 ## Required frontmatter
 
@@ -112,7 +112,7 @@ date: '2026-04-10'
 status: draft
 inputDocuments:
   - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
-  - knowledge/constitution/speckit-constitution.md
+  - .apm/knowledge/constitution/speckit-constitution.md
 changeHistory:
   - date: '2026-04-10'
     description: 'Initial creation by Spec Orchestrator'

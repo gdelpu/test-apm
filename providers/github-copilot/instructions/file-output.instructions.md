@@ -16,7 +16,7 @@ Every deliverable specified in a skill's `## Output` section or an agent's `## R
 2. Create parent directories if they do not already exist.
 3. Write the full content to the exact path specified by the skill or agent (e.g., `outputs/specs/features/<feature>/spec.md`).
 4. Include YAML front matter with artifact identifiers where the skill specifies them (e.g., `[VIS-001]`).
-5. Include the **output document metadata** defined in `output-metadata` instruction (see `knowledge/governance/schemas/output-metadata.schema.json`). Every `outputs/` file must have `workflow`, `trigger`, `date`, `status`, `inputDocuments`, `changeHistory`, `holisticQualityRating`, and `overallStatus` fields.
+5. Include the **output document metadata** defined in `output-metadata` instruction (see `.apm/knowledge/governance/schemas/output-metadata.schema.json`). Every `outputs/` file must have `workflow`, `trigger`, `date`, `status`, `inputDocuments`, `changeHistory`, `holisticQualityRating`, and `overallStatus` fields.
 
 ## Verification
 

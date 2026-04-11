@@ -145,8 +145,8 @@ The following constraints **cannot be enforced by this agent definition alone** 
 
 - `.apm/contexts/sdlc-agent-registry.yaml` — Test agent compositions
 - `.apm/contexts/sdlc-system-context.md` — cross-cutting conventions
-- `knowledge/governance/testing-policy.md` — testing policy
-- `knowledge/governance/secure-by-default.md` — security governance
+- `.apm/knowledge/governance/testing-policy.md` — testing policy
+- `.apm/knowledge/governance/secure-by-default.md` — security governance
 
 ## Guardrails
 

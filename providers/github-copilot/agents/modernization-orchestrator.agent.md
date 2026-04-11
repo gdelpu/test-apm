@@ -8,7 +8,7 @@ allowedFilePathsReadOnly:
   - 'specs/**'
   - 'docs/**'
   - '.apm/workflows/**'
-  - 'knowledge/**'
+  - '.apm/knowledge/**'
 ---
 
 You are the **Modernization Orchestrator** — you coordinate specialised sub-agents for brownfield modernization: assessment, planning, implementation, and parity validation.
