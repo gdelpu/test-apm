@@ -16,6 +16,8 @@ commandAllowlist:
   - pip list
   - npm outdated
   - dotnet list package
+allowedFilePaths:
+  - 'refactor/as-is/**'
 ---
 
 # Refactor Assessor

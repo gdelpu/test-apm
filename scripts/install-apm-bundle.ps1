@@ -398,4 +398,56 @@ $repoRoot = (Get-Location).Path
 # Remove staging directory (now empty after promote)
 if (Test-Path $Destination) { Remove-Item $Destination -Recurse -Force }
 Write-Ok "$PackageName v$Version ($Target, $Mode mode) installed to $repoRoot"
+
+# --- Check for conflicting Copilot settings ---
+Write-Step 'Checking for conflicting Copilot settings'
+$vscodeDirs = @(
+    (Join-Path $repoRoot '.vscode'),
+    (Join-Path $env:APPDATA 'Code/User')
+)
+
+$conflictPatterns = @(
+    'Do NOT create markdown files',
+    'Do not create markdown',
+    'Do not write files unless requested',
+    'never create files',
+    'do not create files'
+)
+
+$conflictFound = $false
+foreach ($dir in $vscodeDirs) {
+    $settingsPath = Join-Path $dir 'settings.json'
+    if (Test-Path $settingsPath) {
+        $settingsContent = Get-Content $settingsPath -Raw -ErrorAction SilentlyContinue
+        if ($settingsContent) {
+            foreach ($pattern in $conflictPatterns) {
+                if ($settingsContent -match [regex]::Escape($pattern)) {
+                    Write-Host ""
+                    Write-Host "  ⚠️  FILE-WRITE CONFLICT DETECTED in $settingsPath" -ForegroundColor Yellow
+                    Write-Host "      Found: '$pattern'" -ForegroundColor Yellow
+                    Write-Host "      This setting will prevent agents from writing deliverable files to disk." -ForegroundColor Yellow
+                    Write-Host "      Remove this from 'github.copilot.chat.reminderInstructions' or add an override:" -ForegroundColor Yellow
+                    Write-Host '      { "text": "Agents from ai-sdlc-foundation MUST write deliverable files to disk under outputs/." }' -ForegroundColor Yellow
+                    Write-Host ""
+                    $conflictFound = $true
+                    break
+                }
+            }
+        }
+    }
+}
+
+# Ensure workspace .vscode/settings.json has the file-write override
+$workspaceSettings = Join-Path $repoRoot '.vscode/settings.json'
+$overrideText = 'Agents from ai-sdlc-foundation MUST write deliverable files to disk under outputs/.'
+
+if (Test-Path $workspaceSettings) {
+    $existingContent = Get-Content $workspaceSettings -Raw -ErrorAction SilentlyContinue
+    if ($existingContent -and $existingContent -notmatch [regex]::Escape($overrideText)) {
+        Write-Info "Consider adding the file-write override to $workspaceSettings :"
+        Write-Host '  "github.copilot.chat.reminderInstructions": [{ "text": "Agents from ai-sdlc-foundation MUST write deliverable files to disk under outputs/." }]' -ForegroundColor Cyan
+    }
+} elseif (-not $conflictFound) {
+    Write-Ok 'No conflicting Copilot settings detected'
+}
 Get-ChildItem -Path $repoRoot | Format-Table Name, Length, LastWriteTime -AutoSize

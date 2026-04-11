@@ -2,6 +2,8 @@
 name: refactor-planner
 description: 'Analyse ADRs and as-is assessment to produce a detailed, phased migration plan with dependency ordering.'
 tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'refactor/docs/**'
 ---
 
 # Refactor Planner

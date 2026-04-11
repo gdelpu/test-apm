@@ -1,7 +1,7 @@
 ---
 name: workflow-orchestrator
 description: 'Orchestrate station-based workflow pipelines by delegating work to station agents.'
-tools: []
+tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
   - '.apm/workflows/**'
@@ -11,7 +11,7 @@ default_sub_agent_posture: deny-all
 
 # Workflow Orchestrator
 
-> **Note**: This agent has no direct tool access (`tools: []`). It delegates all work to station agents. The `default_sub_agent_posture: deny-all` ensures that when comparing a sub-agent's tool scope against this agent's baseline, an empty baseline means **no tools are permitted** — not that all tools are permitted. Station declarations in workflow YAML MUST include an explicit `allowed_tools` list; stations without one inherit `[]` (no tools).
+> **Note**: This agent has `edit/editFiles` for writing workflow state and verifying station outputs on disk. It delegates substantive work to station agents. The `default_sub_agent_posture: deny-all` ensures that when comparing a sub-agent's tool scope against this agent's baseline, stations inherit no tools by default. Station declarations in workflow YAML MUST include an explicit `allowed_tools` list; stations without one inherit `[]` (no tools).
 
 ## Purpose
 

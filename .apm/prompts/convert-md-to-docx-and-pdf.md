@@ -14,17 +14,17 @@ Convert Markdown files to Sopra Steria–compliant DOCX and PDF outputs.
 ```bash
 # DOCX generation
 pandoc <file> -f gfm -o build/<base>.docx \
-  --reference-doc=skills/brand-styler/tools/templates/reference.docx
+  --reference-doc=skills/brand-document/tools/templates/reference.docx
 
 # PDF generation
 pandoc <file> -f gfm -o build/<base>.pdf \
-  --template skills/brand-styler/tools/pandoc/pdf.latex \
+  --template skills/brand-document/tools/pandoc/pdf.latex \
   --pdf-engine=xelatex \
-  --css skills/brand-styler/tools/brandify-md.css
+  --css skills/brand-document/tools/brandify-md.css
 ```
 
 ## Prerequisites
 
 - Pandoc installed
 - XeLaTeX installed (for PDF)
-- Brand Styler skill available
+- Brand Document skill available

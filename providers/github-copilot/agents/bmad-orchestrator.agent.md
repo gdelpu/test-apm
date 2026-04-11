@@ -1,10 +1,11 @@
 ---
 name: BMAD Orchestrator
 description: 'Drive BMAD feedback loop with quality scoring and adaptive decision-making.'
-tools: [codebase, search]
-allowedFilePathsReadOnly:
+tools: [codebase, search, edit/editFiles]
+allowedFilePaths:
   - 'outputs/**'
   - 'outputs/station_out/**'
+allowedFilePathsReadOnly:
   - '.apm/workflows/**'
   - 'docs/**'
 ---
@@ -19,6 +20,10 @@ Read the full agent definition from `.apm/agents/bmad-orchestrator.md`.
 - Score outcomes against quality thresholds
 - Decide whether to iterate, escalate, or accept based on evidence
 - Produce BMAD cycle reports with adaptive recommendations
+
+## File Creation Mandate
+
+All deliverables **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files at the output paths (under `outputs/`). Create parent directories as needed.
 
 ## Security Constraints
 
@@ -36,7 +41,7 @@ Read the full agent definition from `.apm/agents/bmad-orchestrator.md`.
 
 ## Out of Scope
 
-- Direct code modification or file writes
+- Direct source-code modification outside `outputs/`
 - Running commands or scripts
 - Accessing external APIs or network resources
 

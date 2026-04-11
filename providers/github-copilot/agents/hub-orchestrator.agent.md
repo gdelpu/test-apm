@@ -85,7 +85,7 @@ Read `.apm/skills/hub-classification/SKILL.md` for the full classification proto
 | Architecture, ADRs | `sdlc-tech` (12 stations) |
 | Sprint governance | `sdlc-steer` (10 stations) |
 | Analyze codebase | `repository-analyzer` agent |
-| Branding, Sopra Steria | `brand-styler` or `ssg-branding-agent` |
+| Branding, Sopra Steria | `branding` agent |
 | Security review | `security-reviewer` agent |
 | List/compare workflows | Show catalog |
 

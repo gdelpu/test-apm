@@ -154,7 +154,7 @@ Sometimes you want a specific agent rather than a full workflow. Agents are auto
 | **Security Reviewer** | Audits for prompt injection, data exfiltration, OWASP LLM Top 10 | `@security-reviewer` | _(used within workflows)_ |
 | **Repository Analyzer** | Produces architectural overview of a codebase | `@repository-analyzer` | _(used within workflows)_ |
 | **Bug Fixer** | Structured bug diagnosis from triage to regression testing | `@bug-fixer` | `/workflow-bug-fixing` |
-| **Brand Styler** | Generates branded documents with accessibility compliance | `@brand-styler` | _(used within workflows)_ |
+| **Branding Agent** | Audits and generates brand-compliant documents, apps, presentations | `@branding` | _(used within workflows)_ |
 
 > **CLI note**: The CLI provider runs workflows, not individual agents. Use `run-workflow.sh` with a workflow that invokes the agent you need.
 
