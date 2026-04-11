@@ -1,7 +1,7 @@
 ---
 name: sdlc-test-executor
 description: 'Execute qualification campaigns and produce structured test reports.'
-tools: ['codebase', 'search', 'runCommands']
+tools: ['codebase', 'search', 'runCommands', 'edit/editFiles']
 commandAllowlist:
   - npx playwright test --config=playwright.config.ts
   - npm test

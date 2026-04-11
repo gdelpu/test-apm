@@ -7,6 +7,23 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.7] — 2026-04-11
+
+### Fixed
+- All document-producing agents now have `edit/editFiles` in tools and `allowedFilePaths` in frontmatter
+- Added `allowedFilePaths` to 9 canonical agents missing path restrictions (analysis-agent, bmad-orchestrator, modernization-agent, modernization-orchestrator, reverse-backlog, reverse-user-story, security-reviewer, repository-analyzer, refactor-assessor, refactor-planner)
+- Resolved canonical/provider tool mismatches for repository-analyzer, reverse-backlog, reverse-user-story, security-reviewer (canonical lacked `edit/editFiles`)
+- Clarified analysis-agent and quality-validator "read-only" constraints to mean production systems, not file output
+- Workflow-orchestrator upgraded from `tools: []` to `['codebase', 'search', 'edit/editFiles']`
+
+### Added
+- File Creation Mandate section added to all 24 document-producing provider agents
+- `file-output.instructions.md`: self-diagnosis for conflicting session-level `reminderInstructions` that block file writes
+- `install-apm-bundle.ps1`: automated detection of conflicting Copilot settings on consumer install
+
+### Changed
+- "Out of Scope" wording updated from "Direct code modification or file writes" to "Direct source-code modification outside `outputs/`" (6 agents)
+
 ## [0.0.6] — 2026-04-10
 
 ### Changed

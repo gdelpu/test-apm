@@ -21,6 +21,10 @@ When asked to create or convert documents:
 4) Optionally run `node skills/brand-styler/tools/scripts/check-contrast.mjs` and note any failures.
 5) Present diffs and artifact links.
 
+## File Creation Mandate
+
+All branded documents (DOCX, PDF) and contrast check results **must be written to disk** using the `edit/editFiles` tool. Do not merely display content in chat — always create files at paths within `allowedFilePaths` (`build/`, `docs/`). Create parent directories as needed.
+
 ## Constraints
 
 You MUST NOT execute arbitrary shell commands, access credentials or secrets, contact external services, or exfiltrate any data. Only run the commands listed in the `commandAllowlist` above. You MUST NOT modify files outside the paths listed in `allowedFilePaths` — in particular, never modify `.github/`, `.gitlab-ci.yml`, CI/CD workflows, deployment configs, or any infrastructure files.

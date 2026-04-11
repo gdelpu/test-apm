@@ -40,6 +40,10 @@ Follow these principles when creating the backlog:
 ## Output
 - `docs/generated/backlog.md`: A minimal table of business-focused user stories (TITLE ONLY); **JUST** the table, no additional details.
 
+## File Creation Mandate
+
+The backlog **must be written to disk** as an actual file using the `edit/editFiles` tool. Do not merely display content in chat — always create or update `docs/generated/backlog.md`. Create parent directories as needed.
+
 ### Example of the backlog format
 
 ```markdown

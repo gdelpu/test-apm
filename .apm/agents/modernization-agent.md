@@ -1,7 +1,9 @@
 ---
 name: modernization-agent
 description: 'Guide modernization initiatives through baseline assessment and migration planning.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
 ---
 
 # Modernization Agent
