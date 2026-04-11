@@ -1,7 +1,7 @@
 ---
 name: Quality Validator
 description: 'Execute quality and security validation using external tool adapters.'
-tools: [codebase, search, runCommands]
+tools: [codebase, search, runCommands, edit/editFiles]
 commandAllowlist:
   - npm run lint
   - npm audit
@@ -31,6 +31,10 @@ Read the full agent definition from `.apm/agents/quality-validator.md`.
 - Execute test suites and report coverage gaps
 - Audit dependencies for known CVEs
 - Produce a structured quality report with pass/fail per gate
+
+## File Creation Mandate
+
+All quality reports **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files under `reports/`.
 
 ## Security Constraints
 

@@ -21,6 +21,10 @@ This agent supports:
 - brand compliance validation
 - design token generation
 
+## File Creation Mandate
+
+All branding deliverables (audit reports, refactored CSS/SCSS, design tokens, styled documents) **must be written to disk** using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files at the paths listed in `allowedFilePaths`.
+
 ---
 
 # Brand Resources

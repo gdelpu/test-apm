@@ -1,7 +1,9 @@
 ---
 name: repository-analyzer
 description: 'Generate high-level architectural and functional overview from repository analysis.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'docs/generated/**'
 ---
 
 # Repository Analyzer

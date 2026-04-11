@@ -1,7 +1,9 @@
 ---
 name: reverse-backlog
 description: 'Extract business capabilities and generate structured product backlog from codebase.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'docs/generated/**'
 ---
 
 # Reverse Backlog Generator
