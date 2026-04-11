@@ -4,6 +4,11 @@ description: 'Drive BMAD feedback loop with quality scoring and adaptive decisio
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
 ---
 
 # BMAD Orchestrator

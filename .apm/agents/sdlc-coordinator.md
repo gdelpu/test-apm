@@ -4,6 +4,11 @@ description: 'Orchestrate the full SDLC harness with DAG resolution and wave sch
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
 ---
 
 # SDLC Coordinator

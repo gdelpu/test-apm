@@ -4,10 +4,14 @@ description: 'Guide modernization initiatives through baseline assessment and mi
 tools: [codebase, search, edit/editFiles]
 allowedFilePaths:
   - 'outputs/**'
-allowedFilePathsReadOnly:
-  - 'specs/**'
-  - 'docs/**'
   - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
+  - 'package.json'
+  - '*.config.*'
+allowedFilePathsReadOnly:
   - '.apm/workflows/**'
   - '.apm/knowledge/**'
 ---
@@ -43,8 +47,6 @@ All deliverables **must be written to disk** as actual files using the `edit/edi
 
 ## Out of Scope
 
-- Direct source-code modification outside `outputs/`
-- Running commands or scripts
 - Accessing external APIs or network resources
 
 Follow all guardrails defined in the canonical agent file.

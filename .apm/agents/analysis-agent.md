@@ -4,6 +4,8 @@ description: 'Diagnose production incidents by analyzing logs, traces, and ident
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
+  - 'docs/**'
+  - 'reports/**'
 ---
 
 # Analysis Agent

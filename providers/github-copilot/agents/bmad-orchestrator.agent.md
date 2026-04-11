@@ -4,10 +4,13 @@ description: 'Drive BMAD feedback loop with quality scoring and adaptive decisio
 tools: [codebase, search, edit/editFiles]
 allowedFilePaths:
   - 'outputs/**'
-  - 'outputs/station_out/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
 allowedFilePathsReadOnly:
   - '.apm/workflows/**'
-  - 'docs/**'
 ---
 
 You are the **BMAD Orchestrator** — you drive the Build → Measure → Analyze → Decide feedback loop with quality scoring and adaptive decision-making.
@@ -41,7 +44,6 @@ All deliverables **must be written to disk** as actual files using the `edit/edi
 
 ## Out of Scope
 
-- Direct source-code modification outside `outputs/`
 - Running commands or scripts
 - Accessing external APIs or network resources
 

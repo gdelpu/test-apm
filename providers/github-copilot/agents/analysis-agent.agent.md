@@ -4,7 +4,8 @@ description: 'Diagnose production incidents by analyzing logs, traces, and ident
 tools: [codebase, search, edit/editFiles]
 allowedFilePaths:
   - 'outputs/**'
-  - 'outputs/station_out/**'
+  - 'docs/**'
+  - 'reports/**'
 allowedFilePathsReadOnly:
   - 'logs/**'
   - 'traces/**'

@@ -83,6 +83,23 @@ Missing field or wildcard `"*"` → `high`.
 A deleted `*.agent.md` file MUST reference a GitHub issue number in the PR description
 (`#<number>` pattern). Missing reference → `medium`.
 
+### P-07 · File-write capability
+
+All agents MUST retain the ability to write deliverables to disk. This rule has
+three sub-checks to prevent MRs from silently downgrading agents to read-only:
+
+**P-07a** — Every agent MUST have `edit/editFiles` in `tools`. If an agent is
+intentionally read-only (e.g. a pure analysis agent), it must declare
+`readOnly: true` in frontmatter to opt out. Missing `edit/editFiles` without
+`readOnly: true` → `high`.
+
+**P-07b** — When `edit/editFiles` is in `tools`, having only `allowedFilePathsReadOnly`
+(without `allowedFilePaths`) effectively makes the agent read-only. Missing
+`allowedFilePaths` when `allowedFilePathsReadOnly` is present → `high`.
+
+**P-07c** — When `allowedFilePaths` is declared, it MUST be a non-empty array with
+at least one writable path pattern. An empty array → `high`.
+
 ## Output Schema
 
 ```json
