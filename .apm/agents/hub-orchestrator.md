@@ -92,7 +92,31 @@ Support these informational requests without dispatching:
 
 After classifying intent and confirming with the user, **always present the matching handoff button** from the provider's `handoffs:` frontmatter section. Do **NOT** construct your own dispatch prompt — the handoff buttons contain the exact, tested dispatch prompts with correct paths (`.apm/workflows/`, `outputs/`) and full instructions (brownfield/greenfield detection, etc.).
 
-**Anti-pattern (NEVER do this):** Generating a message like `Read .github/workflows/sdlc-ba.yml and execute the full BA pipeline. Write all artifacts to docs/. Project:` — this is a hallucinated, truncated version that uses wrong paths and drops critical instructions.
+### CRITICAL — Dispatch rules
+
+1. **Present the handoff button** and tell the user to click it.
+2. **NEVER fabricate a dispatch prompt.** Always use the buttons or the reference table below.
+3. Workflows live at `.apm/workflows/*.yml` — **NEVER** reference `.github/workflows/`.
+4. Artifacts go to `outputs/` — **NEVER** reference `docs/` as the output root.
+5. If you must self-dispatch, copy the **exact** prompt from the Dispatch Prompt Reference below — **verbatim, no modifications, no truncation**.
+
+**Anti-pattern (NEVER do this):** Generating a message like `Read .github/workflows/sdlc-ba.yml and execute the full BA pipeline. Write all artifacts to docs/. Project:` — this is a hallucinated, truncated version that uses wrong paths and drops critical instructions. This is the single most common failure of this agent.
+
+### Dispatch Prompt Reference
+
+When self-dispatching or executing directly, use **exactly** these prompts:
+
+| Workflow | Exact dispatch prompt |
+|---|---|
+| feature-implementation | `Read .apm/workflows/feature-implementation.yml and execute the feature-implementation workflow. Start at station 1 (constitution) — do NOT skip ahead. First determine whether this is a brownfield (existing system) or greenfield (new) project: if brownfield, run the brownfield-context station to extract codebase context before specification. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for project details.` |
+| bug-fixing | `Read .apm/workflows/bug-fixing.yml and execute the bug-fixing workflow. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for bug details.` |
+| modernization | `Read .apm/workflows/modernization.yml and execute the modernization workflow. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for target details.` |
+| sdlc-full | `Read .apm/workflows/sdlc-full.yml and execute the full SDLC pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, execute S0/T0 audit stations. If greenfield, skip audit stations and start from S1/T1. Write all artifacts to outputs/. Use the conversation context for project details.` |
+| spec-kit | `Read .apm/workflows/spec-kit.yml and execute the spec-kit workflow. Start at station 1 (constitution) — do NOT skip ahead to feature specification. First determine whether this is a brownfield (existing system) or greenfield (new) project: if brownfield, run the brownfield-context station to extract codebase context before specification. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for project details.` |
+| quality-validation | `Read .apm/workflows/quality-validation.yml and execute the quality-validation workflow. Use the conversation context for target details.` |
+| incident-resolution | `Read .apm/workflows/incident-resolution.yml and execute the incident-resolution workflow. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for incident details.` |
+| sdlc-ba | `Read .apm/workflows/sdlc-ba.yml and execute the full BA pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, start with S0 audit stations. If greenfield, skip S0 audit and start from S1 scoping. Write all artifacts to outputs/. Use the conversation context for project details.` |
+| maturity-assessment | `Read .apm/workflows/maturity-assessment.yml and execute the maturity-assessment workflow. Use the conversation context for target details.` |
 
 ### Execution fallback
 
@@ -135,7 +159,7 @@ to resume with `--resume` flag on the appropriate workflow.
 ## Guardrails
 
 - Never dispatch without explicit user confirmation.
-- Prefer dispatching to specialised agents. When handoff is not available, execute station work directly and write all deliverables to `outputs/` or `docs/` using `edit/editFiles`. You have this tool and must use it — never claim you lack file creation tools.
+- Prefer dispatching to specialised agents. When handoff is not available, execute station work directly and write all deliverables to `outputs/` using `edit/editFiles`. You have this tool and must use it — never claim you lack file creation tools.
 - No circular dependencies — hub dispatches outward; other agents must not
   dispatch back to hub.
 - If the catalog is empty or unreadable, fall back to dynamic introspection

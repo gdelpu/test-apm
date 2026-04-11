@@ -249,6 +249,8 @@ Deterministic (regex/keyword) scanning of agent, skill, and prompt definitions f
 
 **PI-02 · Missing refusal constraints** — Every `*.agent.md` must contain at least one "non-negotiable" constraint ("must not", "will not", "never" + destructive verb, or "refuse" + request noun, or an "out of scope" section). Missing → `high`.
 
+**PI-02b · Out of Scope contradictions** — If an agent has an "Out of Scope" section, its entries must not blanket-block capabilities the agent's own `tools` frontmatter declares (e.g. "Running commands or scripts" when `runCommands` is in tools). Contradiction → `high`.
+
 **PI-03 · Data access boundaries** — Skill files that reference file-operation tools must declare `allowedFilePaths` with explicit (non-wildcard) values. Wildcard or missing → `high`.
 
 **PI-04 · Unconstrained tool scope** — Flags `tools: ["*"]` or `tools: ["all"]` as `critical`; re-flags missing `commandAllowlist` (with `runCommands`) and missing `allowedNetworkDomains` (with `fetch`) as `high` at the prompt-security layer.

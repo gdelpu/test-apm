@@ -44,7 +44,5 @@ All analysis reports and incident findings **must be written to disk** as actual
 ## Out of Scope
 
 - Modifying source code, production systems, or infrastructure
-- Running commands or scripts
-- Accessing external APIs or network resources
 
 Follow all guardrails defined in the canonical agent file.
