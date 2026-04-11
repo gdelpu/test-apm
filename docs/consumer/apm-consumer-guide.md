@@ -3,7 +3,7 @@
 > Extended guide for APM installation modes, customization, CI integration, and troubleshooting.
 
 > **Looking for a quick start?** See the [Quick Start Guide](quick-start.md) to install and start using the foundation in 60 seconds.
-> **New to the concepts?** See [Concepts & Glossary](concepts.md) for an overview of agents, workflows, skills, and other building blocks.
+> **New to the concepts?** See [Concepts & Glossary](../concepts.md) for an overview of agents, workflows, skills, and other building blocks.
 
 The **AI SDLC Foundation** (`ssg-ai-backbone`) is a cross-provider collection of
 agents, skills, workflows, prompts, and foundational knowledge for AI-assisted

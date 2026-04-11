@@ -2,7 +2,7 @@
 name: Repository Analyzer
 description: 'This agent analyzes a code repository to provide a high level overview of its structure, documentation and dependencies.'
 tools: [vscode, codebase, search, edit/editFiles]
-model: Claude Opus 4.6 (copilot)
+model: '{{DEFAULT_MODEL}}'
 target: vscode
 allowedFilePaths: ['docs/generated/*']
 
@@ -11,7 +11,7 @@ handoffs:
     agent: Reverse Backlog Generator
     prompt: Analyze the repository and create a product backlog of features based on the existing code and documentation.
     send: true
-    model: Claude Opus 4.6 (copilot)
+    model: '{{DEFAULT_MODEL}}'
 
 ---
 

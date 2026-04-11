@@ -71,4 +71,4 @@ To add/remove a station: add/delete the corresponding file in `ci-gates/stations
 
 ## Local testing
 
-See `LOCAL_TESTING.md` for instructions to run the pipeline locally using Podman/Docker or gitlab-ci-local.
+See [`docs/contributor/local-testing.md`](../../docs/contributor/local-testing.md) for instructions to run the pipeline locally using Podman/Docker or gitlab-ci-local.

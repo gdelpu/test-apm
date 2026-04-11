@@ -1,7 +1,9 @@
 ---
 name: hub-orchestrator
 description: 'Central triage agent — discovers available workflows and agents, classifies user intent, and dispatches execution.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
 ---
 
 # Hub Orchestrator
@@ -111,7 +113,7 @@ to resume with `--resume` flag on the appropriate workflow.
 ## Guardrails
 
 - Never dispatch without explicit user confirmation.
-- Never execute work directly — pure triage and routing only.
+- Prefer dispatching to specialised agents. When handoff is not available, execute station work directly and write all deliverables to `outputs/` using `edit/editFiles`.
 - No circular dependencies — hub dispatches outward; other agents must not
   dispatch back to hub.
 - If the catalog is empty or unreadable, fall back to dynamic introspection

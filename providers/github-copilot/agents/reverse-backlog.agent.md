@@ -8,10 +8,12 @@ allowedFilePaths: ['docs/generated/*']
 handoffs:
   - label: Complete user story
     agent: Reverse User Story Creator
-    prompt: 'Create a detailed user story with acceptance criteria for:'
+    prompt: 'Create a detailed user story with acceptance criteria based on the conversation context.'
+    send: true
   - label: Complete every user story
     agent: Reverse User Story Creator
     prompt: 'Process the next batch of user stories from the backlog (maximum 10 per batch). For each story, create detailed acceptance criteria. When done with the batch, update the backlog status and stop. Do not spawn sub-agents or recurse.'
+    send: true
 
 ---
 

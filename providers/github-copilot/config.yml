@@ -1,0 +1,14 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# GitHub Copilot Provider Configuration
+# ──────────────────────────────────────────────────────────────────────────────
+# Provider-scoped defaults for the GitHub Copilot adapter.
+# Values here are substituted into agent files during projection
+# (project-copilot.ps1 / project-copilot.sh).
+#
+# Consumers in expandable mode can override any value by creating:
+#   providers-local/github-copilot/config.yml
+# ──────────────────────────────────────────────────────────────────────────────
+defaults:
+  # Model used by Copilot agents. Referenced as {{DEFAULT_MODEL}} in agent files.
+  # Update this single value when switching models — projection will propagate.
+  model: "Claude Opus 4.6 (copilot)"

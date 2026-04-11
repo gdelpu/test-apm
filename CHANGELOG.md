@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.8] — 2026-04-11
+
+### Fixed
+- Hub Orchestrator can now write deliverables to disk when handoff buttons are not clicked
+- Hub Orchestrator added `edit/editFiles` tool with `allowedFilePaths: outputs/**` (canonical + provider)
+- Updated Hub Orchestrator guardrail from "pure triage only" to "prefer dispatch; execute directly when handoff unavailable"
+
 ## [0.0.7] — 2026-04-11
 
 ### Fixed
@@ -17,12 +24,22 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - Workflow-orchestrator upgraded from `tools: []` to `['codebase', 'search', 'edit/editFiles']`
 
 ### Added
+- **Branding Agent** (`branding.md`): unified agent replacing `brand-styler` and `soprasteria-branding`, with consolidated brand compliance responsibilities
+- **Office product skills**: `docx` (comments, tracked changes, accept/reject), `pptx` (slide editing, thumbnail generation), `xlsx` (formula recalculation via LibreOffice), `pdf` (forms, bounding boxes, field extraction), `office-common` (OOXML schema validation, pack/unpack, merge runs, redlining)
+- PowerPoint thumbnail grid generator (`pptx/scripts/thumbnail.py`)
+- Excel formula recalculation script (`xlsx/scripts/recalc.py`)
+- Word comment injection and tracked-changes acceptance scripts (`docx/scripts/`)
 - File Creation Mandate section added to all 24 document-producing provider agents
 - `file-output.instructions.md`: self-diagnosis for conflicting session-level `reminderInstructions` that block file writes
 - `install-apm-bundle.ps1`: automated detection of conflicting Copilot settings on consumer install
 
 ### Changed
+- Branding skills restructured: `brand-app` and `brand-document` replace old `app-branding`, `document-branding`, `brand-styler`, and `soprasteria-*` variants
 - "Out of Scope" wording updated from "Direct code modification or file writes" to "Direct source-code modification outside `outputs/`" (6 agents)
+
+### Removed
+- `brand-styler.md` and `soprasteria-branding.md` agents (consolidated into `branding.md`)
+- `app-branding`, `brand-styler`, `document-branding`, `soprasteria-app-branding`, `soprasteria-brand-assets`, `soprasteria-brand-core`, `soprasteria-document-branding` skills (replaced by restructured `brand-*` skills)
 
 ## [0.0.6] — 2026-04-10
 
@@ -114,5 +131,5 @@ Initial release of the SSG AI SDLC Foundation.
 - SHA-256 checksum generation for distribution archives
 - Local testing infrastructure with Podman Compose
 - Structured prompts for branding audits, refactoring, and workflows
-- Distribution documentation (`docs/distribution.md`)
+- Distribution documentation (`docs/contributor/distribution.md`)
 - Security hardening against A2–A5 pipeline findings

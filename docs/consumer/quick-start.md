@@ -8,9 +8,11 @@
 
 - [Install in 60 Seconds](#install-in-60-seconds)
 - [Updating](#updating)
+- [Three Ways to Use It](#three-ways-to-use-it)
 - [Using the Hub Orchestrator](#using-the-hub-orchestrator)
 - [Common Workflows](#common-workflows)
 - [Using Agents Directly](#using-agents-directly)
+- [Spotlight: Branding Agent](#spotlight-branding-agent)
 - [Provider-Specific Usage](#provider-specific-usage)
   - [GitHub Copilot (VS Code)](#github-copilot-vs-code)
   - [CLI](#cli)
@@ -90,6 +92,49 @@ Commit `.github/` and `.apm.lock.yaml` when ready.
 
 ---
 
+## Three Ways to Use It
+
+The AI SDLC Foundation gives you three entry points — pick the one that matches your situation.
+
+### 1. Ask the Hub Orchestrator (recommended start)
+
+Don't know which workflow to use? Just describe what you need. The Hub Orchestrator classifies your intent and dispatches the right workflow automatically.
+
+```
+@hub-orchestrator I need to add a payment processing feature
+```
+
+Best when: you're new, unsure which workflow fits, or want guided discovery.
+
+### 2. Run a workflow directly
+
+Already know which workflow you need? Skip the Hub and invoke it as a slash command or CLI call. Workflows are multi-station pipelines — each station runs an agent with specific skills and a quality gate.
+
+```
+/workflow-feature                    ← Copilot slash command
+/workflow-spec-kit                   ← specification only
+./providers/cli/run-workflow.sh feature-implementation user-auth   ← CLI
+```
+
+Best when: you know the workflow name and want to start immediately.
+
+### 3. Use a specific agent or skill
+
+For focused tasks that don't need a full pipeline, invoke an agent directly. Each agent bundles one or more skills — reusable knowledge packages with tools, templates, and domain expertise.
+
+```
+@branding audit this application for brand compliance
+@spec-orchestrator write a specification for user authentication
+@security-reviewer review this agent definition for vulnerabilities
+@repository-analyzer give me an overview of this codebase
+```
+
+Best when: you need a single capability (brand audit, security review, codebase analysis) without a multi-station workflow.
+
+> **Skills** are the knowledge units that power agents. You don't invoke skills directly — you invoke the agent that bundles them. See the [Skills catalog](../reference/skills.md) for the full list of 94 skills across 11 categories.
+
+---
+
 ## Using the Hub Orchestrator
 
 The **Hub Orchestrator** is the single entry point. Tell it what you need — it classifies your intent and recommends the right workflow.
@@ -137,7 +182,7 @@ Workflows are multi-station pipelines with quality gates at each step. Here are 
 
 All workflow outputs are written to `outputs/specs/features/<feature-name>/`.
 
-> **Full list**: See the [README](../README.md#workflows-19) for all 19 workflows.
+> **Full list**: See the [Workflows catalog](../reference/workflows.md) for all 19 workflows.
 
 ---
 
@@ -157,6 +202,34 @@ Sometimes you want a specific agent rather than a full workflow. Agents are auto
 | **Branding Agent** | Audits and generates brand-compliant documents, apps, presentations | `@branding` | _(used within workflows)_ |
 
 > **CLI note**: The CLI provider runs workflows, not individual agents. Use `run-workflow.sh` with a workflow that invokes the agent you need.
+
+---
+
+## Spotlight: Branding Agent
+
+The **`branding`** agent is designed for **standalone use in any project** — no workflow required. Point it at an application, document, or presentation and it will:
+
+- **Audit** brand compliance (colours, typography, logo usage, WCAG 2.1 AA contrast)
+- **Refactor** styling to match brand guidelines (CSS, design tokens, Tailwind themes)
+- **Generate** branded documents — convert Markdown to Word, PowerPoint, or PDF with correct templates
+- **Manipulate** Office files — create/edit DOCX (tracked changes, comments), build PPTX decks, merge/split PDFs, fill PDF forms
+
+**Default brand: Sopra Steria.** Out of the box, it loads the official visual identity from `knowledge/brand/soprasteria/`. Add a `knowledge/brand/<client>/` directory with client-specific assets to adapt automatically.
+
+### Try it now
+
+```
+@branding audit this application for brand compliance
+@branding convert docs/spec.md to a branded Word document
+@branding create a PowerPoint deck from this markdown
+@branding check the colour contrast of this component
+```
+
+### What powers it
+
+10 skills: `brand-core`, `brand-assets`, `brand-app`, `brand-document`, `brand-accessibility`, `brand-audit`, `docx`, `pptx`, `pdf`, `office-common`.
+
+> See the [full agent catalog](../reference/agents.md#spotlight-branding-agent) for technical details.
 
 ---
 
@@ -259,7 +332,7 @@ Claude Code uses `CLAUDE.md` as its context file and provides slash commands for
 
 | Resource | What it covers |
 |----------|---------------|
-| [Concepts & Glossary](concepts.md) | What are agents, workflows, skills, prompts, instructions, hooks, and other building blocks |
+| [Concepts & Glossary](../concepts.md) | What are agents, workflows, skills, prompts, instructions, hooks, and other building blocks |
 | [APM Consumer Guide](apm-consumer-guide.md) | Extended reference: install modes, customization, `providers-local/` overlay, CI integration, troubleshooting |
-| [Distribution Guide](distribution.md) | Registry details, checksums, CI/CD pipeline examples |
-| [README](../README.md) | Full agent/skill/workflow catalog with descriptions |
+| [Distribution Guide](../contributor/distribution.md) | Registry details, checksums, CI/CD pipeline examples |
+| [Reference Catalogs](../reference/agents.md) | Full agent/skill/workflow catalog with descriptions |
