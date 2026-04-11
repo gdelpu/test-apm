@@ -214,7 +214,7 @@ The **`branding`** agent is designed for **standalone use in any project** — n
 - **Generate** branded documents — convert Markdown to Word, PowerPoint, or PDF with correct templates
 - **Manipulate** Office files — create/edit DOCX (tracked changes, comments), build PPTX decks, merge/split PDFs, fill PDF forms
 
-**Default brand: Sopra Steria.** Out of the box, it loads the official visual identity from `knowledge/brand/soprasteria/`. Add a `knowledge/brand/<client>/` directory with client-specific assets to adapt automatically.
+**Default brand: Sopra Steria.** Out of the box, it loads the official visual identity from `.apm/knowledge/brand/soprasteria/`. Add a `.apm/knowledge/brand/<client>/` directory with client-specific assets to adapt automatically.
 
 ### Try it now
 
@@ -333,6 +333,7 @@ Claude Code uses `CLAUDE.md` as its context file and provides slash commands for
 | Resource | What it covers |
 |----------|---------------|
 | [Concepts & Glossary](../concepts.md) | What are agents, workflows, skills, prompts, instructions, hooks, and other building blocks |
+| [MCP Setup Guide](mcp-setup-guide.md) | Configure MCP servers for richer integration — live docs, browser testing, Jira sync, cloud queries |
 | [APM Consumer Guide](apm-consumer-guide.md) | Extended reference: install modes, customization, `providers-local/` overlay, CI integration, troubleshooting |
 | [Distribution Guide](../contributor/distribution.md) | Registry details, checksums, CI/CD pipeline examples |
 | [Reference Catalogs](../reference/agents.md) | Full agent/skill/workflow catalog with descriptions |

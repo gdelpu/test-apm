@@ -87,8 +87,8 @@ All deliverables listed above **must be written to disk** as actual files using 
 
 - `.apm/contexts/sdlc-agent-registry.yaml` — BA agent compositions
 - `.apm/contexts/sdlc-system-context.md` — cross-cutting conventions
-- `knowledge/constitution/brownfield.md` — brownfield constitution
-- `knowledge/playbooks/brownfield-playbook.md` — brownfield playbook
+- `.apm/knowledge/constitution/brownfield.md` — brownfield constitution
+- `.apm/knowledge/playbooks/brownfield-playbook.md` — brownfield playbook
 
 ## Guardrails
 

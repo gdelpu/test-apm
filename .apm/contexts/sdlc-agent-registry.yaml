@@ -27,7 +27,7 @@ shared:
 
   ba_tools_base: &ba_tools_base
     required: [file-read, file-write]
-    optional: [jira-mcp]
+    optional: [jira-mcp, context7-mcp]
 
   tech_conventions_base: &tech_cv_base
     - Tech-Agents/refs/conventions/cv-tech-markdown.md
@@ -714,7 +714,7 @@ agents:
     client_inputs: docs/0-inputs/tech/1-archi/
     tools:
       required: [file-read, file-write]
-      optional: [jira-mcp, mermaid]
+      optional: [jira-mcp, mermaid, context7-mcp, mslearn-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
@@ -819,7 +819,7 @@ agents:
     client_inputs: docs/0-inputs/tech/2-design/
     tools:
       required: [file-read, file-write]
-      optional: [jira-mcp, mermaid]
+      optional: [jira-mcp, mermaid, context7-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
@@ -889,6 +889,7 @@ agents:
       conventions: *tech_cv_base
     tools:
       required: [file-read, file-write]
+      optional: [semgrep-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
@@ -904,6 +905,7 @@ agents:
       conventions: *tech_cv_base
     tools:
       required: [file-read, file-write]
+      optional: [semgrep-mcp, context7-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
@@ -1100,7 +1102,7 @@ agents:
       conventions: *test_cv_base
     tools:
       required: [file-read, file-write]
-      optional: [owasp-zap]
+      optional: [owasp-zap, semgrep-mcp, playwright-mcp]
     hooks:
       pre:
         - .apm/hooks/pre/input-validation/base.md

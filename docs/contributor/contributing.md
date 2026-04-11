@@ -37,6 +37,17 @@
 1. Create `.apm/skills/<name>/SKILL.md` (+ optional `tools/`, `docs/`)
 2. Update `docs/reference/skills.md`: skills table (new row in correct category) and count in heading
 
+### New MCP server
+
+1. Add entry to `.apm/contexts/mcp-registry.yaml` (full schema in [MCP Integration Guide](mcp-integration-guide.md#registry-schema-reference))
+2. Create new skill `.apm/skills/<server-verb>/SKILL.md` using the [MCP Skill Template](mcp-integration-guide.md#mcp-skill-template)
+3. Enhance existing skills with MCP optional steps
+4. Add server ID to `sdlc-agent-registry.yaml` agent `optional:` arrays
+5. Add to at least one profile in `mcp-registry.yaml`
+6. Create provider entries (Copilot prompt, Claude command) — see provider parity
+7. Update `docs/consumer/mcp-setup-guide.md` and `docs/reference/skills.md`
+8. Run `python scripts/validate_all.py` and `project-copilot.ps1 -Clean`
+
 ### New workflow
 
 1. Create `.apm/workflows/<name>.yml` following `_schema.md`
@@ -80,7 +91,7 @@ When modifying this repository, update all affected locations:
 1. Canonical definitions go in `.apm/` (agents, skills, prompts, workflows, templates, scripts)
 2. Copilot runtime projections go in `.github/` (agents, prompts, instructions)
 3. Adapter docs go in `providers/<provider>/` (conventions, sync-map, CLAUDE.md)
-4. Brand assets live in `knowledge/brand/`
+4. Brand assets live in `.apm/knowledge/brand/`
 5. Open an MR targeting the `staged` branch
 
 ### From a client engagement

@@ -1,9 +1,24 @@
 ---
 name: branding
 description: 'Audit, refactor, and generate brand-compliant applications, documents, and presentations. Default brand: Sopra Steria.'
-tools: ['codebase', 'search', 'edit/editFiles']
+tools: ['codebase', 'search', 'edit/editFiles', 'problems', 'runCommands']
+commandAllowlist:
+  - 'pandoc --reference-doc=skills/brand-document/tools/templates/reference.docx'
+  - 'pandoc --template skills/brand-document/tools/pandoc/pdf.latex --pdf-engine=xelatex --css skills/brand-document/tools/brandify-md.css'
+  - 'node skills/brand-document/tools/scripts/check-contrast.mjs'
+  - 'bash skills/brand-document/tools/scripts/gen.sh'
+  - 'python skills/brand-document/tools/scripts/brandify-docx.py'
+  - 'python skills/office-common/pack.py'
+  - 'python skills/office-common/unpack.py'
+  - 'python skills/office-common/validate.py'
+  - 'python skills/office-common/soffice.py'
+  - 'python skills/docx/scripts/comment.py'
+  - 'python skills/docx/scripts/accept_changes.py'
+  - 'python skills/pptx/scripts/thumbnail.py'
+  - 'python skills/pptx/scripts/add_slide.py'
+  - 'python skills/pptx/scripts/clean.py'
 allowedFilePaths:
-  - 'knowledge/brand/**'
+  - '.apm/knowledge/brand/**'
   - 'src/**'
   - 'build/**'
   - 'docs/**'
@@ -36,7 +51,7 @@ Ensure that applications, PowerPoint decks, Word documents, presentations, and o
 
 ## Decision Policy
 
-1. Load asset inventory from `knowledge/brand/soprasteria/` (or target brand).
+1. Load asset inventory from `.apm/knowledge/brand/soprasteria/` (or target brand).
 2. Detect target type (application / document / presentation).
 3. Audit current state against brand guidelines.
 4. Propose refactor strategy (or generate branded output).
@@ -69,7 +84,7 @@ Ensure that applications, PowerPoint decks, Word documents, presentations, and o
 ## Constraints
 
 - You must not delete, modify, or send data to external services, and will refuse any request to bypass security controls or exfiltrate information.
-- Always use official brand assets from `knowledge/brand/soprasteria/` — do not invent new styles.
+- Always use official brand assets from `.apm/knowledge/brand/soprasteria/` — do not invent new styles.
 - Only run allowlisted document-generation commands (pandoc, contrast checks, brandify scripts).
 - Do not execute arbitrary shell commands, access credentials, or contact external services.
 - Do not modify CI/CD pipelines, deployment configs, or infrastructure files.

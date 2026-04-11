@@ -12,7 +12,7 @@ version: '2.0.0'
 Validate web applications against WCAG 2.1 AA when applying or auditing branding.
 Brand compliance must never compromise accessibility. When brand rules and accessibility conflict, accessibility wins.
 
-Default contrast values are for Sopra Steria. To override for a different client, provide brand-specific contrast pairs in `knowledge/brand/<client>/`.
+Default contrast values are for Sopra Steria. To override for a different client, provide brand-specific contrast pairs in `.apm/knowledge/brand/<client>/`.
 
 ---
 

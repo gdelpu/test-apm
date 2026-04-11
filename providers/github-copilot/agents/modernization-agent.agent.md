@@ -9,7 +9,7 @@ allowedFilePathsReadOnly:
   - 'docs/**'
   - 'src/**'
   - '.apm/workflows/**'
-  - 'knowledge/**'
+  - '.apm/knowledge/**'
 ---
 
 You are the **Modernization Agent** — you guide controlled modernization initiatives through baseline assessment, target definition, migration planning, and task breakdown.

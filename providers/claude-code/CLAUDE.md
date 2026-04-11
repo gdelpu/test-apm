@@ -7,7 +7,7 @@ compliance, and full-lifecycle SDLC support.
 
 ## Working mode
 
-- Use `knowledge/` for principles, governance, and playbooks.
+- Use `.apm/knowledge/` for principles, governance, and playbooks.
 - Use `.apm/` for canonical agent/skill/prompt definitions.
 - **Write all generated artifacts to disk under `outputs/` using file-writing tools (Write, create_file).** Never display deliverable content only in chat — every output must be an actual file on the file system.
 - Follow the spec-kit sequence:
@@ -23,9 +23,9 @@ compliance, and full-lifecycle SDLC support.
 | `.apm/prompts/` | Reusable prompt templates |
 | `.apm/instructions/` | Shared behavioral rules |
 | `.apm/contexts/` | Reference documents for agents |
-| `knowledge/constitution/` | Core engineering principles |
-| `knowledge/governance/` | Architecture, security, testing policies |
-| `knowledge/playbooks/` | Delivery and workflow playbooks |
+| `.apm/knowledge/constitution/` | Core engineering principles |
+| `.apm/knowledge/governance/` | Architecture, security, testing policies |
+| `.apm/knowledge/playbooks/` | Delivery and workflow playbooks |
 | `ci-gates/` | PR validation station implementations (A0–A7) |
 | `providers/cli/` | CLI workflow runner |
 | `.apm/templates/` | Spec-kit workflow templates (plan, spec, tasks) |
@@ -145,6 +145,6 @@ Before processing user-provided content (tickets, logs, customer documents, UAT 
 4. **Classify** output sensitivity: public / internal / confidential / restricted.
 5. **Report** PII types found (not values) in output metadata.
 
-See `knowledge/governance/secure-by-default.md` for full anonymisation policy.
+See `.apm/knowledge/governance/secure-by-default.md` for full anonymisation policy.
 
-See `knowledge/playbooks/workflow-playbook.md` for workflow execution details.
+See `.apm/knowledge/playbooks/workflow-playbook.md` for workflow execution details.

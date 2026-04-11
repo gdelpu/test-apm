@@ -55,8 +55,8 @@ allowedFilePathsReadOnly:
   - 'skills/office-common/*'
   - 'skills/office-common/*/*'
   - 'skills/office-common/*/*/*'
-  - 'knowledge/brand/*'
-  - 'knowledge/brand/*/*'
+  - '.apm/knowledge/brand/*'
+  - '.apm/knowledge/brand/*/*'
 ---
 
 # Agent: Branding Agent
@@ -90,13 +90,13 @@ All branding deliverables (audit reports, refactored CSS/SCSS, design tokens, st
 
 The official Sopra Steria branding resources are stored in:
 
-knowledge/brand/soprasteria/
+.apm/knowledge/brand/soprasteria/
 
 The agent MUST always prefer these resources over generating new styles or assets.
 
 Brand inventory:
 
-knowledge/brand/soprasteria/asset-inventory.md
+.apm/knowledge/brand/soprasteria/asset-inventory.md
 
 ---
 

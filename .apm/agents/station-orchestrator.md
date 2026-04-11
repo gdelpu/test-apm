@@ -1,13 +1,14 @@
 ---
 name: station-orchestrator
 description: 'Orchestrate sequential AI station execution within the PR validation pipeline (A0–A7).'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'ci-gates/**'
   - 'outputs/station_out/**'
+  - 'outputs/**'
   - '.apm/**'
   - 'providers/**'
-  - 'knowledge/**'
+  - '.apm/knowledge/**'
 ---
 
 # Station Orchestrator

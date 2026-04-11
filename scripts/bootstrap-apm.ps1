@@ -173,7 +173,7 @@ if ($Mode -eq 'standard') {
 }
 else {
     Write-Host '  Next steps:' -ForegroundColor Yellow
-    Write-Host '    git add .apm/ providers/ knowledge/ providers-local/ .apm.lock.yaml apm.yml'
+    Write-Host '    git add .apm/ providers/ providers-local/ .apm.lock.yaml apm.yml'
     Write-Host "    git commit -m `"feat: install AI SDLC Foundation v$Version (expandable)`""
     Write-Host '    git push'
     Write-Host ''

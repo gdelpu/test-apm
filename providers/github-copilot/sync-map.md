@@ -103,13 +103,14 @@ Each has a Claude Code command in `providers/claude-code/commands/` and a Copilo
 | Claude Command | Copilot Prompt (`providers/github-copilot/prompts/`) | Status |
 |----------------|--------------------------------------------------------|--------|
 | `setup-apm.md` | `setup-apm.prompt.md` | synced |
+| `configure-mcp.md` | `configure-mcp.prompt.md` | synced |
 
 ## Instructions
 
 | Canonical concept | Provider (`providers/github-copilot/instructions/`) | `applyTo` |
 |-------------------|------------------------------------------------------|-----------|
 | APM layer rules | `apm-layer.instructions.md` | `.apm/**` |
-| Knowledge base rules | `knowledge-base.instructions.md` | `knowledge/**` |
+| Knowledge base rules | `knowledge-base.instructions.md` | `.apm/knowledge/**` |
 | Workflow conventions | `workflow.instructions.md` | `.apm/workflows/**` |
 | README conventions | `readme.instructions.md` | `README.md` |
 | Corrections | `corrections.instructions.md` | `**` |

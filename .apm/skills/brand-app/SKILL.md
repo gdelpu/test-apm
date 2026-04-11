@@ -1,6 +1,6 @@
 ---
 name: brand-app
-description: 'Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for other client brands via knowledge/brand/<client>/.'
+description: 'Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<client>/.'
 triggers: ['app branding', 'application theming', 'UI branding', 'design tokens', 'theme refactor', 'CSS branding', 'application styling']
 version: '2.0.0'
 ---
@@ -9,7 +9,7 @@ version: '2.0.0'
 
 ## Purpose
 
-Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand values are for Sopra Steria. To override for a different client, provide assets in `knowledge/brand/<client>/` and define client-specific tokens.
+Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand values are for Sopra Steria. To override for a different client, provide assets in `.apm/knowledge/brand/<client>/` and define client-specific tokens.
 
 ## Main Principle
 

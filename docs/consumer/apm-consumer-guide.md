@@ -32,6 +32,7 @@ integrate it into CI/CD pipelines.
   - [Overriding an Upstream Prompt](#overriding-an-upstream-prompt)
   - [Adding a Custom Instruction](#adding-a-custom-instruction)
 - [Re-projection Guide](#re-projection-guide)
+- [MCP Integration](#mcp-integration)
 - [Updating to a New Version](#updating-to-a-new-version)
 - [`.gitignore` Recommendations](#gitignore-recommendations)
 - [CI Integration Template](#ci-integration-template)
@@ -150,10 +151,10 @@ Copilot auto-discovers everything in `.github/`. Open the chat panel and try:
 | Aspect | Standard | Expandable |
 |--------|----------|------------|
 | **Use case** | Just want AI capabilities in your project | Need to customize agent behaviors, add local prompts, or contribute changes back |
-| **What's installed** | Self-contained runtime directory (`.github/`) + lock file | Full source tree (`.apm/`, `providers/`, `knowledge/`) plus an overlay system (`providers-local/`) |
+| **What's installed** | Self-contained runtime directory (`.github/`) + lock file | Full source tree (`.apm/`, `providers/`) plus an overlay system (`providers-local/`) |
 | **Customization** | None — use the agents and prompts as-is | Full — add, override, or extend any agent, prompt, or instruction via `providers-local/` |
 | **Update story** | Replace runtime dir, commit new `.github/` | Replace upstream source, preserve `providers-local/`, re-project |
-| **What to commit** | `.github/` and `.apm.lock.yaml` | Source dirs (`.apm/`, `providers/`, `knowledge/`, `providers-local/`) and `.apm.lock.yaml` — **not** `.github/` (generated) |
+| **What to commit** | `.github/` and `.apm.lock.yaml` | Source dirs (`.apm/`, `providers/`, `providers-local/`) and `.apm.lock.yaml` — **not** `.github/` (generated) |
 
 > **Rule of thumb:** If you don't know yet, start with **Standard**. You can
 > switch to Expandable later by re-running the installer with `--mode expandable`.
@@ -247,7 +248,7 @@ Same as Standard — see above.
   -Token $env:GITLAB_TOKEN
 ```
 
-The installer extracts the full source tree (`.apm/`, `providers/`, `knowledge/`),
+The installer extracts the full source tree (`.apm/`, `providers/`),
 scaffolds `providers-local/` for your customizations, runs projection to
 generate `.github/`, and writes `.apm.lock.yaml`.
 
@@ -258,7 +259,7 @@ The `.gitignore` already excludes the generated `.github/agents/`,
 else:
 
 ```bash
-git add .apm/ providers/ knowledge/ providers-local/ scripts/ .apm.lock.yaml apm.yml
+git add .apm/ providers/ providers-local/ scripts/ .apm.lock.yaml apm.yml
 git commit -m "feat: install AI SDLC Foundation v1.2.0 (expandable)"
 ```
 
@@ -416,12 +417,59 @@ To change the behavior of an existing upstream prompt (e.g., `workflow-feature`)
 | Flag | Effect |
 |------|--------|
 | `--clean` / `-Clean` | Removes `.github/agents/`, `.github/prompts/`, `.github/instructions/` before copying — ensures deleted upstream files are cleaned up |
-| `--full` / `-Full` | Also copies canonical content (`.apm/skills/`, `.apm/workflows/`, `knowledge/`) into the runtime and rewrites path references in Markdown files |
+| `--full` / `-Full` | Also copies canonical content (`.apm/skills/`, `.apm/workflows/`, `.apm/knowledge/`) into the runtime and rewrites path references in Markdown files |
 | `--provider` / `-Provider` | Selects the provider adapter from `apm.yml` (default: `github-copilot`) |
 
 > **Standard mode consumers** should use `--full` to get a complete runtime.
 > **Expandable mode consumers** typically use the default (no `--full`) since
 > they already have the canonical directories in their tree.
+
+---
+
+## MCP Integration
+
+The AI SDLC Foundation supports 13 curated **MCP (Model Context Protocol)** servers that provide optional enrichments to agents and workflows: live cloud resource queries, current library documentation, browser automation, Jira/Confluence sync, and more.
+
+**All MCP servers are optional** — every workflow runs without any MCP configured.
+
+### Quick setup
+
+Use the Hub Orchestrator for guided configuration:
+
+```
+@hub-orchestrator configure MCP
+```
+
+This auto-detects your platform, recommends a profile, and generates `.vscode/mcp.json`.
+
+### Manual setup
+
+Add servers to `.vscode/mcp.json` (or `.claude/mcp.json` for Claude Code). See the [MCP Setup Guide](mcp-setup-guide.md) for per-server configuration snippets.
+
+### Curated profiles
+
+| Profile | Servers | Best for |
+|---------|---------|----------|
+| `github-stack` | GitHub, Context7, Playwright, SemGrep | GitHub-native projects |
+| `gitlab-stack` | GitLab, Context7, Playwright, SemGrep, Atlassian | GitLab CI/CD with Atlassian PM |
+| `azure-devops-stack` | Azure, ADO, MsLearn, Context7, Work-iq, Playwright | Microsoft-centric stacks |
+| `full` | All 13 servers | Maximum capability |
+
+### Client-specific overrides
+
+In expandable mode, create `clients/<name>/mcp-overrides.yaml` to customise MCP configuration per client:
+
+```yaml
+overrides:
+  atlassian-mcp:
+    install:
+      env:
+        ATLASSIAN_SITE: acme.atlassian.net
+```
+
+Overrides are merged on top of profile defaults during configuration generation.
+
+> **Full reference**: [MCP Setup Guide](mcp-setup-guide.md) — per-server setup, fallback behavior, version management, security, troubleshooting.
 
 ---
 
@@ -474,7 +522,7 @@ are never overwritten:
 $env:GITLAB_TOKEN = "glpat-xxxxxxxxxxxxxxxxxxxx"
 .\bootstrap-apm.ps1 -Version 0.0.2 -Mode expandable
 
-git add .apm/ providers/ knowledge/ .apm.lock.yaml
+git add .apm/ providers/ .apm.lock.yaml
 git commit -m "chore: update AI SDLC Foundation to v0.0.2 (expandable)"
 git push
 ```
@@ -599,6 +647,8 @@ target.
 ---
 
 ## Troubleshooting
+
+> **MCP troubleshooting**: See the [MCP Setup Guide](mcp-setup-guide.md#troubleshooting) for MCP-specific issues.
 
 ### "Projection script not found"
 

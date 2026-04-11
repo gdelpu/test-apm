@@ -51,10 +51,10 @@ Guide controlled modernization initiatives through baseline assessment, target d
 
 ## Reference material
 
-- `knowledge/constitution/brownfield.md`
-- `knowledge/constitution/enterprise-defaults.md`
-- `knowledge/governance/architecture-principles.md`
-- `knowledge/playbooks/modernization-playbook.md`
+- `.apm/knowledge/constitution/brownfield.md`
+- `.apm/knowledge/constitution/enterprise-defaults.md`
+- `.apm/knowledge/governance/architecture-principles.md`
+- `.apm/knowledge/playbooks/modernization-playbook.md`
 
 ## Guardrails
 

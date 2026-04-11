@@ -9,7 +9,7 @@ version: '2.0.0'
 
 ## Purpose
 
-Adapt PowerPoint, Word, PDF, proposal, dossier, memo, brochure, and similar assets to a target brand identity. Also generates branded DOCX and PDF outputs from Markdown via Pandoc. Default brand values are for Sopra Steria. To override for a different client, provide assets in `knowledge/brand/<client>/`.
+Adapt PowerPoint, Word, PDF, proposal, dossier, memo, brochure, and similar assets to a target brand identity. Also generates branded DOCX and PDF outputs from Markdown via Pandoc. Default brand values are for Sopra Steria. To override for a different client, provide assets in `.apm/knowledge/brand/<client>/`.
 
 ## Priority Order
 

@@ -9,7 +9,7 @@ allowedFilePaths:
   - 'test/**'
   - '.apm/**'
   - 'providers/**'
-  - 'knowledge/**'
+  - '.apm/knowledge/**'
   - 'specs/**'
   - 'docs/**'
   - 'ci-gates/**'

@@ -187,7 +187,7 @@ if [[ "$FULL" == true ]]; then
     ["workflows"]=".apm/workflows"
     ["contexts"]=".apm/contexts"
     ["templates"]=".apm/templates"
-    ["knowledge"]="knowledge"
+    ["knowledge"]=".apm/knowledge"
   )
 
   for type in "${!CANONICAL_DIRS[@]}"; do
@@ -223,7 +223,7 @@ if [[ "$FULL" == true ]]; then
     ".apm/prompts/|${RUNTIME_REL}/prompts/"
     ".apm/agents/|${RUNTIME_REL}/agents/"
     ".apm/instructions/|${RUNTIME_REL}/instructions/"
-    "knowledge/|${RUNTIME_REL}/knowledge/"
+    ".apm/knowledge/|${RUNTIME_REL}/knowledge/"
   )
 
   # Provider-specific rewrite

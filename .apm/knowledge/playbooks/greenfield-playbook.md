@@ -12,7 +12,7 @@ Step-by-step guide for new feature or project delivery.
 ### 1. Establish constitution
 
 Define quality, security, testing, and performance standards.
-Reference `knowledge/constitution/enterprise-defaults.md` for baseline.
+Reference `.apm/knowledge/constitution/enterprise-defaults.md` for baseline.
 
 ### 2. Write specification
 
@@ -28,9 +28,9 @@ Reference `knowledge/constitution/enterprise-defaults.md` for baseline.
 
 ### 4. Architecture review
 
-- Review against `knowledge/governance/architecture-principles.md`.
-- Check security posture against `knowledge/governance/secure-by-default.md`.
-- Verify testing approach against `knowledge/governance/testing-policy.md`.
+- Review against `.apm/knowledge/governance/architecture-principles.md`.
+- Check security posture against `.apm/knowledge/governance/secure-by-default.md`.
+- Verify testing approach against `.apm/knowledge/governance/testing-policy.md`.
 
 ### 5. Implementation plan
 

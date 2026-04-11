@@ -1,9 +1,15 @@
 ---
 name: security-reviewer
 description: 'Review AI artifacts for prompt injection, data exfiltration, and LLM security risks.'
-tools: ['codebase', 'search', 'edit/editFiles']
+tools: ['codebase', 'search', 'edit/editFiles', 'problems']
 allowedFilePaths:
   - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - '.apm/**'
+  - 'providers/**'
+  - '.apm/knowledge/**'
 ---
 
 # Security Reviewer
