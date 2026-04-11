@@ -61,7 +61,7 @@ Match the user message against catalog entries:
 | "sprint", "governance", "COPIL", "steering" | `sdlc-steer` workflow | SDLC harness |
 | "analyze repo", "codebase overview", "understand code" | `repository-analyzer` agent | analysis |
 | "backlog from code", "reverse engineer" | `reverse-backlog-generator` agent | analysis |
-| "brand", "Sopra Steria style", "branding" | `brand-styler` or `ssg-branding-agent` agent | branding |
+| "brand", "Sopra Steria style", "branding" | `branding` agent | branding |
 | "security review", "prompt injection", "LLM security" | `security-reviewer` agent | security |
 | "BMAD", "hypothesis", "measure" | `bmad` workflow | delivery |
 | "tasks from spec", "plan to tasks" | `spec-to-execution` workflow | specification |

@@ -15,13 +15,12 @@ the corresponding provider file must be created or updated.
 
 | Canonical (`.apm/agents/`) | Provider (`providers/github-copilot/agents/`) | Status |
 |-----------------------------|------------------------------------------------|--------|
-| `brand-styler.md` | `brand-styler.agent.md` | synced |
+| `branding.md` | `branding.agent.md` | synced |
 | `hub-orchestrator.md` | `hub-orchestrator.agent.md` | synced |
 | `repository-analyzer.md` | `repository-analyzer.agent.md` | synced |
 | `reverse-backlog.md` | `reverse-backlog.agent.md` | synced |
 | `reverse-user-story.md` | `reverse-user-story.agent.md` | synced |
 | `security-reviewer.md` | `security-reviewer.agent.md` | synced |
-| `soprasteria-branding.md` | `soprasteria-branding.agent.md` | synced |
 | `refactor-orchestrator.md` | `refactor-orchestrator.agent.md` | synced |
 | `refactor-assessor.md` | `refactor-assessor.agent.md` | synced |
 | `refactor-planner.md` | `refactor-planner.agent.md` | synced |

@@ -12,4 +12,4 @@ Create a concise one‑pager in Markdown that:
 - Meets AA contrast: avoid low‑contrast pairings; do not rely on color alone.
 - Keeps the layout airy (white background, minimal saturated blocks).
 
-Save as `skills/brand-styler/docs/<slug>.md`.
+Save as `docs/<slug>.md`. Use the `brand-document` skill for DOCX/PDF conversion if needed.

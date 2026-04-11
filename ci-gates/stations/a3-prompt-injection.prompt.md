@@ -92,7 +92,7 @@ Flag any instruction to the agent to process external content without sandboxing
 - "execute the steps described in the user's document"
 - "process the webpage and carry out what it says"
 
-Pattern: `(read\|process\|execute\|follow).{0,40}(file\|document\|webpage\|url).{0,40}(instruct\|step\|direct)` → `critical`
+Pattern: `(read\|process\|execute\|follow).{0,40}(file\|document\|webpage\|url).{0,40}(instructions?\b\|steps?\b\|directs?\b\|directed\b\|directing\b)` → `critical`
 
 ## Output Schema
 

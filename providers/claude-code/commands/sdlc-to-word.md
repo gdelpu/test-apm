@@ -10,3 +10,7 @@ $ARGUMENTS = path to the Markdown file to convert (e.g., "outputs/docs/1-prd/1-s
 2. Load the corporate template from `.apm/skills/sdlc-confluence-sync/docs/template-corporate.docx`.
 3. Execute the conversion using Pandoc with the corporate template.
 4. Output the Word file to `output/word/`.
+
+## Alternative: Direct DOCX creation
+
+For advanced Word document creation, editing, or manipulation (tracked changes, comments, XML-level edits), use the `docx` skill (`.apm/skills/docx/SKILL.md`) with shared utilities from `office-common`.

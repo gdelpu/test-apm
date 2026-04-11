@@ -29,7 +29,8 @@ A shared collection of AI agents, prompts, skills, workflows, instructions, and 
 - [Architecture](#architecture)
 - [Repository Layout](#repository-layout)
 - [Agents (23)](#agents-23)
-- [Skills (89)](#skills-89)
+  - [Spotlight: Branding Agent](#spotlight-branding-agent)
+- [Skills (94)](#skills-94)
 - [Workflows (19)](#workflows-19)
   - [Delivery Workflows](#delivery-workflows)
     - [feature-implementation](#feature-implementation-10-stations)
@@ -149,7 +150,7 @@ Agents are provider-agnostic definitions that pair with one or more skills to pe
 | `analysis-agent` | Diagnose production incidents by reconstructing timelines, analyzing logs/traces, identifying affected services, and forming root-cause hypotheses | `incident-analysis`, `root-cause-analysis`, `repo-analysis`, `bug-reproduction` |
 | `architecture-governance` | Review specifications and plans against architecture principles, NFRs, and delivery guardrails | — |
 | `bmad-orchestrator` | Drive the BMAD (Build → Measure → Analyze → Decide) feedback loop with evaluation scoring and adaptive decision-making | `iteration-scoring`, `drift-detection`, `adaptive-decision` |
-| `brand-styler` | Generate and convert documents to Sopra Steria brand spec with AA accessibility compliance | `brand-styler`, `soprasteria-brand-core`, `soprasteria-assets-and-templates` |
+| `branding` | Audit, refactor, and generate brand-compliant applications, documents, and presentations. Default brand: Sopra Steria | `brand-core`, `brand-assets`, `brand-app`, `brand-document`, `brand-accessibility`, `brand-audit`, `docx`, `pptx`, `pdf`, `office-common` |
 | `bug-fixer` | Drive structured bug diagnosis and resolution from triage through root-cause analysis, fix planning, and regression testing | `bug-triage`, `bug-reproduction`, `root-cause-analysis`, `fix-planning` |
 | `hub-orchestrator` | Central triage agent — discovers available workflows and agents, classifies user intent, and dispatches execution | `hub-classification` |
 | `implementer` | Execute implementation tasks by reading task breakdowns and producing/modifying code following constitution and plan constraints | `code-implementation` |
@@ -161,7 +162,6 @@ Agents are provider-agnostic definitions that pair with one or more skills to pe
 | `reverse-backlog` | Analyze legacy code repositories and create a consolidated, business-focused product backlog | `repo-analysis` |
 | `reverse-user-story` | Create detailed user stories with acceptance criteria from existing codebases | `repo-analysis` |
 | `security-reviewer` | Review prompts, agents, instructions, and code for prompt injection, data exfiltration, privilege escalation (OWASP Top 10 LLMs) | `soprasteria-agent-policy-guard`, `injection-detection`, `secret-scan` |
-| `soprasteria-branding` | Assess, adapt, and refactor applications, documents, and presentations for Sopra Steria brand compliance | `soprasteria-brand-core`, `soprasteria-brand-assets`, `soprasteria-app-branding`, `soprasteria-document-branding`, `soprasteria-web-accessibility`, `soprasteria-audit-checklist` |
 | `spec-orchestrator` | Lead structured, specification-driven flows for software changes and new initiatives | `brownfield-context`, `spec-constitution`, `spec-feature`, `spec-clarify`, `spec-plan`, `spec-tasks`, `spec-quality-gate`, `adr-generation`, `test-strategy`, `nfr-review`, `architecture-guardrails` |
 | `workflow-orchestrator` | Execute workflow definitions by driving stations sequentially, evaluating quality gates, and managing workflow state | `workflow-engine` |
 | `sdlc-coordinator` | Orchestrate the full SDLC lifecycle — DAG resolution, wave scheduling, fan-out/fan-in, gate management across BA/Tech/Steer/Test domains | All `sdlc-*` skills |
@@ -170,11 +170,19 @@ Agents are provider-agnostic definitions that pair with one or more skills to pe
 | `sdlc-steer-manager` | Steering and project management across initialization, planning, sprint tracking, and governance | `sdlc-steer-init`, `sdlc-steer-planning`, `sdlc-steer-sprint`, `sdlc-steer-governance` |
 | `sdlc-test-executor` | Test execution for E2E/UAT campaigns and performance testing | `sdlc-test-campaign`, `sdlc-test-performance` |
 
+### Spotlight: Branding Agent
+
+The **`branding`** agent is designed for standalone use in any project — no workflow required. Point it at an application, document, or presentation and it will audit brand compliance, refactor styling, generate design tokens, or convert Markdown into branded DOCX/PDF files. It ships with full Office document manipulation capabilities: create and edit Word documents (tracked changes, comments), build PowerPoint decks from scratch or from templates, process PDFs (merge, split, fill forms), and validate OOXML output — all via the `docx`, `pptx`, `pdf`, and `office-common` skills.
+
+**Default brand: Sopra Steria.** Out of the box the agent loads the official Sopra Steria visual identity — colours, typography, logo rules, PowerPoint/Word templates, and WCAG 2.1 AA contrast matrix — from `knowledge/brand/soprasteria/`. The brand is extensible: add a `knowledge/brand/<client>/` directory with client-specific assets and the agent adapts automatically.
+
+> **Quick start**: `@branding audit this application for brand compliance` or `@branding convert docs/spec.md to a branded Word document`.
+
 Canonical definitions: `.apm/agents/`. Copilot runtime projection: `.github/agents/` (7 user-facing agents).
 
 ---
 
-## Skills (89)
+## Skills (94)
 
 Skills are reusable knowledge and tool packages. Each skill has a `SKILL.md` manifest + optional `tools/` and `docs/` directories.
 
@@ -275,15 +283,18 @@ Skills are reusable knowledge and tool packages. Each skill has a `SKILL.md` man
 
 | Skill | Description |
 |-------|-------------|
-| `brand-styler` | Pandoc-based DOCX/PDF generation with brand compliance |
+| `brand-core` | Core brand guidelines, colour/typography rules (default: Sopra Steria) |
+| `brand-assets` | Brand asset discovery, inventory, and template management |
+| `brand-app` | Application branding audit and refactoring |
+| `brand-document` | Document branding and Pandoc-based DOCX/PDF generation |
+| `brand-accessibility` | WCAG 2.1 AA validation for web applications |
+| `brand-audit` | Compliance audit checklists |
+| `docx` | Word document creation (docx-js), editing (XML unpack/repack), tracked changes, comments |
+| `pptx` | PowerPoint creation (pptxgenjs), editing (XML unpack/repack), thumbnailing |
+| `pdf` | PDF reading, merging, splitting, form filling, creation |
+| `xlsx` | Excel creation (openpyxl), formulas, recalculation via LibreOffice |
+| `office-common` | Shared OOXML pack/unpack/validate/convert utilities for docx/pptx/xlsx |
 | `soprasteria-agent-policy-guard` | Shift-left policy enforcement (A1–A6 rules) |
-| `soprasteria-app-branding` | Application branding audit and refactoring |
-| `soprasteria-assets-and-templates` | Brand asset and template management |
-| `soprasteria-audit-checklist` | Compliance audit checklists |
-| `soprasteria-brand-assets` | Brand asset library |
-| `soprasteria-brand-core` | Core brand guidelines and colour/typography rules |
-| `soprasteria-document-branding` | Document branding refactoring |
-| `soprasteria-web-accessibility` | WCAG 2.1 AA validation |
 
 ### SDLC Harness Skills
 
@@ -1175,7 +1186,7 @@ When modifying this repository, update all affected sections:
 
 ### Naming conventions
 
-- **lowercase, hyphens**: `code-review.agent.md`, `brand-styler/SKILL.md`
+- **lowercase, hyphens**: `code-review.agent.md`, `brand-core/SKILL.md`
 - YAML frontmatter required: `name`, `description` (single-quoted)
 - Copilot instructions need `applyTo` in frontmatter
 

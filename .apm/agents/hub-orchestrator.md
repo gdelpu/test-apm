@@ -96,7 +96,7 @@ For `sdlc-ba`, `sdlc-tech`, `sdlc-steer`, `sdlc-full`: delegate to
 
 ### Standalone agents
 
-For agents not tied to a workflow (e.g., `repository-analyzer`, `brand-styler`,
+For agents not tied to a workflow (e.g., `repository-analyzer`, `branding`,
 `security-reviewer`, `reverse-backlog-generator`): invoke the agent directly.
 
 ### Resume

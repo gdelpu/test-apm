@@ -14,4 +14,4 @@ Create a concise one-pager in Markdown following Sopra Steria brand guidelines.
 
 ## Output
 
-Save as `docs/<slug>.md`.
+Save as `docs/<slug>.md`. Use the `brand-document` skill for DOCX/PDF conversion if needed.

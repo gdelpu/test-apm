@@ -36,7 +36,7 @@ guardrails. The body is the system prompt Copilot uses when the agent is active.
 argument-injection prevention, content sanitisation, and processing-limit
 sections in its body.
 
-**Example**: `providers/github-copilot/agents/brand-styler.agent.md`
+**Example**: `providers/github-copilot/agents/branding.agent.md`
 
 ---
 
@@ -95,7 +95,7 @@ repository layout, working rules, and workflow catalog. No frontmatter needed.
 
 | Type | Pattern | Example |
 |------|---------|---------|
-| Agent | `<kebab-case>.agent.md` | `brand-styler.agent.md` |
+| Agent | `<kebab-case>.agent.md` | `branding.agent.md` |
 | Prompt | `<kebab-case>.prompt.md` | `create-one-pager.prompt.md` |
 | Workflow prompt | `workflow-<name>.prompt.md` | `workflow-feature.prompt.md` |
 | Instruction | `<domain>.instructions.md` | `apm-layer.instructions.md` |

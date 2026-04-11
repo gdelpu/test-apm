@@ -50,7 +50,8 @@ PI05_PATTERNS: list[tuple[str, str, str]] = [
 ]
 
 # ── PI-06: Indirect injection vectors ────────────────────────────────────
-PI06_PATTERN = r"(read|process|execute|follow).{0,40}(file|document|webpage|url).{0,40}(instruct|step|direct)"
+# Matches "read file ... instructions" but NOT "directories", "directives", "directly".
+PI06_PATTERN = r"(read|process|execute|follow).{0,40}(file|document|webpage|url).{0,40}(instructions?\b|steps?\b|directs?\b|directed\b|directing\b)"
 
 
 def is_in_safe_codeblock(text: str, match_start: int) -> bool:
