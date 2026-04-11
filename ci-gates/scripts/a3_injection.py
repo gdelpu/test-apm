@@ -113,6 +113,47 @@ def scan_pi02(path: str, text: str, ftype: str) -> list[dict]:
     }]
 
 
+# ── PI-02b: Out of Scope contradiction detection ────────────────────────
+# Blanket Out-of-Scope phrases that contradict declared tools cause the LLM
+# to refuse legitimate tool invocations (file writes, MCP, commands).
+_OOS_CONTRADICTIONS: list[tuple[str, str, str]] = [
+    (r"(?:file\s+writes|code\s+modification)(?!\s+outside)", "edit/editFiles",
+     "Out of Scope blanket-blocks file writes but agent declares edit/editFiles tool"),
+    (r"running\s+commands|executing\s+(?:scripts|commands)", "runCommands",
+     "Out of Scope blanket-blocks running commands but agent declares runCommands tool"),
+    (r"accessing\s+external\s+APIs|network\s+resources", "fetch",
+     "Out of Scope blanket-blocks external API access but agent declares fetch tool"),
+]
+
+
+def scan_pi02b(path: str, text: str, fm: dict, ftype: str) -> list[dict]:
+    """PI-02b: Out of Scope entries must not contradict declared tools."""
+    if ftype != "agent":
+        return []
+    tools = fm.get("tools", [])
+    if not isinstance(tools, list):
+        return []
+
+    # Find the Out of Scope section (if any)
+    oos_match = re.search(r"(?:^|\n)#+\s*out\s+of\s+scope\b(.*?)(?=\n#|\Z)", text, re.IGNORECASE | re.DOTALL)
+    if not oos_match:
+        return []
+
+    oos_text = oos_match.group(1)
+    findings = []
+    for pattern, tool, message in _OOS_CONTRADICTIONS:
+        if tool in tools and re.search(pattern, oos_text, re.IGNORECASE):
+            findings.append({
+                "check": "PI-02b",
+                "severity": "high",
+                "file": path,
+                "line": None,
+                "match": None,
+                "message": message,
+            })
+    return findings
+
+
 def scan_pi03(path: str, fm: dict, ftype: str) -> list[dict]:
     """PI-03: Data access boundary declarations for skills with file tools."""
     if ftype != "skill":
@@ -330,6 +371,7 @@ def main() -> None:
 
         findings.extend(scan_pi01(fpath, text))
         findings.extend(scan_pi02(fpath, text, ftype))
+        findings.extend(scan_pi02b(fpath, text, fm, ftype))
         findings.extend(scan_pi03(fpath, fm, ftype))
         findings.extend(scan_pi04(fpath, fm, ftype))
         findings.extend(scan_pi05(fpath, text))
