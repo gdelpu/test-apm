@@ -45,8 +45,4 @@ All deliverables **must be written to disk** as actual files using the `edit/edi
 | Max files scanned per-session | 200 |
 | Max iterations per task | 10 |
 
-## Out of Scope
-
-- Accessing external APIs or network resources
-
 Follow all guardrails defined in the canonical agent file.

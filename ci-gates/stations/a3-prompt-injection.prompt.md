@@ -65,6 +65,27 @@ Every `*.agent.md` body MUST include at least one sentence describing what the a
 - "refuse" + (request\|instruction\|attempt)
 - Any explicit "out of scope" section
 
+### PI-02b · Out of Scope must not contradict declared tools
+
+If an agent body contains an "Out of Scope" section, its entries **must not** blanket-block
+capabilities that the agent's own `tools` frontmatter declares. Contradictions cause the LLM
+to refuse legitimate tool invocations, effectively downgrading the agent to read-only or
+preventing MCP tool usage.
+
+Flag as `high` if the Out of Scope section contains:
+
+| Out of Scope phrase (case-insensitive) | Contradicts tool | Severity |
+|----------------------------------------|------------------|----------|
+| `file writes` or `code modification` (without path qualifier) | `edit/editFiles` | `high` |
+| `running commands` or `executing scripts` (blanket) | `runCommands` | `high` |
+| `accessing external APIs` or `network resources` (blanket) | `fetch` | `high` |
+
+**Acceptable alternatives** (specific, not blanket):
+- "Do not modify CI/CD pipelines or infrastructure files" ← specific path restriction, OK
+- "Do not access credentials or secret stores" ← specific data restriction, OK
+- "Network access restricted to localhost only" ← scoped restriction, OK
+- "Commands restricted to the allowlist only" ← specific, OK
+
 ### PI-03 · Data access boundary declarations
 
 Skill `SKILL.md` files that declare `tools` referencing file operations

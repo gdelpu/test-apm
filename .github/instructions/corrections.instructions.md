@@ -30,3 +30,23 @@ Three interacting causes:
 - `allowedFilePathsReadOnly` is for ADDITIONAL read-access paths — it must never be the ONLY path restriction on agents that need to write.
 - Never add "Direct code modification or file writes" to Out of Scope for agents that produce deliverables.
 - Consumer-facing agents should include `src/**`, `tests/**`, `docs/**`, `specs/**`, `outputs/**` in `allowedFilePaths` unless there's a specific security reason to restrict.
+
+## C-02 · Overly broad Out of Scope hardening (2026-04-12)
+
+**Problem**: CI-gate stations (A3/PI-02, A5) encouraged agents to add "Out of Scope" sections to pass security checks, but the sections contained blanket restrictions that contradicted the agents' declared tools:
+- "Running commands or scripts" — blocks `runCommands` and MCP tool execution
+- "Accessing external APIs or network resources" — blocks `fetch` and MCP tool access
+- "Direct code modification or file writes" — blocks `edit/editFiles` (already caught by C-01)
+
+Five provider agent files (`workflow-orchestrator`, `spec-orchestrator`, `sdlc-tech-architect`, `sdlc-steer-manager`, `sdlc-coordinator`) had these entries despite their canonical `.apm/agents/` versions having none. Six more (`analysis-agent`, `bmad-orchestrator`, `architecture-governance`, `sdlc-ba-analyst`, `modernization-agent`, `modernization-orchestrator`) had the same pattern. The canonical agents use specific **Security Constraints** sections instead.
+
+**Fix applied**:
+- Removed blanket "Out of Scope" entries from 11 provider agent files.
+- Added **PI-02b** to `a3-prompt-injection.prompt.md` and `a3_injection.py`: flags `high` when Out of Scope entries contradict the agent's frontmatter `tools` declarations.
+- Updated **A5** sandbox simulation to clarify that agents using declared tools for their intended purpose (writing deliverables, running allowlisted commands) is expected behavior, not a vulnerability.
+
+**Rule for agents**: When adding security constraints to agent definitions:
+- Use **specific** constraints: "Do not modify CI/CD pipelines", "Do not access credentials", "Commands restricted to the allowlist only".
+- **Never** use blanket phrases: "Running commands or scripts", "Accessing external APIs or network resources", "Direct code modification or file writes".
+- Blanket Out of Scope entries that contradict declared `tools` will be flagged by PI-02b as `high` severity.
+- The canonical `.apm/agents/` definitions are the source of truth — provider adapter files must not add restrictions beyond those in the canonical layer.

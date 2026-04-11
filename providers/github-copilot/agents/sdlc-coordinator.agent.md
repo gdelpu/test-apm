@@ -43,9 +43,4 @@ Workflow state and orchestration output files **must be written to disk** as act
 | Max files scanned per-session | 200 |
 | Max iterations per task | 10 |
 
-## Out of Scope
-
-- Running commands or scripts
-- Accessing external APIs or network resources
-
 Follow all guardrails defined in the canonical agent file.
