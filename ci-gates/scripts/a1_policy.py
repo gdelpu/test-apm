@@ -153,6 +153,41 @@ def validate_agent(path: str, fm: dict, body: str) -> list[dict]:
             "message": f"Description is {len(desc)} characters — consider expanding (minimum 20)",
         })
 
+    # P-07: File-write capability — agents must retain edit/editFiles and
+    # have allowedFilePaths (not just allowedFilePathsReadOnly).
+    # This prevents MRs from silently downgrading agents to read-only,
+    # ensuring consumers always receive agents that can write deliverables.
+    read_only_opt_out = fm.get("readOnly") in (True, "true", "True")
+    if not read_only_opt_out:
+        # P-07a: All agents must have edit/editFiles unless explicitly readOnly
+        if "edit/editFiles" not in tools:
+            findings.append({
+                "rule": "P-07",
+                "severity": "high",
+                "file": path,
+                "message": "Agent is missing edit/editFiles in tools — all agents must be able to write deliverables (add readOnly: true to frontmatter if this agent is intentionally read-only)",
+            })
+
+    if "edit/editFiles" in tools:
+        afp = fm.get("allowedFilePaths")
+        afp_ro = fm.get("allowedFilePathsReadOnly")
+        # P-07b: allowedFilePathsReadOnly without allowedFilePaths = effectively read-only
+        if afp_ro and not afp:
+            findings.append({
+                "rule": "P-07",
+                "severity": "high",
+                "file": path,
+                "message": "Agent has edit/editFiles tool but only allowedFilePathsReadOnly — add allowedFilePaths with writable directories",
+            })
+        # P-07c: allowedFilePaths must be a non-empty list when present
+        if afp is not None and (not isinstance(afp, list) or len(afp) == 0):
+            findings.append({
+                "rule": "P-07",
+                "severity": "high",
+                "file": path,
+                "message": "allowedFilePaths is declared but empty — add at least one writable path pattern",
+            })
+
     return findings
 
 

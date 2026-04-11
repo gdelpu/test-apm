@@ -5,6 +5,7 @@ tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
   - 'specs/**'
+  - 'docs/**'
 ---
 
 # Spec Orchestrator

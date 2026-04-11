@@ -4,8 +4,12 @@ description: 'Orchestrate station-based workflow pipelines by delegating work to
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
   - '.apm/workflows/**'
-  - 'outputs/station_out/**'
 default_sub_agent_posture: deny-all
 ---
 

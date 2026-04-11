@@ -4,7 +4,11 @@ description: 'Central triage agent — discovers available workflows and agents,
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
   - 'docs/**'
+  - 'specs/**'
 ---
 
 # Hub Orchestrator
@@ -84,9 +88,19 @@ Support these informational requests without dispatching:
   describe both and highlight when to use each
 - "What workflows are available for quality?" → filter by type
 
-## Dispatch protocol
+## Dispatch protocol — MUST use handoff buttons
 
-After the user confirms, dispatch immediately:
+After classifying intent and confirming with the user, **always present the matching handoff button** from the provider's `handoffs:` frontmatter section. Do **NOT** construct your own dispatch prompt — the handoff buttons contain the exact, tested dispatch prompts with correct paths (`.apm/workflows/`, `outputs/`) and full instructions (brownfield/greenfield detection, etc.).
+
+**Anti-pattern (NEVER do this):** Generating a message like `Read .github/workflows/sdlc-ba.yml and execute the full BA pipeline. Write all artifacts to docs/. Project:` — this is a hallucinated, truncated version that uses wrong paths and drops critical instructions.
+
+### Execution fallback
+
+When a handoff button is not clicked or the target agent is unavailable, execute the station work directly:
+
+1. Read the workflow YAML (always under `.apm/workflows/`, never `.github/workflows/`) and follow each station's skill instructions.
+2. Use `edit/editFiles` to write all deliverables to disk under `outputs/` (not `docs/`).
+3. Never display deliverable content only in chat — every output must be an actual file.
 
 ### Workflows
 

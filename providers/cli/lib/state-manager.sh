@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-# State manager — reads and writes workflow state files
+# State manager — DEPRECATED: use Python state tracker instead.
+#
+# This file is kept for backward compatibility during migration.
+# New code should call the canonical Python tracker:
+#
+#   cd .apm/hooks && python -m engine --state init   ...
+#   cd .apm/hooks && python -m engine --state update ...
+#   cd .apm/hooks && python -m engine --state query  ...
+#   cd .apm/hooks && python -m engine --state resume ...
+#
+# See .apm/hooks/engine/state_tracker.py for the canonical implementation.
 
 # Initialize workflow state file.
 # Usage: init_state <state_file> <workflow> <feature> <stations_array_name>

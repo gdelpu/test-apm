@@ -4,6 +4,13 @@ description: 'Guide modernization initiatives through baseline assessment and mi
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
+  - 'package.json'
+  - '*.config.*'
 ---
 
 # Modernization Agent

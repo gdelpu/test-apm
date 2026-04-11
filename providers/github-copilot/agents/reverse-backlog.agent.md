@@ -3,7 +3,7 @@ name: Reverse Backlog Generator
 description: 'This agent generates a product backlog based on the analysis of a code repository that can be used to rebuild the application.'
 tools: [vscode, codebase, search, edit/editFiles]
 target: vscode
-allowedFilePaths: ['docs/generated/*']
+allowedFilePaths: ['outputs/**', 'docs/**', 'docs/generated/*']
 
 handoffs:
   - label: Complete user story

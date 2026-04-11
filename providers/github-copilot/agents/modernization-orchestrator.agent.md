@@ -4,9 +4,12 @@ description: 'Coordinate modernization sub-agents for assessment, planning, and 
 tools: [codebase, search, edit/editFiles]
 allowedFilePaths:
   - 'outputs/**'
-allowedFilePathsReadOnly:
-  - 'specs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
   - 'docs/**'
+  - 'specs/**'
+allowedFilePathsReadOnly:
   - '.apm/workflows/**'
   - '.apm/knowledge/**'
 ---
@@ -42,7 +45,6 @@ All deliverables **must be written to disk** as actual files using the `edit/edi
 
 ## Out of Scope
 
-- Direct source-code modification outside `outputs/`
 - Running commands or scripts
 - Accessing external APIs or network resources
 
