@@ -428,7 +428,7 @@ To change the behavior of an existing upstream prompt (e.g., `workflow-feature`)
 
 ## MCP Integration
 
-The AI SDLC Foundation supports 13 curated **MCP (Model Context Protocol)** servers that provide optional enrichments to agents and workflows: live cloud resource queries, current library documentation, browser automation, Jira/Confluence sync, and more.
+The AI SDLC Foundation supports 14 curated **MCP (Model Context Protocol)** servers that provide optional enrichments to agents and workflows: live cloud resource queries, current library documentation, browser automation, Jira/Confluence sync, and more.
 
 **All MCP servers are optional** — every workflow runs without any MCP configured.
 
@@ -450,10 +450,10 @@ Add servers to `.vscode/mcp.json` (or `.claude/mcp.json` for Claude Code). See t
 
 | Profile | Servers | Best for |
 |---------|---------|----------|
-| `github-stack` | GitHub, Context7, Playwright, SemGrep | GitHub-native projects |
-| `gitlab-stack` | GitLab, Context7, Playwright, SemGrep, Atlassian | GitLab CI/CD with Atlassian PM |
-| `azure-devops-stack` | Azure, ADO, MsLearn, Context7, Work-iq, Playwright | Microsoft-centric stacks |
-| `full` | All 13 servers | Maximum capability |
+| `github-stack` | GitHub, Context7, Playwright, SemGrep, SonarQube | GitHub-native projects |
+| `gitlab-stack` | GitLab, Context7, Playwright, SemGrep, Atlassian, SonarQube | GitLab CI/CD with Atlassian PM |
+| `azure-devops-stack` | Azure, ADO, MsLearn, Context7, Work-iq, Playwright, SonarQube | Microsoft-centric stacks |
+| `full` | All 14 servers | Maximum capability |
 
 ### Client-specific overrides
 

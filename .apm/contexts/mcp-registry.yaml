@@ -12,15 +12,15 @@
 profiles:
   github-stack:
     description: 'GitHub-native development with modern testing and docs'
-    servers: [github-mcp, context7, playwright-mcp, semgrep-mcp]
+    servers: [github-mcp, context7, playwright-mcp, semgrep-mcp, sonarqube-mcp]
 
   gitlab-stack:
     description: 'GitLab CI/CD with Atlassian project management'
-    servers: [gitlab-mcp, context7, playwright-mcp, semgrep-mcp, atlassian-mcp]
+    servers: [gitlab-mcp, context7, playwright-mcp, semgrep-mcp, atlassian-mcp, sonarqube-mcp]
 
   azure-devops-stack:
     description: 'Microsoft-centric stack with Azure DevOps and M365'
-    servers: [azure-mcp, azdo-local-mcp, azdo-remote-mcp, mslearn-mcp, context7, work-iq-mcp, playwright-mcp]
+    servers: [azure-mcp, azdo-local-mcp, azdo-remote-mcp, mslearn-mcp, context7, work-iq-mcp, playwright-mcp, sonarqube-mcp]
 
   full:
     description: 'All curated MCP servers enabled — configure auth per-server'
@@ -38,6 +38,7 @@ profiles:
       - semgrep-mcp
       - figma-mcp
       - work-iq-mcp
+      - sonarqube-mcp
 
 # ─── Server Definitions ───────────────────────────────────────────────
 
@@ -310,6 +311,43 @@ servers:
       - security-scan
       - static-analysis
     fallback: 'Existing regex-based dangerous-pattern scan (A2 station S-03 rules)'
+
+  - id: sonarqube-mcp
+    name: SonarQube
+    category: testing
+    repo: https://github.com/SonarSource/sonarqube-mcp-server
+    description: 'Code quality and security analysis via SonarQube Server or SonarQube Cloud — issues, quality gates, coverage, duplications, security hotspots, and metrics.'
+    install:
+      command: docker
+      args:
+        - run
+        - -i
+        - --rm
+        - --init
+        - --pull=always
+        - -e
+        - SONARQUBE_TOKEN
+        - -e
+        - SONARQUBE_URL
+        - mcp/sonarqube
+      env:
+        SONARQUBE_TOKEN: '${SONARQUBE_TOKEN}'
+        SONARQUBE_URL: '${SONARQUBE_URL}'
+        SONARQUBE_ORG: '${SONARQUBE_ORG}'
+    default_version: '@latest'
+    auth: user-token
+    platform_detection:
+      markers: ['sonar-project.properties', '.sonarcloud.properties']
+      env: ['SONARQUBE_TOKEN', 'SONARQUBE_URL']
+    security_notes: |
+      Disable telemetry with TELEMETRY_DISABLED=true if required.
+      Tokens must never be committed — use ${input:VAR} placeholders in IDE config.
+    skills_new: [sonarqube-analysis]
+    skills_enhanced:
+      - static-analysis
+      - security-scan
+      - quality-report
+    fallback: 'SonarQube CLI scanner or local static analysis tools (ESLint, Pylint)'
 
   # ── Design ──────────────────────────────────────────────────────────
 

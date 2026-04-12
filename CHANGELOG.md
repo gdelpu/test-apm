@@ -7,43 +7,26 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
-## [0.0.11] — 2026-04-11
-
-### Changed
-- Add MCP setup and integration guides, enhance configuration commands
-- Add brand assets, governance documents, and playbooks
-- Refactor workflow state management and enhance agent file-write capabilities
+## [0.0.12] — 2026-04-12
 
 ### Fixed
-- Hub Orchestrator can now write deliverables to disk when handoff buttons are not clicked
-- Hub Orchestrator added `edit/editFiles` tool with `allowedFilePaths: outputs/**` (canonical + provider)
-- Updated Hub Orchestrator guardrail from "pure triage only" to "prefer dispatch; execute directly when handoff unavailable"
-- Refine Out of Scope constraints and enhance agent tool declarations
+- Enhance install scripts for better runtime management
 
+## [0.0.11] — 2026-04-11
+
+### Fixed
+- Refine Out of Scope constraints and enhance agent tool declarations
 
 ## [0.0.10] — 2026-04-11
 
 ### Changed
-- Add MCP setup and integration guides, enhance configuration commands
-- Add brand assets, governance documents, and playbooks
 - Refactor workflow state management and enhance agent file-write capabilities
-
-### Fixed
-- Hub Orchestrator can now write deliverables to disk when handoff buttons are not clicked
-- Hub Orchestrator added `edit/editFiles` tool with `allowedFilePaths: outputs/**` (canonical + provider)
-- Updated Hub Orchestrator guardrail from "pure triage only" to "prefer dispatch; execute directly when handoff unavailable"
-
 
 ## [0.0.9] — 2026-04-11
 
 ### Changed
 - Add MCP setup and integration guides, enhance configuration commands
 - Add brand assets, governance documents, and playbooks
-
-### Fixed
-- Hub Orchestrator can now write deliverables to disk when handoff buttons are not clicked
-- Hub Orchestrator added `edit/editFiles` tool with `allowedFilePaths: outputs/**` (canonical + provider)
-- Updated Hub Orchestrator guardrail from "pure triage only" to "prefer dispatch; execute directly when handoff unavailable"
 
 
 ## [0.0.8] — 2026-04-11

@@ -240,6 +240,14 @@ if [[ "$MODE" == "standard" ]]; then
     cp -r "$TEMP_DIR/$RUNTIME_DIR" "$REPO_ROOT/$RUNTIME_DIR"
     log_ok "Copied runtime: $RUNTIME_DIR"
 
+    # Copy hook engine so consumers can use the state tracker CLI
+    if [[ -d "$TEMP_DIR/.apm/hooks" ]]; then
+        rm -rf "$REPO_ROOT/.apm/hooks"
+        mkdir -p "$REPO_ROOT/.apm"
+        cp -r "$TEMP_DIR/.apm/hooks" "$REPO_ROOT/.apm/hooks"
+        log_ok "Copied hook engine: .apm/hooks/"
+    fi
+
     # Write lock file at repo root
     write_apm_lock "$REPO_ROOT" "$VERSION" "standard" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"
 

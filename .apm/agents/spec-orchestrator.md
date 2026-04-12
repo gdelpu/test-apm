@@ -21,7 +21,7 @@ This agent is the default entry point for greenfield and brownfield work.
 - Select the right playbook and skills.
 - Enforce the sequence:
   constitution → spec → clarify → plan → tasks → quality gate.
-- Ensure outputs are written to the standard locations under `specs/`.
+- Ensure outputs are written to the standard locations under `outputs/specs/features/<feature>/`.
 - Prevent premature implementation when the specification is still ambiguous.
 
 ## Decision policy

@@ -88,7 +88,7 @@ MCP (Model Context Protocol) servers provide optional tool enrichments that cros
 ┌───────────────────────────────────────────────┐
 │           MCP Registry (canonical)             │
 │    .apm/contexts/mcp-registry.yaml            │
-│    13 curated servers, 4 profiles             │
+│    14 curated servers, 4 profiles             │
 └──────────┬─────────────────┬──────────────────┘
            │ projection      │ projection
   ┌────────▼────────┐ ┌─────▼──────────────┐

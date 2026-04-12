@@ -12,4 +12,4 @@ Run the Feature Implementation workflow.
 2. Execute each station: constitution → specification → clarification →
    architecture review → plan → task breakdown → implementation → quality validation → final gate.
 3. Write all artifacts to `outputs/specs/features/<feature>/`.
-4. Track state in `outputs/specs/features/<feature>/workflow-state.md`.
+4. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`.

@@ -9,15 +9,15 @@ Run the BMAD (Build → Measure → Analyze → Decide) feedback loop.
    ```bash
    cd .apm/hooks && python -m engine --state init \
      --workflow bmad --feature <feature> \
-     --stations "build,measure,analyze,decide" \
-     --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+     --stations "build,measure,analyze,decide"
    ```
-3. Before each station, run `python -m engine --state update --station <id> --status running ...`.
-   After each station, run `python -m engine --state update --station <id> --status passed --gate pass ...`.
+   Capture the returned `trace_id` and `run_dir`. State and trace files are auto-created under `outputs/runs/bmad/<timestamp>-<feature>-<short-tid>/`.
+3. Before each station, run `python -m engine --state update --station <id> --status running --trace-id <tid> --workflow bmad`.
+   After each station, run `python -m engine --state update --station <id> --status passed --gate pass --trace-id <tid> --workflow bmad`.
 4. Execute each station: build → measure → analyze → decide.
 5. Evaluation uses scoring, drift detection, and adaptive decisions.
 6. If decide station recommends retry, loop back to build.
-7. **Write every artifact as an actual file on disk** under `outputs/specs/features/<feature>/`. Do not merely display content in chat — use file-writing tools to create each file.
+7. **Write every artifact as an actual file on disk** under the run directory returned by init. Do not merely display content in chat — use file-writing tools to create each file.
 
 ## Inputs
 

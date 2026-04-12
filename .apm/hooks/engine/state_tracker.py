@@ -12,6 +12,7 @@ to audit-trace.jsonl for full observability.
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -26,6 +27,9 @@ from .trace_emitter import emit_trace
 
 _STATUS_VALUES = {"pending", "running", "passed", "failed", "skipped"}
 _GATE_VALUES = {"pass", "fail", "warning", "blocked-by-hook", "—"}
+_RUN_DIR_PATTERN = re.compile(
+    r"^(\d{8}-\d{6})-(.+)-([0-9a-f]{8})$"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -33,27 +37,122 @@ _GATE_VALUES = {"pass", "fail", "warning", "blocked-by-hook", "—"}
 # ---------------------------------------------------------------------------
 
 
+def resolve_run_dir(
+    *,
+    repo_root: Path,
+    workflow: str,
+    name: str,
+    trace_id: str,
+) -> Path:
+    """
+    Build the canonical run directory path::
+
+        outputs/runs/<workflow>/<YYYYMMDD-HHMMSS>-<name>-<short-tid>/
+
+    Returns the absolute ``Path``.
+    """
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    short_tid = trace_id[:8]
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "run"
+    dir_name = f"{ts}-{slug}-{short_tid}"
+    return repo_root / "outputs" / "runs" / workflow / dir_name
+
+
+def find_latest_run(
+    *,
+    repo_root: Path,
+    workflow: str | None = None,
+) -> Path | None:
+    """
+    Return the ``workflow-state.md`` inside the latest run directory.
+
+    If *workflow* is given, scopes to ``outputs/runs/<workflow>/``.
+    Otherwise, searches across all workflow directories under ``outputs/runs/``.
+
+    Uses the ``latest`` symlink when available, falling back to
+    lexicographic sort of directory names (timestamp prefix ensures order).
+    """
+    runs_root = repo_root / "outputs" / "runs"
+    if not runs_root.exists():
+        return None
+
+    search_dirs: list[Path] = []
+    if workflow:
+        wf_dir = runs_root / workflow
+        if wf_dir.exists():
+            search_dirs = [wf_dir]
+    else:
+        search_dirs = [d for d in runs_root.iterdir() if d.is_dir()]
+
+    latest_state: Path | None = None
+    for wf_dir in search_dirs:
+        # Prefer symlink
+        link = wf_dir / "latest"
+        if link.exists():
+            candidate = link / "workflow-state.md"
+            if candidate.exists():
+                if latest_state is None or str(candidate) > str(latest_state):
+                    latest_state = candidate
+                continue
+        # Fallback: lexicographic sort
+        run_dirs = sorted(
+            (d for d in wf_dir.iterdir()
+             if d.is_dir() and _RUN_DIR_PATTERN.match(d.name)),
+            key=lambda d: d.name,
+            reverse=True,
+        )
+        for rd in run_dirs:
+            candidate = rd / "workflow-state.md"
+            if candidate.exists():
+                if latest_state is None or str(candidate) > str(latest_state):
+                    latest_state = candidate
+                break
+
+    return latest_state
+
+
 def init_workflow(
     *,
-    state_file: str,
+    state_file: str | None = None,
     workflow: str,
     feature: str,
     stations: list[str],
     trace_id: str | None = None,
     trace_file: str | None = None,
+    repo_root: Path | None = None,
 ) -> dict[str, Any]:
     """
     Create the workflow-state.md file and emit a ``span_type: workflow``
     root span to audit-trace.jsonl.
 
+    If *state_file* is omitted and *repo_root* is provided, the run
+    directory is auto-resolved to::
+
+        outputs/runs/<workflow>/<YYYYMMDD-HHMMSS>-<feature>-<short-tid>/
+
     If the state file already exists (resume case), returns the existing
     trace_id without overwriting.
 
     Returns:
-        dict with ``trace_id``, ``state_file``, ``created`` (bool).
+        dict with ``trace_id``, ``state_file``, ``run_dir``, ``created``.
     """
-    path = Path(state_file)
     tid = trace_id or generate_trace_id()
+
+    # Resolve path
+    if state_file:
+        path = Path(state_file)
+    elif repo_root:
+        run_dir = resolve_run_dir(
+            repo_root=repo_root,
+            workflow=workflow,
+            name=feature or workflow,
+            trace_id=tid,
+        )
+        path = run_dir / "workflow-state.md"
+    else:
+        raise ValueError(
+            "Either --state-file or repo_root must be provided for init"
+        )
 
     # Resume guard — don't overwrite existing state
     if path.exists():
@@ -61,6 +160,7 @@ def init_workflow(
         return {
             "trace_id": existing_tid or tid,
             "state_file": str(path),
+            "run_dir": str(path.parent),
             "created": False,
         }
 
@@ -83,6 +183,10 @@ def init_workflow(
 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    # Auto-derive trace file as sibling
+    if not trace_file:
+        trace_file = str(path.parent / "audit-trace.jsonl")
+
     # Emit workflow root span
     _emit_span(
         trace_id=tid,
@@ -94,7 +198,23 @@ def init_workflow(
         metadata={"feature": feature, "stations": stations},
     )
 
-    return {"trace_id": tid, "state_file": str(path), "created": True}
+    # Symlink + manifest (best-effort, non-fatal)
+    if repo_root:
+        _update_latest_symlink(path.parent)
+        _update_manifest(
+            repo_root=repo_root,
+            workflow=workflow,
+            feature=feature,
+            trace_id=tid,
+            run_dir=path.parent,
+        )
+
+    return {
+        "trace_id": tid,
+        "state_file": str(path),
+        "run_dir": str(path.parent),
+        "created": True,
+    }
 
 
 def update_station(
@@ -108,6 +228,7 @@ def update_station(
     workflow: str = "",
     agent: str = "",
     skill: str = "",
+    repo_root: Path | None = None,
 ) -> dict[str, Any]:
     """
     Update a station row in workflow-state.md and emit a station span.
@@ -122,6 +243,7 @@ def update_station(
         workflow: Workflow name (for trace record).
         agent: Agent name (for trace record).
         skill: Skill name (for trace record).
+        repo_root: Repository root (for manifest update on completion).
 
     Returns:
         dict with ``station_id``, ``status``, ``gate``, ``timestamp``.
@@ -158,6 +280,7 @@ def update_station(
     content = pattern.sub(new_row, content, count=1)
 
     # Update overall workflow status if all stations resolved
+    workflow_completed = False
     if _all_resolved(content):
         overall = "passed" if "| failed |" not in content else "failed"
         content = re.sub(
@@ -165,8 +288,21 @@ def update_station(
             f"**Status**: {overall}",
             content,
         )
+        workflow_completed = True
 
     path.write_text(content, encoding="utf-8")
+
+    # Auto-derive trace file as sibling if not provided
+    if not trace_file:
+        trace_file = str(path.parent / "audit-trace.jsonl")
+
+    # Update manifest on workflow completion
+    if workflow_completed and repo_root:
+        _update_manifest_status(
+            repo_root=repo_root,
+            run_dir=path.parent,
+            status=overall,
+        )
 
     # Emit station span
     _emit_span(
@@ -241,6 +377,7 @@ def query_state(
         "trace_id": trace_id,
         "stations": stations,
         "current_station": current_station,
+        "run_dir": str(path.parent),
     }
 
 
@@ -347,3 +484,77 @@ def _emit_span(
         record.update(metadata)
 
     emit_trace(record, trace_file=trace_file)
+
+
+def _update_latest_symlink(run_dir: Path) -> None:
+    """Create or replace a ``latest`` symlink in the workflow directory."""
+    link = run_dir.parent / "latest"
+    try:
+        if link.is_symlink() or link.exists():
+            link.unlink()
+        # Use relative target so the symlink is portable
+        link.symlink_to(run_dir.name, target_is_directory=True)
+    except OSError:
+        # Symlinks may require elevated privileges on Windows — best-effort
+        pass
+
+
+def _update_manifest(
+    *,
+    repo_root: Path,
+    workflow: str,
+    feature: str,
+    trace_id: str,
+    run_dir: Path,
+) -> None:
+    """Append an entry to ``outputs/runs/run-manifest.json``."""
+    manifest_path = repo_root / "outputs" / "runs" / "run-manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+
+    entries: list[dict[str, Any]] = []
+    if manifest_path.exists():
+        try:
+            entries = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, ValueError):
+            entries = []
+
+    entries.append({
+        "trace_id": trace_id,
+        "workflow": workflow,
+        "feature": feature,
+        "run_dir": str(run_dir.relative_to(repo_root)),
+        "started": _now_utc(),
+        "status": "in-progress",
+    })
+
+    manifest_path.write_text(
+        json.dumps(entries, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+def _update_manifest_status(
+    *,
+    repo_root: Path,
+    run_dir: Path,
+    status: str,
+) -> None:
+    """Update the status of an existing manifest entry on completion."""
+    manifest_path = repo_root / "outputs" / "runs" / "run-manifest.json"
+    if not manifest_path.exists():
+        return
+
+    try:
+        entries = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, ValueError):
+        return
+
+    rel_dir = str(run_dir.relative_to(repo_root))
+    for entry in entries:
+        if entry.get("run_dir") == rel_dir:
+            entry["status"] = status
+            entry["completed"] = _now_utc()
+            break
+
+    manifest_path.write_text(
+        json.dumps(entries, indent=2) + "\n", encoding="utf-8"
+    )

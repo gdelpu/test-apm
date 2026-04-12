@@ -12,6 +12,7 @@ Teams installing and using the foundation in their own repositories.
 |----------|---------------|
 | [Quick Start](consumer/quick-start.md) | Install in 60 seconds, Hub Orchestrator, common workflows, per-provider usage |
 | [APM Consumer Guide](consumer/apm-consumer-guide.md) | Install modes, customization, `providers-local/` overlay, CI integration, troubleshooting |
+| [MCP Setup Guide](consumer/mcp-setup-guide.md) | Configure MCP servers, profiles, per-server setup, auto-detection via Hub Orchestrator |
 
 ---
 
@@ -26,6 +27,7 @@ Catalogs of all available agents, skills, workflows, hooks, and prompts — usef
 | [Workflows](reference/workflows.md) | All 19 workflows with detailed station tables |
 | [Hooks](reference/hooks.md) | 7 hook definitions + Python engine spec |
 | [Prompts & Knowledge](reference/prompts.md) | 4 prompts and knowledge base areas |
+| [Workflow Tracking](reference/workflow-tracking.md) | Execution tracking, state files, JSONL audit traces, observability |
 
 ---
 
@@ -41,6 +43,7 @@ Maintainers developing, extending, or operating the foundation itself.
 | [CI Pipeline](contributor/ci-pipeline.md) | PR validation pipeline (A0–A7), deterministic validators, local testing |
 | [Local Testing](contributor/local-testing.md) | Run the full CI pipeline locally with Podman, environment variables, troubleshooting |
 | [Distribution](contributor/distribution.md) | APM bundle build, publish, registry, consumer install channels |
+| [MCP Integration Guide](contributor/mcp-integration-guide.md) | Add new MCP servers, enhance skills with MCP support, testing, registry schema |
 
 ---
 

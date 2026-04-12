@@ -13,10 +13,10 @@ Before executing any station, determine whether this is a **brownfield** (existi
    ```bash
    cd .apm/hooks && python -m engine --state init \
      --workflow spec-kit --feature <feature> \
-     --stations "constitution,brownfield-context,specification,clarification,architecture-review,plan,tasks,test-strategy,quality-gate" \
-     --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+     --stations "constitution,brownfield-context,specification,clarification,architecture-review,plan,tasks,test-strategy,quality-gate"
    ```
-   Capture the returned `trace_id` for all subsequent calls.
+   Capture the returned `trace_id` and `run_dir` for all subsequent calls.
+   State and trace files are auto-created under `outputs/runs/spec-kit/<timestamp>-<feature>-<short-tid>/`.
 3. **Always start at station 1 (constitution)** — never skip ahead to specification.
    Use the brownfield or greenfield constitution template accordingly.
 4. For brownfield projects, execute the `brownfield-context` station next
@@ -24,21 +24,19 @@ Before executing any station, determine whether this is a **brownfield** (existi
 5. **Before each station**, mark it running:
    ```bash
    cd .apm/hooks && python -m engine --state update \
-     --feature <feature> --station <id> --status running \
-     --trace-id <tid> --workflow spec-kit \
-     --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+     --station <id> --status running \
+     --trace-id <tid> --workflow spec-kit
    ```
 6. **After each station**, mark it passed (or failed):
    ```bash
    cd .apm/hooks && python -m engine --state update \
-     --feature <feature> --station <id> --status passed --gate pass \
-     --trace-id <tid> --workflow spec-kit \
-     --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+     --station <id> --status passed --gate pass \
+     --trace-id <tid> --workflow spec-kit
    ```
 7. Continue through the remaining stations in order:
    specification → clarification → architecture review → plan → tasks →
    test strategy → quality gate.
-8. **Write every artifact as an actual file on disk** under `outputs/specs/features/<feature>/`. Do not merely display content in chat — use file-writing tools to create each file.
+8. **Write every artifact as an actual file on disk** under the run directory returned by init. Do not merely display content in chat — use file-writing tools to create each file.
 9. After each station, verify that declared output files exist on disk before proceeding.
 
 ## Inputs
