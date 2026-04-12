@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Changed
+- SonarQube integration updated: skill(s) `sdlc-tech-architecture`
+- Skill updates: `sdlc-tech-architecture`
+
+
 ## [0.0.15] — 2026-04-12
 
 ### Changed
