@@ -18,6 +18,7 @@ Before executing any station, determine whether this is a **brownfield** (existi
    - T2: Data model, API contracts, test strategy, implementation plan.
    - T3: Drift detection, E2E Playwright generation.
 7. **Write every artifact as an actual file on disk** under `outputs/docs/2-tech/`. Do not merely display content in chat — use file-writing tools to create each file.
+8. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If unavailable, write `workflow-state.md` directly following the **exact Markdown table format** in `.apm/hooks/engine/schemas/workflow-state.schema.md`.
 
 If $ARGUMENTS contains "gated", use `gate_mode: pause` at each system boundary.
 If $ARGUMENTS contains "skip-audit", start from T1 architecture (greenfield mode).

@@ -20,5 +20,5 @@ Before executing any station, determine whether this is a **brownfield** (existi
 1. Read `.apm/workflows/sdlc-full.yml` for the station sequence.
 2. Execute all phases: scaffold → init → BA (S0-S3, skipping S0 if greenfield) → planning → Tech (T0-T3, skipping T0 if greenfield) → implementation → test → tracking → quality → governance.
 3. **Use `edit/editFiles` or `create_file` to write every artifact as an actual file on disk** under `docs/`. Do not merely display content in chat.
-4. Track state in `docs/workflow-state.md`.
+4. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If `runCommands` is unavailable, write `workflow-state.md` directly using `edit/editFiles` following the **exact Markdown table format** defined in `.apm/hooks/engine/schemas/workflow-state.schema.md`. Do **not** invent alternative formats (e.g. YAML frontmatter with `stations_completed`/`stations_remaining`).
 5. After each station, verify that declared output files exist on disk before proceeding.
