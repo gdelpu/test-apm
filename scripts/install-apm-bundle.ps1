@@ -277,6 +277,14 @@ if ($Mode -eq 'standard') {
             Write-Ok 'Copied hook engine: .apm/hooks/'
         }
 
+        # Seed hook-config.json if not already present
+        $hookCfgTpl = Join-Path $tempDir '.apm/templates/hook-config.json'
+        $hookCfgDst = Join-Path $repoRoot 'hook-config.json'
+        if ((Test-Path $hookCfgTpl) -and -not (Test-Path $hookCfgDst)) {
+            Copy-Item $hookCfgTpl -Destination $hookCfgDst
+            Write-Ok 'Seeded hook-config.json (edit to customise hooks)'
+        }
+
         # Write lock file at repo root
         Write-ApmLock -Path $repoRoot -Version $Version -Mode 'standard' -Provider $Provider -Archive $ArchiveName -Checksum $actualHash
         Write-Ok 'Lock file written'

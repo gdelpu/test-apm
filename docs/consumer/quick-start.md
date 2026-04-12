@@ -334,6 +334,7 @@ Claude Code uses `CLAUDE.md` as its context file and provides slash commands for
 |----------|---------------|
 | [Concepts & Glossary](../concepts.md) | What are agents, workflows, skills, prompts, instructions, hooks, and other building blocks |
 | [MCP Setup Guide](mcp-setup-guide.md) | Configure MCP servers for richer integration — live docs, browser testing, Jira sync, cloud queries |
+| [Hooks Setup Guide](hooks-setup.md) | Configure lifecycle hooks: PII scanning, injection detection, risk scoring, audit tracing, Confluence push |
 | [APM Consumer Guide](apm-consumer-guide.md) | Extended reference: install modes, customization, `providers-local/` overlay, CI integration, troubleshooting |
 | [Distribution Guide](../contributor/distribution.md) | Registry details, checksums, CI/CD pipeline examples |
 | [Reference Catalogs](../reference/agents.md) | Full agent/skill/workflow catalog with descriptions |

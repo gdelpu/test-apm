@@ -7,6 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.16] — 2026-04-12
+
+### Added
+- `docs/consumer/hooks-setup.md`
+
+### Changed
+- Data anonymisation handling updated: 2 docs file(s)
+- Script updates: `install-apm-bundle.ps1`, `install-apm-bundle.sh`
+
+
 ## [0.0.15] — 2026-04-12
 
 ### Changed
