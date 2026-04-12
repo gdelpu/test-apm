@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.15] — 2026-04-12
+
+### Changed
+- Workflow state tracking standardised: 4 Claude Code command(s), 14 Copilot prompt(s), 1 Copilot agent(s), 1 docs file(s), 8 prompts file(s), 1 workflows file(s)
+- Hook engine updates: `workflow-state.schema.md`
+- Script updates: `generate-changelog-entry.py`
+
+
 ## [0.0.14] — 2026-04-12
 
 ### Changed
