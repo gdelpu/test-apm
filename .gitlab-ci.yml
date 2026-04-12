@@ -362,11 +362,17 @@ test:apm-smoke:
             echo "❌ Expected at least 10 projected prompts, got $prompt_count"
             FAIL=1
           fi
-          # Verify hooks are bundled
+          # Verify hooks are bundled (canonical + projected)
           hook_count=$(tar -tzf "$archive" | grep -c '\.apm/hooks/' || true)
-          echo "  Hook files:             $hook_count"
+          projected_hook_count=$(tar -tzf "$archive" | grep -c '\.github/hooks/' || true)
+          echo "  Hook files (canonical):  $hook_count"
+          echo "  Hook files (projected):  $projected_hook_count"
           if [ "$hook_count" -lt 20 ]; then
-            echo "❌ Expected at least 20 hook files, got $hook_count"
+            echo "❌ Expected at least 20 canonical hook files, got $hook_count"
+            FAIL=1
+          fi
+          if [ "$projected_hook_count" -lt 20 ]; then
+            echo "❌ Expected at least 20 projected hook files, got $projected_hook_count"
             FAIL=1
           fi
           # Verify templates are bundled (hook-config.json seeding)

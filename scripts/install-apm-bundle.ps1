@@ -265,20 +265,9 @@ if ($Mode -eq 'standard') {
         Copy-Item $runtimeSrc -Destination $runtimeDst -Recurse -Force
         Write-Ok "Copied runtime: $runtimeDir"
 
-        # Copy hook engine so consumers can use the state tracker CLI
-        $hooksSrc = Join-Path $tempDir '.apm/hooks'
-        if (Test-Path $hooksSrc) {
-            $hooksDst = Join-Path $repoRoot '.apm/hooks'
-            if (Test-Path $hooksDst) {
-                Remove-Item $hooksDst -Recurse -Force
-            }
-            New-Item -ItemType Directory -Path (Split-Path $hooksDst -Parent) -Force | Out-Null
-            Copy-Item $hooksSrc -Destination $hooksDst -Recurse -Force
-            Write-Ok 'Copied hook engine: .apm/hooks/'
-        }
-
         # Seed hook-config.json if not already present
-        $hookCfgTpl = Join-Path $tempDir '.apm/templates/hook-config.json'
+        # After projection hooks+templates live inside the runtime dir
+        $hookCfgTpl = Join-Path $tempDir "$runtimeDir/templates/hook-config.json"
         $hookCfgDst = Join-Path $repoRoot 'hook-config.json'
         if ((Test-Path $hookCfgTpl) -and -not (Test-Path $hookCfgDst)) {
             Copy-Item $hookCfgTpl -Destination $hookCfgDst
