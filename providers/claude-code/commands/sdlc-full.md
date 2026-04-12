@@ -15,7 +15,7 @@ Before executing any station, determine whether this is a **brownfield** (existi
 3. Read `.apm/contexts/sdlc-system-context.md` for orchestration conventions.
 4. Execute all 11 stations: scaffold → project init → BA pipeline (S0-S3, skipping S0 if greenfield) → sprint planning → Tech pipeline (T0-T3, skipping T0 if greenfield) → implementation → test campaigns → sprint tracking → quality validation → COPIL/Go-No-Go.
 5. **Write every artifact as an actual file on disk** under `outputs/docs/`. Do not merely display content in chat — use file-writing tools to create each file.
-6. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If unavailable, write `workflow-state.md` directly following the **exact Markdown table format** in `.apm/hooks/engine/schemas/workflow-state.schema.md`.
+6. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If unavailable, write `outputs/workflow-state-<workflow>-<feature>.md` (e.g. `outputs/workflow-state-sdlc-full-crm.md`) directly following the **exact Markdown table format** in `.apm/hooks/engine/schemas/workflow-state.schema.md`. Always write the state file to the **root** of `outputs/` — never inside a workflow subfolder.
 
 If $ARGUMENTS contains "gated", pause at each phase boundary for human review.
 

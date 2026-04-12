@@ -19,7 +19,7 @@ Before executing any station, determine whether this is a **brownfield** (existi
    - S3: per-feature functional design (stories, journeys, screens, tests, E2E plan).
    - Handle fan-in for project-level deliverables (business rules, E2E plan).
 7. **Write every artifact as an actual file on disk** under `outputs/docs/1-prd/`. Do not merely display content in chat — use file-writing tools to create each file.
-8. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If unavailable, write `workflow-state.md` directly following the **exact Markdown table format** in `.apm/hooks/engine/schemas/workflow-state.schema.md`.
+8. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If unavailable, write `outputs/workflow-state-<workflow>-<feature>.md` (e.g. `outputs/workflow-state-sdlc-ba-crm.md`) directly following the **exact Markdown table format** in `.apm/hooks/engine/schemas/workflow-state.schema.md`. Always write the state file to the **root** of `outputs/` — never inside a workflow subfolder.
 9. At the end, suggest `/sdlc-coherence` for global consistency check.
 
 If $ARGUMENTS contains "gated", use `gate_mode: pause` at each system boundary.

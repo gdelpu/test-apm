@@ -7,14 +7,20 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.15] — 2026-04-12
+
+### Changed
+- Workflow state tracking standardised: 4 Claude Code command(s), 14 Copilot prompt(s), 1 Copilot agent(s), 1 docs file(s), 8 prompts file(s), 1 workflows file(s)
+- Hook engine updates: `workflow-state.schema.md`
+- Script updates: `generate-changelog-entry.py`
+
+
 ## [0.0.14] — 2026-04-12
 
 ### Changed
-- Script updates: `generate-changelog-entry.py`
-
-### Fixed
-- Update version to 0.0.14 and refine documentation for state tracking across workflows
-- Rewrite changelog generator to use diff analysis; fix historical entries
+- SDLC workflow state tracking standardised: 4 Claude Code commands (`sdlc-ba`, `sdlc-full`, `sdlc-steer`, `sdlc-tech`) and 4 Copilot prompts (`workflow-sdlc-ba`, `workflow-sdlc-full`, `workflow-sdlc-steer`, `workflow-sdlc-tech`) now use the canonical state tracker (`python -m engine --state`) under `outputs/runs/` with fallback to Markdown table format from `workflow-state.schema.md`
+- `readme.instructions.md`: removed redundant rule about updating `docs/README.md` on doc additions
+- `generate-changelog-entry.py`: rewritten to use diff-based analysis for accurate changelog generation
 
 
 ## [0.0.13] — 2026-04-12

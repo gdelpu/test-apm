@@ -43,7 +43,7 @@ stations:
 
 config:
   output_dir: <string>            # Where artifacts are written (supports <feature> placeholder)
-  state_file: workflow-state.md   # Tracks station completion
+  state_file: workflow-state.md   # Tracks station completion (fallback: outputs/workflow-state-<workflow>-<feature>.md; engine: outputs/runs/<workflow>/<run>/workflow-state.md)
   allow_resume: true              # Whether --resume is supported
   allow_skip_gate: true           # Whether --skip-gate is supported
   nestable: <boolean>             # Whether this workflow can be invoked as a sub-workflow
