@@ -9,10 +9,27 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [0.0.13] — 2026-04-12
 
-### Changed
-- Resolve merge conflict in CHANGELOG.md
-- Refactor workflow tracking and state management
+### Added
+- **SonarQube MCP server** (`sonarqube-mcp`) in MCP registry with Docker-based install, auth configuration, and security notes
+- SonarQube MCP added to all MCP profiles: `github-stack`, `gitlab-stack`, `azure-devops-stack`, `full`
+- `docs/reference/workflow-tracking.md` — reference documentation for centralized workflow state tracking
+- `docs/concepts.md` — high-level concepts documentation
+- Workflow state schema: run directory layout (`outputs/runs/`), `latest` symlink convention, `run-manifest.json` index, auto-derived trace file
 
+### Changed
+- Hub Orchestrator dispatch protocol refactored: removed rigid Dispatch Prompt Reference table, introduced dual-path dispatch (handoff buttons OR direct execution when user confirms textually)
+- Workflow state management centralized under `outputs/runs/<workflow>/<timestamp>-<name>-<tid>/` with automatic run directory resolution
+- State tracker (`state_tracker.py`): added `resolve_run_dir()` and `find_latest_run()` for automatic latest-run discovery; `--state-file` no longer required for non-init operations
+- State tracker CLI: improved error messages, auto-discovery of active runs, auto-derived trace file paths
+- Spec Orchestrator: output path corrected from `specs/` to `outputs/specs/features/<feature>/`
+- Workflow Orchestrator: state tracking redirected to canonical state tracker under `outputs/runs/<workflow>/`
+- Quality Validator: `static-analysis` skill now references SonarQube MCP adapter (`sonarqube-mcp`)
+- Static-analysis skill updated with SonarQube MCP reference
+- Claude Code workflow commands (8 commands) updated with centralized run-directory state tracking
+- Provider agents (hub-orchestrator, spec-orchestrator, workflow-orchestrator) synced with canonical changes
+- MCP setup guide expanded with SonarQube configuration steps
+- Changelog generation script (`generate-changelog-entry.py`) enhanced for better diff analysis
+- Install scripts: consumer workspace detection improvements
 
 ## [0.0.12] — 2026-04-12
 
