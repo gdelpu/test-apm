@@ -248,6 +248,14 @@ if [[ "$MODE" == "standard" ]]; then
         log_ok "Copied hook engine: .apm/hooks/"
     fi
 
+    # Seed hook-config.json if not already present
+    HOOK_CFG_TPL="$TEMP_DIR/.apm/templates/hook-config.json"
+    HOOK_CFG_DST="$REPO_ROOT/hook-config.json"
+    if [[ -f "$HOOK_CFG_TPL" && ! -f "$HOOK_CFG_DST" ]]; then
+        cp "$HOOK_CFG_TPL" "$HOOK_CFG_DST"
+        log_ok "Seeded hook-config.json (edit to customise hooks)"
+    fi
+
     # Write lock file at repo root
     write_apm_lock "$REPO_ROOT" "$VERSION" "standard" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"
 
