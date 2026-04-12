@@ -1,8 +1,18 @@
 # Workflow State File Format (Fallback Schema)
 
 When the canonical state tracker (`python -m engine --state`) is **unavailable**
-(e.g. `runCommands` blocked in Copilot), agents MUST write `workflow-state.md`
+(e.g. `runCommands` blocked in Copilot), agents MUST write
+`outputs/workflow-state-<workflow>-<feature>.md` (e.g. `outputs/workflow-state-feature-implementation-login.md`)
 directly using `edit/editFiles` following this **exact format**.
+
+> **Important**: Always write the state file to `outputs/workflow-state-<workflow>-<feature>.md`
+> (the **root** of the `outputs/` directory, with the workflow name and
+> feature/project name as suffix). Never write it inside a workflow’s
+> `output_dir` subfolder (e.g. not
+> `outputs/specs/features/<feature>/workflow-state.md` or
+> `outputs/docs/1-prd/workflow-state.md`). The `<workflow>-<feature>` suffix
+> ensures concurrent workflows and repeated runs for different features do not
+> overwrite each other’s state.
 
 ## Required structure
 

@@ -43,7 +43,7 @@ The state tracker is a Python CLI (`python -m engine --state ...`) that all thre
 
 ### Copilot fallback
 
-When `runCommands` is unavailable in Copilot, agents write `workflow-state.md` directly using `edit/editFiles` following the format in `.apm/hooks/engine/schemas/workflow-state.schema.md`. A post-hook validator auto-corrects malformed entries.
+When `runCommands` is unavailable in Copilot, agents write `outputs/workflow-state-<workflow>-<feature>.md` (e.g. `outputs/workflow-state-feature-implementation-login.md`) directly using `edit/editFiles` following the format in `.apm/hooks/engine/schemas/workflow-state.schema.md`. The state file must always be written to the **root** of `outputs/` with the workflow and feature name as suffix — never inside a workflow's `output_dir` subfolder. The `<workflow>-<feature>` suffix prevents conflicts when multiple workflows or the same workflow for different features run concurrently. A post-hook validator auto-corrects malformed entries.
 
 ## Run directory layout
 

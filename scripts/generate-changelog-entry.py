@@ -43,6 +43,9 @@ UNRELEASED_MARKER = "## [Unreleased]"
 
 # Files to exclude from diff analysis (meta-files that always change)
 EXCLUDED_FILES = {"CHANGELOG.md", "apm.yml"}
+# Files whose diff content should not be scanned for modification patterns
+# (e.g. this script's own source contains pattern strings that cause false positives)
+CONTENT_SCAN_EXCLUDED = {"scripts/generate-changelog-entry.py"}
 
 
 # ---------------------------------------------------------------------------
@@ -172,6 +175,8 @@ AREA_PATTERNS: list[tuple[str, str]] = [
     (r"^providers/github-copilot/instructions/(.+)$", "copilot-instruction:{0}"),
     (r"^providers/claude-code/commands/(.+)$", "claude-command:{0}"),
     (r"^providers/cli/(.+)$", "cli:{0}"),
+    (r"^\.github/instructions/(.+)$", "github-instruction:{0}"),
+    (r"^\.github/(.+)$", "github:{0}"),
     (r"^ci-gates/(.+)$", "ci-gate:{0}"),
     (r"^scripts/(.+)$", "script:{0}"),
     (r"^docs/(.+)$", "docs:{0}"),
@@ -218,6 +223,10 @@ def area_group(path: str) -> str:
         return "scripts"
     if p.startswith("docs/"):
         return "docs"
+    if p.startswith(".github/instructions/"):
+        return "copilot-instructions"
+    if p.startswith(".github/"):
+        return "copilot-runtime"
     return "other"
 
 
@@ -334,20 +343,127 @@ def detect_new_instructions(name_status: dict[str, str]) -> list[str]:
 def detect_significant_modifications(
     file_stats: list[dict],
     name_status: dict[str, str],
+    exclude_files: set[str] | None = None,
 ) -> dict[str, list[str]]:
     """Detect significantly modified areas for the Changed section."""
+    excluded = exclude_files or set()
     mods_by_area: dict[str, list[str]] = defaultdict(list)
     for f in file_stats:
         path = f["path"]
         if name_status.get(path) != "M":
             continue
-        # Only note files with meaningful changes (>5 lines delta)
+        if path in excluded:
+            continue
+        # Only note files with meaningful changes (>1 line delta)
         delta = f["insertions"] + f["deletions"]
-        if delta < 6:
+        if delta < 2:
             continue
         group = area_group(path)
         mods_by_area[group].append(path)
     return dict(mods_by_area)
+
+
+# Content-aware modification patterns: (regex matching added lines, description)
+MODIFICATION_PATTERNS: list[tuple[str, str]] = [
+    (r"state.tracker|outputs/runs/|workflow-state\.schema|python -m engine --state", "Workflow state tracking standardised"),
+    (r"allowedFilePaths|allowedFilePathsReadOnly", "Agent file path permissions updated"),
+    (r"commandAllowlist", "Agent command allowlist updated"),
+    (r"allowedNetworkDomains", "Agent network domain restrictions updated"),
+    (r"edit/editFiles", "File-writing tool declarations updated"),
+    (r"sonarqube|SonarQube", "SonarQube integration updated"),
+    (r"Out of Scope|out.of.scope", "Agent scope constraints updated"),
+    (r"file-output|File Creation Mandate", "File output mandate enforcement updated"),
+    (r"PII|REDACTED|anonymis", "Data anonymisation handling updated"),
+    (r"prompt.injection|injection.detect", "Prompt injection detection updated"),
+    (r"mcp-registry|mcp.server|mcp.profile", "MCP configuration updated"),
+    (r"brownfield|reverse.brief", "Brownfield detection updated"),
+]
+
+
+def parse_diff_added_lines_per_file(diff_content: str) -> dict[str, list[str]]:
+    """Extract added lines (starting with +) per file from unified diff."""
+    result: dict[str, list[str]] = {}
+    current_file = ""
+    for line in diff_content.splitlines():
+        m = re.match(r"^diff --git a/(.+?) b/(.+)$", line)
+        if m:
+            current_file = m.group(2)
+            continue
+        if current_file and line.startswith("+") and not line.startswith("+++"):
+            result.setdefault(current_file, []).append(line[1:])
+    return result
+
+
+def detect_modification_categories(
+    diff_content: str,
+    name_status: dict[str, str],
+) -> tuple[list[str], set[str]]:
+    """Detect content-aware modification categories from diff added lines.
+
+    Returns (changelog_entries, set_of_files_covered_by_patterns).
+    """
+    added_per_file = parse_diff_added_lines_per_file(diff_content)
+    modified_files = {p for p, s in name_status.items()
+                      if s == "M" and p not in EXCLUDED_FILES and p not in CONTENT_SCAN_EXCLUDED}
+
+    # pattern_desc -> list of matching files
+    pattern_hits: dict[str, list[str]] = defaultdict(list)
+    covered_files: set[str] = set()
+
+    for filepath in modified_files:
+        added_lines = added_per_file.get(filepath, [])
+        if not added_lines:
+            continue
+        joined = "\n".join(added_lines)
+        # First-match-wins: attribute each file to the first matching pattern only
+        for regex, desc in MODIFICATION_PATTERNS:
+            if re.search(regex, joined, re.I):
+                pattern_hits[desc].append(filepath)
+                covered_files.add(filepath)
+                break  # stop checking further patterns for this file
+
+    entries: list[str] = []
+    for desc, files in sorted(pattern_hits.items()):
+        parts: list[str] = []
+        groups: dict[str, list[str]] = defaultdict(list)
+        for f in files:
+            groups[area_group(f)].append(f)
+        for group_name in sorted(groups):
+            group_files = groups[group_name]
+            if group_name == "copilot-provider":
+                prompts = [f for f in group_files if "prompts/" in f]
+                agents = [f for f in group_files if "agents/" in f]
+                instrs = [f for f in group_files if "instructions/" in f]
+                if prompts:
+                    parts.append(f"{len(prompts)} Copilot prompt(s)")
+                if agents:
+                    parts.append(f"{len(agents)} Copilot agent(s)")
+                if instrs:
+                    parts.append(f"{len(instrs)} Copilot instruction(s)")
+            elif group_name == "claude-provider":
+                cmds = [f for f in group_files if "commands/" in f]
+                if cmds:
+                    parts.append(f"{len(cmds)} Claude Code command(s)")
+                else:
+                    parts.append(f"{len(group_files)} Claude Code file(s)")
+            elif group_name == "agents":
+                names = ", ".join(f"`{PurePosixPath(f).stem}`" for f in sorted(group_files))
+                parts.append(f"agent(s) {names}")
+            elif group_name == "skills":
+                skill_names = list({PurePosixPath(f).parts[2]
+                                   for f in group_files if len(PurePosixPath(f).parts) > 2})
+                names = ", ".join(f"`{s}`" for s in sorted(skill_names))
+                parts.append(f"skill(s) {names}")
+            else:
+                human = group_name.replace("-", " ")
+                parts.append(f"{len(group_files)} {human} file(s)")
+
+        if parts:
+            entries.append(f"{desc}: {', '.join(parts)}")
+        else:
+            entries.append(desc)
+
+    return entries, covered_files
 
 
 def _agent_display_name(filename: str) -> str:
@@ -435,9 +551,14 @@ def analyze_diff(base: str, until: str = "HEAD") -> dict[str, list[str]]:
                 add("Added", f"`{path}`")
 
     # --- CHANGED ---
-    mods = detect_significant_modifications(file_stats, name_status)
+    # Phase 1: Content-aware pattern detection (covers small but meaningful changes)
+    content_entries, content_covered = detect_modification_categories(diff_content, name_status)
+    for entry in content_entries:
+        add("Changed", entry)
 
-    # Summarize by area
+    # Phase 2: Area-based fallback for files not covered by content patterns
+    mods = detect_significant_modifications(file_stats, name_status, exclude_files=content_covered)
+
     if "agents" in mods:
         agent_names = [PurePosixPath(p).stem for p in mods["agents"]]
         names = ", ".join(f"`{a}`" for a in sorted(agent_names))
@@ -462,12 +583,22 @@ def analyze_diff(base: str, until: str = "HEAD") -> dict[str, list[str]]:
                      if "agents/" in p]
         mod_prompts = [PurePosixPath(p).stem for p in mods["copilot-provider"]
                       if "prompts/" in p]
+        mod_instrs = [PurePosixPath(p).stem for p in mods["copilot-provider"]
+                     if "instructions/" in p]
         if mod_agents:
             names = ", ".join(f"`{a}`" for a in sorted(mod_agents))
             add("Changed", f"Copilot provider agent updates: {names}")
         if mod_prompts:
             count = len(mod_prompts)
             add("Changed", f"{count} Copilot prompt(s) updated")
+        if mod_instrs:
+            names = ", ".join(f"`{i}`" for i in sorted(mod_instrs))
+            add("Changed", f"Copilot instruction updates: {names}")
+
+    if "copilot-instructions" in mods:
+        instr_names = [PurePosixPath(p).stem for p in mods["copilot-instructions"]]
+        names = ", ".join(f"`{i}`" for i in sorted(instr_names))
+        add("Changed", f"Copilot instruction updates: {names}")
 
     if "claude-provider" in mods:
         mod_cmds = [PurePosixPath(p).stem for p in mods["claude-provider"]
@@ -497,7 +628,18 @@ def analyze_diff(base: str, until: str = "HEAD") -> dict[str, list[str]]:
         add("Changed", f"Workflow updates: {names}")
 
     # --- FIXED ---
-    # Extract fix-related info from commit messages as supplementary data
+    # Extract fix-related info from commit messages as supplementary data.
+    # Skip noise: version bumps, changelog chores, messages that duplicate
+    # diff-detected content.
+    SKIP_FIX_PATTERNS = [
+        r"^update version",
+        r"^bump version",
+        r"changelog",
+        r"^merge",
+        r"^auto-generate",
+    ]
+    # Collect lowercased content-entry keywords to detect overlap
+    content_keywords = " ".join(e.lower() for e in content_entries)
     for subject in commits:
         if subject.startswith("Merge "):
             continue
@@ -506,8 +648,17 @@ def analyze_diff(base: str, until: str = "HEAD") -> dict[str, list[str]]:
         m_fix = re.match(r"^fix(?:\([^)]*\))?:\s*(.+)", subject, re.I)
         if m_fix:
             msg = m_fix.group(1).strip()
-            if msg:
-                add("Fixed", msg[0].upper() + msg[1:])
+            if not msg:
+                continue
+            msg_clean = msg[0].upper() + msg[1:]
+            # Skip noise patterns
+            if any(re.search(pat, msg, re.I) for pat in SKIP_FIX_PATTERNS):
+                continue
+            # Skip if the message largely overlaps with a content-detected entry
+            msg_words = set(re.findall(r"\w{4,}", msg.lower()))
+            if msg_words and len(msg_words & set(re.findall(r"\w{4,}", content_keywords))) > len(msg_words) * 0.5:
+                continue
+            add("Fixed", msg_clean)
 
     # --- REMOVED ---
     deleted = detect_deleted_files(name_status)
