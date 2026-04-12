@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-domain
 reviewers: []
 dependencies: ["VIS-001", "GLO-001", "ACT-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [DOM-001] Functional Domain Model

@@ -11,6 +11,8 @@ epic: EP-001
 feature: FT-001
 priority: Must
 doc_depth: standard
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [US-001] User Story Title

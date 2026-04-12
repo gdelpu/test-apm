@@ -23,17 +23,19 @@ Create the standard `docs/` directory structure for an SDLC project — both the
 Create the full `docs/` directory tree:
 
 ```
-docs/
-  0-inputs/
-    ba/_source/, ba/0-audit/, ba/1-scoping/, ba/2-spec/, ba/3-design/
-    tech/_source/, tech/0-audit/, tech/1-archi/, tech/2-design/
-    steer/
-  1-prd/
-    0-audit/, 1-scoping/, 2-specification/, 3-epics/, 4-tests/, 5-tools/, 6-workshops/
-  2-tech/
-    0-audit/, 1-architecture/, 2-design/, 3-quality/, 4-workshops/
-  3-steer/
-    0-sprint-reports/, 1-committees/
+# Client inputs
+docs/0-inputs/
+  ba/_source/, ba/0-audit/, ba/1-scoping/, ba/2-spec/, ba/3-design/
+  tech/_source/, tech/0-audit/, tech/1-archi/, tech/2-design/
+  steer/
+
+# Generated deliverables
+outputs/docs/1-prd/
+  0-audit/, 1-scoping/, 2-specification/, 3-epics/, 4-tests/, 5-tools/, 6-workshops/
+outputs/docs/2-tech/
+  0-audit/, 1-architecture/, 2-design/, 3-quality/, 4-workshops/
+outputs/docs/3-steer/
+  0-sprint-reports/, 1-committees/
 ```
 
 ### Mode 2 — Feature Scaffold

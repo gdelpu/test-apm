@@ -10,6 +10,8 @@ author: agent-journeys
 reviewers: []
 dependencies: ["DOM-001", "BRL-001"]
 stories: ["US-001", "US-002"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [UF-001] User Journey Name

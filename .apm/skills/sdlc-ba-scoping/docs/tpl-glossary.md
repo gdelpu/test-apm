@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-glossary
 reviewers: []
 dependencies: ["VIS-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [GLO-001] Business Glossary

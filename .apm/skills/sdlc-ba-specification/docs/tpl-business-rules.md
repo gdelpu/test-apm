@@ -9,6 +9,8 @@ version: "1.0"
 last_updated: YYYY-MM-DD
 author: agent-rules
 dependencies: ["VIS-001", "GLO-001", "ACT-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [BRL-{rule_type}] {rule_type_name} Rules Catalogue
