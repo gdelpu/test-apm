@@ -57,17 +57,17 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - Python-based workflow state tracker (`state_tracker.py`) replacing the deprecated bash state manager
 - Tool invocation tracker (`tool_tracker.py`) for audit-trace logging of tool and skill events
 - Workflow state file schema (`workflow-state.schema.md`) standardising state entry structure
-- Trace record JSON schema for structured audit metadata
 - **C-01** correction record and policy rules **P-07a/b/c** ensuring agent file-write capability
 
 ### Changed
-- Expanded `allowedFilePaths` on 12 agents to include `src/**`, `tests/**`, `docs/**`, `specs/**` for consumer workspaces
+- Expanded `allowedFilePaths` on 12 agents (hub-orchestrator, modernization-agent, workflow-orchestrator, + 6 Copilot provider agents) to include `src/**`, `tests/**`, `docs/**`, `specs/**` for consumer workspaces
 - Removed restrictive "Direct source-code modification" Out of Scope language from 5 agents
-- Workflow-orchestrator upgraded from `tools: []` to `['codebase', 'search', 'edit/editFiles']`
-- Claude Code workflow commands updated to use new Python state tracker for init/update
+- Hook engine `__main__.py` expanded with state tracker CLI integration (+205 lines)
+- 8 Claude Code workflow commands updated to use new Python state tracker for init/update
+- CI gate policy rules (`a1_policy.py`, `a1-policy-validation.prompt.md`) updated with P-07a/b/c
 
-### Fixed
-- `LOCAL_TESTING.md` was misplaced at repo root — removed (content moved to docs)
+### Removed
+- `LOCAL_TESTING.md` at repo root (content previously moved to `docs/contributor/local-testing.md`)
 
 ## [0.0.9] — 2026-04-11
 
@@ -131,11 +131,18 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [0.0.6] — 2026-04-10
 
-### Changed
-- Enhance workflows and enforce file output requirements
+### Added
+- `scripts/generate-changelog-entry.py` — automated changelog generation from git history
+- `scripts/simulate_ci.py` — local CI simulation runner
 
-### Fixed
-- Update version to 0.0.6 and enhance README for CI pipeline clarity
+### Changed
+- `feature-implementation` workflow expanded with file-output enforcement and brownfield detection
+- `spec-kit` workflow expanded with quality gate improvements
+- Workflow-orchestrator agent updated with enhanced execution modes
+- Hub Orchestrator and Workflow Orchestrator Copilot provider agents updated
+- 5 Copilot prompts and 5 Claude Code commands updated for workflow consistency
+- CI gates README significantly expanded
+- `.gitlab-ci.yml` expanded with new pipeline stages
 
 
 ## [0.0.5] — 2026-04-10
@@ -145,56 +152,61 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - `output-metadata.instructions.md`: structured YAML frontmatter metadata required on all `outputs/` files
 - Canonical instructions: `.apm/instructions/file-output.md` and `.apm/instructions/output-metadata.md`
 - Output metadata JSON schema (`knowledge/governance/schemas/output-metadata.schema.json`)
+- Reference documentation: `docs/output-metadata.md`
 - CI gate: changelog enforcement — `release:tag-and-publish` now fails if `CHANGELOG.md` has no entry for the releasing version
 
 ### Changed
-- Refactored agents and prompts to enforce file output mandates (no more chat-only deliverables)
-- SDLC agents updated: BA Analyst, Steering Manager, Tech Architect, Spec Orchestrator, Station Orchestrator, Workflow Orchestrator
-- Hub catalog and SDLC agent registry updated for output-metadata awareness
-- Multiple skills updated with consistent frontmatter and output-metadata references
+- 7 canonical agents updated to enforce file output mandates: PR Validator, SDLC BA Analyst, Steering Manager, Tech Architect, Spec Orchestrator, Station Orchestrator, Workflow Orchestrator
+- 17 skills updated with consistent frontmatter and output-metadata references
+- 8 Copilot provider agents synced with canonical file-output changes
+- 9 Claude Code commands updated
+- CI gate station prompts updated across all A0–A7 stations
+- PR validation and SDLC workflows updated
+- Bootstrap and install scripts enhanced (`bootstrap-apm.ps1`, `install-apm-bundle.ps1`)
+
+### Removed
+- Stale result files: `pr_auto_result.json`, `test_gap_result.json`, `yaml_lint_result.json`
 
 ## [0.0.4] — 2026-04-09
 
-### Fixed
-- All 27 canonical agents now projected to `providers/github-copilot/agents/` (15 were missing in v0.0.2)
-- Consumer install: `.github/` and `.apm.lock.yaml` now land at repo root in both standard and expandable modes (previously nested inside `.apm-dist/`)
-- Consumer install: `.apm-dist/` staging directory removed after install (no longer left behind)
-- Bundle now includes `.apm/scripts/` and `scripts/project-copilot.sh` (projection script was missing, causing "Projection script not found" error)
-- Bootstrap default version changed from `0.0.1` to `latest`
-
 ### Added
-- `project-copilot.ps1` parity check: warns when canonical agents lack provider counterparts
-- `validate_copilot_assets.py`: missing agent projection is now a blocking error (was a warning)
-- `provider-parity.instructions.md`: explicit agent parity rules and checklist for all three providers
+- CI gate Python scripts: `a0_intake.py`, `a1_policy.py`, `a3_injection.py`, `a6_gate.py` (~1000 lines of PR validation pipeline logic)
+
+### Changed
+- `ci-gates/scripts/run_stations.sh` refactored for new Python-based station runners
+- `scripts/project-copilot.sh` syntax simplification
+
+### Fixed
+- Increment syntax for count and rewrite_count variables in `project-copilot.sh`
 
 ## [0.0.3] — 2026-04-09
 
 ### Added
 - Hook engine framework: context classifier, PII scanner, injection detector, policy authorizer, risk scorer, trace emitter (`.apm/hooks/engine/`)
-- Hook configuration template (`.apm/templates/hook-config.json`)
 - Trace record JSON schema (`.apm/hooks/engine/schemas/trace-record.schema.json`)
-- Station Orchestrator agent (`.apm/agents/station-orchestrator.md`) for hybrid deterministic + LLM pipeline execution
-- PR Validator agent (`.apm/agents/pr-validator.md`)
-- 20+ new skills: audit-tracing, data-anonymisation, adaptive-decision, ADR generation, brownfield-context, bug-triage, bug-reproduction, fix-planning, incident-analysis, intent-capture, iteration-scoring, knowledge-update, NFR review, observability-readiness, parity-validation, risk-scoring, root-cause-analysis, test-strategy, workflow-engine, governance-rules, delivery-metrics, drift-detection, soprasteria-dep
-- Copilot provider agents: Analysis, Architecture Governance, BMAD Orchestrator, Bug Fixer, Implementer, Modernization Agent/Orchestrator, Quality Validator, SDLC BA/Coordinator/Steering/Tech/Test, Spec Orchestrator, Workflow Orchestrator
+- Canonical agents: `station-orchestrator` and `pr-validator`
+- 23 new skills: `adaptive-decision`, `adr-generation`, `audit-tracing`, `brownfield-context`, `bug-reproduction`, `bug-triage`, `data-anonymisation`, `delivery-metrics`, `drift-detection`, `fix-planning`, `governance-rules`, `incident-analysis`, `intent-capture`, `iteration-scoring`, `knowledge-update`, `nfr-review`, `observability-readiness`, `parity-validation`, `risk-scoring`, `root-cause-analysis`, `soprasteria-dep`, `test-strategy`, `workflow-engine`
 - Copilot instructions: `audit-tracing.instructions.md`, `data-anonymisation.instructions.md`
-- Copilot prompt: `audit-trace.prompt.md`
-- Claude Code command: `audit-trace.md`
+- Claude Code command: `audit-trace`
 - CLI provider: gate-checker library, enhanced station-runner and workflow runner
-- Security constraints and resource limits for agent definitions
 - Observability-by-default and secure-by-default governance documents
-- Workflow playbook additions
-- Compliance-check and feature-implementation workflow hook integrations
 
 ### Changed
-- README expanded with hook framework, new agents, and updated workflow documentation
+- Security constraints and resource limits added to 16 existing Copilot provider agent files
+- Compliance-check and feature-implementation workflow hook integrations
+- README expanded with hook framework and updated workflow documentation
 - Hub catalog updated with new agent and workflow entries
 
 ## [0.0.2] — 2026-04-08
 
 ### Added
-- Usage documentation (`docs/ai-foundation-usage.md`) with TL;DR install guide and updating instructions
-- Consumer bootstrap scripts: `scripts/bootstrap-apm.ps1` and `scripts/bootstrap-apm.sh`
+- 15 GitHub Copilot provider agents: Analysis Agent, Architecture Governance, BMAD Orchestrator, Bug Fixer, Implementer, Modernization Agent/Orchestrator, Quality Validator, SDLC BA/Coordinator/Steering/Tech/Test, Spec Orchestrator, Workflow Orchestrator
+- Consumer quick-start guide (`docs/quick-start.md`)
+- Concepts documentation (`docs/concepts.md`)
+
+### Changed
+- Usage documentation renamed from `ai-foundation-usage.md` to `apm-consumer-guide.md`
+- Provider parity validation and projection scripts updated
 
 ## [0.0.1] — 2026-04-08
 
