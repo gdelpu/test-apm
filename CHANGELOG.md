@@ -7,6 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.17] — 2026-04-12
+
+### Changed
+- Documentation updates: `apm-consumer-guide.md`, `quick-start.md`
+- Script updates: `bootstrap-apm.ps1`, `bootstrap-apm.sh`
+
+### Fixed
+- Bundle hooks+templates in distribution, add CI smoke checks
+
+
 ## [0.0.16] — 2026-04-12
 
 ### Added
