@@ -7,6 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.14] — 2026-04-12
+
+### Changed
+- Script updates: `generate-changelog-entry.py`
+
+### Fixed
+- Update version to 0.0.14 and refine documentation for state tracking across workflows
+- Rewrite changelog generator to use diff analysis; fix historical entries
+
+
 ## [0.0.13] — 2026-04-12
 
 ### Added
