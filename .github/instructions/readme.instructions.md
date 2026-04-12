@@ -18,8 +18,7 @@ It must reflect the actual state of the repo at all times.
 5. **When adding an instruction**: update the Asset summary table and Repository Layout counts.
 6. **When changing directory structure**: update the Repository Layout table.
 7. **When changing provider projections**: update the Provider Setup section and Architecture diagram counts.
-8. **When adding or renaming a doc in `docs/`**: update `docs/README.md` (the Documentation Hub) — add or update the row in the appropriate audience table (Consumers, Reference, Contributors, Shared).
-9. **After any change**: run `python scripts/validate_all.py` to verify cross-layer consistency.
+8. **After any change**: run `python scripts/validate_all.py` to verify cross-layer consistency.
 
 ## Counts to keep in sync
 

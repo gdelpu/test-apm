@@ -13,6 +13,7 @@ Execute the **full Steer pipeline** (Systems P0 through P3) without human gates.
    - P2: Sprint progress, system health, sprint risks (recurring).
    - P3: COPIL preparation, Go/No-Go decision.
 5. **Write every artifact as an actual file on disk** under `outputs/docs/3-steer/`. Do not merely display content in chat — use file-writing tools to create each file.
+6. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If unavailable, write `workflow-state.md` directly following the **exact Markdown table format** in `.apm/hooks/engine/schemas/workflow-state.schema.md`.
 
 If $ARGUMENTS contains "gated", use `gate_mode: pause` at each system boundary.
 

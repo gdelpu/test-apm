@@ -22,5 +22,5 @@ Before executing any station, determine whether this is a **brownfield** (existi
 3. For greenfield: skip S0, start at S1 scoping.
 4. Execute remaining stations: scoping → specification (with fan-out) → functional design (per feature) → validation.
 5. **Use `edit/editFiles` or `create_file` to write every artifact as an actual file on disk** under `outputs/docs/1-prd/`. Do not merely display content in chat.
-6. Track state in `outputs/docs/1-prd/workflow-state.md`.
+6. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`. If `runCommands` is unavailable, write `workflow-state.md` directly using `edit/editFiles` following the **exact Markdown table format** defined in `.apm/hooks/engine/schemas/workflow-state.schema.md`. Do **not** invent alternative formats (e.g. YAML frontmatter with `stations_completed`/`stations_remaining`).
 7. After each station, verify that declared output files exist on disk before proceeding.
