@@ -362,6 +362,20 @@ test:apm-smoke:
             echo "❌ Expected at least 10 projected prompts, got $prompt_count"
             FAIL=1
           fi
+          # Verify hooks are bundled
+          hook_count=$(tar -tzf "$archive" | grep -c '\.apm/hooks/' || true)
+          echo "  Hook files:             $hook_count"
+          if [ "$hook_count" -lt 20 ]; then
+            echo "❌ Expected at least 20 hook files, got $hook_count"
+            FAIL=1
+          fi
+          # Verify templates are bundled (hook-config.json seeding)
+          template_count=$(tar -tzf "$archive" | grep -c '\.apm/templates/' || true)
+          echo "  Template files:         $template_count"
+          if [ "$template_count" -lt 1 ]; then
+            echo "❌ Expected at least 1 template file, got $template_count"
+            FAIL=1
+          fi
         fi
       done
       if [ -f "${APM_DIST_DIR}/SHA256SUMS" ]; then

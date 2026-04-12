@@ -40,7 +40,7 @@ Invoke-WebRequest `
 .\bootstrap-apm.ps1
 
 # 3. Commit (optional)
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "feat: install AI SDLC Foundation"
 ```
 
@@ -60,7 +60,7 @@ chmod +x bootstrap-apm.sh
 ./bootstrap-apm.sh
 
 # 3. Commit (optional)
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "feat: install AI SDLC Foundation"
 ```
 

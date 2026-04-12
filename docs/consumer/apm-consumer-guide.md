@@ -91,7 +91,7 @@ Invoke-WebRequest `
 .\bootstrap-apm.ps1
 
 # ── Step 3: Commit (optional — do this when you're happy) ───────────
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "feat: install AI SDLC Foundation"
 git push
 ```
@@ -116,7 +116,7 @@ chmod +x bootstrap-apm.sh
 ./bootstrap-apm.sh
 
 # ── Step 3: Commit (optional — do this when you're happy) ───────────
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "feat: install AI SDLC Foundation"
 git push
 ```
@@ -205,7 +205,7 @@ The bootstrap script downloads the installer, runs it, and cleans up temp files.
 ### 3. Commit the result
 
 ```bash
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "feat: install AI SDLC Foundation v0.0.1"
 ```
 
@@ -495,7 +495,7 @@ Re-run the bootstrap script with the new version number. It detects the existing
 $env:GITLAB_TOKEN = "glpat-xxxxxxxxxxxxxxxxxxxx"   # ← your token
 .\bootstrap-apm.ps1 -Version 0.0.2
 
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "chore: update AI SDLC Foundation to v0.0.2"
 git push
 ```
@@ -505,7 +505,7 @@ git push
 export GITLAB_TOKEN="glpat-xxxxxxxxxxxxxxxxxxxx"   # ← your token
 ./bootstrap-apm.sh --version 0.0.2
 
-git add .github/ .apm.lock.yaml
+git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml
 git commit -m "chore: update AI SDLC Foundation to v0.0.2"
 git push
 ```
