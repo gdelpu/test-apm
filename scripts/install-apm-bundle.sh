@@ -183,7 +183,12 @@ tar -xzf "${DEST_DIR}/${ARCHIVE_NAME}" -C "${DEST_DIR}"
 log_ok "Extracted: ${ARCHIVE_NAME}"
 
 # --- Detect existing install ---
+# Standard mode writes the lock at repo root; expandable writes at $DEST_DIR.
+# Try both locations so updates are detected regardless of prior mode.
+REPO_ROOT="$(pwd)"
 if read_apm_lock "$DEST_DIR"; then
+    log_info "Existing install detected: v${APM_LOCK_VERSION} (${APM_LOCK_MODE} mode)"
+elif read_apm_lock "$REPO_ROOT"; then
     log_info "Existing install detected: v${APM_LOCK_VERSION} (${APM_LOCK_MODE} mode)"
 fi
 
@@ -228,7 +233,6 @@ if [[ "$MODE" == "standard" ]]; then
     RUNTIME_DIR="${RUNTIME_DIR:-.github}"
 
     # Copy runtime directory to consumer repo root (not into staging dir)
-    REPO_ROOT="$(pwd)"
     if [[ -d "$REPO_ROOT/$RUNTIME_DIR" ]]; then
         log_info "Removing previous runtime directory: $RUNTIME_DIR"
         rm -rf "${REPO_ROOT:?}/$RUNTIME_DIR"
