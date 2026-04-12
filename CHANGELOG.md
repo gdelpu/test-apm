@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.13] — 2026-04-12
+
+### Changed
+- Resolve merge conflict in CHANGELOG.md
+- Refactor workflow tracking and state management
+
+
 ## [0.0.12] — 2026-04-12
 
 ### Fixed
