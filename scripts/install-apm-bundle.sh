@@ -240,16 +240,9 @@ if [[ "$MODE" == "standard" ]]; then
     cp -r "$TEMP_DIR/$RUNTIME_DIR" "$REPO_ROOT/$RUNTIME_DIR"
     log_ok "Copied runtime: $RUNTIME_DIR"
 
-    # Copy hook engine so consumers can use the state tracker CLI
-    if [[ -d "$TEMP_DIR/.apm/hooks" ]]; then
-        rm -rf "$REPO_ROOT/.apm/hooks"
-        mkdir -p "$REPO_ROOT/.apm"
-        cp -r "$TEMP_DIR/.apm/hooks" "$REPO_ROOT/.apm/hooks"
-        log_ok "Copied hook engine: .apm/hooks/"
-    fi
-
     # Seed hook-config.json if not already present
-    HOOK_CFG_TPL="$TEMP_DIR/.apm/templates/hook-config.json"
+    # After projection hooks+templates live inside the runtime dir
+    HOOK_CFG_TPL="$TEMP_DIR/$RUNTIME_DIR/templates/hook-config.json"
     HOOK_CFG_DST="$REPO_ROOT/hook-config.json"
     if [[ -f "$HOOK_CFG_TPL" && ! -f "$HOOK_CFG_DST" ]]; then
         cp "$HOOK_CFG_TPL" "$HOOK_CFG_DST"
