@@ -98,6 +98,9 @@ $Version = $Version -replace '^v', ''
 # --- Initialise checksum (may be set later by verification step) ---
 $actualHash = ''
 
+# --- Consumer repo root (CWD) used for standard-mode lock/runtime resolution ---
+$repoRoot = (Get-Location).Path
+
 # --- Validate semver ---
 if ($Version -notmatch '^\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?(\+[a-zA-Z0-9.]+)?$') {
     Write-Err "Invalid semver: '$Version'"
@@ -175,7 +178,12 @@ tar -xzf $ArchivePath -C $Destination
 Write-Ok "Extracted: $ArchiveName"
 
 # --- Check for existing lock file ---
+# Standard mode writes the lock at repo root; expandable writes at $Destination.
+# Try both locations so updates are detected regardless of prior mode.
 $existingLock = Read-ApmLock -Path $Destination
+if (-not $existingLock) {
+    $existingLock = Read-ApmLock -Path $repoRoot
+}
 if ($existingLock) {
     Write-Info "Existing install detected: v$($existingLock['version']) ($($existingLock['mode']) mode)"
 }
@@ -205,18 +213,8 @@ Write-Step "Applying install mode: $Mode"
 
 if ($Mode -eq 'standard') {
     # ── Standard mode: project runtime-only files ──────────────────────
-
-    # If updating, remove old runtime directory
-    if ($existingLock) {
-        $oldRuntime = Get-ApmRuntime -ApmRoot $Destination -ProviderKey $Provider
-        if ($oldRuntime) {
-            $oldRuntimePath = Join-Path $Destination $oldRuntime
-            if (Test-Path $oldRuntimePath) {
-                Remove-Item $oldRuntimePath -Recurse -Force
-                Write-Info "Removed previous runtime directory: $oldRuntime"
-            }
-        }
-    }
+    # NOTE: old runtime is removed unconditionally AFTER projection,
+    # right before copying the new runtime to $repoRoot (see below).
 
     # Create temp working directory alongside destination
     $tempDir = Join-Path (Split-Path $Destination -Parent) ".apm-install-tmp-$(Get-Date -Format 'yyyyMMddHHmmss')"
@@ -255,8 +253,15 @@ if ($Mode -eq 'standard') {
         }
 
         # Copy runtime directory to consumer repo root (not into staging dir)
-        $repoRoot = (Get-Location).Path
         $runtimeDst = Join-Path $repoRoot $runtimeDir
+
+        # Always remove old runtime so stale files (renamed/deleted upstream)
+        # do not persist.  This matches the bash installer behaviour.
+        if (Test-Path $runtimeDst) {
+            Remove-Item $runtimeDst -Recurse -Force
+            Write-Info "Removed previous runtime directory: $runtimeDir"
+        }
+
         Copy-Item $runtimeSrc -Destination $runtimeDst -Recurse -Force
         Write-Ok "Copied runtime: $runtimeDir"
 
