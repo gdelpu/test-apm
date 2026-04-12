@@ -10,31 +10,73 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 ## [0.0.12] — 2026-04-12
 
 ### Fixed
-- Enhance install scripts for better runtime management
+- Install scripts (`install-apm-bundle.ps1`, `.sh`): old runtime directory is now removed unconditionally before copying new runtime so stale files (renamed/deleted upstream) do not persist
+- Lock-file detection now checks both repo root and destination so updates are found regardless of prior install mode
+- `$repoRoot` variable hoisted to script top to avoid scoping issues in standard-mode runtime resolution
 
 ## [0.0.11] — 2026-04-11
 
+### Changed
+- Hub Orchestrator: added Dispatch Prompt Reference table with exact, copy-safe prompts for all 9 workflows
+- Hub Orchestrator: added CRITICAL dispatch rules (never fabricate prompts, never reference `.github/workflows/`, always use `outputs/`)
+- Hub Orchestrator guardrail updated to remove `docs/` as an alternative output root
+
 ### Fixed
-- Refine Out of Scope constraints and enhance agent tool declarations
+- Removed blanket "Out of Scope" entries from 11 provider agent files that contradicted their declared tools
+- Added **PI-02b** rule to `a3-prompt-injection.prompt.md` and `a3_injection.py`: flags `high` when Out of Scope entries contradict the agent's frontmatter `tools` declarations
+- Updated **A5** sandbox simulation to treat agents using declared tools for their intended purpose as expected behavior
+- Added **C-02** correction record documenting the overly broad Out of Scope hardening pattern
 
 ## [0.0.10] — 2026-04-11
 
+### Added
+- Python-based workflow state tracker (`state_tracker.py`) replacing the deprecated bash state manager
+- Tool invocation tracker (`tool_tracker.py`) for audit-trace logging of tool and skill events
+- Workflow state file schema (`workflow-state.schema.md`) standardising state entry structure
+- Trace record JSON schema for structured audit metadata
+- **C-01** correction record and policy rules **P-07a/b/c** ensuring agent file-write capability
+
 ### Changed
-- Refactor workflow state management and enhance agent file-write capabilities
+- Expanded `allowedFilePaths` on 12 agents to include `src/**`, `tests/**`, `docs/**`, `specs/**` for consumer workspaces
+- Removed restrictive "Direct source-code modification" Out of Scope language from 5 agents
+- Workflow-orchestrator upgraded from `tools: []` to `['codebase', 'search', 'edit/editFiles']`
+- Claude Code workflow commands updated to use new Python state tracker for init/update
+
+### Fixed
+- `LOCAL_TESTING.md` was misplaced at repo root — removed (content moved to docs)
 
 ## [0.0.9] — 2026-04-11
 
-### Changed
-- Add MCP setup and integration guides, enhance configuration commands
-- Add brand assets, governance documents, and playbooks
+### Added
+- MCP setup guide for consumers (`docs/consumer/mcp-setup-guide.md`) with server configuration profiles
+- MCP integration guide for contributors (`docs/contributor/mcp-integration-guide.md`)
+- `configure-mcp` command for Claude Code and matching Copilot prompt
+- MCP registry context (`mcp-registry.yaml`) cataloguing available MCP servers
+- MCP configuration skill (`mcp-configuration`) and fallback skill (`mcp-fallback`)
+- 10 new MCP-backed skills: `atlassian-ops`, `aws-resource-query`, `azdo-ops`, `azure-resource-query`, `context7-docs`, `figma-design-sync`, `github-ops`, `gitlab-ops`, `m365-data-query`, `mslearn-docs-lookup`
+- `playwright-browser-automation` and `semgrep-analysis` skills
+- PR Validator and Station Orchestrator agents for GitHub Copilot provider
+- `security-hardening.md` and `mcp-integration.md` canonical instructions
 
+### Changed
+- Brand assets relocated under `.apm/knowledge/brand/soprasteria/` with icons, logos, and templates
+- Governance documents and playbooks moved under `.apm/knowledge/` (constitution, governance, playbooks)
+- Agent security and tool declarations tightened across 12 canonical agents
+- Quick-start and consumer guides expanded with MCP configuration steps
 
 ## [0.0.8] — 2026-04-11
 
-### Fixed
-- Hub Orchestrator can now write deliverables to disk when handoff buttons are not clicked
+### Added
+- Reference documentation: `docs/reference/prompts.md`, `skills.md`, `workflows.md`, `agents.md`, `hooks.md`
+- Contributor documentation: `architecture.md`, `ci-pipeline.md`, `contributing.md`, `provider-setup.md`
+- GitHub Copilot provider `config.yml` for model specification and defaults
+- `project-copilot.sh` bash projection script (parity with `.ps1`)
+- `docs/README.md` documentation hub page
+
+### Changed
 - Hub Orchestrator added `edit/editFiles` tool with `allowedFilePaths: outputs/**` (canonical + provider)
-- Updated Hub Orchestrator guardrail from "pure triage only" to "prefer dispatch; execute directly when handoff unavailable"
+- Hub Orchestrator guardrail updated from "pure triage only" to "prefer dispatch; execute directly when handoff unavailable"
+- `README.md` significantly reduced — detailed content moved to `docs/` reference pages
 
 ## [0.0.7] — 2026-04-11
 
