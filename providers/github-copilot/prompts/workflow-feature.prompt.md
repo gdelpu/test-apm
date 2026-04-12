@@ -29,5 +29,5 @@ Before executing any station, determine whether this is a **brownfield** (existi
 5. The specification station receives `context-brief.md` as input for brownfield
    projects (ensuring the spec respects existing constraints).
 6. **Use `edit/editFiles` or `create_file` to write every artifact as an actual file on disk** under `outputs/specs/features/<feature>/`. Do not merely display content in chat.
-7. Track state in `outputs/specs/features/<feature>/workflow-state.md`.
+7. Track state via the canonical state tracker (`python -m engine --state`) under `outputs/runs/`.
 8. After each station, verify that declared output files exist on disk before proceeding.

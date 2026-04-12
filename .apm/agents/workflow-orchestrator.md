@@ -28,7 +28,7 @@ Execute workflow definitions by driving stations sequentially, evaluating qualit
 - Pass file-based state between stations (outputs of station N become inputs of station N+1)
 - Evaluate quality gates after each station completes
 - Block on blocker gates, log and continue on warning gates
-- Write and maintain workflow state in `outputs/specs/features/<feature>/workflow-state.md`
+- Write and maintain workflow state via the canonical state tracker under `outputs/runs/<workflow>/`
 - Support nested workflows (a station can reference another workflow)
 
 ## Execution modes

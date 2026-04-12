@@ -18,10 +18,12 @@ from pathlib import Path
 from . import generate_trace_id, run_pre_hooks, run_post_hooks
 from .pii_scanner import scan_retroactive
 from .state_tracker import (
+    find_latest_run,
     get_resume_index,
     inherit_trace_id,
     init_workflow,
     query_state,
+    resolve_run_dir,
     update_station,
 )
 from .tool_tracker import log_tool_call, log_skill_event
@@ -222,34 +224,39 @@ def _retroactive(args: argparse.Namespace) -> int:
 
 def _run_state(args: argparse.Namespace) -> int:
     """Dispatch --state sub-commands."""
+    repo_root = _find_repo_root()
     state_file = args.state_file
-    if not state_file and args.feature:
-        repo_root = _find_repo_root()
-        state_file = str(repo_root / "outputs" / "specs" / "features" / args.feature / "workflow-state.md")
+
+    # For non-init ops, auto-discover the latest run if no explicit path given
+    if args.state != "init" and not state_file:
+        latest = find_latest_run(
+            repo_root=repo_root,
+            workflow=args.workflow or None,
+        )
+        if latest:
+            state_file = str(latest)
 
     try:
         if args.state == "init":
-            if not state_file:
-                print("ERROR: --state-file or --feature required")
-                return 1
             stations = [s.strip() for s in args.stations.split(",") if s.strip()]
             if not stations:
                 print("ERROR: --stations required (comma-separated IDs)")
                 return 1
             result = init_workflow(
-                state_file=state_file,
+                state_file=state_file or None,
                 workflow=args.workflow,
                 feature=args.feature,
                 stations=stations,
                 trace_id=args.trace_id or None,
-                trace_file=args.trace_file,
+                trace_file=args.trace_file or None,
+                repo_root=repo_root,
             )
             print(json.dumps(result, indent=2))
             return 0
 
         elif args.state == "update":
             if not state_file:
-                print("ERROR: --state-file or --feature required")
+                print("ERROR: no active run found (use --state-file or run init first)")
                 return 1
             if not args.station:
                 print("ERROR: --station required")
@@ -263,17 +270,18 @@ def _run_state(args: argparse.Namespace) -> int:
                 status=args.status,
                 gate=args.gate,
                 trace_id=args.trace_id or None,
-                trace_file=args.trace_file,
+                trace_file=args.trace_file or None,
                 workflow=args.workflow,
                 agent=args.agent,
                 skill=args.skill,
+                repo_root=repo_root,
             )
             print(json.dumps(result, indent=2))
             return 0
 
         elif args.state == "query":
             if not state_file:
-                print("ERROR: --state-file or --feature required")
+                print("ERROR: no active run found (use --state-file or run init first)")
                 return 1
             result = query_state(state_file=state_file)
             print(json.dumps(result, indent=2))
@@ -281,7 +289,7 @@ def _run_state(args: argparse.Namespace) -> int:
 
         elif args.state == "resume":
             if not state_file:
-                print("ERROR: --state-file or --feature required")
+                print("ERROR: no active run found (use --state-file or run init first)")
                 return 1
             idx = get_resume_index(state_file=state_file)
             print(json.dumps({"resume_index": idx}))
@@ -289,7 +297,7 @@ def _run_state(args: argparse.Namespace) -> int:
 
         elif args.state == "inherit-trace":
             if not state_file:
-                print("ERROR: --state-file or --feature required")
+                print("ERROR: no active run found (use --state-file or run init first)")
                 return 1
             tid = inherit_trace_id(state_file=state_file)
             print(json.dumps({"trace_id": tid}))

@@ -88,43 +88,35 @@ Support these informational requests without dispatching:
   describe both and highlight when to use each
 - "What workflows are available for quality?" → filter by type
 
-## Dispatch protocol — MUST use handoff buttons
+## Dispatch protocol
 
-After classifying intent and confirming with the user, **always present the matching handoff button** from the provider's `handoffs:` frontmatter section. Do **NOT** construct your own dispatch prompt — the handoff buttons contain the exact, tested dispatch prompts with correct paths (`.apm/workflows/`, `outputs/`) and full instructions (brownfield/greenfield detection, etc.).
+After classifying intent and receiving user confirmation, dispatch execution through one of two paths:
 
-### CRITICAL — Dispatch rules
+### Path 1: Handoff buttons (provider-specific)
 
-1. **Present the handoff button** and tell the user to click it.
-2. **NEVER fabricate a dispatch prompt.** Always use the buttons or the reference table below.
-3. Workflows live at `.apm/workflows/*.yml` — **NEVER** reference `.github/workflows/`.
-4. Artifacts go to `outputs/` — **NEVER** reference `docs/` as the output root.
-5. If you must self-dispatch, copy the **exact** prompt from the Dispatch Prompt Reference below — **verbatim, no modifications, no truncation**.
+When available (e.g., in GitHub Copilot), present the matching handoff button from the provider's `handoffs:` frontmatter. Each button routes directly to the correct specialized agent:
 
-**Anti-pattern (NEVER do this):** Generating a message like `Read .github/workflows/sdlc-ba.yml and execute the full BA pipeline. Write all artifacts to docs/. Project:` — this is a hallucinated, truncated version that uses wrong paths and drops critical instructions. This is the single most common failure of this agent.
+- **Standard workflows** (feature-implementation, bug-fixing, modernization, spec-kit, quality-validation, incident-resolution, maturity-assessment) → **workflow-orchestrator**
+- **SDLC harness workflows** (sdlc-ba, sdlc-full, sdlc-tech, sdlc-steer) → **sdlc-coordinator**
+- **Standalone agents** (repository-analyzer, security-reviewer, branding) → the named agent directly
 
-### Dispatch Prompt Reference
+Tell the user which button to click. The buttons contain tested dispatch prompts with correct paths.
 
-When self-dispatching or executing directly, use **exactly** these prompts:
+### Path 2: Direct execution (when user confirms textually)
 
-| Workflow | Exact dispatch prompt |
-|---|---|
-| feature-implementation | `Read .apm/workflows/feature-implementation.yml and execute the feature-implementation workflow. Start at station 1 (constitution) — do NOT skip ahead. First determine whether this is a brownfield (existing system) or greenfield (new) project: if brownfield, run the brownfield-context station to extract codebase context before specification. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for project details.` |
-| bug-fixing | `Read .apm/workflows/bug-fixing.yml and execute the bug-fixing workflow. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for bug details.` |
-| modernization | `Read .apm/workflows/modernization.yml and execute the modernization workflow. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for target details.` |
-| sdlc-full | `Read .apm/workflows/sdlc-full.yml and execute the full SDLC pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, execute S0/T0 audit stations. If greenfield, skip audit stations and start from S1/T1. Write all artifacts to outputs/. Use the conversation context for project details.` |
-| spec-kit | `Read .apm/workflows/spec-kit.yml and execute the spec-kit workflow. Start at station 1 (constitution) — do NOT skip ahead to feature specification. First determine whether this is a brownfield (existing system) or greenfield (new) project: if brownfield, run the brownfield-context station to extract codebase context before specification. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for project details.` |
-| quality-validation | `Read .apm/workflows/quality-validation.yml and execute the quality-validation workflow. Use the conversation context for target details.` |
-| incident-resolution | `Read .apm/workflows/incident-resolution.yml and execute the incident-resolution workflow. Write all artifacts to outputs/specs/features/<feature>/. Use the conversation context for incident details.` |
-| sdlc-ba | `Read .apm/workflows/sdlc-ba.yml and execute the full BA pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, start with S0 audit stations. If greenfield, skip S0 audit and start from S1 scoping. Write all artifacts to outputs/. Use the conversation context for project details.` |
-| maturity-assessment | `Read .apm/workflows/maturity-assessment.yml and execute the maturity-assessment workflow. Use the conversation context for target details.` |
+When the user confirms by typing "yes", "go ahead", "start", etc. — **execute the workflow directly yourself**:
 
-### Execution fallback
+1. Read the workflow YAML from `.apm/workflows/<name>.yml`
+2. Follow each station's skill instructions sequentially
+3. Use `edit/editFiles` to write all deliverables to disk under `outputs/`
+4. Track progress in `workflow-state.md` under `outputs/runs/`
 
-When a handoff button is not clicked or the target agent is unavailable, execute the station work directly:
+### CRITICAL — What you must NEVER do
 
-1. Read the workflow YAML (always under `.apm/workflows/`, never `.github/workflows/`) and follow each station's skill instructions.
-2. Use `edit/editFiles` to write all deliverables to disk under `outputs/` (not `docs/`).
-3. Never display deliverable content only in chat — every output must be an actual file.
+1. **NEVER compose, fabricate, or output a "dispatch prompt" as chat text.** When the user confirms, your next action must be either presenting a handoff button OR reading the workflow YAML and starting execution. Do not generate text that looks like a dispatch instruction.
+2. **NEVER reference `.github/workflows/`.** Workflows live at `.apm/workflows/*.yml`.
+3. **NEVER reference `docs/` as the output root.** Artifacts go to `outputs/`.
+4. **NEVER truncate or summarise workflow instructions into a short prompt.** The most common failure of this agent is generating a hallucinated prompt like `Read .github/workflows/sdlc-ba.yml and execute the full BA pipeline. Write all artifacts to docs/. Project:` — wrong paths, missing instructions, truncated. If you catch yourself composing text like this, **STOP** and instead read `.apm/workflows/<name>.yml` directly and begin station execution.
 
 ### Workflows
 
@@ -148,7 +140,7 @@ For agents not tied to a workflow (e.g., `repository-analyzer`, `branding`,
 
 ### Resume
 
-If in-progress work is detected (existing `workflow-state.md` files), offer
+If in-progress work is detected (existing `workflow-state.md` files under `outputs/runs/`), offer
 to resume with `--resume` flag on the appropriate workflow.
 
 ## Skills to invoke

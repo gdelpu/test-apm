@@ -185,9 +185,39 @@ def parse_existing_unreleased_items(body: str) -> set[str]:
     return items
 
 
+def collect_all_versioned_items(text: str) -> set[str]:
+    """Collect all lowercase bullet items from existing versioned (non-Unreleased)
+    sections in the changelog. Used to deduplicate new entries against already-
+    released content."""
+    items: set[str] = set()
+    # Find all versioned sections: ## [X.Y.Z]  (not [Unreleased])
+    in_versioned = False
+    for line in text.splitlines():
+        if re.match(r"^## \[\d+\.\d+\.\d+", line):
+            in_versioned = True
+            continue
+        if re.match(r"^## \[", line):
+            # Another heading like [Unreleased] — skip until versioned
+            in_versioned = False
+            continue
+        if in_versioned:
+            bm = re.match(r"^-\s+(.+)", line)
+            if bm:
+                items.add(bm.group(1).strip().lower())
+    return items
+
+
 def build_release_entry(version: str, commits: list[str],
-                        unreleased_body: str) -> str:
-    """Build a ## [X.Y.Z] entry, merging unreleased content + new commits."""
+                        unreleased_body: str,
+                        existing_versioned_items: set[str] | None = None) -> str:
+    """Build a ## [X.Y.Z] entry, merging unreleased content + new commits.
+
+    Items already present in existing versioned changelog entries (passed via
+    *existing_versioned_items*) are excluded to prevent accumulation when the
+    commit-range base is too old or tags are unavailable locally.
+    """
+    already_released: set[str] = existing_versioned_items or set()
+
     # Start with existing unreleased sections
     existing_sections: dict[str, list[str]] = {}
     current_heading = ""
@@ -203,18 +233,19 @@ def build_release_entry(version: str, commits: list[str],
     # Classify new commits
     new_sections = classify_commits(commits)
 
-    # Merge: existing items first, then new (deduplicated)
+    # Merge: existing items first, then new (deduplicated against each other
+    # AND against items already present in prior versioned entries)
     merged: dict[str, list[str]] = {}
     seen: set[str] = set()
     for heading in SECTION_ORDER:
         for item in existing_sections.get(heading, []):
             key = item.lower()
-            if key not in seen:
+            if key not in seen and key not in already_released:
                 seen.add(key)
                 merged.setdefault(heading, []).append(item)
         for item in new_sections.get(heading, []):
             key = item.lower()
-            if key not in seen:
+            if key not in seen and key not in already_released:
                 seen.add(key)
                 merged.setdefault(heading, []).append(item)
 
@@ -365,7 +396,9 @@ def main():
             print(f"CHANGELOG.md already has a versioned entry for {version} — nothing to do")
             return
         unreleased_body = parse_unreleased_body(text)
-        entry = build_release_entry(version, commits, unreleased_body)
+        already_released = collect_all_versioned_items(text)
+        entry = build_release_entry(version, commits, unreleased_body,
+                                    already_released)
 
         if not args.apply:
             print("\n--- Draft release entry (use --apply to write) ---\n")

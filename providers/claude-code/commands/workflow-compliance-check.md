@@ -9,14 +9,14 @@ Run the Compliance Check workflow for privacy, AI governance, and security valid
    ```bash
    cd .apm/hooks && python -m engine --state init \
      --workflow compliance-check --feature <feature> \
-     --stations "pii-scan,injection-detection,policy-validation,risk-scoring,approval,report" \
-     --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+     --stations "pii-scan,injection-detection,policy-validation,risk-scoring,approval,report"
    ```
-3. Before each station, run `python -m engine --state update --station <id> --status running ...`.
-   After each station, run `python -m engine --state update --station <id> --status passed --gate pass ...`.
+   Capture the returned `trace_id` and `run_dir`. State and trace files are auto-created under `outputs/runs/compliance-check/<timestamp>-<feature>-<short-tid>/`.
+3. Before each station, run `python -m engine --state update --station <id> --status running --trace-id <tid> --workflow compliance-check`.
+   After each station, run `python -m engine --state update --station <id> --status passed --gate pass --trace-id <tid> --workflow compliance-check`.
 4. Execute each station: PII scan → prompt injection detection → policy validation →
    risk scoring → human approval → compliance report.
-5. **Write every artifact as an actual file on disk** under `outputs/specs/features/<feature>/`. Do not merely display content in chat — use file-writing tools to create each file.
+5. **Write every artifact as an actual file on disk** under the run directory returned by init. Do not merely display content in chat — use file-writing tools to create each file.
 6. Report overall compliance status (pass / conditional / fail) with gate results.
 
 ## Outputs

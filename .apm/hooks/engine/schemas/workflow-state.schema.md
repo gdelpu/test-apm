@@ -64,3 +64,64 @@ The hook framework's post-hook validator checks:
 
 Malformed entries are auto-corrected where possible and flagged in
 `audit-trace.jsonl` with `event: "state-validation-fix"`.
+
+## Run directory layout
+
+All workflow runs are stored under a centralized `outputs/runs/` tree:
+
+```
+outputs/runs/
+├── run-manifest.json               # Append-only index of all runs
+├── feature-implementation/
+│   ├── latest → 20260412-143000-login-a1b2c3d4/
+│   ├── 20260412-143000-login-a1b2c3d4/
+│   │   ├── workflow-state.md
+│   │   └── audit-trace.jsonl
+│   └── 20260411-091500-signup-e5f6a7b8/
+│       ├── workflow-state.md
+│       └── audit-trace.jsonl
+├── spec-kit/
+│   ├── latest → 20260412-150000-payments-c9d0e1f2/
+│   └── ...
+```
+
+### Directory naming
+
+Format: `<YYYYMMDD-HHMMSS>-<name>-<short-tid>`
+
+| Segment | Source | Example |
+|---------|--------|---------|
+| `YYYYMMDD-HHMMSS` | UTC timestamp at init | `20260412-143000` |
+| `name` | Feature name or workflow name (kebab-case slug) | `login` |
+| `short-tid` | First 8 chars of trace ID | `a1b2c3d4` |
+
+### `latest` symlink
+
+Each `outputs/runs/<workflow>/latest` is a symlink pointing to the most
+recent run directory. Updated automatically by `--state init`. Used by
+`--state query/update/resume` to auto-discover state when `--state-file`
+is not explicitly provided.
+
+### `run-manifest.json`
+
+Append-only JSON array at `outputs/runs/run-manifest.json`:
+
+```json
+[
+  {
+    "trace_id": "a1b2c3d4-...",
+    "workflow": "feature-implementation",
+    "feature": "login",
+    "run_dir": "outputs/runs/feature-implementation/20260412-143000-login-a1b2c3d4",
+    "started": "2026-04-12T14:30:00Z",
+    "status": "in-progress"
+  }
+]
+```
+
+The `status` field is updated to `passed` or `failed` when all stations resolve.
+
+### Auto-derived trace file
+
+When `--trace-file` is not explicitly provided, `audit-trace.jsonl` is
+automatically created as a sibling of `workflow-state.md` in the run directory.

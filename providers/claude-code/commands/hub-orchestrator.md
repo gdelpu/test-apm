@@ -22,7 +22,7 @@ Central triage and routing — discover the right workflow or agent for your tas
 
 3. **Load dispatch protocol**: Read `.apm/agents/hub-orchestrator.md` for dispatch rules.
 
-4. **Check for in-progress work**: Scan `outputs/specs/features/*/workflow-state.md`.
+4. **Check for in-progress work**: Scan `outputs/runs/*/latest/workflow-state.md`.
    If any exist, offer to resume before starting a new workflow.
 
 5. **Classify intent**: Use the fast-path keyword matching table from the
@@ -58,7 +58,7 @@ Central triage and routing — discover the right workflow or agent for your tas
 - `.apm/contexts/hub-catalog.yaml` (auto-generated catalog)
 - `.apm/skills/hub-classification/SKILL.md` (classification protocol)
 - `.apm/agents/hub-orchestrator.md` (dispatch rules)
-- `outputs/specs/features/*/workflow-state.md` (optional, for resume detection)
+- `outputs/runs/*/latest/workflow-state.md` (optional, for resume detection)
 
 ## Outputs
 

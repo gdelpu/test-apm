@@ -29,7 +29,7 @@ Read the full agent definition from `.apm/agents/workflow-orchestrator.md`.
 - Resolve station sequence and dependency graph
 - Dispatch each station to the appropriate agent with an explicit tool scope
 - Collect station outputs and enforce quality gates before advancing
-- Write workflow state to `outputs/station_out/` and `outputs/specs/features/<feature>/workflow-state.md`
+- Write workflow state to `outputs/runs/<workflow>/` via the canonical state tracker
 
 > All station declarations in workflow YAML MUST include an explicit `allowed_tools` list. Stations without one inherit `[]` (no tools).
 
@@ -37,33 +37,32 @@ Read the full agent definition from `.apm/agents/workflow-orchestrator.md`.
 
 Use the canonical Python state tracker via `runCommands` for **deterministic** state management. This replaces LLM-driven file writes for workflow-state.md.
 
+All runs are stored under `outputs/runs/<workflow>/<timestamp>-<name>-<short-tid>/` with auto-derived `audit-trace.jsonl` and a `latest` symlink per workflow.
+
 ### Workflow initialisation
 
 At the start of every workflow, run:
 ```bash
 cd .apm/hooks && python -m engine --state init \
   --workflow <name> --feature <feature> \
-  --stations "station1,station2,station3" \
-  --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+  --stations "station1,station2,station3"
 ```
-This creates `workflow-state.md` and emits a root `workflow` span. Capture the returned `trace_id` for all subsequent calls.
+This creates `workflow-state.md` + `audit-trace.jsonl` in a new run directory and emits a root `workflow` span. Capture the returned `trace_id` and `run_dir` for all subsequent calls.
 
 ### Before each station
 
 ```bash
 cd .apm/hooks && python -m engine --state update \
-  --feature <feature> --station <id> --status running \
-  --trace-id <tid> --workflow <name> --agent <agent> \
-  --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+  --station <id> --status running \
+  --trace-id <tid> --workflow <name> --agent <agent>
 ```
 
 ### After each station
 
 ```bash
 cd .apm/hooks && python -m engine --state update \
-  --feature <feature> --station <id> --status passed --gate pass \
-  --trace-id <tid> --workflow <name> --agent <agent> \
-  --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+  --station <id> --status passed --gate pass \
+  --trace-id <tid> --workflow <name> --agent <agent>
 ```
 
 Use `--status failed --gate fail` if the station fails.
@@ -71,20 +70,21 @@ Use `--status failed --gate fail` if the station fails.
 ### Query current state
 
 ```bash
-cd .apm/hooks && python -m engine --state query --feature <feature> --json
+cd .apm/hooks && python -m engine --state query --workflow <name> --json
 ```
+Auto-discovers the latest run for the given workflow. Use `--state-file <path>` to target a specific run.
 
 ### Resume detection
 
 ```bash
-cd .apm/hooks && python -m engine --state resume --feature <feature>
+cd .apm/hooks && python -m engine --state resume --workflow <name>
 ```
 
 ### Trace ID inheritance (cross-provider)
 
 When resuming a workflow started by another provider:
 ```bash
-cd .apm/hooks && python -m engine --state inherit-trace --feature <feature>
+cd .apm/hooks && python -m engine --state inherit-trace --workflow <name>
 ```
 
 ### Tool / MCP tracking
@@ -93,8 +93,7 @@ After invoking an MCP tool:
 ```bash
 cd .apm/hooks && python -m engine --tool <name> \
   --mcp-server <server-id> --mcp-method <method> \
-  --trace-id <tid> --station <station> --workflow <name> \
-  --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+  --trace-id <tid> --station <station> --workflow <name>
 ```
 
 ### Skill lifecycle
@@ -102,8 +101,7 @@ cd .apm/hooks && python -m engine --tool <name> \
 Before/after skill invocation:
 ```bash
 cd .apm/hooks && python -m engine --skill-event start --skill <name> \
-  --trace-id <tid> --station <station> --workflow <name> \
-  --trace-file outputs/specs/features/<feature>/audit-trace.jsonl
+  --trace-id <tid> --station <station> --workflow <name>
 ```
 
 ### Fallback (if runCommands unavailable)

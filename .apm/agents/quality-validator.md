@@ -40,7 +40,7 @@ Execute quality and security validation stations using external tool adapters. I
 | Skill | Purpose | Tool adapters |
 |-------|---------|---------------|
 | `lint-analysis` | Code style and error detection | ESLint, Pylint, Clippy |
-| `static-analysis` | Code quality, bugs, vulnerabilities | SonarQube, SonarCloud |
+| `static-analysis` | Code quality, bugs, vulnerabilities | SonarQube, SonarCloud (MCP: `sonarqube-mcp`) |
 | `security-scan` | SAST and DAST security scanning | Checkmarx, OWASP ZAP |
 | `dependency-audit` | Known vulnerability detection in dependencies | OWASP Dependency-Check, Snyk, Trivy |
 | `coverage-assessment` | Test coverage measurement | JaCoCo, Istanbul, Coverage.py |

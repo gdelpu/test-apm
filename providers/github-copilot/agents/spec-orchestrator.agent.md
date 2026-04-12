@@ -21,7 +21,7 @@ Read the full agent definition from `.apm/agents/spec-orchestrator.md`.
 
 ## File Creation Mandate
 
-All deliverables **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files at the output paths specified by the active skill (typically under `outputs/specs/features/<feature>/` or `specs/`). Create parent directories as needed.
+All deliverables **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files at the output paths specified by the active skill (typically under `outputs/specs/features/<feature>/`). Create parent directories as needed.
 
 ## Security Constraints
 

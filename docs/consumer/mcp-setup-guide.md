@@ -24,6 +24,7 @@
   - [Context7](#context7)
   - [Playwright](#playwright)
   - [SemGrep](#semgrep)
+  - [SonarQube](#sonarqube)
   - [Figma](#figma)
 - [Fallback Behavior](#fallback-behavior)
 - [Version Management](#version-management)
@@ -38,7 +39,7 @@
 
 **Model Context Protocol (MCP)** is an open standard that allows AI agents to interact with external tools and services through a unified interface. Instead of relying solely on built-in capabilities, agents can call MCP servers to query live data, run analysis tools, or interact with external platforms.
 
-The AI SDLC Foundation supports 13 curated MCP servers. **All are optional** — every workflow runs without any MCP server configured. MCP servers provide enrichments: live infrastructure data, current documentation, browser automation, and platform integrations.
+The AI SDLC Foundation supports 14 curated MCP servers. **All are optional** — every workflow runs without any MCP server configured. MCP servers provide enrichments: live infrastructure data, current documentation, browser automation, and platform integrations.
 
 > Learn more: [modelcontextprotocol.io](https://modelcontextprotocol.io/)
 
@@ -92,10 +93,10 @@ Curated server sets for common development stacks:
 
 | Profile | Servers included | Best for |
 |---------|-----------------|----------|
-| `github-stack` | GitHub, Context7, Playwright, SemGrep | GitHub-native projects |
-| `gitlab-stack` | GitLab, Context7, Playwright, SemGrep, Atlassian | GitLab CI/CD with Atlassian PM |
-| `azure-devops-stack` | Azure, ADO (Local+Remote), MsLearn, Context7, Work-iq, Playwright | Microsoft-centric stacks |
-| `full` | All 13 servers | Maximum capability (configure auth per-server) |
+| `github-stack` | GitHub, Context7, Playwright, SemGrep, SonarQube | GitHub-native projects |
+| `gitlab-stack` | GitLab, Context7, Playwright, SemGrep, Atlassian, SonarQube | GitLab CI/CD with Atlassian PM |
+| `azure-devops-stack` | Azure, ADO (Local+Remote), MsLearn, Context7, Work-iq, Playwright, SonarQube | Microsoft-centric stacks |
+| `full` | All 14 servers | Maximum capability (configure auth per-server) |
 
 ---
 
@@ -428,6 +429,64 @@ For Semgrep Cloud rules (optional):
 
 ---
 
+### SonarQube
+
+**What it does**: Code quality and security analysis — retrieve issues, quality gate status, coverage, duplications, security hotspots, and metrics from SonarQube Server or SonarQube Cloud.
+
+**Prerequisites**: Docker (or any OCI-compatible runtime). SonarQube Server 2025.1+, SonarQube Cloud, or SonarQube Community Build. A SonarQube user token.
+
+**Skills enhanced**: `static-analysis`, `security-scan`, `quality-report`
+
+**Configuration** (SonarQube Cloud):
+```json
+{
+  "servers": {
+    "sonarqube": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm", "--init", "--pull=always",
+        "-e", "SONARQUBE_TOKEN",
+        "-e", "SONARQUBE_ORG",
+        "mcp/sonarqube"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}",
+        "SONARQUBE_ORG": "${input:SONARQUBE_ORG}"
+      }
+    }
+  }
+}
+```
+
+**Configuration** (SonarQube Server / Community Build):
+```json
+{
+  "servers": {
+    "sonarqube": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm", "--init", "--pull=always",
+        "-e", "SONARQUBE_TOKEN",
+        "-e", "SONARQUBE_URL",
+        "mcp/sonarqube"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "${input:SONARQUBE_TOKEN}",
+        "SONARQUBE_URL": "${input:SONARQUBE_URL}"
+      }
+    }
+  }
+}
+```
+
+To disable telemetry, add `"-e", "TELEMETRY_DISABLED"` to `args` and `"TELEMETRY_DISABLED": "true"` to `env`.
+
+**Troubleshooting**: Ensure Docker is running. Verify token with the SonarQube API (`/api/authentication/validate`). For SonarQube Cloud US region, set `SONARQUBE_URL` to `https://sonarqube.us`.
+
+> See [SonarQube MCP Server docs](https://docs.sonarsource.com/sonarqube-mcp-server) for advanced configuration (HTTPS transport, team deployments, SonarQube for IDE integration).
+
+---
+
 ### Figma
 
 **What it does**: Read Figma designs, extract component specs, validate against design tokens.
@@ -463,6 +522,7 @@ Every workflow runs without any MCP server. When a server is unavailable, skills
 | DevOps (GitHub, GitLab, ADO) | Live PR/pipeline/issue data | Local git/diff, manual platform UI |
 | Documentation (MsLearn, Context7) | Current, verified API docs | Agent training knowledge + `[DOCS-NOT-VERIFIED]` markers |
 | Testing (Playwright, SemGrep) | Live browser/SAST execution | CLI tools or regex-based pattern scans |
+| Quality (SonarQube) | Live issues, quality gates, coverage metrics | SonarQube CLI scanner, local linters (ESLint, Pylint) |
 | Collaboration (Atlassian, Work-iq) | Live Jira/M365 data | Manual input, local Markdown files |
 | Design (Figma) | Bidirectional design sync | Local HTML prototypes |
 
