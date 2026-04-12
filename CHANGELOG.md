@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.18] — 2026-04-12
+
+### Changed
+- Script updates: `install-apm-bundle.ps1`, `install-apm-bundle.sh`, `project-copilot.sh`
+
+### Fixed
+- Project hooks into runtime dir, add rewrite pairs, bump to 0.0.18
+
+
 ## [0.0.17] — 2026-04-12
 
 ### Changed
