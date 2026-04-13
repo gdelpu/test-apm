@@ -18,6 +18,7 @@ Run the BMAD (Build → Measure → Analyze → Decide) feedback loop.
 5. Evaluation uses scoring, drift detection, and adaptive decisions.
 6. If decide station recommends retry, loop back to build.
 7. **Write every artifact as an actual file on disk** under the run directory returned by init. Do not merely display content in chat — use file-writing tools to create each file.
+8. **After each station completes, re-display the full progress table** showing updated statuses (✅ completed, 🔄 in-progress, ⏳ pending) for all stations. Never leave the initial table stale.
 
 ## Inputs
 
