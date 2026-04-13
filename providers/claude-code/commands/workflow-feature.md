@@ -38,6 +38,7 @@ Before executing any station, determine whether this is a **brownfield** (existi
    implementation → quality validation → final gate.
 8. **Write every artifact as an actual file on disk** under the run directory returned by init. Do not merely display content in chat — use file-writing tools to create each file.
 9. After each station, verify that declared output files exist on disk before proceeding.
+10. **After each station completes, re-display the full progress table** showing updated statuses (✅ completed, 🔄 in-progress, ⏳ pending) for all stations. Never leave the initial table stale.
 
 If $ARGUMENTS contains "skip-brownfield", skip the brownfield-context station (greenfield mode).
 
