@@ -17,6 +17,7 @@ Run the Maturity Assessment workflow to evaluate project or team maturity.
 4. Execute each station: scope definition → analysis → scoring →
    report generation → roadmap → stakeholder review.
 5. **Write every artifact as an actual file on disk** under the run directory returned by init. Do not merely display content in chat — use file-writing tools to create each file.
+6. **After each station completes, re-display the full progress table** showing updated statuses (✅ completed, 🔄 in-progress, ⏳ pending) for all stations. Never leave the initial table stale.
 
 ## Inputs
 

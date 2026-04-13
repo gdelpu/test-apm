@@ -24,7 +24,7 @@ You are a senior tech lead. Your mission is to consolidate all enabler files pro
 
 A single index file `outputs/docs/2-tech/2-design/enablers/enb-000-index.md` containing:
 
-1. **Complete enabler inventory** — all enablers with ID, title, source ADR, wave, dependencies
+1. **Complete thematic enabler inventory** — 10 to 15 consolidated themes with ID, title, source ADRs, wave, dependencies
 2. **Wave summary** — enablers grouped by wave with dependency arrows
 3. **Coverage check** — every ADR's `### Required enablers` items accounted for
 4. **Duplicate detection** — flag any overlapping enablers from different ADRs
@@ -36,7 +36,38 @@ A single index file `outputs/docs/2-tech/2-design/enablers/enb-000-index.md` con
 
 Read the YAML front matter of each enabler file in `outputs/docs/2-tech/2-design/enablers/`. Extract: `id`, `title`, `adr_source`, `wave`.
 
+### Step 1b: Thematic consolidation (MANDATORY)
+
+**Target: 10 to 15 thematic enablers maximum.**
+
+After inventorying all individual enablers, group them by technical domain using the table below as a starting point. If the project has fewer concerns, fewer themes are acceptable (minimum: 5).
+
+| Thematic domain | Typical candidates to group |
+|---|---|
+| Infrastructure & Platform | K8s namespaces, Helm charts, OVH/infogérance actions, environment provisioning |
+| Project Scaffold & Docker | Monorepo structure, Docker Compose, service templates, Nx/Maven multi-module |
+| CI/CD Pipeline & Quality Gates | GitLab CI / GitHub Actions stages, Trivy, SonarQube, coverage gate |
+| Data Layer (DB, Migrations, ORM) | Flyway, JPA/Hibernate config, HikariCP, Testcontainers DB |
+| Backend Foundation (Security, API) | Spring Security, Keycloak adapter, JWT filter, OpenAPI/SpringDoc config |
+| Async & Batch Processing | CronJobs, message broker setup, email dispatch state machine |
+| Observability (Logs, Metrics, Health) | Logback JSON encoder, MDC correlation ID, Actuator, SLO alert rules |
+| GDPR & Data Protection | Log sanitisation filter, soft-delete, hard-purge job, right-to-erasure endpoint |
+| Test Automation (Unit, Integration, E2E) | Testcontainers, WireMock, MSW, Playwright, k6 |
+| Sensitive Data Encryption *(conditional)* | Column-level encryption, HSM/KMS config — only if legally confirmed |
+
+**Consolidation rules:**
+1. Group all individual enablers that share the same technical domain into a single thematic enabler.
+2. Assign the thematic enabler the **most blocking** wave of its members (e.g., if 3 members are Wave 0 and 1 is Wave 1, the thematic enabler is Wave 0).
+3. Preserve **all original tasks** inside a "Tâches incluses / Included tasks" table within each thematic enabler section. Do not lose any task — granularity is kept inside the enabler, not at index level.
+4. If an individual enabler does not fit any theme, create a new theme rather than skipping it.
+5. Mark conditional enablers (e.g., contingent on a legal or architectural decision) explicitly with `[CONDITIONAL — <condition>]` and assign them to the highest wave.
+6. The index YAML front matter must reflect the consolidated count: `total_enablers: <10-15>`.
+
+> **BLOCK condition:** If after Step 1b the count of thematic enablers is still > 15 — STOP. Re-merge themes before proceeding to Step 2.
+
 ### Step 2: Cross-ADR dependency resolution
+
+> Steps 2–5 operate on the **consolidated thematic enablers** produced in Step 1b, not on the original atomic files.
 
 Some enablers from different ADRs may depend on each other (e.g., auth middleware from ADR-AUTH depends on project setup from ADR-ARCH). Resolve:
 1. For each enabler, check if its sub-tasks reference another enabler (by ID or by implicit dependency)
@@ -69,6 +100,7 @@ Produce a Mermaid `graph TD` showing all enablers grouped by wave with dependenc
 - **Wave 0 enablers must have zero dependencies**
 - **Flag but do not delete duplicates** — let the human reviewer decide
 - **Every ADR must have its enablers accounted for**
+- **BLOCK if `total_enablers` > 15** — do not produce the index; return to Step 1b and re-merge themes
 
 ## Output format
 
