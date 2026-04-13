@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.19] — 2026-04-13
+
 ### Changed
 - SonarQube integration updated: skill(s) `sdlc-tech-architecture`
 - Skill updates: `sdlc-tech-architecture`
@@ -16,6 +18,9 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ### Fixed
 - Re-display progress table after each station transition
+
+### Removed
+- `.apm/templates/template-corporate.docx`
 
 
 ## [0.0.18] — 2026-04-12
