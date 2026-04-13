@@ -17,6 +17,16 @@ from pathlib import Path
 
 from . import generate_trace_id, run_pre_hooks, run_post_hooks
 from .pii_scanner import scan_retroactive
+from .state_tracker import (
+    find_latest_run,
+    get_resume_index,
+    inherit_trace_id,
+    init_workflow,
+    query_state,
+    resolve_run_dir,
+    update_station,
+)
+from .tool_tracker import log_tool_call, log_skill_event
 
 
 def main() -> int:
@@ -24,6 +34,8 @@ def main() -> int:
         description="SSG AI SDLC hook framework",
         prog="python -m engine",
     )
+
+    # --- Existing hook flags ---
     parser.add_argument("--phase", choices=["pre", "post"], help="Hook phase")
     parser.add_argument("--trace-id", default="", help="Correlation ID (UUID)")
     parser.add_argument("--station", default="", help="Station ID")
@@ -40,13 +52,46 @@ def main() -> int:
     parser.add_argument("--path", help="File or directory to scan (retroactive mode)")
     parser.add_argument("--json", dest="json_output", action="store_true", help="JSON output")
 
+    # --- State tracker flags ---
+    parser.add_argument(
+        "--state",
+        choices=["init", "update", "query", "resume", "inherit-trace"],
+        help="Workflow state operation",
+    )
+    parser.add_argument("--feature", default="", help="Feature name (state ops)")
+    parser.add_argument("--state-file", help="Path to workflow-state.md")
+    parser.add_argument("--stations", default="", help="Comma-separated station IDs (init)")
+    parser.add_argument("--status", default="", help="Station status (update)")
+    parser.add_argument("--gate", default="—", help="Gate result (update)")
+
+    # --- Tool / MCP tracking flags ---
+    parser.add_argument("--tool", default="", help="Tool name for invocation tracking")
+    parser.add_argument("--mcp-server", default="", help="MCP server ID")
+    parser.add_argument("--mcp-method", default="", help="MCP method called")
+    parser.add_argument("--duration-ms", type=int, default=None, help="Call duration in ms")
+    parser.add_argument(
+        "--skill-event",
+        choices=["start", "end"],
+        help="Skill lifecycle event",
+    )
+
     args = parser.parse_args()
+
+    # --- Dispatch ---
+    if args.state:
+        return _run_state(args)
+
+    if args.tool or args.mcp_server:
+        return _run_tool_track(args)
+
+    if args.skill_event:
+        return _run_skill_track(args)
 
     if args.retroactive:
         return _retroactive(args)
 
     if not args.phase:
-        parser.error("--phase is required (unless --retroactive)")
+        parser.error("--phase is required (unless --state, --tool, --skill-event, or --retroactive)")
 
     trace_id = args.trace_id or generate_trace_id()
 
@@ -170,6 +215,172 @@ def _retroactive(args: argparse.Namespace) -> int:
         print(f"\nTotal: {total_findings} PII findings across {len(files)} files")
 
     return 0
+
+
+# ---------------------------------------------------------------------------
+# State tracker handlers
+# ---------------------------------------------------------------------------
+
+
+def _run_state(args: argparse.Namespace) -> int:
+    """Dispatch --state sub-commands."""
+    repo_root = _find_repo_root()
+    state_file = args.state_file
+
+    # For non-init ops, auto-discover the latest run if no explicit path given
+    if args.state != "init" and not state_file:
+        latest = find_latest_run(
+            repo_root=repo_root,
+            workflow=args.workflow or None,
+        )
+        if latest:
+            state_file = str(latest)
+
+    try:
+        if args.state == "init":
+            stations = [s.strip() for s in args.stations.split(",") if s.strip()]
+            if not stations:
+                print("ERROR: --stations required (comma-separated IDs)")
+                return 1
+            result = init_workflow(
+                state_file=state_file or None,
+                workflow=args.workflow,
+                feature=args.feature,
+                stations=stations,
+                trace_id=args.trace_id or None,
+                trace_file=args.trace_file or None,
+                repo_root=repo_root,
+            )
+            print(json.dumps(result, indent=2))
+            return 0
+
+        elif args.state == "update":
+            if not state_file:
+                print("ERROR: no active run found (use --state-file or run init first)")
+                return 1
+            if not args.station:
+                print("ERROR: --station required")
+                return 1
+            if not args.status:
+                print("ERROR: --status required")
+                return 1
+            result = update_station(
+                state_file=state_file,
+                station_id=args.station,
+                status=args.status,
+                gate=args.gate,
+                trace_id=args.trace_id or None,
+                trace_file=args.trace_file or None,
+                workflow=args.workflow,
+                agent=args.agent,
+                skill=args.skill,
+                repo_root=repo_root,
+            )
+            print(json.dumps(result, indent=2))
+            return 0
+
+        elif args.state == "query":
+            if not state_file:
+                print("ERROR: no active run found (use --state-file or run init first)")
+                return 1
+            result = query_state(state_file=state_file)
+            print(json.dumps(result, indent=2))
+            return 0
+
+        elif args.state == "resume":
+            if not state_file:
+                print("ERROR: no active run found (use --state-file or run init first)")
+                return 1
+            idx = get_resume_index(state_file=state_file)
+            print(json.dumps({"resume_index": idx}))
+            return 0
+
+        elif args.state == "inherit-trace":
+            if not state_file:
+                print("ERROR: no active run found (use --state-file or run init first)")
+                return 1
+            tid = inherit_trace_id(state_file=state_file)
+            print(json.dumps({"trace_id": tid}))
+            return 0
+
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"ERROR: {exc}")
+        return 1
+
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# Tool / MCP tracking handler
+# ---------------------------------------------------------------------------
+
+
+def _run_tool_track(args: argparse.Namespace) -> int:
+    """Handle --tool and --mcp-server tracking."""
+    trace_id = args.trace_id or generate_trace_id()
+    result = log_tool_call(
+        trace_id=trace_id,
+        tool=args.tool,
+        mcp_server=args.mcp_server or None,
+        mcp_method=args.mcp_method or None,
+        duration_ms=args.duration_ms,
+        workflow=args.workflow,
+        station=args.station,
+        agent=args.agent,
+        skill=args.skill,
+        trace_file=args.trace_file,
+    )
+    if args.json_output:
+        print(json.dumps(result, indent=2))
+    else:
+        parts = [f"tool={result.get('tool_invoked', args.tool)}"]
+        if result.get("mcp", {}).get("server_id"):
+            parts.append(f"mcp={result['mcp']['server_id']}/{result['mcp']['method']}")
+        print(f"tracked: {', '.join(parts)}")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# Skill lifecycle handler
+# ---------------------------------------------------------------------------
+
+
+def _run_skill_track(args: argparse.Namespace) -> int:
+    """Handle --skill-event start|end."""
+    trace_id = args.trace_id or generate_trace_id()
+    if not args.skill:
+        print("ERROR: --skill required with --skill-event")
+        return 1
+    result = log_skill_event(
+        trace_id=trace_id,
+        skill=args.skill,
+        event=args.skill_event,
+        workflow=args.workflow,
+        station=args.station,
+        agent=args.agent,
+        trace_file=args.trace_file,
+    )
+    if args.json_output:
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"skill-{args.skill_event}: {args.skill}")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# Utility helpers
+# ---------------------------------------------------------------------------
+
+
+def _find_repo_root() -> Path:
+    """Walk up from this file to find the repo root (contains apm.yml)."""
+    current = Path(__file__).resolve().parent
+    for _ in range(10):
+        if (current / "apm.yml").exists():
+            return current
+        current = current.parent
+    # Fallback to CWD if apm.yml not found
+    return Path.cwd()
 
 
 if __name__ == "__main__":

@@ -8,11 +8,11 @@ description: 'Run secret scanning, dependency scanning, and dangerous-pattern de
 ## Goal
 
 Detect hardcoded secrets, vulnerable dependencies, and dangerous shell/code patterns in the PR diff.
-Emit `station_out/security_report.json`.
+Emit `outputs/station_out/security_report.json`.
 
 ## Inputs
 
-- `station_out/work_order.json`
+- `outputs/station_out/work_order.json`
 - Full `git diff` of the PR
 - Lock files / manifest files (if changed): `package-lock.json`, `requirements.txt`, `pyproject.toml`, `go.sum`, etc.
 
@@ -27,7 +27,7 @@ If `work_order.json` has `"scope": "non-agent"`, skip and write:
 
 **CRITICAL — read this before scanning:**
 
-Only scan files that appear in `station_out/changed_files.txt` or are tracked by git (`git ls-files`).
+Only scan files that appear in `outputs/station_out/changed_files.txt` or are tracked by git (`git ls-files`).
 **DO NOT scan `.env` files.** The `.env` file in the workspace is a local developer artifact listed in
 `.gitignore` — it is never committed. Scanning it produces false positives. Skip it unconditionally.
 

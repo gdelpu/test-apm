@@ -1,13 +1,14 @@
 ---
 name: station-orchestrator
 description: 'Orchestrate sequential AI station execution within the PR validation pipeline (A0–A7).'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'ci-gates/**'
-  - 'station_out/**'
+  - 'outputs/station_out/**'
+  - 'outputs/**'
   - '.apm/**'
   - 'providers/**'
-  - 'knowledge/**'
+  - '.apm/knowledge/**'
 ---
 
 # Station Orchestrator
@@ -45,20 +46,20 @@ Each merge request passes through a series of AI stations that classify, validat
 1. Load the diff and changed file list as the shared context.
 2. Execute A0 to produce the work order.
 3. Feed the work order to each subsequent station sequentially.
-4. Collect each station's JSON output into `station_out/`.
+4. Collect each station's JSON output into `outputs/station_out/`.
 5. If any blocker-severity station fails, halt the pipeline.
 6. A6 produces the final gate decision aggregating all prior reports.
 
 ## Required Outputs
 
-- `station_out/work_order.json` (A0)
-- `station_out/policy_report.json` (A1)
-- `station_out/security_report.json` (A2)
-- `station_out/promptsec_report.json` (A3)
-- `station_out/redteam_report.json` (A4)
-- `station_out/sandbox_report.json` (A5)
-- `station_out/gate_decision.json` (A6)
-- `station_out/gitlab_update.json` (A7)
+- `outputs/station_out/work_order.json` (A0)
+- `outputs/station_out/policy_report.json` (A1)
+- `outputs/station_out/security_report.json` (A2)
+- `outputs/station_out/promptsec_report.json` (A3)
+- `outputs/station_out/redteam_report.json` (A4)
+- `outputs/station_out/sandbox_report.json` (A5)
+- `outputs/station_out/gate_decision.json` (A6)
+- `outputs/station_out/gitlab_update.json` (A7)
 
 ## Constraints
 

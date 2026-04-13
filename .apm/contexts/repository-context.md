@@ -9,7 +9,7 @@ supporting the full software development lifecycle.
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    CANONICAL LAYER                           │
-│  .apm/agents/  .apm/skills/  .apm/workflows/  knowledge/    │
+│  .apm/agents/  .apm/skills/  .apm/workflows/  .apm/knowledge/│
 │  (6 agents)    (26 skills)   (8 workflows)    (principles,  │
 │                                                governance,   │
 │                                                playbooks)    │
@@ -43,7 +43,7 @@ supporting the full software development lifecycle.
 | `.apm/prompts/` | Reusable prompt templates |
 | `.apm/workflows/` | YAML workflow definitions with stations and gates |
 | `.apm/instructions/` | Shared behavioral instructions |
-| `knowledge/` | Constitution, governance, playbooks, brand guidelines |
+| `.apm/knowledge/` | Constitution, governance, playbooks, brand guidelines |
 | `providers/github-copilot/` | Copilot adapter docs (conventions.md, sync-map.md) |
 | `.github/` | Copilot runtime projection (agents, prompts, instructions) |
 | `providers/claude-code/` | Claude Code adapter (CLAUDE.md, commands) |
@@ -68,13 +68,13 @@ supporting the full software development lifecycle.
 
 ## Schema Integration
 
-The `knowledge/governance/schemas/` directory contains JSON schemas that validate
+The `.apm/knowledge/governance/schemas/` directory contains JSON schemas that validate
 canonical asset manifests:
 
 | Schema | Path | Validates |
-|--------|------|-----------|
-| Agent Manifest | `knowledge/governance/schemas/agent-manifest.schema.json` | `.apm/agents/*.md` frontmatter |
-| Skill Manifest | `knowledge/governance/schemas/skill-manifest.schema.json` | `.apm/skills/*/SKILL.md` frontmatter |
+|--------|------|----------|
+| Agent Manifest | `.apm/knowledge/governance/schemas/agent-manifest.schema.json` | `.apm/agents/*.md` frontmatter |
+| Skill Manifest | `.apm/knowledge/governance/schemas/skill-manifest.schema.json` | `.apm/skills/*/SKILL.md` frontmatter |
 
 These schemas are referenced from `apm.yml` under the `schemas:` key and used
 by the PR validation pipeline (A0 station) to enforce structural correctness.

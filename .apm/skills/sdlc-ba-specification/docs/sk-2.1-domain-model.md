@@ -49,7 +49,7 @@ A single Markdown file conforming to the template `tpl-domain-model.md`, contain
 
 ## Rules-only mode
 
-**Activation condition:** the primary output file (`docs/1-prd/2-specification/dom-001-domain-model.md`) already exists on disk.
+**Activation condition:** the primary output file (`outputs/docs/1-prd/2-specification/dom-001-domain-model.md`) already exists on disk.
 
 When this condition is met:
 
@@ -152,11 +152,11 @@ Write **one file per rule type** that has at least one rule, using the paths bel
 
 | Rule type | Output file |
 |-----------|-------------|
-| Validation (`BR-VAL`) | `docs/1-prd/2-specification/_rules-staging/VAL/rules-from-domain.md` |
-| Calculation (`BR-CAL`) | `docs/1-prd/2-specification/_rules-staging/CAL/rules-from-domain.md` |
-| Trigger (`BR-TRG`) | `docs/1-prd/2-specification/_rules-staging/TRG/rules-from-domain.md` |
-| Consistency (`BR-COH`) | `docs/1-prd/2-specification/_rules-staging/COH/rules-from-domain.md` |
-| Authorisation (`BR-AUT`) | `docs/1-prd/2-specification/_rules-staging/AUT/rules-from-domain.md` |
+| Validation (`BR-VAL`) | `outputs/docs/1-prd/2-specification/_rules-staging/VAL/rules-from-domain.md` |
+| Calculation (`BR-CAL`) | `outputs/docs/1-prd/2-specification/_rules-staging/CAL/rules-from-domain.md` |
+| Trigger (`BR-TRG`) | `outputs/docs/1-prd/2-specification/_rules-staging/TRG/rules-from-domain.md` |
+| Consistency (`BR-COH`) | `outputs/docs/1-prd/2-specification/_rules-staging/COH/rules-from-domain.md` |
+| Authorisation (`BR-AUT`) | `outputs/docs/1-prd/2-specification/_rules-staging/AUT/rules-from-domain.md` |
 
 Each file has the following front matter:
 
@@ -226,11 +226,11 @@ Extract the following rules, using the standard format (one `###` section per ru
 
 The produced files must:
 
-1. **Primary output** — `docs/1-prd/2-specification/dom-001-domain-model.md`:
+1. **Primary output** — `outputs/docs/1-prd/2-specification/dom-001-domain-model.md`:
    - Conform exactly to the structure of template `tpl-domain-model.md`
    - Have the YAML front matter with `dependencies: ["VIS-001", "GLO-001", "ACT-001"]`
    - Have status `draft`
 
-2. **Secondary output** — `docs/1-prd/2-specification/_rules-staging/{TYPE}/rules-from-domain.md` (one file per rule type):
+2. **Secondary output** — `outputs/docs/1-prd/2-specification/_rules-staging/{TYPE}/rules-from-domain.md` (one file per rule type):
    - Business rules extracted from the model (see Step 8), split by type (`VAL/`, `CAL/`, `TRG/`, `COH/`, `AUT/`)
    - Uses temporary IDs (`BR-VAL-D001`, etc.)

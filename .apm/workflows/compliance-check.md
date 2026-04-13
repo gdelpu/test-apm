@@ -23,7 +23,7 @@ Validate compliance, privacy, and AI governance requirements including PII scann
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `pii-report.md` — PII scan results and data classification
 - `prompt-injection-report.md` — Prompt template and AI input analysis
 - `policy-report.md` — Policy compliance evaluation
@@ -34,10 +34,10 @@ All artifacts are written to `specs/features/<feature>/`:
 ## Governance references
 
 This workflow validates against rules defined in:
-- `knowledge/governance/secure-by-default.md`
-- `knowledge/governance/architecture-principles.md`
-- `knowledge/governance/observability-by-default.md`
-- `knowledge/constitution/principles.md`
+- `.apm/knowledge/governance/secure-by-default.md`
+- `.apm/knowledge/governance/architecture-principles.md`
+- `.apm/knowledge/governance/observability-by-default.md`
+- `.apm/knowledge/constitution/principles.md`
 
 ## Composition
 

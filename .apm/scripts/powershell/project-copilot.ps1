@@ -10,8 +10,8 @@
     provider, then copies all asset-type subdirectories from source to target.
 
     When -Full is specified the script additionally copies canonical content
-    (.apm/skills, .apm/workflows, .apm/contexts, .apm/templates, knowledge/)
-    into the runtime tree and rewrites .apm/ and knowledge/ path references
+    (.apm/skills, .apm/workflows, .apm/contexts, .apm/templates, .apm/knowledge/)
+    into the runtime tree and rewrites .apm/ path references
     inside every .md file so they point to their new runtime locations.
 
     After the main provider copy, files under providers-local/ (if it exists)
@@ -171,7 +171,8 @@ if ($Full) {
         @{ Source = '.apm/workflows';  Target = 'workflows' }
         @{ Source = '.apm/contexts';   Target = 'contexts' }
         @{ Source = '.apm/templates';  Target = 'templates' }
-        @{ Source = 'knowledge';       Target = 'knowledge' }
+        @{ Source = '.apm/knowledge';   Target = 'knowledge' }
+        @{ Source = '.apm/hooks';        Target = 'hooks' }
     )
 
     foreach ($mapping in $canonicalMappings) {
@@ -205,7 +206,9 @@ if ($Full) {
         ,@('.apm/templates/',     "$runtimePrefix/templates/")
         ,@('.apm/prompts/',       "$runtimePrefix/prompts/")
         ,@('.apm/instructions/',  "$runtimePrefix/instructions/")
-        ,@('knowledge/',          "$runtimePrefix/knowledge/")
+        ,@('.apm/knowledge/',      "$runtimePrefix/knowledge/")
+        ,@('.apm/hooks/',          "$runtimePrefix/hooks/")
+        ,@('.apm/hooks',           "$runtimePrefix/hooks")
     )
 
     # Only rewrite .apm/agents/ if the runtime is different from the source
@@ -250,6 +253,50 @@ if ($Full) {
     }
 
     Write-Host "  REWRITE   $rewriteCount files updated with runtime path references"
+}
+
+# ── Refresh hub catalog ────────────────────────────────────────────────
+
+# ── Config-driven placeholder substitution ─────────────────────────────
+# Read provider config.yml (with providers-local/ override) and substitute
+# {{KEY}} placeholders in all projected .md files.
+$configFile = Join-Path $repoRoot "providers-local/$Provider/config.yml"
+if (-not (Test-Path $configFile)) {
+    $configFile = Join-Path $sourcePath 'config.yml'
+}
+if (Test-Path $configFile) {
+    $configLines  = Get-Content $configFile -Encoding UTF8
+    $configValues = @{}
+    $inDefaults   = $false
+
+    foreach ($line in $configLines) {
+        if ($line -match '^\s*defaults:\s*$') { $inDefaults = $true; continue }
+        if ($inDefaults -and $line -match '^\S') { $inDefaults = $false }
+        if ($inDefaults -and $line -match '^\s+(\w+):\s*"?(.+?)"?\s*$') {
+            $key   = $Matches[1].ToUpper()
+            $value = $Matches[2]
+            $configValues["{{DEFAULT_$key}}"] = $value
+        }
+    }
+
+    if ($configValues.Count -gt 0) {
+        $mdFiles = Get-ChildItem $targetPath -Filter '*.md' -Recurse -File
+        $substCount = 0
+        foreach ($mdFile in $mdFiles) {
+            $content  = Get-Content $mdFile.FullName -Raw -Encoding UTF8
+            $original = $content
+            foreach ($entry in $configValues.GetEnumerator()) {
+                $content = $content.Replace($entry.Key, $entry.Value)
+            }
+            if ($content -ne $original) {
+                Set-Content -Path $mdFile.FullName -Value $content -NoNewline -Encoding UTF8
+                $substCount++
+            }
+        }
+        Write-Host "  CONFIG  $substCount files updated with provider config substitutions ($($configValues.Count) keys)"
+    }
+} else {
+    Write-Host "  SKIP  config -- no provider config.yml found"
 }
 
 # ── Refresh hub catalog ────────────────────────────────────────────────

@@ -9,7 +9,7 @@ version: '1.0.0'
 
 ## Purpose
 
-Guide agents in working with official brand logos, templates, and supporting assets. This is the generic, client-agnostic skill. For Sopra Steria specifics, see `soprasteria-assets-and-templates`.
+Guide agents in working with official brand logos, templates, and supporting assets. This is the generic, client-agnostic skill. For Sopra Steria defaults, see `brand-assets`.
 
 ## Rules
 

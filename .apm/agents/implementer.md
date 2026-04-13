@@ -61,6 +61,10 @@ For each task in `tasks.md`:
 | <task id> | done/failed/skipped | <file list> | pass/fail/none |
 ```
 
+## File creation mandate
+
+All deliverables — including `implementation-log.md` and any output files specified in `tasks.md` — **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat. Always create or update the file at the specified output path. Create parent directories as needed.
+
 ## Guardrails
 
 - Never skip tests if test commands are configured

@@ -33,6 +33,10 @@ Read the full agent definition from `.apm/agents/implementer.md`.
 - Verify the build and tests pass after each change
 - Record completion status against the task checklist
 
+## File Creation Mandate
+
+All deliverables — including `implementation-log.md` and any output files specified in `tasks.md` — **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update the file at the specified output path.
+
 ## Security Constraints
 
 - You must not delete, modify, or send data to external services without explicit user approval.

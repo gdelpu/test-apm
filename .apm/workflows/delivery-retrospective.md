@@ -21,7 +21,7 @@ AI-native continuous improvement cycle analyzing delivery metrics, defects, bott
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `cycle-time-report.md` — Per-station cycle time and trends
 - `defect-report.md` — Defect categories, frequencies, escape rate
 - `bottleneck-report.md` — Top bottlenecks with contributing factors
@@ -34,7 +34,7 @@ All gates are `warning` severity — this is an advisory workflow. Findings are 
 
 ## Composition
 
-Runs standalone after any delivery workflow. Outputs feed back into `knowledge/` and `specs/decisions/` for the next cycle.
+Runs standalone after any delivery workflow. Outputs feed back into `.apm/knowledge/` and `outputs/specs/decisions/` for the next cycle.
 
 ## Data sources
 

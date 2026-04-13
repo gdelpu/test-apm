@@ -57,15 +57,15 @@ When an agent with `produces: <collection>` completes, the coordinator scans the
 ```
 Agent 2.2 completes
   --> produces: epics
-  --> output_pattern: "docs/1-prd/3-epics/ep-{id}-{slug}/"
-  --> SCAN: ls docs/1-prd/3-epics/ep-*/
+  --> output_pattern: "outputs/docs/1-prd/3-epics/ep-{id}-{slug}/"
+  --> SCAN: ls outputs/docs/1-prd/3-epics/ep-*/
   --> DISCOVERS: ep-001, ep-002, ..., ep-008
   --> REGISTERS: epics = [ep-001, ..., ep-008]
 
 Agent 2.2b(ep-001) completes
   --> produces: features
-  --> output_pattern: "docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
-  --> SCAN: ls docs/1-prd/3-epics/ep-001-*/ft-*/
+  --> output_pattern: "outputs/docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
+  --> SCAN: ls outputs/docs/1-prd/3-epics/ep-001-*/ft-*/
   --> DISCOVERS: ft-001, ft-002, ..., ft-006
   --> REGISTERS: features += [ft-001, ..., ft-006]
 
@@ -82,7 +82,7 @@ For `foreach: <collection>` agents, the coordinator creates **one instance per i
 When `--scope sprint-1` is provided, the coordinator reads the sprint plan:
 
 ```
-docs/3-steer/plan-001-sprint-planning.md   (BA Sprint 1)
+outputs/docs/3-steer/plan-001-sprint-planning.md   (BA Sprint 1)
   scope_items:
     features:
       - .../ft-001-create-modify-bookings
@@ -152,7 +152,7 @@ Assembled prompt for 3.1(ft-005):
   [7] post-quality-control.md        (hook)
   [8] post-confluence-push.md       (hook)
   [9] Scope context:
-      feature_path = docs/1-prd/3-epics/ep-001-.../ft-005-packages-tarifaires
+      feature_path = outputs/docs/1-prd/3-epics/ep-001-.../ft-005-packages-tarifaires
       upstream files resolved for this feature
 ```
 
@@ -255,7 +255,7 @@ Each agent = **skill + refs + tools + hooks**, assembled at runtime by the coord
 
 The coordinator applies `doc_depth` filtering before resolving the DAG into waves.
 
-1. Read `doc_depth` from `docs/project.yml` (default: `full`).
+1. Read `doc_depth` from `outputs/docs/project.yml` (default: `full`).
 2. Define the depth hierarchy: `essential` < `full`.
 3. For each agent, read `min_depth` from the registry (default: `full`). If the agent's `min_depth` exceeds the current `doc_depth`, remove it from the DAG.
 4. For remaining agents with `template_variants.{depth}`, resolve the variant template instead of the default.

@@ -1,7 +1,11 @@
 ---
 name: reverse-user-story
 description: 'Generate detailed user stories with acceptance criteria from existing codebase.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
+  - 'docs/**'
+  - 'docs/generated/**'
 ---
 
 # Reverse User Story Creator

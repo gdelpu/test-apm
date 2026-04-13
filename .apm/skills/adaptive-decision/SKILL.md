@@ -28,7 +28,7 @@ Evaluate experiment results against predefined success criteria to make a data-d
 
 ## Output
 
-`specs/features/<feature>/decision.md`
+`outputs/specs/features/<feature>/decision.md`
 
 ## Rules
 

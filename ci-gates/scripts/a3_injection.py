@@ -4,12 +4,12 @@ Station A3 — Prompt Injection & Exfil Hardening Checks (deterministic).
 
 Scans changed agent/skill/prompt files for jailbreak phrases, missing safety
 constraints, unconstrained tool scope, exfiltration vectors, and indirect
-injection patterns.  Writes station_out/a3_result.json.
+injection patterns.  Writes outputs/station_out/a3_result.json.
 
 Usage:
     python3 a3_injection.py \
-        --work-order station_out/a0_result.json \
-        --out station_out/a3_result.json \
+        --work-order outputs/station_out/a0_result.json \
+        --out outputs/station_out/a3_result.json \
         [--repo-root .]
 """
 
@@ -50,12 +50,13 @@ PI05_PATTERNS: list[tuple[str, str, str]] = [
 ]
 
 # ── PI-06: Indirect injection vectors ────────────────────────────────────
-PI06_PATTERN = r"(read|process|execute|follow).{0,40}(file|document|webpage|url).{0,40}(instruct|step|direct)"
+# Matches "read file ... instructions" but NOT "directories", "directives", "directly".
+PI06_PATTERN = r"(read|process|execute|follow).{0,40}(file|document|webpage|url).{0,40}(instructions?\b|steps?\b|directs?\b|directed\b|directing\b)"
 
 
 def is_in_safe_codeblock(text: str, match_start: int) -> bool:
-    """Check if a match position is inside a fenced code block with a safety comment."""
-    # Find all code blocks
+    """Check if a match position is inside a fenced code block with a safety comment or an inline code span."""
+    # Find all fenced code blocks
     code_blocks = list(re.finditer(r"```[^\n]*\n(.*?)```", text, re.DOTALL))
     safety_comments = re.compile(
         r"#\s*(example|do\s+not\s+follow|do\s+not\s+interpret|detection\s+patterns)",
@@ -65,6 +66,12 @@ def is_in_safe_codeblock(text: str, match_start: int) -> bool:
         if block.start() <= match_start <= block.end():
             if safety_comments.search(block.group(0)):
                 return True
+
+    # Check if match is inside an inline backtick code span (e.g. `pattern text`)
+    for inline in re.finditer(r"`[^`\n]+`", text):
+        if inline.start() <= match_start < inline.end():
+            return True
+
     return False
 
 
@@ -75,7 +82,7 @@ def scan_pi01(path: str, text: str) -> list[dict]:
     for pattern, description in PI01_PATTERNS:
         for i, line in enumerate(lines, 1):
             m = re.search(pattern, line, re.IGNORECASE)
-            if m and not is_in_safe_codeblock(text, text.find(line)):
+            if m and not is_in_safe_codeblock(text, text.find(line) + m.start()):
                 findings.append({
                     "check": "PI-01",
                     "severity": "critical" if "override" in description.lower() or "delimiter" in description.lower() else "high",
@@ -104,6 +111,47 @@ def scan_pi02(path: str, text: str, ftype: str) -> list[dict]:
         "match": None,
         "message": "Agent body contains no non-negotiable refusal constraints (must not / will not / never / refuse / out of scope).",
     }]
+
+
+# ── PI-02b: Out of Scope contradiction detection ────────────────────────
+# Blanket Out-of-Scope phrases that contradict declared tools cause the LLM
+# to refuse legitimate tool invocations (file writes, MCP, commands).
+_OOS_CONTRADICTIONS: list[tuple[str, str, str]] = [
+    (r"(?:file\s+writes|code\s+modification)(?!\s+outside)", "edit/editFiles",
+     "Out of Scope blanket-blocks file writes but agent declares edit/editFiles tool"),
+    (r"running\s+commands|executing\s+(?:scripts|commands)", "runCommands",
+     "Out of Scope blanket-blocks running commands but agent declares runCommands tool"),
+    (r"accessing\s+external\s+APIs|network\s+resources", "fetch",
+     "Out of Scope blanket-blocks external API access but agent declares fetch tool"),
+]
+
+
+def scan_pi02b(path: str, text: str, fm: dict, ftype: str) -> list[dict]:
+    """PI-02b: Out of Scope entries must not contradict declared tools."""
+    if ftype != "agent":
+        return []
+    tools = fm.get("tools", [])
+    if not isinstance(tools, list):
+        return []
+
+    # Find the Out of Scope section (if any)
+    oos_match = re.search(r"(?:^|\n)#+\s*out\s+of\s+scope\b(.*?)(?=\n#|\Z)", text, re.IGNORECASE | re.DOTALL)
+    if not oos_match:
+        return []
+
+    oos_text = oos_match.group(1)
+    findings = []
+    for pattern, tool, message in _OOS_CONTRADICTIONS:
+        if tool in tools and re.search(pattern, oos_text, re.IGNORECASE):
+            findings.append({
+                "check": "PI-02b",
+                "severity": "high",
+                "file": path,
+                "line": None,
+                "match": None,
+                "message": message,
+            })
+    return findings
 
 
 def scan_pi03(path: str, fm: dict, ftype: str) -> list[dict]:
@@ -195,7 +243,7 @@ def scan_pi05(path: str, text: str) -> list[dict]:
     for pattern, description, severity in PI05_PATTERNS:
         for i, line in enumerate(lines, 1):
             m = re.search(pattern, line, re.IGNORECASE)
-            if m and not is_in_safe_codeblock(text, text.find(line)):
+            if m and not is_in_safe_codeblock(text, text.find(line) + m.start()):
                 findings.append({
                     "check": "PI-05",
                     "severity": severity,
@@ -213,7 +261,7 @@ def scan_pi06(path: str, text: str) -> list[dict]:
     lines = text.splitlines()
     for i, line in enumerate(lines, 1):
         m = re.search(PI06_PATTERN, line, re.IGNORECASE)
-        if m and not is_in_safe_codeblock(text, text.find(line)):
+        if m and not is_in_safe_codeblock(text, text.find(line) + m.start()):
             findings.append({
                 "check": "PI-06",
                 "severity": "critical",
@@ -323,6 +371,7 @@ def main() -> None:
 
         findings.extend(scan_pi01(fpath, text))
         findings.extend(scan_pi02(fpath, text, ftype))
+        findings.extend(scan_pi02b(fpath, text, fm, ftype))
         findings.extend(scan_pi03(fpath, fm, ftype))
         findings.extend(scan_pi04(fpath, fm, ftype))
         findings.extend(scan_pi05(fpath, text))

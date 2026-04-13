@@ -143,7 +143,7 @@ All project artefacts — functional documentation, technical documentation, ste
 
 ## 3. File naming conventions
 
-### PRD artefacts (`docs/1-prd/`)
+### PRD artefacts (`outputs/docs/1-prd/`)
 
 | Artefact type | Pattern | Example |
 |---|---|---|
@@ -164,7 +164,7 @@ All project artefacts — functional documentation, technical documentation, ste
 | Change impact report | `impact-{NNN}-{slug}.md` | `impact-001-add-payment-options.md` |
 | Validation report | `val-{id}-{YYYYMMDD}.md` | `val-vis-001-20260310.md` |
 
-### Technical artefacts (`docs/2-tech/`)
+### Technical artefacts (`outputs/docs/2-tech/`)
 
 | Artefact type | Pattern | Example |
 |---|---|---|
@@ -182,7 +182,7 @@ All project artefacts — functional documentation, technical documentation, ste
 | Code review | `code-review-{PR-ID}-{YYYY-MM-DD}.md` | `code-review-pr-47-2026-03-11.md` |
 | Debt backlog | `debt-{NNN}-{slug}.md` | `debt-001-backlog.md` |
 
-### Steering artefacts (`docs/3-steer/`)
+### Steering artefacts (`outputs/docs/3-steer/`)
 
 | Artefact type | Pattern | Example |
 |---|---|---|
@@ -192,9 +192,9 @@ All project artefacts — functional documentation, technical documentation, ste
 
 ---
 
-## 4. `docs/1-prd/README.md` — static PRD index
+## 4. `outputs/docs/1-prd/README.md` — static PRD index
 
-This file is **created once and never updated by agents**. It is auto-rendered by GitLab when navigating to `docs/1-prd/`. It describes the expected PRD structure without listing individual epics, features or user stories.
+This file is **created once and never updated by agents**. It is auto-rendered by GitLab when navigating to `outputs/docs/1-prd/`. It describes the expected PRD structure without listing individual epics, features or user stories.
 
 ```markdown
 # PRD — Product Requirements Document
@@ -204,7 +204,7 @@ For a consolidated export: run `/confluence-push` (Confluence) or `/to-word` (Wo
 
 ## Structure
 
-docs/1-prd/
+outputs/docs/1-prd/
 ├── 0-audit/          # (brownfield) As-is system audit and gap analysis
 ├── scoping/          # Product vision, glossary, actors, functional requirements
 ├── specification/    # Domain model, cross-cutting business rules
@@ -222,7 +222,7 @@ docs/1-prd/
 For projects with **more than ~10 epics** or **more than 2 bounded contexts**, add a `{domain}/` level inside `epics/` to group epics by bounded context:
 
 ```
-docs/1-prd/3-epics/
+outputs/docs/1-prd/3-epics/
 └── {domain}/
     └── ep-xxx-{slug}/
         ├── ep-xxx-{slug}.md
@@ -240,7 +240,7 @@ src/
     └── presentation/
 ```
 
-**This variant is activated explicitly during Phase 0 of agent T-1.3** when the project scope is analysed. Once activated, it applies consistently across `docs/1-prd/3-epics/` and `src/`.
+**This variant is activated explicitly during Phase 0 of agent T-1.3** when the project scope is analysed. Once activated, it applies consistently across `outputs/docs/1-prd/3-epics/` and `src/`.
 
 ---
 
@@ -265,7 +265,7 @@ node_modules/
 
 ## 7. PRD is not a single file
 
-> The PRD is the logical sum of `docs/1-prd/1-scoping/` + `docs/1-prd/2-specification/` + `docs/1-prd/3-epics/`.
+> The PRD is the logical sum of `outputs/docs/1-prd/1-scoping/` + `outputs/docs/1-prd/2-specification/` + `outputs/docs/1-prd/3-epics/`.
 >
 > There is no standalone `prd.md` file to maintain. A compiled PRD export (for stakeholder communication or governance gates) is produced on demand by:
 > - `/confluence-push` → Confluence pages (automatic via post-hook, or manual)
@@ -277,8 +277,8 @@ node_modules/
 
 | System | Writes to | Reads from |
 |---|---|---|
-| BA Agents | `docs/1-prd/` | — |
-| Tech Agents | `docs/2-tech/`, `api/`, `migrations/`, `CLAUDE.md`, `.claude/` | `docs/1-prd/` |
-| Test Agents | `tests/e2e/`, `tests/nfr/`, `tests/results/` | `docs/1-prd/4-tests/`, `docs/1-prd/3-epics/**/tests/` |
-| Steer Agents | `docs/3-steer/` | `docs/1-prd/`, `docs/2-tech/`, `.claude/orchestration-log.jsonl` |
-| Claude Code | `src/`, `tests/unit/`, `tests/integration/`, `migrations/`, `api/openapi.yaml` | `CLAUDE.md`, `docs/2-tech/`, `docs/1-prd/` |
+| BA Agents | `outputs/docs/1-prd/` | — |
+| Tech Agents | `outputs/docs/2-tech/`, `api/`, `migrations/`, `CLAUDE.md`, `.claude/` | `outputs/docs/1-prd/` |
+| Test Agents | `tests/e2e/`, `tests/nfr/`, `tests/results/` | `outputs/docs/1-prd/4-tests/`, `outputs/docs/1-prd/3-epics/**/tests/` |
+| Steer Agents | `outputs/docs/3-steer/` | `outputs/docs/1-prd/`, `outputs/docs/2-tech/`, `.claude/orchestration-log.jsonl` |
+| Claude Code | `src/`, `tests/unit/`, `tests/integration/`, `migrations/`, `api/openapi.yaml` | `CLAUDE.md`, `outputs/docs/2-tech/`, `outputs/docs/1-prd/` |

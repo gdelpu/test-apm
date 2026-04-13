@@ -149,15 +149,15 @@ stateDiagram-v2
 Format: `{id}-{slug}.md` where `{id}` is the lowercase deliverable identifier and `{slug}` is a short kebab-case description.
 
 Examples:
-- `vis-001-product-vision.md` in `docs/1-prd/1-scoping/`
-- `dom-001-domain-model.md` in `docs/1-prd/2-specification/`
-- `ep-003-order-management.md` in `docs/1-prd/3-epics/ep-003-order-management/`
+- `vis-001-product-vision.md` in `outputs/docs/1-prd/1-scoping/`
+- `dom-001-domain-model.md` in `outputs/docs/1-prd/2-specification/`
+- `ep-003-order-management.md` in `outputs/docs/1-prd/3-epics/ep-003-order-management/`
 - `us-042-place-order-as-customer.md` in `.../ft-012-place-order/user-stories/`
 
 **Scoping rule:** a document lives where its subject lives.
-- Project-wide scope in `docs/1-prd/1-scoping/` or `docs/1-prd/2-specification/`
-- Epic scope inside `docs/1-prd/3-epics/ep-xxx-{slug}/`
-- Feature scope inside `docs/1-prd/3-epics/ep-xxx-{slug}/ft-xxx-{slug}/`
+- Project-wide scope in `outputs/docs/1-prd/1-scoping/` or `outputs/docs/1-prd/2-specification/`
+- Epic scope inside `outputs/docs/1-prd/3-epics/ep-xxx-{slug}/`
+- Feature scope inside `outputs/docs/1-prd/3-epics/ep-xxx-{slug}/ft-xxx-{slug}/`
 
 ---
 

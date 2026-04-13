@@ -1,6 +1,14 @@
 name: spec-kit
-description: Specification-only flow — produce a complete spec package without implementation.
+description: Specification-only flow — produce a complete spec package without implementation (brownfield and greenfield).
 type: delivery
+
+when_to_use:
+  - When only specification artifacts are needed (no code generation)
+  - Preparing a spec package for manual implementation or external team handoff
+  - When the full feature-implementation workflow is too broad
+  - Greenfield scoping that requires formal gates before committing to implementation
+  - Brownfield specification requiring context extraction and constraint mapping before spec authoring
+  - Creating a detailed roadmap or RFP document for contracted work
 
 stations:
   - id: constitution
@@ -16,6 +24,22 @@ stations:
         - "Constitution covers architecture, quality, security, testing, observability"
       severity: blocker
 
+  - id: brownfield-context
+    name: Brownfield Context Extraction
+    agent: spec-orchestrator
+    skills:
+      - brownfield-context
+    inputs:
+      - constitution.md
+    outputs:
+      - context-brief.md
+    gate:
+      criteria:
+        - "Existing architecture, patterns, and constraints documented"
+        - "Do-not-break constraints identified"
+      severity: blocker
+    condition: brownfield
+
   - id: specification
     name: Feature Specification
     agent: spec-orchestrator
@@ -23,6 +47,7 @@ stations:
       - spec-feature
     inputs:
       - constitution.md
+      - context-brief.md?
     outputs:
       - spec.md
     gate:
@@ -127,7 +152,7 @@ stations:
       severity: blocker
 
 config:
-  output_dir: specs/features/<feature>/
+  output_dir: outputs/specs/features/<feature>/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

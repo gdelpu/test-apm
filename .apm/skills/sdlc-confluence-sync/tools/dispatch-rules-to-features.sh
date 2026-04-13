@@ -10,7 +10,7 @@
 #   _rules-staging/{TYPE}/rules-from-ep-*.md (feature-level rules)
 #
 # Output per feature:
-#   docs/1-prd/3-epics/{epic}/{feature}/business-rules.md
+#   outputs/docs/1-prd/3-epics/{epic}/{feature}/business-rules.md
 #
 # Logic:
 #   - Rules with "Related features | [FT-xxx]" → dispatched to FT-xxx
@@ -21,7 +21,7 @@
 
 set -euo pipefail
 
-DOCS_ROOT="docs/1-prd"
+DOCS_ROOT="outputs/1-prd"
 STAGING="$DOCS_ROOT/2-specification/_rules-staging"
 EPICS_DIR="$DOCS_ROOT/3-epics"
 
@@ -44,7 +44,7 @@ for ft_file in "$EPICS_DIR"/ep-*/ft-*/ft-*.md; do
 done
 
 # ── Step 1: Build feature→directory mapping ─────────────────
-declare -A FT_DIR  # FT-001 → docs/1-prd/3-epics/ep-001-.../ft-001-.../
+declare -A FT_DIR  # FT-001 → outputs/docs/1-prd/3-epics/ep-001-.../ft-001-.../
 
 echo "Building feature → directory mapping..."
 for ft_dir in "$EPICS_DIR"/ep-*/ft-*/; do

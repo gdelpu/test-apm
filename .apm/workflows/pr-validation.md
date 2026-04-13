@@ -41,7 +41,7 @@ Runs only after deterministic validators pass. Stages A0–A7 execute in sequenc
 
 **When triggered**: On push to merge request or pull request (any branch).
 
-**Outputs**: All reports written to `station_out/`:
+**Outputs**: All reports written to `outputs/station_out/`:
 - `work_order.json` — PR metadata, changed files, diff summary, risk hints
 - `policy_report.json` — manifest validation results
 - `security_report.json` — secrets + pattern scans
@@ -71,4 +71,4 @@ To add/remove a station: add/delete the corresponding file in `ci-gates/stations
 
 ## Local testing
 
-See `LOCAL_TESTING.md` for instructions to run the pipeline locally using Podman/Docker or gitlab-ci-local.
+See [`docs/contributor/local-testing.md`](../../docs/contributor/local-testing.md) for instructions to run the pipeline locally using Podman/Docker or gitlab-ci-local.

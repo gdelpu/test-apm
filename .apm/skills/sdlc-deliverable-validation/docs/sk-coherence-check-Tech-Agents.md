@@ -18,7 +18,7 @@ This agent requires **no external tools**. It reads Markdown files as input and 
 
 | Input | Description | Required |
 |-------|-------------|----------|
-| **All Tech deliverables** | All .md files in `docs/2-tech/` produced by Tech agents | Yes |
+| **All Tech deliverables** | All .md files in `outputs/docs/2-tech/` produced by Tech agents | Yes |
 | **BA deliverables** | Key BA files: `[DOM-001]`, `[EXF-001]`, `[BRL-001]`, `[ACT-001]`, `[GLO-001]`, `[US-xxx]` | Yes |
 
 ## Expected Output
@@ -43,7 +43,7 @@ This agent requires **no external tools**. It reads Markdown files as input and 
 
 ### Step 1: Inventory all identifiers
 
-Scan all Markdown files in `docs/2-tech/` to build a **global Tech identifier registry**:
+Scan all Markdown files in `outputs/docs/2-tech/` to build a **global Tech identifier registry**:
 
 1. **Read each file** in system order (T0 -> T1 -> T2 -> T3)
 2. **Extract all defined identifiers**: `[CTX-001]`, `[ADR-xxx]`, `[STK-001]`, `[SEC-001]`, `[DAT-001]`, `[API-xxx]`, `[ENB-xxx]`, `[TST-001]`, `[IMP-001]`, `[OBS-001]`, `[DFT-xxx]`
@@ -355,6 +355,6 @@ scope: "All Tech deliverables — T0 + T1 + T2"
 |---------|--------|
 | **Produced by** | agent-coherence-check-tech |
 | **Production date** | YYYY-MM-DD |
-| **Inputs used** | All MD files in `docs/2-tech/` + key BA deliverables |
+| **Inputs used** | All MD files in `outputs/docs/2-tech/` + key BA deliverables |
 | **Validated by** | Pending |
 | **Validation date** | Pending |

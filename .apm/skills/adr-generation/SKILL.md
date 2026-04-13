@@ -31,7 +31,7 @@ Produce Architecture Decision Records that capture significant technical decisio
 
 ## Output
 
-`specs/features/<feature>/decisions/<ADR-ID>-<short-title>.md`
+`outputs/specs/features/<feature>/decisions/<ADR-ID>-<short-title>.md`
 
 ## ADR Template
 

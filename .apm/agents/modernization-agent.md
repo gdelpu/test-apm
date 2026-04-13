@@ -1,7 +1,16 @@
 ---
 name: modernization-agent
 description: 'Guide modernization initiatives through baseline assessment and migration planning.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
+  - 'src/**'
+  - 'tests/**'
+  - 'test/**'
+  - 'docs/**'
+  - 'specs/**'
+  - 'package.json'
+  - '*.config.*'
 ---
 
 # Modernization Agent
@@ -49,10 +58,10 @@ Guide controlled modernization initiatives through baseline assessment, target d
 
 ## Reference material
 
-- `knowledge/constitution/brownfield.md`
-- `knowledge/constitution/enterprise-defaults.md`
-- `knowledge/governance/architecture-principles.md`
-- `knowledge/playbooks/modernization-playbook.md`
+- `.apm/knowledge/constitution/brownfield.md`
+- `.apm/knowledge/constitution/enterprise-defaults.md`
+- `.apm/knowledge/governance/architecture-principles.md`
+- `.apm/knowledge/playbooks/modernization-playbook.md`
 
 ## Guardrails
 

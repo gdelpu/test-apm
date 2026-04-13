@@ -151,7 +151,7 @@ log_step "Done!"
 echo ""
 if [ "${MODE}" = "standard" ]; then
     echo "  Next steps:"
-    echo "    git add .github/ .apm.lock.yaml"
+    echo "    git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml"
     echo "    git commit -m \"feat: install AI SDLC Foundation v${VERSION}\""
     echo "    git push"
     echo ""
@@ -159,7 +159,7 @@ if [ "${MODE}" = "standard" ]; then
     echo "  Try: @hub-orchestrator or /workflow-feature"
 else
     echo "  Next steps:"
-    echo "    git add .apm/ providers/ knowledge/ providers-local/ .apm.lock.yaml apm.yml"
+    echo "    git add .apm/ providers/ providers-local/ .apm.lock.yaml apm.yml"
     echo "    git commit -m \"feat: install AI SDLC Foundation v${VERSION} (expandable)\""
     echo "    git push"
     echo ""

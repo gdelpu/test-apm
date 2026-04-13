@@ -29,7 +29,7 @@ Analyze a production incident by reconstructing the event timeline, identifying 
 
 ## Output
 
-`specs/features/<feature>/incident-analysis.md`
+`outputs/specs/features/<feature>/incident-analysis.md`
 
 ## Rules
 

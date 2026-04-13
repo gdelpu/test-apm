@@ -160,7 +160,7 @@ station_a0_intake:
     - python ci-gates/implementations/A0-intake.py
   artifacts:
     paths:
-      - station_out/work_order.json
+      - outputs/station_out/work_order.json
 ```
 
 **Pros**: 

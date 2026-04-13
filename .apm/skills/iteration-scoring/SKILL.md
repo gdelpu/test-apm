@@ -28,7 +28,7 @@ Score a BMAD iteration outcome using quantitative metrics and qualitative assess
 
 ## Output
 
-`specs/features/<feature>/iteration-score.md`
+`outputs/specs/features/<feature>/iteration-score.md`
 
 ## Rules
 

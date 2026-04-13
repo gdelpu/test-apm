@@ -2,8 +2,8 @@
 name: '1.0.refactor'
 alias: refactor-orchestrator
 description: "Use when: refactor code, restructure project, reduce technical debt, improve code quality, reorganize modules, extract components, simplify architecture, clean up codebase, modernize code, apply design patterns, migrate to new framework, restructure backend, change database. Foundation orchestrator that gathers decisions, creates Architecture Decision Records (ADRs), plans, and delegates refactoring to specialized subagents."
-tools: [vscode, codebase, search]
-model: Claude Opus 4.6 (copilot)
+tools: [vscode, codebase, search, edit/editFiles]
+model: '{{DEFAULT_MODEL}}'
 target: vscode
 ---
 

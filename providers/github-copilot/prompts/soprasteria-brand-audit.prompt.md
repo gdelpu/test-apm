@@ -21,7 +21,7 @@ Assess the provided application, document, slide deck, page, mockup, or codebase
 6. Office-template compliance for Word/PPT if relevant
 7. Accessibility and contrast
 8. Naming/casing consistency for Sopra Steria
-9. **Web accessibility (WCAG 2.1 AA)** — when the target is a web application, use the soprasteria-web-accessibility skill to validate:
+9. **Web accessibility (WCAG 2.1 AA)** — when the target is a web application, use the brand-accessibility skill to validate:
    - color contrast for all brand pairings
    - keyboard navigation and focus visibility
    - ARIA usage on branded custom components

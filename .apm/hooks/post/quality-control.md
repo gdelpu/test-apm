@@ -4,7 +4,7 @@
 
 ## Objective
 
-Executed **after the agent has produced its deliverable**, before returning to the coordinator. The agent MUST run this complete checklist and correct any non-conforming items before considering the deliverable complete.
+Executed **after the agent has produced its deliverable**, before returning to the coordinator. The agent MUST run this complete checklist and correct any non-conforming items before considering the deliverable complete. All modifications to the deliverable (adding `## Production confidence`, `## Attention Points`, updating YAML front matter) **must be written to disk** using the `edit/editFiles` tool — do not merely display corrections in chat.
 
 For **domain-specific** validation checklists (BA deliverable types, Tech deliverable types, Steer/Test specifics), see the `sdlc-deliverable-validation` skill and its docs (`sk-validate-BA-Agents.md`, `sk-validate-Tech-Agents.md`, `sk-validate-Steer-Agents.md`).
 

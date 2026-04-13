@@ -29,7 +29,7 @@ Capture lessons learned from incidents, bug fixes, or retrospectives as permanen
 
 ## Output
 
-`specs/features/<feature>/knowledge-update.md`
+`outputs/specs/features/<feature>/knowledge-update.md`
 
 ## Rules
 

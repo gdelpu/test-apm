@@ -1,0 +1,373 @@
+# MCP Server Registry — Canonical Source of Truth
+# Auto-consumed by project-copilot.ps1 to generate provider-specific configs.
+# Consumer overrides: clients/<name>/mcp-overrides.yaml or .vscode/mcp.json direct edits.
+#
+# Version pinning: each server declares a default_version (@latest unless pinned).
+# Consumers can override per-server via mcp-overrides.yaml.
+
+# ─── Profiles ──────────────────────────────────────────────────────────
+# Curated sets of servers for common stacks. Hub Orchestrator recommends
+# a profile based on repo auto-detection, then fine-tunes via interview.
+
+profiles:
+  github-stack:
+    description: 'GitHub-native development with modern testing and docs'
+    servers: [github-mcp, context7, playwright-mcp, semgrep-mcp, sonarqube-mcp]
+
+  gitlab-stack:
+    description: 'GitLab CI/CD with Atlassian project management'
+    servers: [gitlab-mcp, context7, playwright-mcp, semgrep-mcp, atlassian-mcp, sonarqube-mcp]
+
+  azure-devops-stack:
+    description: 'Microsoft-centric stack with Azure DevOps and M365'
+    servers: [azure-mcp, azdo-local-mcp, azdo-remote-mcp, mslearn-mcp, context7, work-iq-mcp, playwright-mcp, sonarqube-mcp]
+
+  full:
+    description: 'All curated MCP servers enabled — configure auth per-server'
+    servers:
+      - azure-mcp
+      - mslearn-mcp
+      - github-mcp
+      - gitlab-mcp
+      - aws-mcp
+      - context7
+      - azdo-local-mcp
+      - azdo-remote-mcp
+      - atlassian-mcp
+      - playwright-mcp
+      - semgrep-mcp
+      - figma-mcp
+      - work-iq-mcp
+      - sonarqube-mcp
+
+# ─── Server Definitions ───────────────────────────────────────────────
+
+servers:
+
+  # ── Cloud & Infrastructure ──────────────────────────────────────────
+
+  - id: azure-mcp
+    name: Azure
+    category: cloud
+    repo: https://github.com/microsoft/mcp
+    description: 'Query and manage Azure resources, validate IaC against live state, check service health.'
+    install:
+      command: npx
+      args: ['@azure/mcp@latest']
+      env:
+        AZURE_SUBSCRIPTION_ID: '${AZURE_SUBSCRIPTION_ID}'
+        AZURE_TENANT_ID: '${AZURE_TENANT_ID}'
+    default_version: '@latest'
+    auth: azure-identity
+    platform_detection:
+      markers: ['azure-pipelines.yml', '.azure/', 'azuredevops']
+      env: ['AZURE_SUBSCRIPTION_ID', 'AZURE_TENANT_ID']
+    skills_new: [azure-resource-query]
+    skills_enhanced:
+      - soprasteria-dep
+      - sdlc-tech-architecture
+      - observability-readiness
+    fallback: 'Local IaC templates, manual Azure portal checks'
+
+  - id: aws-mcp
+    name: AWS
+    category: cloud
+    repo: https://docs.aws.amazon.com/aws-mcp/latest/userguide/what-is-mcp-server.html
+    description: 'Query AWS resources, validate CloudFormation/CDK, check service quotas and health.'
+    install:
+      command: npx
+      args: ['@aws/mcp@latest']
+      env:
+        AWS_PROFILE: '${AWS_PROFILE}'
+        AWS_REGION: '${AWS_REGION}'
+    default_version: '@latest'
+    auth: aws-credentials
+    platform_detection:
+      markers: ['template.yaml', 'cdk.json', 'samconfig.toml', '.aws/']
+      env: ['AWS_PROFILE', 'AWS_ACCESS_KEY_ID']
+    skills_new: [aws-resource-query]
+    skills_enhanced:
+      - soprasteria-dep
+    fallback: 'Local CloudFormation/CDK templates, manual AWS console'
+
+  # ── DevOps Platforms ────────────────────────────────────────────────
+
+  - id: github-mcp
+    name: GitHub
+    category: devops
+    repo: https://github.com/github/github-mcp-server
+    description: 'Issue/PR management, code search across repos, Actions status, release management.'
+    install:
+      command: npx
+      args: ['@github/mcp-server@latest']
+      env:
+        GITHUB_TOKEN: '${GITHUB_TOKEN}'
+    default_version: '@latest'
+    auth: personal-access-token
+    platform_detection:
+      markers: ['.github/']
+      env: ['GITHUB_TOKEN']
+    skills_new: [github-ops]
+    skills_enhanced:
+      - pr-checks
+      - code-implementation
+    fallback: 'Local git operations, diff/patch files'
+
+  - id: gitlab-mcp
+    name: GitLab
+    category: devops
+    repo: https://docs.gitlab.com/user/gitlab_duo/model_context_protocol/mcp_server/
+    description: 'MR management, pipeline status, container registry access, wiki integration.'
+    install:
+      command: npx
+      args: ['@gitlab/mcp-server@latest']
+      env:
+        GITLAB_TOKEN: '${GITLAB_TOKEN}'
+        GITLAB_URL: '${GITLAB_URL:-https://gitlab.com}'
+    default_version: '@latest'
+    auth: personal-access-token
+    platform_detection:
+      markers: ['.gitlab-ci.yml', '.gitlab/']
+      env: ['GITLAB_TOKEN']
+    skills_new: [gitlab-ops]
+    skills_enhanced:
+      - soprasteria-dep
+      - pr-checks
+    fallback: 'Local CI files, manual GitLab UI'
+
+  - id: azdo-local-mcp
+    name: Azure DevOps (Local)
+    category: devops
+    repo: https://github.com/microsoft/azure-devops-mcp
+    description: 'Self-hosted Azure DevOps: work items, boards, pipelines, artifact feeds.'
+    install:
+      command: npx
+      args: ['@microsoft/azure-devops-mcp@latest']
+      env:
+        AZURE_DEVOPS_ORG: '${AZURE_DEVOPS_ORG}'
+        AZURE_DEVOPS_PAT: '${AZURE_DEVOPS_PAT}'
+    default_version: '@latest'
+    auth: personal-access-token
+    platform_detection:
+      markers: ['azure-pipelines.yml', '.azuredevops/']
+      env: ['AZURE_DEVOPS_ORG']
+    skills_new: [azdo-ops]
+    skills_enhanced:
+      - sdlc-steer-planning
+      - sdlc-steer-sprint
+      - pr-checks
+    fallback: 'Local work-item Markdown files in outputs/'
+
+  - id: azdo-remote-mcp
+    name: Azure DevOps (Remote)
+    category: devops
+    repo: https://learn.microsoft.com/en-us/azure/devops/mcp-server/remote-mcp-server
+    description: 'Azure-hosted DevOps: same capabilities as local via remote MCP endpoint.'
+    install:
+      url: '${AZURE_DEVOPS_MCP_URL}'
+    default_version: remote
+    auth: azure-identity
+    platform_detection:
+      markers: ['azure-pipelines.yml']
+      env: ['AZURE_DEVOPS_MCP_URL']
+    skills_new: [azdo-ops]
+    skills_enhanced:
+      - sdlc-steer-planning
+      - sdlc-steer-sprint
+    fallback: 'Falls back to azdo-local-mcp or local Markdown files'
+
+  # ── Collaboration & Project Management ──────────────────────────────
+
+  - id: atlassian-mcp
+    name: Atlassian
+    category: collaboration
+    repo: https://github.com/atlassian/atlassian-mcp-server
+    description: 'Jira issue CRUD, Confluence page management, Bitbucket integration.'
+    install:
+      command: npx
+      args: ['@atlassian/mcp-server@latest']
+      env:
+        ATLASSIAN_SITE: '${ATLASSIAN_SITE}'
+        ATLASSIAN_API_TOKEN: '${ATLASSIAN_API_TOKEN}'
+        ATLASSIAN_EMAIL: '${ATLASSIAN_EMAIL}'
+    default_version: '@latest'
+    auth: api-token
+    platform_detection:
+      markers: []
+      env: ['ATLASSIAN_SITE', 'ATLASSIAN_API_TOKEN']
+    skills_new: [atlassian-ops]
+    skills_enhanced:
+      - sdlc-confluence-sync
+      - sdlc-ba-functional-design
+    fallback: 'Local Markdown files — all deliverables remain file-first'
+
+  - id: work-iq-mcp
+    name: Work-iq (Microsoft 365)
+    category: collaboration
+    repo: https://github.com/microsoft/work-iq
+    description: 'Query M365 data: emails, meetings, Teams messages, OneDrive docs, people directory.'
+    install:
+      command: npx
+      args: ['-y', '@microsoft/workiq', 'mcp']
+    default_version: '@latest'
+    auth: entra-admin-consent
+    platform_detection:
+      markers: []
+      env: []
+    security_notes: |
+      Requires Entra tenant admin consent. All returned M365 data MUST pass
+      through PII redaction (data-anonymisation skill) before inclusion in outputs.
+    skills_new: [m365-data-query]
+    skills_enhanced:
+      - sdlc-steer-governance
+      - sdlc-steer-sprint
+    fallback: 'Manual input of meeting notes, email summaries'
+
+  # ── Documentation & Knowledge ───────────────────────────────────────
+
+  - id: mslearn-mcp
+    name: MsLearn
+    category: documentation
+    repo: https://github.com/MicrosoftDocs/mcp
+    description: 'Query Microsoft Learn for .NET, Azure, M365, PowerShell documentation and API references.'
+    install:
+      command: npx
+      args: ['@microsoftdocs/mcp@latest']
+    default_version: '@latest'
+    auth: none
+    platform_detection:
+      markers: ['*.csproj', '*.sln', 'global.json']
+      env: []
+    skills_new: [mslearn-docs-lookup]
+    skills_enhanced:
+      - docs-architect
+      - api-documentation
+      - dotnet-backend
+    fallback: 'Agent training knowledge, local documentation'
+
+  - id: context7
+    name: Context7
+    category: documentation
+    repo: https://github.com/upstash/context7
+    description: 'Resolve library IDs and fetch up-to-date, version-specific documentation for any framework or library.'
+    install:
+      command: npx
+      args: ['-y', '@upstash/context7-mcp@latest']
+      env:
+        CONTEXT7_API_KEY: '${CONTEXT7_API_KEY}'
+    default_version: '@latest'
+    auth: api-key-optional
+    platform_detection:
+      markers: []
+      env: ['CONTEXT7_API_KEY']
+    cross_cutting: true
+    skills_new: [context7-docs]
+    skills_enhanced:
+      - code-implementation
+      - code-refactoring
+      - frontend-developer
+      - dotnet-backend
+      - react-best-practices
+      - react-patterns
+    fallback: 'Agent training knowledge — may be outdated for newer library versions'
+
+  # ── Testing & Quality ───────────────────────────────────────────────
+
+  - id: playwright-mcp
+    name: Playwright
+    category: testing
+    repo: https://github.com/microsoft/playwright-mcp
+    description: 'Browser automation via accessibility snapshots: navigate, interact, inspect, screenshot, record tests.'
+    install:
+      command: npx
+      args: ['@playwright/mcp@latest']
+    default_version: '@latest'
+    auth: none
+    platform_detection:
+      markers: ['playwright.config.ts', 'playwright.config.js']
+      env: []
+    skills_new: [playwright-browser-automation]
+    skills_enhanced:
+      - sdlc-test-campaign
+      - sdlc-tech-quality
+    fallback: 'Playwright CLI execution, static HTML inspection'
+
+  - id: semgrep-mcp
+    name: SemGrep
+    category: testing
+    repo: https://github.com/semgrep/semgrep/tree/develop/cli/src/semgrep/mcp
+    description: 'Run SemGrep SAST rules via MCP, query rule registry, get fix suggestions.'
+    install:
+      command: semgrep
+      args: ['mcp']
+      prerequisite: 'pip install semgrep'
+    default_version: '@latest'
+    auth: api-key-optional
+    platform_detection:
+      markers: ['.semgrep.yml', '.semgrep/', 'semgrep.yml']
+      env: ['SEMGREP_APP_TOKEN']
+    skills_new: [semgrep-analysis]
+    skills_enhanced:
+      - security-scan
+      - static-analysis
+    fallback: 'Existing regex-based dangerous-pattern scan (A2 station S-03 rules)'
+
+  - id: sonarqube-mcp
+    name: SonarQube
+    category: testing
+    repo: https://github.com/SonarSource/sonarqube-mcp-server
+    description: 'Code quality and security analysis via SonarQube Server or SonarQube Cloud — issues, quality gates, coverage, duplications, security hotspots, and metrics.'
+    install:
+      command: docker
+      args:
+        - run
+        - -i
+        - --rm
+        - --init
+        - --pull=always
+        - -e
+        - SONARQUBE_TOKEN
+        - -e
+        - SONARQUBE_URL
+        - mcp/sonarqube
+      env:
+        SONARQUBE_TOKEN: '${SONARQUBE_TOKEN}'
+        SONARQUBE_URL: '${SONARQUBE_URL}'
+        SONARQUBE_ORG: '${SONARQUBE_ORG}'
+    default_version: '@latest'
+    auth: user-token
+    platform_detection:
+      markers: ['sonar-project.properties', '.sonarcloud.properties']
+      env: ['SONARQUBE_TOKEN', 'SONARQUBE_URL']
+    security_notes: |
+      Disable telemetry with TELEMETRY_DISABLED=true if required.
+      Tokens must never be committed — use ${input:VAR} placeholders in IDE config.
+    skills_new: [sonarqube-analysis]
+    skills_enhanced:
+      - static-analysis
+      - security-scan
+      - quality-report
+    fallback: 'SonarQube CLI scanner or local static analysis tools (ESLint, Pylint)'
+
+  # ── Design ──────────────────────────────────────────────────────────
+
+  - id: figma-mcp
+    name: Figma
+    category: design
+    repo: https://github.com/figma/mcp-server-guide
+    description: 'Read Figma designs, extract component specs, validate against design system tokens.'
+    install:
+      command: npx
+      args: ['@figma/mcp-server@latest']
+      env:
+        FIGMA_ACCESS_TOKEN: '${FIGMA_ACCESS_TOKEN}'
+    default_version: '@latest'
+    auth: personal-access-token
+    platform_detection:
+      markers: []
+      env: ['FIGMA_ACCESS_TOKEN']
+    skills_new: [figma-design-sync]
+    skills_enhanced:
+      - sdlc-ba-functional-design
+      - brand-audit
+    fallback: 'Local HTML prototypes — Figma sync is optional enrichment'

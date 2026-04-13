@@ -196,7 +196,7 @@ stations:
       severity: warning
 
 config:
-  output_dir: docs/2-tech/
+  output_dir: outputs/docs/2-tech/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

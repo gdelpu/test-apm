@@ -26,19 +26,19 @@ Perform a functional snapshot of an existing system (brownfield audit) and produ
    - **Mode B** — Partial documentation: inference + gap identification  
    - **Mode C** — No documentation: reverse-engineering from available artifacts
 4. Produce the AS-IS functional snapshot with domain modules, integrations, and constraints
-5. Write `docs/1-prd/0-audit/asis-001-existing-audit.md` with identifier `[ASIS-001]`
+5. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/0-audit/asis-001-existing-audit.md` with identifier `[ASIS-001]`
 
 ### Phase 2 — Delta Analysis (agent 0.2)
 1. Load the existing audit `[ASIS-001]` as upstream input
 2. Load the delta analysis template from `resources/`
 3. Qualify each functional area as: **New** / **Evolving** / **Preserved** / **Deprecated**
 4. Produce the evolution status matrix with impact assessment
-5. Write `docs/1-prd/0-audit/delta-001-delta-analysis.md` with identifier `[DELTA-001]`
+5. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/0-audit/delta-001-delta-analysis.md` with identifier `[DELTA-001]`
 
 ## Output
 
-- `docs/1-prd/0-audit/asis-001-existing-audit.md` — `[ASIS-001]`
-- `docs/1-prd/0-audit/delta-001-delta-analysis.md` — `[DELTA-001]`
+- `outputs/docs/1-prd/0-audit/asis-001-existing-audit.md` — `[ASIS-001]`
+- `outputs/docs/1-prd/0-audit/delta-001-delta-analysis.md` — `[DELTA-001]`
 
 ## Rules
 

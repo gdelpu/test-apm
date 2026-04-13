@@ -70,7 +70,7 @@ fi
 log_info "Package: ${PACKAGE_NAME}"
 
 # --- Canonical (common) content included in every bundle ---
-# Paths defined by the 'exports' and 'knowledge' keys in apm.yml.
+# Paths defined by the 'exports' key in apm.yml.
 CANONICAL_PATHS=(
     ".apm/agents"
     ".apm/skills"
@@ -79,8 +79,10 @@ CANONICAL_PATHS=(
     ".apm/contexts"
     ".apm/workflows"
     ".apm/scripts"
+    ".apm/knowledge"
+    ".apm/hooks"
+    ".apm/templates"
     "scripts/project-copilot.sh"
-    "knowledge"
     "apm.yml"
 )
 

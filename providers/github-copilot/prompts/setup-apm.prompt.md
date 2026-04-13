@@ -52,6 +52,6 @@ all agents, prompts, workflows, and knowledge assets.
 
 3. After installation, instruct the user to commit:
    - **Standard mode:** `git add .github/ .apm.lock.yaml`
-   - **Expandable mode:** `git add .apm/ providers/ knowledge/ providers-local/ .apm.lock.yaml apm.yml`
+   - **Expandable mode:** `git add .apm/ providers/ providers-local/ .apm.lock.yaml apm.yml`
 
 4. Confirm the user can now invoke `@hub-orchestrator` or `/workflow-feature`.

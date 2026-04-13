@@ -1,7 +1,7 @@
 ---
 name: pr-validator
 description: 'Run deterministic merge request validation checks including frontmatter, naming conventions, YAML lint, and test gap detection.'
-tools: ['codebase', 'search', 'runCommands']
+tools: ['codebase', 'search', 'runCommands', 'edit/editFiles']
 commandAllowlist:
   - python scripts/validate_all.py
   - python scripts/validate_copilot_assets.py
@@ -13,8 +13,9 @@ allowedFilePaths:
   - 'providers/**'
   - 'reports/**'
   - 'ci-gates/**'
-  - 'knowledge/**'
+  - '.apm/knowledge/**'
   - 'scripts/**'
+  - 'outputs/**'
 ---
 
 # PR Validator
@@ -47,9 +48,9 @@ Execute structural, syntactic, and policy validators against changed files in a 
 
 ## Required Outputs
 
-- `reports/pr-auto-validator.json`
-- `reports/yaml-workflow-linter.json`
-- `reports/test-gap-detector.json`
+- `outputs/reports/pr-auto-validator.json`
+- `outputs/reports/yaml-workflow-linter.json`
+- `outputs/reports/test-gap-detector.json`
 
 ## Constraints
 

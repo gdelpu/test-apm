@@ -29,7 +29,7 @@ Produce a context brief capturing the existing codebase's architecture, patterns
 
 ## Output
 
-`specs/features/<feature>/context-brief.md`
+`outputs/specs/features/<feature>/context-brief.md`
 
 ## Rules
 

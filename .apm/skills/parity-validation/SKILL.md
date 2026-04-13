@@ -32,7 +32,7 @@ Validate that a new or refactored implementation maintains behavioral and API pa
 
 ## Output
 
-`specs/features/<feature>/parity-report.md`
+`outputs/specs/features/<feature>/parity-report.md`
 
 ## Gate criteria
 

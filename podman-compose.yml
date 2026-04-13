@@ -12,8 +12,8 @@
 #   4. Run only the station orchestrator:
 #        podman-compose up stations-run-all
 #
-# Reports are written to ./reports/ on your host.
-# Station outputs are written to ./station_out/ on your host.
+# Reports are written to ./outputs/reports/ on your host.
+# Station outputs are written to ./outputs/station_out/ on your host.
 # =======================================================
 
 version: "3.8"
@@ -21,8 +21,8 @@ version: "3.8"
 x-common-env: &common-env
   CI_PROJECT_DIR: /workspace
   VALIDATORS_DIR: .apm/skills/ai-backbone-pr-checks/tools/scripts
-  REPORTS_DIR: reports
-  STATION_OUT: station_out
+  REPORTS_DIR: outputs/reports
+  STATION_OUT: outputs/station_out
   STATION_DIR: ci-gates/stations
   STATION_TIMEOUT: "900"
   CI_MERGE_REQUEST_TARGET_BRANCH_NAME: ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-main}

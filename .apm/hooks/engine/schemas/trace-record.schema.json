@@ -54,6 +54,38 @@
       "type": "string",
       "description": "Tool name if this trace is for a tool invocation."
     },
+    "span_type": {
+      "type": "string",
+      "enum": ["hook", "workflow", "station", "skill", "tool"],
+      "description": "Type of span: hook (default pre/post), workflow (root), station (lifecycle), skill (start/end), tool (invocation)."
+    },
+    "event": {
+      "type": "string",
+      "description": "Lifecycle event (e.g. workflow-init, station-running, skill-start, skill-end)."
+    },
+    "mcp": {
+      "type": "object",
+      "description": "MCP tool invocation details (present only for MCP calls).",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "description": "MCP server identifier from mcp-registry.yaml."
+        },
+        "method": {
+          "type": "string",
+          "description": "MCP method called."
+        },
+        "external": {
+          "type": "boolean",
+          "description": "Whether this is an external MCP server.",
+          "default": true
+        },
+        "duration_ms": {
+          "type": ["integer", "null"],
+          "description": "Call duration in milliseconds."
+        }
+      }
+    },
     "input_hash": {
       "type": "string",
       "description": "SHA-256 hash of the input content (never raw content)."

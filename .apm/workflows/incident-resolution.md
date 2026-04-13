@@ -30,7 +30,7 @@ Structured incident diagnosis and resolution from analysis through fix, regressi
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `incident-analysis.md` — Timeline, affected services, logs/traces
 - `root-cause.md` — Root cause with evidence and alternatives
 - `reproduction.md` — Steps to reproduce with environment details
@@ -42,4 +42,4 @@ All artifacts are written to `specs/features/<feature>/`:
 ## Composition
 
 Can trigger `quality-validation` as a nested workflow in station 6 for thorough validation.
-The knowledge update feeds back into `knowledge/` and `specs/decisions/` for organizational learning.
+The knowledge update feeds back into `.apm/knowledge/` and `outputs/specs/decisions/` for organizational learning.

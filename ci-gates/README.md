@@ -1,45 +1,56 @@
 # Agent Factory — Station-Gate Workflow
 
 An MR-driven, multi-station pipeline that validates every **agent** and **skill** change before merge.
-Each _station_ runs its own checks and writes a structured JSON report to `station_out/`.
+Each _station_ runs its own checks and writes a structured JSON report to `outputs/station_out/`.
 The **Policy Gate (A6)** aggregates all reports and either approves, blocks, or escalates for human review.
 
 ## Architecture
 
-The pipeline runs in two phases:
+The pipeline runs in two top-level phases, with the station phase itself split
+into three sub-phases for performance:
 
 1. **Validate** — deterministic Python scripts run in parallel.
-2. **Stations** — once the blocking validators pass, the station orchestrator
-   dynamically discovers every `*.prompt.md` / `*.agent.md` file in
-   `ci-gates/stations/`, sorts by prefix, and executes them
-   sequentially via GitHub Copilot CLI.
+2. **Stations** — once the blocking validators pass, the hybrid station
+   orchestrator runs in three sub-phases:
+   - **Phase 1 (deterministic):** A0, A1, A3 run as fast Python scripts (<2s total).
+   - **Phase 2 (LLM-powered):** A2, A4, A5, A7 run via Copilot CLI (skipped entirely for non-agent PRs).
+   - **Phase 3 (deterministic gate):** A6 aggregates all reports as a Python script (<1s).
 
 ```
 merge_request_event
   │
-  ├─ validate (parallel)               ← Phase 1
-  │   ├─ validate:pr-auto               Python deterministic   ⛔ gates
-  │   ├─ validate:yaml-workflows        Python deterministic   ⛔ gates
-  │   └─ validate:test-gaps             Python deterministic   advisory
+  ├─ validate (parallel)                  ← Top-level Phase 1
+  │   ├─ validate:pr-auto                  Python deterministic   ⛔ gates
+  │   ├─ validate:yaml-workflows           Python deterministic   ⛔ gates
+  │   └─ validate:test-gaps                Python deterministic   advisory
   │
-  └─ stations (sequential)             ← Phase 2 (needs pr-auto + yaml-workflows)
-      └─ stations:run-all
-           ├─ a0-intake.prompt.md       → work_order.json
-           ├─ a1-policy-validation      → a1_result.json    ⛔ gates
-           ├─ a2-security-static        → a2_result.json    ⛔ gates
-           ├─ a3-prompt-injection       → a3_result.json    ⛔ gates
-           ├─ a4-red-team.agent         → a4_result.json
-           ├─ a5-sandbox-simulation     → a5_result.json    ⛔ gates
-           ├─ a6-policy-gate.agent      → a6_result.json    ⛔ gates
-           └─ a7-gitlab-update          → (GitLab API side effects)
+  └─ stations:run-all                     ← Top-level Phase 2
+      │
+      ├─ Station Phase 1 (deterministic, ~2s)
+      │   ├─ A0  a0_intake.py              → a0_result.json
+      │   ├─ A1  a1_policy.py              → a1_result.json    ⛔ gates
+      │   └─ A3  a3_injection.py           → a3_result.json    ⛔ gates
+      │
+      ├─ Station Phase 2 (LLM, skipped if non-agent scope)
+      │   ├─ A2  Copilot CLI (Haiku)       → a2_result.json    ⛔ gates
+      │   ├─ A4  Copilot CLI (Sonnet)      → a4_result.json
+      │   ├─ A5  Copilot CLI (Sonnet)      → a5_result.json    ⛔ gates
+      │   └─ A7  Copilot CLI (Haiku)       → a7_result.json
+      │
+      └─ Station Phase 3 (deterministic gate, <1s)
+          └─ A6  a6_gate.py               → a6_result.json    ⛔ gates
 ```
 
 Adding or removing a station requires **no CI YAML changes** — just add/remove
 the file in `stations/` and the orchestrator picks it up automatically.
 
+For **non-agent PRs** (no agent/skill/prompt/instruction files changed), A0
+sets `scope: "non-agent"` and the entire LLM phase is skipped — total pipeline
+time drops from minutes to seconds.
+
 ## Station Outputs
 
-All station outputs are written to `station_out/` (created by A0).
+All station outputs are written to `outputs/station_out/` (created by A0).
 
 | File | Station | Purpose |
 |------|---------|---------|
@@ -52,16 +63,20 @@ All station outputs are written to `station_out/` (created by A0).
 
 ## Station Files
 
-| Station | File | Type |
-|---------|------|------|
-| A0 Intake | `stations/a0-intake.prompt.md` | Prompt |
-| A1 Policy Validation | `stations/a1-policy-validation.prompt.md` | Prompt |
-| A2 Security Static | `stations/a2-security-static.prompt.md` | Prompt |
-| A3 Prompt Injection (deterministic) | `stations/a3-prompt-injection.prompt.md` | Prompt |
-| A4 Red Team (AI) | `stations/a4-red-team.agent.md` | Agent |
-| A5 Sandbox Simulation | `stations/a5-sandbox-simulation.prompt.md` | Prompt |
-| A6 Policy Gate | `stations/a6-policy-gate.agent.md` | Agent |
-| A7 GitLab Update | `stations/a7-gitlab-update.prompt.md` | Prompt |
+| Station | File | Engine | Type |
+|---------|------|--------|------|
+| A0 Intake | `scripts/a0_intake.py` | Python (deterministic) | Script |
+| A1 Policy Validation | `scripts/a1_policy.py` | Python (deterministic) | Script |
+| A2 Security Static | `stations/a2-security-static.prompt.md` | Copilot CLI (Haiku) | Prompt |
+| A3 Prompt Injection | `scripts/a3_injection.py` | Python (deterministic) | Script |
+| A4 Red Team (AI) | `stations/a4-red-team.agent.md` | Copilot CLI (Sonnet) | Agent |
+| A5 Sandbox Simulation | `stations/a5-sandbox-simulation.prompt.md` | Copilot CLI (Sonnet) | Prompt |
+| A6 Policy Gate | `scripts/a6_gate.py` | Python (deterministic) | Script |
+| A7 GitLab Update | `stations/a7-gitlab-update.prompt.md` | Copilot CLI (Haiku) | Prompt |
+
+The original prompt/agent files for A0, A1, A3, and A6 remain in `stations/` as
+the canonical specification of what each station checks. The Python scripts in
+`scripts/` implement those specifications deterministically.
 
 ## Schemas
 
@@ -151,15 +166,20 @@ Heuristic analysis of whether companion files were updated alongside the main ch
 
 Advisory only — findings appear in the report but never block the pipeline.
 
-### Phase 2 — AI Stations
+### Phase 2 — AI Stations (Hybrid)
 
-Stations run **sequentially** via the `run_stations.sh` orchestrator, which discovers all
-`*.prompt.md` / `*.agent.md` files in `stations/`, sorts by prefix, and invokes each through
-GitHub Copilot CLI. Each station reads inputs from `station_out/` and writes its own JSON report.
+The station orchestrator (`scripts/run_stations.sh`) runs in three sub-phases:
+
+- **Phase 1 (deterministic):** A0, A1, A3 execute as Python scripts — instant, no LLM required.
+- **Phase 2 (LLM-powered):** A2, A4, A5, A7 run via Copilot CLI with per-station model selection. Skipped entirely if A0 determines `scope: "non-agent"`.
+- **Phase 3 (deterministic gate):** A6 aggregates all reports as a Python script.
+
+LLM-powered stations still discover `*.prompt.md` / `*.agent.md` files in `stations/` and
+are invoked sequentially with inter-station throttling.
 
 #### A0 — Intake
 
-**File**: `a0-intake.prompt.md` · **Model**: claude-haiku-4.5 · **Tools**: view, create
+**Script**: `scripts/a0_intake.py` · **Engine**: Python (deterministic) · **Spec**: `stations/a0-intake.prompt.md`
 
 Bootstraps the pipeline by producing a structured work order from the MR.
 
@@ -172,11 +192,11 @@ Bootstraps the pipeline by producing a structured work order from the MR.
    - `eval-usage` — `eval()` calls
    - `agent-removed` — deleted `*.agent.md` file
 3. **Determine scope** — if no agent/skill/prompt/instruction files changed, sets `scope: "non-agent"` so downstream stations can skip.
-4. **Write output** — `station_out/work_order.json` containing PR metadata, classified file list, risk hints, and diff summary.
+4. **Write output** — `outputs/station_out/work_order.json` containing PR metadata, classified file list, risk hints, and diff summary.
 
 #### A1 — Policy & Structure Validation
 
-**File**: `a1-policy-validation.prompt.md` · **Model**: claude-sonnet-4.6 · **Tools**: view, create · ⛔ gates
+**Script**: `scripts/a1_policy.py` · **Engine**: Python (deterministic) · **Spec**: `stations/a1-policy-validation.prompt.md` · ⛔ gates
 
 Validates agent and skill manifests against workspace policy rules and JSON Schema.
 
@@ -221,13 +241,15 @@ Files under `**/fixtures/**`, `**/test*/**`, or `ci-gates/stations/**` are exclu
 
 #### A3 — Prompt Injection & Exfil Hardening (Deterministic)
 
-**File**: `a3-prompt-injection.prompt.md` · **Model**: claude-sonnet-4.6 · **Tools**: view, create · ⛔ gates
+**Script**: `scripts/a3_injection.py` · **Engine**: Python (deterministic) · **Spec**: `stations/a3-prompt-injection.prompt.md` · ⛔ gates
 
 Deterministic (regex/keyword) scanning of agent, skill, and prompt definitions for injection and exfiltration vulnerabilities. Six check categories:
 
 **PI-01 · Jailbreak phrases** — Scans for known instruction-override patterns: "ignore previous instructions", "you are now a", "pretend to be", "do anything now" (DAN), "developer mode", injected `[SYSTEM]` / `[INST]` delimiters. Severity: `critical` or `high` depending on pattern.
 
 **PI-02 · Missing refusal constraints** — Every `*.agent.md` must contain at least one "non-negotiable" constraint ("must not", "will not", "never" + destructive verb, or "refuse" + request noun, or an "out of scope" section). Missing → `high`.
+
+**PI-02b · Out of Scope contradictions** — If an agent has an "Out of Scope" section, its entries must not blanket-block capabilities the agent's own `tools` frontmatter declares (e.g. "Running commands or scripts" when `runCommands` is in tools). Contradiction → `high`.
 
 **PI-03 · Data access boundaries** — Skill files that reference file-operation tools must declare `allowedFilePaths` with explicit (non-wildcard) values. Wildcard or missing → `high`.
 
@@ -253,7 +275,7 @@ Five attack categories are evaluated:
 | **RT-04 · Privilege Escalation via Chaining** | Searches the workspace for other agents that could be chained to escalate privileges. Identifies the most dangerous 2-agent combination. |
 | **RT-05 · Denial of Service** | Describes inputs that could cause infinite loops, excessive token usage, or unbounded tool calls. Checks for rate limits or recursion guards. |
 
-Red team findings are appended to `station_out/promptsec_report.json` under `"red_team_findings"` and use the same severity schema. Findings must not duplicate those already flagged by A3.
+Red team findings are appended to `outputs/station_out/promptsec_report.json` under `"red_team_findings"` and use the same severity schema. Findings must not duplicate those already flagged by A3.
 
 #### A5 — Sandbox Simulation
 
@@ -274,7 +296,7 @@ Fixture files provide realistic adversarial inputs across categories: exfiltrati
 
 #### A6 — Policy Gate
 
-**File**: `a6-policy-gate.agent.md` · **Model**: claude-sonnet-4.6 · **Tools**: codebase · ⛔ gates
+**Script**: `scripts/a6_gate.py` · **Engine**: Python (deterministic) · **Spec**: `stations/a6-policy-gate.agent.md` · ⛔ gates
 
 The final aggregation step. Reads all upstream station reports and applies a priority-ordered decision:
 
@@ -303,7 +325,11 @@ Skips entirely if the gate decision is `APPROVE` (no MR update needed for clean 
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/run_stations.sh` | Sequential station orchestrator — discovers station files, prepares shared MR context (diff, changed files), invokes each station via Copilot CLI with per-station model selection and rate-limit retry logic |
+| `scripts/a0_intake.py` | Deterministic A0 station — classifies changed files, computes risk hints, determines PR scope |
+| `scripts/a1_policy.py` | Deterministic A1 station — validates agent/skill frontmatter against policy rules P-01 through P-06 |
+| `scripts/a3_injection.py` | Deterministic A3 station — regex scans for jailbreak phrases, missing constraints, exfiltration vectors (PI-01 through PI-06) |
+| `scripts/a6_gate.py` | Deterministic A6 station — aggregates all station reports and applies G-BLOCK/G-REVIEW/G-APPROVE rules |
+| `scripts/run_stations.sh` | Hybrid station orchestrator — runs deterministic Python stations (A0, A1, A3, A6) directly, invokes LLM stations (A2, A4, A5, A7) via Copilot CLI with per-station model selection and rate-limit retry logic. Skips LLM phase entirely for non-agent PRs |
 | `scripts/extract_json.py` | Extracts the first valid JSON object from Copilot CLI output (supports plain text and JSONL envelope formats, handles multi-object responses, prefers station-keyed objects) |
 | `scripts/check_injection.py` | Lightweight regex scanner for prompt-injection patterns in MR titles (checks for "ignore previous", "you are now", "jailbreak", "act as", etc.) |
 | `scripts/sanitize_title.py` | Applies NFKC unicode normalization and strips control/format characters from MR titles to defeat encoding-based injection tricks (truncates to 200 chars) |

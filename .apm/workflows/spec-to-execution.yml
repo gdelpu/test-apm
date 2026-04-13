@@ -115,7 +115,7 @@ stations:
       severity: blocker
 
 config:
-  output_dir: specs/features/<feature>/
+  output_dir: outputs/specs/features/<feature>/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

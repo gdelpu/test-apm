@@ -21,7 +21,7 @@ ai-sdlc-foundation catalog.
 - **Hub catalog**: `.apm/contexts/hub-catalog.yaml` — the cached index of all
   workflows (name, description, type, stations, when_to_use) and agents
   (name, description, tools).
-- **In-progress state** (optional): any `specs/features/*/workflow-state.md`
+- **In-progress state** (optional): any `outputs/runs/*/latest/workflow-state.md`
   files indicating workflows that can be resumed.
 
 ## Classification Protocol
@@ -34,7 +34,7 @@ and `.apm/agents/*.md` (frontmatter: name, description).
 
 ### Step 2 — Check for in-progress work
 
-Scan `specs/features/*/workflow-state.md` for existing workflow executions.
+Scan `outputs/runs/*/latest/workflow-state.md` for existing workflow executions.
 If any exist, include in the response: "You have in-progress work on [feature].
 Would you like to resume?"
 
@@ -61,7 +61,7 @@ Match the user message against catalog entries:
 | "sprint", "governance", "COPIL", "steering" | `sdlc-steer` workflow | SDLC harness |
 | "analyze repo", "codebase overview", "understand code" | `repository-analyzer` agent | analysis |
 | "backlog from code", "reverse engineer" | `reverse-backlog-generator` agent | analysis |
-| "brand", "Sopra Steria style", "branding" | `brand-styler` or `ssg-branding-agent` agent | branding |
+| "brand", "Sopra Steria style", "branding" | `branding` agent | branding |
 | "security review", "prompt injection", "LLM security" | `security-reviewer` agent | security |
 | "BMAD", "hypothesis", "measure" | `bmad` workflow | delivery |
 | "tasks from spec", "plan to tasks" | `spec-to-execution` workflow | specification |

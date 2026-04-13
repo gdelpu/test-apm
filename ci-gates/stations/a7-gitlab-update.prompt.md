@@ -12,8 +12,8 @@ request a review from the designated human approver group.
 
 ## Inputs
 
-- `station_out/gate_decision.json`
-- `station_out/work_order.json`
+- `outputs/station_out/gate_decision.json`
+- `outputs/station_out/work_order.json`
 - All station reports: `policy_report.json`, `security_report.json`, `promptsec_report.json`, `sim_report.json`
 - GitLab MR IID (from `CI_MERGE_REQUEST_IID` or `work_order.json`)
 
@@ -99,12 +99,12 @@ then `POST` a new note.
 <summary>Full report artifacts</summary>
 
 Download from the pipeline's job artifacts:
-- `station_out/work_order.json`
-- `station_out/policy_report.json`
-- `station_out/security_report.json`
-- `station_out/promptsec_report.json`
-- `station_out/sim_report.json`
-- `station_out/gate_decision.json`
+- `outputs/station_out/work_order.json`
+- `outputs/station_out/policy_report.json`
+- `outputs/station_out/security_report.json`
+- `outputs/station_out/promptsec_report.json`
+- `outputs/station_out/sim_report.json`
+- `outputs/station_out/gate_decision.json`
 
 </details>
 ```

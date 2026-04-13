@@ -183,7 +183,12 @@ tar -xzf "${DEST_DIR}/${ARCHIVE_NAME}" -C "${DEST_DIR}"
 log_ok "Extracted: ${ARCHIVE_NAME}"
 
 # --- Detect existing install ---
+# Standard mode writes the lock at repo root; expandable writes at $DEST_DIR.
+# Try both locations so updates are detected regardless of prior mode.
+REPO_ROOT="$(pwd)"
 if read_apm_lock "$DEST_DIR"; then
+    log_info "Existing install detected: v${APM_LOCK_VERSION} (${APM_LOCK_MODE} mode)"
+elif read_apm_lock "$REPO_ROOT"; then
     log_info "Existing install detected: v${APM_LOCK_VERSION} (${APM_LOCK_MODE} mode)"
 fi
 
@@ -228,13 +233,21 @@ if [[ "$MODE" == "standard" ]]; then
     RUNTIME_DIR="${RUNTIME_DIR:-.github}"
 
     # Copy runtime directory to consumer repo root (not into staging dir)
-    REPO_ROOT="$(pwd)"
     if [[ -d "$REPO_ROOT/$RUNTIME_DIR" ]]; then
         log_info "Removing previous runtime directory: $RUNTIME_DIR"
         rm -rf "${REPO_ROOT:?}/$RUNTIME_DIR"
     fi
     cp -r "$TEMP_DIR/$RUNTIME_DIR" "$REPO_ROOT/$RUNTIME_DIR"
     log_ok "Copied runtime: $RUNTIME_DIR"
+
+    # Seed hook-config.json if not already present
+    # After projection hooks+templates live inside the runtime dir
+    HOOK_CFG_TPL="$TEMP_DIR/$RUNTIME_DIR/templates/hook-config.json"
+    HOOK_CFG_DST="$REPO_ROOT/hook-config.json"
+    if [[ -f "$HOOK_CFG_TPL" && ! -f "$HOOK_CFG_DST" ]]; then
+        cp "$HOOK_CFG_TPL" "$HOOK_CFG_DST"
+        log_ok "Seeded hook-config.json (edit to customise hooks)"
+    fi
 
     # Write lock file at repo root
     write_apm_lock "$REPO_ROOT" "$VERSION" "standard" "$PROVIDER" "$ARCHIVE_NAME" "${ACTUAL_CHECKSUM}"

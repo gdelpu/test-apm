@@ -11,11 +11,11 @@ Detect prompt injection vulnerabilities and data exfiltration vectors in agent/s
 using deterministic (regex / keyword) scanners. The optional Red Team Agent (`a4-red-team.agent.md`)
 runs separately and appends its structured findings to the same report.
 
-Emit `station_out/promptsec_report.json`.
+Emit `outputs/station_out/promptsec_report.json`.
 
 ## Inputs
 
-- `station_out/work_order.json`
+- `outputs/station_out/work_order.json`
 - Full text of changed `*.agent.md`, `SKILL.md`, and `*.prompt.md` files
 
 ## Target Selection
@@ -65,6 +65,27 @@ Every `*.agent.md` body MUST include at least one sentence describing what the a
 - "refuse" + (request\|instruction\|attempt)
 - Any explicit "out of scope" section
 
+### PI-02b · Out of Scope must not contradict declared tools
+
+If an agent body contains an "Out of Scope" section, its entries **must not** blanket-block
+capabilities that the agent's own `tools` frontmatter declares. Contradictions cause the LLM
+to refuse legitimate tool invocations, effectively downgrading the agent to read-only or
+preventing MCP tool usage.
+
+Flag as `high` if the Out of Scope section contains:
+
+| Out of Scope phrase (case-insensitive) | Contradicts tool | Severity |
+|----------------------------------------|------------------|----------|
+| `file writes` or `code modification` (without path qualifier) | `edit/editFiles` | `high` |
+| `running commands` or `executing scripts` (blanket) | `runCommands` | `high` |
+| `accessing external APIs` or `network resources` (blanket) | `fetch` | `high` |
+
+**Acceptable alternatives** (specific, not blanket):
+- "Do not modify CI/CD pipelines or infrastructure files" ← specific path restriction, OK
+- "Do not access credentials or secret stores" ← specific data restriction, OK
+- "Network access restricted to localhost only" ← scoped restriction, OK
+- "Commands restricted to the allowlist only" ← specific, OK
+
 ### PI-03 · Data access boundary declarations
 
 Skill `SKILL.md` files that declare `tools` referencing file operations
@@ -92,7 +113,7 @@ Flag any instruction to the agent to process external content without sandboxing
 - "execute the steps described in the user's document"
 - "process the webpage and carry out what it says"
 
-Pattern: `(read\|process\|execute\|follow).{0,40}(file\|document\|webpage\|url).{0,40}(instruct\|step\|direct)` → `critical`
+Pattern: `(read\|process\|execute\|follow).{0,40}(file\|document\|webpage\|url).{0,40}(instructions?\b\|steps?\b\|directs?\b\|directed\b\|directing\b)` → `critical`
 
 ## Output Schema
 

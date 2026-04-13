@@ -85,9 +85,9 @@ $PackageName = 'ssg-ai-backbone'
 
 # --- Helpers ---
 function Write-Step  { param([string]$msg) Write-Host "`n── $msg ──" -ForegroundColor Cyan }
-function Write-Ok    { param([string]$msg) Write-Host "✅ $msg" -ForegroundColor Green }
-function Write-Info  { param([string]$msg) Write-Host "ℹ️  $msg" }
-function Write-Err   { param([string]$msg) Write-Host "❌ $msg" -ForegroundColor Red }
+function Write-Ok    { param([string]$msg) Write-Host "[OK] $msg" -ForegroundColor Green }
+function Write-Info  { param([string]$msg) Write-Host "[..] $msg" }
+function Write-Err   { param([string]$msg) Write-Host "[!!] $msg" -ForegroundColor Red }
 
 # --- Dot-source lock file helper ---
 . (Join-Path $PSScriptRoot 'lib/apm-lock.ps1')
@@ -97,6 +97,9 @@ $Version = $Version -replace '^v', ''
 
 # --- Initialise checksum (may be set later by verification step) ---
 $actualHash = ''
+
+# --- Consumer repo root (CWD) used for standard-mode lock/runtime resolution ---
+$repoRoot = (Get-Location).Path
 
 # --- Validate semver ---
 if ($Version -notmatch '^\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?(\+[a-zA-Z0-9.]+)?$') {
@@ -175,7 +178,12 @@ tar -xzf $ArchivePath -C $Destination
 Write-Ok "Extracted: $ArchiveName"
 
 # --- Check for existing lock file ---
+# Standard mode writes the lock at repo root; expandable writes at $Destination.
+# Try both locations so updates are detected regardless of prior mode.
 $existingLock = Read-ApmLock -Path $Destination
+if (-not $existingLock) {
+    $existingLock = Read-ApmLock -Path $repoRoot
+}
 if ($existingLock) {
     Write-Info "Existing install detected: v$($existingLock['version']) ($($existingLock['mode']) mode)"
 }
@@ -205,18 +213,8 @@ Write-Step "Applying install mode: $Mode"
 
 if ($Mode -eq 'standard') {
     # ── Standard mode: project runtime-only files ──────────────────────
-
-    # If updating, remove old runtime directory
-    if ($existingLock) {
-        $oldRuntime = Get-ApmRuntime -ApmRoot $Destination -ProviderKey $Provider
-        if ($oldRuntime) {
-            $oldRuntimePath = Join-Path $Destination $oldRuntime
-            if (Test-Path $oldRuntimePath) {
-                Remove-Item $oldRuntimePath -Recurse -Force
-                Write-Info "Removed previous runtime directory: $oldRuntime"
-            }
-        }
-    }
+    # NOTE: old runtime is removed unconditionally AFTER projection,
+    # right before copying the new runtime to $repoRoot (see below).
 
     # Create temp working directory alongside destination
     $tempDir = Join-Path (Split-Path $Destination -Parent) ".apm-install-tmp-$(Get-Date -Format 'yyyyMMddHHmmss')"
@@ -255,10 +253,26 @@ if ($Mode -eq 'standard') {
         }
 
         # Copy runtime directory to consumer repo root (not into staging dir)
-        $repoRoot = (Get-Location).Path
         $runtimeDst = Join-Path $repoRoot $runtimeDir
+
+        # Always remove old runtime so stale files (renamed/deleted upstream)
+        # do not persist.  This matches the bash installer behaviour.
+        if (Test-Path $runtimeDst) {
+            Remove-Item $runtimeDst -Recurse -Force
+            Write-Info "Removed previous runtime directory: $runtimeDir"
+        }
+
         Copy-Item $runtimeSrc -Destination $runtimeDst -Recurse -Force
         Write-Ok "Copied runtime: $runtimeDir"
+
+        # Seed hook-config.json if not already present
+        # After projection hooks+templates live inside the runtime dir
+        $hookCfgTpl = Join-Path $tempDir "$runtimeDir/templates/hook-config.json"
+        $hookCfgDst = Join-Path $repoRoot 'hook-config.json'
+        if ((Test-Path $hookCfgTpl) -and -not (Test-Path $hookCfgDst)) {
+            Copy-Item $hookCfgTpl -Destination $hookCfgDst
+            Write-Ok 'Seeded hook-config.json (edit to customise hooks)'
+        }
 
         # Write lock file at repo root
         Write-ApmLock -Path $repoRoot -Version $Version -Mode 'standard' -Provider $Provider -Archive $ArchiveName -Checksum $actualHash
@@ -398,4 +412,56 @@ $repoRoot = (Get-Location).Path
 # Remove staging directory (now empty after promote)
 if (Test-Path $Destination) { Remove-Item $Destination -Recurse -Force }
 Write-Ok "$PackageName v$Version ($Target, $Mode mode) installed to $repoRoot"
+
+# --- Check for conflicting Copilot settings ---
+Write-Step 'Checking for conflicting Copilot settings'
+$vscodeDirs = @(
+    (Join-Path $repoRoot '.vscode'),
+    (Join-Path $env:APPDATA 'Code/User')
+)
+
+$conflictPatterns = @(
+    'Do NOT create markdown files',
+    'Do not create markdown',
+    'Do not write files unless requested',
+    'never create files',
+    'do not create files'
+)
+
+$conflictFound = $false
+foreach ($dir in $vscodeDirs) {
+    $settingsPath = Join-Path $dir 'settings.json'
+    if (Test-Path $settingsPath) {
+        $settingsContent = Get-Content $settingsPath -Raw -ErrorAction SilentlyContinue
+        if ($settingsContent) {
+            foreach ($pattern in $conflictPatterns) {
+                if ($settingsContent -match [regex]::Escape($pattern)) {
+                    Write-Host ""
+                    Write-Host "  ⚠️  FILE-WRITE CONFLICT DETECTED in $settingsPath" -ForegroundColor Yellow
+                    Write-Host "      Found: '$pattern'" -ForegroundColor Yellow
+                    Write-Host "      This setting will prevent agents from writing deliverable files to disk." -ForegroundColor Yellow
+                    Write-Host "      Remove this from 'github.copilot.chat.reminderInstructions' or add an override:" -ForegroundColor Yellow
+                    Write-Host '      { "text": "Agents from ai-sdlc-foundation MUST write deliverable files to disk under outputs/." }' -ForegroundColor Yellow
+                    Write-Host ""
+                    $conflictFound = $true
+                    break
+                }
+            }
+        }
+    }
+}
+
+# Ensure workspace .vscode/settings.json has the file-write override
+$workspaceSettings = Join-Path $repoRoot '.vscode/settings.json'
+$overrideText = 'Agents from ai-sdlc-foundation MUST write deliverable files to disk under outputs/.'
+
+if (Test-Path $workspaceSettings) {
+    $existingContent = Get-Content $workspaceSettings -Raw -ErrorAction SilentlyContinue
+    if ($existingContent -and $existingContent -notmatch [regex]::Escape($overrideText)) {
+        Write-Info "Consider adding the file-write override to $workspaceSettings :"
+        Write-Host '  "github.copilot.chat.reminderInstructions": [{ "text": "Agents from ai-sdlc-foundation MUST write deliverable files to disk under outputs/." }]' -ForegroundColor Cyan
+    }
+} elseif (-not $conflictFound) {
+    Write-Ok 'No conflicting Copilot settings detected'
+}
 Get-ChildItem -Path $repoRoot | Format-Table Name, Length, LastWriteTime -AutoSize

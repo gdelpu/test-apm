@@ -23,19 +23,19 @@ Perform a technical stack assessment and gap analysis for brownfield projects, i
 2. Read client-provided technical documentation from `docs/0-inputs/tech/0-audit/`
 3. Assess current stack: languages, frameworks, infrastructure, CI/CD, observability
 4. Identify compliance gaps against governance standards
-5. Write `docs/2-tech/0-audit/tech-asis-001-technical-audit.md` with identifier `[TECH-ASIS-001]`
+5. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/0-audit/tech-asis-001-technical-audit.md` with identifier `[TECH-ASIS-001]`
 
 ### Phase 2 — Gap Analysis (agent t0.2)
 1. Load the gap analysis template from `resources/`
 2. Read upstream: `[TECH-ASIS-001]` technical audit
 3. Define migration paths for each identified gap
 4. Estimate effort and risk for each migration path
-5. Write `docs/2-tech/0-audit/gap-001-technical-gap.md` with identifier `[GAP-001]`
+5. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/0-audit/gap-001-technical-gap.md` with identifier `[GAP-001]`
 
 ## Output
 
-- `docs/2-tech/0-audit/tech-asis-001-technical-audit.md` — `[TECH-ASIS-001]`
-- `docs/2-tech/0-audit/gap-001-technical-gap.md` — `[GAP-001]`
+- `outputs/docs/2-tech/0-audit/tech-asis-001-technical-audit.md` — `[TECH-ASIS-001]`
+- `outputs/docs/2-tech/0-audit/gap-001-technical-gap.md` — `[GAP-001]`
 
 ## Rules
 

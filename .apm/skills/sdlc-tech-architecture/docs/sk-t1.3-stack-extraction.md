@@ -16,13 +16,13 @@ You are a senior lead developer. Your mission is to read **a single ADR** and ex
 
 | Input | Source | Required |
 |-------|--------|----------|
-| **One ADR file** | `docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md` — provided by the foreach orchestrator | Yes |
+| **One ADR file** | `outputs/docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md` — provided by the foreach orchestrator | Yes |
 
 No other input. Do not read other ADRs, BA deliverables, or STK-001.
 
 ## Expected output
 
-A single extraction file `docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md` containing:
+A single extraction file `outputs/docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md` containing:
 
 ```yaml
 ---
@@ -63,5 +63,5 @@ Followed by a structured extraction:
 
 ## Output format
 
-- File: `docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md`
+- File: `outputs/docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md`
 - Status: intermediate (not a deliverable — consumed by t1.3b)

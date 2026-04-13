@@ -22,7 +22,7 @@ Continuously monitor specification-to-code alignment through drift detection, au
 1. Compare current codebase against specification deliverables
 2. Identify discrepancies: missing implementations, extra features, specification violations
 3. Produce drift report with categorized findings (critical, warning, info)
-4. Write `docs/2-tech/3-quality/dft-{id}-drift-report.md` with identifier `[DFT-xxx]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/3-quality/dft-{id}-drift-report.md` with identifier `[DFT-xxx]`
 
 ### Phase 2 — Code Review (agent t3.2) — depends on Phase 1
 1. Perform per-PR code review against architecture decisions and coding standards
@@ -32,13 +32,13 @@ Continuously monitor specification-to-code alignment through drift detection, au
 ### Phase 3 — E2E Playwright Generation (agent t3.3)
 1. Read BA E2E test plan `[E2E-PLAN-001]` and test scenarios `[SCE-xxx]`
 2. Generate cross-US, cross-feature Playwright test scripts
-3. Write `docs/2-tech/3-quality/e2e-scripts-001-playwright.md` with identifier `[E2E-SCRIPTS-001]`
+3. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/3-quality/e2e-scripts-001-playwright.md` with identifier `[E2E-SCRIPTS-001]`
 
 ## Output
 
-- `docs/2-tech/3-quality/dft-{id}-drift-report.md` — `[DFT-xxx]`
+- `outputs/docs/2-tech/3-quality/dft-{id}-drift-report.md` — `[DFT-xxx]`
 - Code review reports
-- `docs/2-tech/3-quality/e2e-scripts-001-playwright.md` — `[E2E-SCRIPTS-001]`
+- `outputs/docs/2-tech/3-quality/e2e-scripts-001-playwright.md` — `[E2E-SCRIPTS-001]`
 
 ## Rules
 

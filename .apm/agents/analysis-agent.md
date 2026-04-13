@@ -1,7 +1,11 @@
 ---
 name: analysis-agent
 description: 'Diagnose production incidents by analyzing logs, traces, and identifying root causes.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
+  - 'docs/**'
+  - 'reports/**'
 ---
 
 # Analysis Agent
@@ -43,7 +47,7 @@ Diagnose production incidents by reconstructing timelines, analyzing logs and tr
 - Never assume root cause without evidence
 - Always consider at least two alternative hypotheses
 - Document what was ruled out and why
-- Do not modify production systems — analysis is read-only
+- Do not modify production systems or source code — analysis is read-only with respect to live systems (writing analysis reports to `outputs/` is expected)
 - Escalate when evidence is insufficient for diagnosis
 
 ### Resource limits
@@ -65,4 +69,4 @@ Diagnose production incidents by reconstructing timelines, analyzing logs and tr
 - Do not read or summarise `.env`, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `.aws/*`, `.ssh/*` files.
 - Do not access credentials, environment variables, or secret stores.
 - Redact PII (names, emails, IPs, tokens) from incident logs before including in reports.
-- Analysis is strictly read-only — never execute remediation commands against live systems.
+- Analysis is strictly read-only with respect to production systems — never execute remediation commands against live systems. Writing analysis reports to `outputs/` is expected and required.

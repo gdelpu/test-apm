@@ -3,15 +3,17 @@ name: Reverse Backlog Generator
 description: 'This agent generates a product backlog based on the analysis of a code repository that can be used to rebuild the application.'
 tools: [vscode, codebase, search, edit/editFiles]
 target: vscode
-allowedFilePaths: ['docs/generated/*']
+allowedFilePaths: ['outputs/**', 'docs/**', 'docs/generated/*']
 
 handoffs:
   - label: Complete user story
     agent: Reverse User Story Creator
-    prompt: 'Create a detailed user story with acceptance criteria for:'
+    prompt: 'Create a detailed user story with acceptance criteria based on the conversation context.'
+    send: true
   - label: Complete every user story
     agent: Reverse User Story Creator
     prompt: 'Process the next batch of user stories from the backlog (maximum 10 per batch). For each story, create detailed acceptance criteria. When done with the batch, update the backlog status and stop. Do not spawn sub-agents or recurse.'
+    send: true
 
 ---
 
@@ -39,6 +41,10 @@ Follow these principles when creating the backlog:
 
 ## Output
 - `docs/generated/backlog.md`: A minimal table of business-focused user stories (TITLE ONLY); **JUST** the table, no additional details.
+
+## File Creation Mandate
+
+The backlog **must be written to disk** as an actual file using the `edit/editFiles` tool. Do not merely display content in chat — always create or update `docs/generated/backlog.md`. Create parent directories as needed.
 
 ### Example of the backlog format
 

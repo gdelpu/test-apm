@@ -10,4 +10,4 @@ Run the Steer sprint tracking pipeline (recurring per sprint).
 
 1. Read `.apm/workflows/sdlc-steer.yml` — stations `steer-sprint-progress` through `steer-sprint-risks`.
 2. Execute: sprint progress → system health → sprint risks.
-3. Write to `docs/3-steer/`. Provide sprint number as argument.
+3. Write to `outputs/docs/3-steer/`. Provide sprint number as argument.

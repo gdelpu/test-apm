@@ -22,11 +22,11 @@ Turn ambiguity into explicit decisions, assumptions, or open questions.
 2. Walk through `resources/clarify-checklist.md` to identify functional gaps
 3. Walk through `resources/nfr-clarify-checklist.md` to identify non-functional gaps
 4. Categorize each item as: decision (resolved), assumption (stated), or open question
-5. Write `specs/features/<feature>/clarifications.md`
+5. Use the `edit/editFiles` tool to create `outputs/specs/features/<feature>/clarifications.md`
 
 ## Output
 
-`specs/features/<feature>/clarifications.md`
+`outputs/specs/features/<feature>/clarifications.md`
 
 ## Resources
 

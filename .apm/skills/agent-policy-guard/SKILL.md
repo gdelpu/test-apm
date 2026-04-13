@@ -19,8 +19,8 @@ Use `soprasteria-agent-policy-guard` for the extended ruleset that also covers A
 
 ## Reference Schemas
 
-- Agent manifest: `knowledge/governance/schemas/agent-manifest.schema.json`
-- Skill manifest: `knowledge/governance/schemas/skill-manifest.schema.json`
+- Agent manifest: `.apm/knowledge/governance/schemas/agent-manifest.schema.json`
+- Skill manifest: `.apm/knowledge/governance/schemas/skill-manifest.schema.json`
 
 ## Policy Rules
 
@@ -98,7 +98,7 @@ A deleted `*.agent.md` file MUST reference a GitHub/GitLab issue number in the P
 
 ## Output
 
-Structured JSON report following `station_out/policy_report.json` schema:
+Structured JSON report following `outputs/station_out/policy_report.json` schema:
 
 ```json
 {

@@ -12,7 +12,7 @@ Assess an application, document, slide deck, page, mockup, or codebase against S
 6. Office-template compliance (Word/PPT)
 7. Accessibility and contrast
 8. Naming/casing consistency for Sopra Steria
-9. Web accessibility (WCAG 2.1 AA) when target is a web application
+9. Web accessibility (WCAG 2.1 AA) when target is a web application — use the `brand-accessibility` skill
 
 ## Output Format
 

@@ -24,8 +24,8 @@ Use this skill whenever you are:
 
 ## Reference schemas
 
-- Agent manifest: `knowledge/governance/schemas/agent-manifest.schema.json`
-- Skill manifest: `knowledge/governance/schemas/skill-manifest.schema.json`
+- Agent manifest: `.apm/knowledge/governance/schemas/agent-manifest.schema.json`
+- Skill manifest: `.apm/knowledge/governance/schemas/skill-manifest.schema.json`
 
 ---
 

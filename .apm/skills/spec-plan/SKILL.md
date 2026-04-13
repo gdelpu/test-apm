@@ -23,11 +23,11 @@ Produce an implementation plan that explains how the feature will be delivered.
 4. Assess risks using `resources/risk-template.md`
 5. Define rollout and rollback strategy using `resources/rollout-template.md`
 6. Include observability and monitoring considerations
-7. Write `specs/features/<feature>/plan.md`
+7. Use the `edit/editFiles` tool to create `outputs/specs/features/<feature>/plan.md`
 
 ## Output
 
-`specs/features/<feature>/plan.md`
+`outputs/specs/features/<feature>/plan.md`
 
 ## Rules
 

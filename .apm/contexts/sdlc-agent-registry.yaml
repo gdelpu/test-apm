@@ -27,7 +27,7 @@ shared:
 
   ba_tools_base: &ba_tools_base
     required: [file-read, file-write]
-    optional: [jira-mcp]
+    optional: [jira-mcp, context7-mcp]
 
   tech_conventions_base: &tech_cv_base
     - Tech-Agents/refs/conventions/cv-tech-markdown.md
@@ -84,7 +84,7 @@ agents:
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/0-audit/asis-001-existing-audit.md
+    output: outputs/docs/1-prd/0-audit/asis-001-existing-audit.md
 
   ba-0.2:
     name: Delta Analysis
@@ -96,13 +96,13 @@ agents:
       conventions: *ba_cv_brownfield
       template: BA-Agents/refs/templates/tpl-delta-analysis.md
       upstream:
-        - docs/1-prd/0-audit/asis-001-existing-audit.md
+        - outputs/docs/1-prd/0-audit/asis-001-existing-audit.md
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/0-audit/delta-001-delta-analysis.md
+    output: outputs/docs/1-prd/0-audit/delta-001-delta-analysis.md
 
   # ─── BA Agents — System 1 (Scoping) ─────────────────────────────────
 
@@ -116,14 +116,14 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-product-vision.md
       upstream:
-        - docs/1-prd/1-scoping/dco-001-discovery.md
+        - outputs/docs/1-prd/1-scoping/dco-001-discovery.md
     client_inputs: docs/0-inputs/ba/1-scoping/
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/1-scoping/vis-001-product-vision.md
+    output: outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
 
   ba-1.2:
     name: Business Glossary
@@ -135,15 +135,15 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-glossary.md
       upstream:
-        - docs/1-prd/1-scoping/dco-001-discovery.md
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/dco-001-discovery.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
     client_inputs: docs/0-inputs/ba/1-scoping/
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/1-scoping/glo-001-glossary.md
+    output: outputs/docs/1-prd/1-scoping/glo-001-glossary.md
 
   ba-1.3:
     name: Actors & Roles
@@ -155,16 +155,16 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-actors-roles.md
       upstream:
-        - docs/1-prd/1-scoping/dco-001-discovery.md
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/1-prd/1-scoping/glo-001-glossary.md
+        - outputs/docs/1-prd/1-scoping/dco-001-discovery.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
     client_inputs: docs/0-inputs/ba/1-scoping/
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/1-scoping/act-001-actors-roles.md
+    output: outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
 
   ba-1.4:
     name: Functional Requirements
@@ -176,9 +176,9 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-functional-requirements.md
       upstream:
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/1-prd/1-scoping/glo-001-glossary.md
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
     client_inputs: docs/0-inputs/ba/1-scoping/
     tools:
       required: [file-read, file-write]
@@ -186,7 +186,7 @@ agents:
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/1-scoping/exf-001-functional-requirements.md
+    output: outputs/docs/1-prd/1-scoping/exf-001-functional-requirements.md
 
   # ─── BA Agents — System 2 (Specification) ────────────────────────────
 
@@ -200,10 +200,10 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-domain-model.md
       upstream:
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/1-prd/1-scoping/glo-001-glossary.md
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
-        - docs/1-prd/0-audit/delta-001-delta-analysis.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/0-audit/delta-001-delta-analysis.md
     client_inputs: docs/0-inputs/ba/2-spec/
     tools:
       required: [file-read, file-write]
@@ -211,8 +211,8 @@ agents:
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/2-specification/dom-001-domain-model.md
-    secondary_output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-domain.md"
+    output: outputs/docs/1-prd/2-specification/dom-001-domain-model.md
+    secondary_output_pattern: "outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-domain.md"
     rules_only: auto   # skip primary output if it already exists on disk
 
   ba-2.2:
@@ -225,17 +225,17 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-epic.md
       upstream:
-        - docs/1-prd/2-specification/dom-001-domain-model.md
-        - docs/1-prd/1-scoping/exf-001-functional-requirements.md
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
+        - outputs/docs/1-prd/1-scoping/exf-001-functional-requirements.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
     client_inputs: docs/0-inputs/ba/2-spec/
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output_pattern: "docs/1-prd/3-epics/ep-{id}-{slug}/"
-    secondary_output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-epics.md"
+    output_pattern: "outputs/docs/1-prd/3-epics/ep-{id}-{slug}/"
+    secondary_output_pattern: "outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-epics.md"
     rules_only: auto   # skip primary output if epics already exist on disk
 
   ba-2.2b:
@@ -249,14 +249,14 @@ agents:
       template: BA-Agents/refs/templates/tpl-feature.md
       template_variants:
         essential: BA-Agents/refs/templates/tpl-feature-essential.md
-      upstream_pattern: "docs/1-prd/3-epics/{epic}/ep-*.md"
+      upstream_pattern: "outputs/docs/1-prd/3-epics/{epic}/ep-*.md"
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output_pattern: "docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
-    secondary_output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-{epic-slug}.md"
+    output_pattern: "outputs/docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/"
+    secondary_output_pattern: "outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/rules-from-{epic-slug}.md"
     rules_only: auto   # skip primary output if features already exist on disk
 
   ba-2.3:
@@ -269,16 +269,16 @@ agents:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-business-rules.md
       upstream:
-        - "docs/1-prd/2-specification/_rules-staging/{rule_type}/"   # only files for this rule type
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/1-prd/1-scoping/glo-001-glossary.md
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - "outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/"   # only files for this rule type
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output_pattern: "docs/1-prd/2-specification/_rules-staging/{rule_type}/"
+    output_pattern: "outputs/docs/1-prd/2-specification/_rules-staging/{rule_type}/"
 
   ba-2.3b:
     name: Business Rules Dispatch & Confluence Push
@@ -294,8 +294,8 @@ agents:
       post:
         - .apm/hooks/post/confluence-push.md
     model: skip   # no LLM — script only
-    output_pattern: "docs/1-prd/3-epics/{epic}/{feature}/business-rules.md"
-    confluence_push: "docs/1-prd/3-epics/*/ft-*/business-rules.md"
+    output_pattern: "outputs/docs/1-prd/3-epics/{epic}/{feature}/business-rules.md"
+    confluence_push: "outputs/docs/1-prd/3-epics/*/ft-*/business-rules.md"
 
   # ─── BA Agents — System 3 (Design) — per feature ────────────────────
 
@@ -311,9 +311,9 @@ agents:
       upstream_scope:
         - "{feature_path}/ft-*.md"
         - "{feature_path}/business-rules.md"   # per-feature business rules (dispatched by sk-2.3)
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
-        - docs/1-prd/1-scoping/glo-001-glossary.md
-        - docs/1-prd/2-specification/dom-001-domain-model.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
+        - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
     client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
     tools:
       required: [file-read, file-write]
@@ -334,7 +334,7 @@ agents:
       template: BA-Agents/refs/templates/tpl-user-journey.md
       upstream_scope:
         - "{feature_path}/user-stories/"
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
     client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
@@ -392,7 +392,7 @@ agents:
       conventions: *ba_cv_base
       upstream_scope:
         - "{feature_path}/user-stories/"
-        - docs/1-prd/2-specification/dom-001-domain-model.md
+        - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
     client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
@@ -413,7 +413,7 @@ agents:
       upstream_scope:
         - "{feature_path}/user-stories/"
         - "{feature_path}/journeys/"
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
     client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
@@ -464,7 +464,7 @@ agents:
       upstream_scope:
         - "{feature_path}/tests/"
         - "{feature_path}/user-stories/"
-        - docs/1-prd/2-specification/dom-001-domain-model.md
+        - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
     tools:
       <<: *ba_tools_base
     hooks:
@@ -481,13 +481,13 @@ agents:
     refs:
       conventions: *ba_cv_base
       upstream:
-        - docs/1-prd/3-epics/
+        - outputs/docs/1-prd/3-epics/
     tools:
       <<: *ba_tools_base
     hooks:
       <<: *ba_hooks_std
     model: sonnet
-    output: docs/1-prd/4-tests/e2e-plan-001.md
+    output: outputs/docs/1-prd/4-tests/e2e-plan-001.md
 
   # ─── BA Tools (on-demand) ──────────────────────────────────────────
 
@@ -523,7 +523,7 @@ agents:
         - .apm/hooks/post/quality-control.md
         - .apm/hooks/post/confluence-push.md
     model: sonnet
-    output: docs/1-prd/1-scoping/dco-001-discovery.md
+    output: outputs/docs/1-prd/1-scoping/dco-001-discovery.md
 
   ba-review-workshop:
     name: Review Workshop — Preparation
@@ -541,7 +541,7 @@ agents:
         - .apm/hooks/post/quality-control.md
         - .apm/hooks/post/confluence-push.md
     model: sonnet
-    output_pattern: "docs/1-prd/6-workshops/wrk-{NNN}-{scope-slug}-review.md"
+    output_pattern: "outputs/docs/1-prd/6-workshops/wrk-{NNN}-{scope-slug}-review.md"
 
   ba-coherence:
     name: Coherence Check
@@ -675,7 +675,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/0-audit/tech-asis-001-technical-audit.md
+    output: outputs/docs/2-tech/0-audit/tech-asis-001-technical-audit.md
 
   tech-t0.2:
     name: Technical Gap
@@ -693,7 +693,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/0-audit/gap-001-technical-gap.md
+    output: outputs/docs/2-tech/0-audit/gap-001-technical-gap.md
 
   tech-t1.1:
     name: System Context
@@ -705,17 +705,17 @@ agents:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-system-context.md
       upstream:
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
-        - docs/2-tech/1-architecture/dco-tech-001-discovery.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/2-tech/1-architecture/dco-tech-001-discovery.md
     client_inputs: docs/0-inputs/tech/1-archi/
     tools:
       required: [file-read, file-write]
-      optional: [jira-mcp, mermaid]
+      optional: [jira-mcp, mermaid, context7-mcp, mslearn-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/1-architecture/ctx-001-system-context.md
+    output: outputs/docs/2-tech/1-architecture/ctx-001-system-context.md
 
   tech-t1.2:
     name: Architecture Decisions
@@ -727,10 +727,10 @@ agents:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-adr.md
       upstream:
-        - docs/2-tech/1-architecture/ctx-001-system-context.md
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/2-tech/1-architecture/dco-tech-001-discovery.md
+        - outputs/docs/2-tech/1-architecture/ctx-001-system-context.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/2-tech/1-architecture/dco-tech-001-discovery.md
     client_inputs: docs/0-inputs/tech/1-archi/
     tools:
       required: [file-read, file-write]
@@ -738,7 +738,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md"
+    output_pattern: "outputs/docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md"
 
   tech-t1.3:
     name: Stack Extraction (per ADR)
@@ -754,7 +754,7 @@ agents:
       pre: []
       post: []
     model: sonnet
-    output_pattern: "docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md"
+    output_pattern: "outputs/docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md"
 
   tech-t1.3b:
     name: Stack Consolidation
@@ -770,7 +770,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/1-architecture/stk-001-stack-conventions.md
+    output: outputs/docs/2-tech/1-architecture/stk-001-stack-conventions.md
 
   tech-t1.4:
     name: Enabler Extraction (per ADR)
@@ -787,7 +787,7 @@ agents:
       pre: []
       post: []
     model: sonnet
-    output_pattern: "docs/2-tech/2-design/enablers/enb-{id}-{slug}.md"
+    output_pattern: "outputs/docs/2-tech/2-design/enablers/enb-{id}-{slug}.md"
 
   tech-t1.4b:
     name: Enabler Index & Wave Resolution
@@ -802,7 +802,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/2-design/enablers/enb-000-index.md
+    output: outputs/docs/2-tech/2-design/enablers/enb-000-index.md
 
   tech-t2.1:
     name: Data Model
@@ -816,11 +816,11 @@ agents:
     client_inputs: docs/0-inputs/tech/2-design/
     tools:
       required: [file-read, file-write]
-      optional: [jira-mcp, mermaid]
+      optional: [jira-mcp, mermaid, context7-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/2-design/dat-001-data-model.md
+    output: outputs/docs/2-tech/2-design/dat-001-data-model.md
 
   tech-t2.2:
     name: API Contracts
@@ -838,7 +838,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "docs/2-tech/2-design/api/api-{id}-{slug}.md"
+    output_pattern: "outputs/docs/2-tech/2-design/api/api-{id}-{slug}.md"
 
   tech-t2.4:
     name: Test Strategy
@@ -856,7 +856,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/2-design/tst-001-test-strategy.md
+    output: outputs/docs/2-tech/2-design/tst-001-test-strategy.md
 
   tech-t2.5:
     name: Implementation Plan
@@ -874,7 +874,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/2-design/imp-001-implementation-plan.md
+    output: outputs/docs/2-tech/2-design/imp-001-implementation-plan.md
 
   tech-t3.1:
     name: Drift Detection
@@ -886,10 +886,11 @@ agents:
       conventions: *tech_cv_base
     tools:
       required: [file-read, file-write]
+      optional: [semgrep-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/3-quality/dft-001-drift-report.md
+    output: outputs/docs/2-tech/3-quality/dft-001-drift-report.md
 
   tech-t3.2:
     name: Automated Code Review
@@ -901,10 +902,11 @@ agents:
       conventions: *tech_cv_base
     tools:
       required: [file-read, file-write]
+      optional: [semgrep-mcp, context7-mcp]
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: docs/2-tech/3-quality/
+    output: outputs/docs/2-tech/3-quality/
 
   # ─── Tech Tools (on-demand) ──────────────────────────────────────────
 
@@ -937,7 +939,7 @@ agents:
         - .apm/hooks/post/quality-control.md
         - .apm/hooks/post/confluence-push.md
     model: sonnet
-    output_pattern: "docs/2-tech/4-workshops/wrk-tech-{NNN}-{scope-slug}-review.md"
+    output_pattern: "outputs/docs/2-tech/4-workshops/wrk-tech-{NNN}-{scope-slug}-review.md"
 
   tech-coherence:
     name: Tech Coherence Check
@@ -991,8 +993,8 @@ agents:
       conventions: *tech_cv_base
       template: null
       upstream:
-        - docs/1-prd/1-scoping/vis-001-product-vision.md
-        - docs/1-prd/1-scoping/act-001-actors-roles.md
+        - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
+        - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
     client_inputs:
       - docs/0-inputs/tech/_source/
       - docs/0-inputs/tech/1-archi/
@@ -1004,7 +1006,7 @@ agents:
         - .apm/hooks/post/quality-control.md
         - .apm/hooks/post/confluence-push.md
     model: sonnet
-    output: docs/2-tech/1-architecture/dco-tech-001-discovery.md
+    output: outputs/docs/2-tech/1-architecture/dco-tech-001-discovery.md
 
   tech-to-word:
     name: Tech Word Conversion
@@ -1030,8 +1032,8 @@ agents:
     refs:
       conventions: *test_cv_base
       upstream:
-        - docs/1-prd/4-tests/e2e-plan-001.md
-        - docs/1-prd/4-tests/dat-test-001-shared-seeds.md
+        - outputs/docs/1-prd/4-tests/e2e-plan-001.md
+        - outputs/docs/1-prd/4-tests/dat-test-001-shared-seeds.md
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, xray-api, playwright]
@@ -1047,14 +1049,14 @@ agents:
     refs:
       conventions: *test_cv_base
       upstream:
-        - docs/1-prd/4-tests/e2e-plan-001.md
+        - outputs/docs/1-prd/4-tests/e2e-plan-001.md
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, xray-api]
     hooks:
       <<: *test_hooks_std
     model: sonnet
-    output_pattern: "docs/1-prd/4-tests/camp-rpt-{NNN}.md"
+    output_pattern: "outputs/docs/1-prd/4-tests/camp-rpt-{NNN}.md"
 
   # ─── Test Agents — Performance System ────────────────────────────────
 
@@ -1084,7 +1086,7 @@ agents:
     hooks:
       <<: *test_hooks_std
     model: sonnet
-    output_pattern: "docs/1-prd/4-tests/perf-rpt-{NNN}.md"
+    output_pattern: "outputs/docs/1-prd/4-tests/perf-rpt-{NNN}.md"
 
   # ─── Test Tools (on-demand) ──────────────────────────────────────────
 
@@ -1097,7 +1099,7 @@ agents:
       conventions: *test_cv_base
     tools:
       required: [file-read, file-write]
-      optional: [owasp-zap]
+      optional: [owasp-zap, semgrep-mcp, playwright-mcp]
     hooks:
       pre:
         - .apm/hooks/pre/input-validation/base.md
@@ -1105,7 +1107,7 @@ agents:
       post:
         - .apm/hooks/post/quality-control.md
     model: sonnet
-    output_pattern: "docs/1-prd/4-tests/dast-rpt-{NNN}.md"
+    output_pattern: "outputs/docs/1-prd/4-tests/dast-rpt-{NNN}.md"
 
   # ─── Steer Agents ──────────────────────────────────────────────────
 
@@ -1125,7 +1127,7 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output: docs/3-steer/pil-001-project-sheet.md
+    output: outputs/docs/3-steer/pil-001-project-sheet.md
 
   steer-p0.2:
     name: KPI Baseline
@@ -1141,7 +1143,7 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output: docs/3-steer/kpi-001-baseline-kpis.md
+    output: outputs/docs/3-steer/kpi-001-baseline-kpis.md
 
   steer-p1.3:
     name: Sprint Planning (AI-Native)
@@ -1152,14 +1154,14 @@ agents:
     refs:
       conventions: *steer_cv_base
       upstream:
-        - "docs/1-prd/3-epics/ep-*/ep-*.md"
-        - "docs/2-tech/2-design/enablers/enb-*.md"
+        - "outputs/docs/1-prd/3-epics/ep-*/ep-*.md"
+        - "outputs/docs/2-tech/2-design/enablers/enb-*.md"
     tools:
       required: [file-read, file-write]
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output: docs/3-steer/plan-001-sprint-planning.md
+    output: outputs/docs/3-steer/plan-001-sprint-planning.md
 
   steer-p1.1:
     name: Roadmap
@@ -1176,7 +1178,7 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output: docs/3-steer/rdp-001-roadmap.md
+    output: outputs/docs/3-steer/rdp-001-roadmap.md
 
   steer-p1.2:
     name: Initial Risk Register
@@ -1193,7 +1195,7 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output: docs/3-steer/rsk-001-risk-register.md
+    output: outputs/docs/3-steer/rsk-001-risk-register.md
 
   steer-p2.1:
     name: Sprint Progress
@@ -1210,7 +1212,7 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output_pattern: "docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-{nn}.md"
+    output_pattern: "outputs/docs/3-steer/0-sprint-reports/sta-{NNN}-sprint-{nn}.md"
 
   steer-p2.2:
     name: System Health
@@ -1259,7 +1261,7 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output_pattern: "docs/3-steer/1-committees/cop-{NNN}-{date}.md"
+    output_pattern: "outputs/docs/3-steer/1-committees/cop-{NNN}-{date}.md"
 
   steer-p3.2:
     name: Release Go/No-Go
@@ -1276,4 +1278,4 @@ agents:
     hooks:
       <<: *steer_hooks_std
     model: sonnet
-    output: docs/3-steer/gng-001-release-gonogo.md
+    output: outputs/docs/3-steer/gng-001-release-gonogo.md

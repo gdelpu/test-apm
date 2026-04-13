@@ -265,7 +265,7 @@ stations:
       severity: blocker
 
 config:
-  output_dir: docs/1-prd/
+  output_dir: outputs/docs/1-prd/
   state_file: workflow-state.md
   allow_resume: true
   allow_skip_gate: true

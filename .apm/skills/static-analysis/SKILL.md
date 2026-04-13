@@ -17,6 +17,8 @@ Run static analysis tools to detect code quality issues, bugs, code smells, and 
 | `sonarqube-adapter.md` | SonarQube | Self-hosted server |
 | `sonarcloud-adapter.md` | SonarCloud | Cloud-hosted |
 
+> **MCP enrichment**: When the `sonarqube-mcp` server is available, this skill queries issues, quality gates, coverage, and metrics via MCP instead of running the CLI scanner. Falls back to CLI when MCP is unavailable.
+
 ## Procedure
 
 1. Detect whether SonarQube or SonarCloud is configured (look for `sonar-project.properties` or environment variables)
@@ -33,4 +35,4 @@ Run static analysis tools to detect code quality issues, bugs, code smells, and 
 
 ## Output
 
-`static-analysis-report.md` following the quality-validator report format.
+Use `edit/editFiles` to write: `outputs/specs/features/<feature>/static-analysis-report.md`

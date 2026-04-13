@@ -24,11 +24,11 @@ Produce a functional feature specification that explains what should be built, f
    - Modernization → `resources/modernization-template.md`
 3. Define scope, out-of-scope, user stories, and acceptance criteria
 4. Include NFR expectations where applicable
-5. Write `specs/features/<feature>/spec.md`
+5. Use the `edit/editFiles` tool to create `outputs/specs/features/<feature>/spec.md`
 
 ## Output
 
-`specs/features/<feature>/spec.md`
+`outputs/specs/features/<feature>/spec.md`
 
 ## Rules
 

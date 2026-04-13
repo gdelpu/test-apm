@@ -1,6 +1,6 @@
 ---
 name: spec-constitution
-description: 'Create or refine specs/constitution.md so the team and the agent work from clear delivery principles.'
+description: 'Create or refine the project constitution so the team and the agent work from clear delivery principles.'
 triggers: ['delivery principles', 'constitution', 'project setup']
 ---
 
@@ -8,7 +8,7 @@ triggers: ['delivery principles', 'constitution', 'project setup']
 
 ## Goal
 
-Create or refine `specs/constitution.md` so the team and the agent work from clear delivery principles.
+Create or refine `outputs/specs/features/<feature>/constitution.md` so the team and the agent work from clear delivery principles.
 
 ## When to use
 
@@ -28,15 +28,15 @@ Create or refine `specs/constitution.md` so the team and the agent work from cle
 
 ## Procedure
 
-1. Check if `specs/constitution.md` already exists
+1. Check if `outputs/specs/features/<feature>/constitution.md` already exists
 2. If greenfield: load `resources/constitution-template.md` and `resources/greenfield-constitution-example.md`
 3. If brownfield: load `resources/constitution-template.md` and `resources/brownfield-constitution-example.md`
 4. Fill each minimum coverage section with project-specific decisions
-5. Write or update `specs/constitution.md`
+5. Use the `edit/editFiles` tool to write or update `outputs/specs/features/<feature>/constitution.md`
 
 ## Output
 
-`specs/constitution.md`
+`outputs/specs/features/<feature>/constitution.md`
 
 ## Resources
 

@@ -23,7 +23,7 @@ Transform a raw idea into a validated, unambiguous specification with NFRs and a
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `intent.md` — Business goal, constraints, target users
 - `context-brief.md` — Domain context, existing codebase patterns (brownfield)
 - `spec.md` — Feature specification with scope and acceptance criteria

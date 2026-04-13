@@ -1,7 +1,7 @@
 ---
 name: sdlc-test-executor
 description: 'Execute qualification campaigns and produce structured test reports.'
-tools: ['codebase', 'search', 'runCommands']
+tools: ['codebase', 'search', 'runCommands', 'edit/editFiles']
 commandAllowlist:
   - npx playwright test --config=playwright.config.ts
   - npm test
@@ -10,8 +10,11 @@ commandAllowlist:
   - pytest
   - dotnet test
 allowedFilePaths:
+  - 'tests/**'
+  - 'test/**'
   - 'tests/results/**'
   - 'tests/reports/**'
+  - 'outputs/**'
   - 'package.json'
 allowedFilePathsReadOnly:
   - '*.config.*'
@@ -145,8 +148,8 @@ The following constraints **cannot be enforced by this agent definition alone** 
 
 - `.apm/contexts/sdlc-agent-registry.yaml` — Test agent compositions
 - `.apm/contexts/sdlc-system-context.md` — cross-cutting conventions
-- `knowledge/governance/testing-policy.md` — testing policy
-- `knowledge/governance/secure-by-default.md` — security governance
+- `.apm/knowledge/governance/testing-policy.md` — testing policy
+- `.apm/knowledge/governance/secure-by-default.md` — security governance
 
 ## Guardrails
 

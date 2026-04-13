@@ -11,7 +11,7 @@ Execute the **BA System S1 — Scoping** pipeline.
    - Resolve DAG into waves (1.1 // 1.2 parallel, then 1.3, then 1.4).
    - For each agent: assemble prompt (hooks + conventions + template + skill), then launch.
    - Verify output file exists before proceeding to next agent.
-4. Write to `docs/1-prd/1-scoping/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/1-prd/1-scoping/`. Do not merely display content in chat — use file-writing tools to create each file.
 5. Suggest `/sdlc-validate` on each deliverable.
 
 $ARGUMENTS: path to source documents (optional, used as context for agents 1.1 and 1.2).

@@ -3,13 +3,13 @@
 Station A0 — Intake (deterministic replacement for LLM-based intake).
 
 Classifies changed files by artefact type, computes risk hints from the diff,
-determines PR scope, and writes station_out/a0_result.json.
+determines PR scope, and writes outputs/station_out/a0_result.json.
 
 Usage:
     python3 a0_intake.py \
-        --changed-files station_out/changed_files.txt \
-        --diff station_out/diff.patch \
-        --out station_out/a0_result.json \
+        --changed-files outputs/station_out/changed_files.txt \
+        --diff outputs/station_out/diff.patch \
+        --out outputs/station_out/a0_result.json \
         [--mr-iid 42]
 """
 

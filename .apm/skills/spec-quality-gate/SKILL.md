@@ -22,7 +22,7 @@ Confirm that the specification package is complete, coherent, and safe enough fo
 3. Check cross-references between spec, plan, and tasks for coherence
 4. Verify NFR coverage against constitution expectations
 5. Produce the quality gate report using `resources/pr-review-template.md` format
-6. Write `specs/features/<feature>/quality-gate.md`
+6. Use the `edit/editFiles` tool to create `outputs/specs/features/<feature>/quality-gate.md`
 
 ## Gate criteria
 
@@ -32,7 +32,7 @@ Confirm that the specification package is complete, coherent, and safe enough fo
 
 ## Output
 
-`specs/features/<feature>/quality-gate.md`
+`outputs/specs/features/<feature>/quality-gate.md`
 
 ## Resources
 

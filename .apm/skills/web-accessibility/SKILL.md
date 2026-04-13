@@ -9,7 +9,7 @@ version: '1.0.0'
 
 ## Purpose
 
-Validate web applications against WCAG 2.1 AA when applying or auditing branding. Brand compliance must never compromise accessibility. When brand rules and accessibility conflict, **accessibility wins**. This is the generic, client-agnostic skill. For Sopra Steria specifics, see `soprasteria-web-accessibility`.
+Validate web applications against WCAG 2.1 AA when applying or auditing branding. Brand compliance must never compromise accessibility. When brand rules and accessibility conflict, **accessibility wins**. This is the generic, client-agnostic skill. For Sopra Steria defaults, see `brand-accessibility`.
 
 ## When to Activate
 

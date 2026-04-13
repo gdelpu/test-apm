@@ -22,9 +22,9 @@ variables:
   ENABLE_COPILOT_CLI: "false"
 
   VALIDATORS_DIR: ".apm/skills/ai-backbone-pr-checks/tools/scripts"
-  REPORTS_DIR: "reports"
+  REPORTS_DIR: "outputs/reports"
 
-  STATION_OUT: "station_out"
+  STATION_OUT: "outputs/station_out"
   STATION_DIR: "ci-gates/stations"
   STATION_TIMEOUT: "900"
 
@@ -147,6 +147,95 @@ validate:test-gaps:
     when: always
 
   allow_failure: true
+
+
+validate:changelog:
+  extends: .mr_only
+  stage: validate
+  image: python:3.11-slim
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git
+    - git config user.email "ci@${CI_SERVER_HOST}"
+    - git config user.name "GitLab CI"
+    - git remote set-url origin "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    - git fetch origin "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+
+  script:
+    - |
+      VERSION=$(python3 -c "
+      import re
+      with open('apm.yml') as f:
+          for line in f:
+              m = re.match(r'^version:\s*(.+)', line)
+              if m:
+                  print(m.group(1).strip())
+                  break
+      ")
+      if [ -z "$VERSION" ]; then
+        echo "❌ Could not read version from apm.yml"
+        exit 1
+      fi
+      export VERSION
+
+      # Check if apm.yml version was changed in this MR
+      TARGET_VERSION=$(git show "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}:apm.yml" 2>/dev/null \
+        | python3 -c "
+      import re, sys
+      for line in sys.stdin:
+          m = re.match(r'^version:\s*(.+)', line)
+          if m:
+              print(m.group(1).strip())
+              break
+      " || echo "")
+
+      if [ "$VERSION" != "$TARGET_VERSION" ]; then
+        echo "🔖 Version bumped: ${TARGET_VERSION} → ${VERSION} (release mode)"
+        MODE="release"
+      else
+        echo "📝 Version unchanged: ${VERSION} (unreleased mode)"
+        MODE="unreleased"
+      fi
+    - |
+      if [ "$MODE" = "release" ]; then
+        # Release mode: ensure versioned entry exists and is not a stub
+        NEEDS_FIX=0
+        if ! grep -qE "^## \[${VERSION}\]" CHANGELOG.md; then
+          echo "⚠️  No changelog entry for ${VERSION} — auto-generating from commits..."
+          NEEDS_FIX=1
+        else
+          python3 -c "
+      import re, sys, os
+      version = os.environ['VERSION']
+      with open('CHANGELOG.md') as f:
+          text = f.read()
+      pattern = r'## \[' + re.escape(version) + r'\][^\n]*\n(.*?)(?=\n## \[|\Z)'
+      m = re.search(pattern, text, re.DOTALL)
+      if not m: sys.exit(1)
+      body = m.group(1).strip()
+      if not re.search(r'^###\s', body, re.MULTILINE): sys.exit(1)
+      " || {
+            echo "⚠️  Changelog entry for ${VERSION} is a stub — regenerating..."
+            NEEDS_FIX=1
+          }
+        fi
+        if [ "$NEEDS_FIX" = "1" ]; then
+          git checkout "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+          python3 scripts/generate-changelog-entry.py --mode release \
+            --base-ref "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" --apply --push
+          echo "✅ Auto-generated release entry for ${VERSION} and pushed"
+          echo "ℹ️  Review the generated entry and amend if needed."
+        else
+          echo "✅ CHANGELOG.md release entry for ${VERSION} is valid"
+        fi
+      else
+        # Unreleased mode: merge MR commits into [Unreleased]
+        git checkout "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+        python3 scripts/generate-changelog-entry.py --mode unreleased \
+          --base-ref "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" --apply --push \
+          && echo "✅ Updated [Unreleased] section with MR changes" \
+          || echo "ℹ️  No new unreleased items to add"
+      fi
 
 # =====================================================
 # AI Station Orchestrator
@@ -273,6 +362,26 @@ test:apm-smoke:
             echo "❌ Expected at least 10 projected prompts, got $prompt_count"
             FAIL=1
           fi
+          # Verify hooks are bundled (canonical + projected)
+          hook_count=$(tar -tzf "$archive" | grep -c '\.apm/hooks/' || true)
+          projected_hook_count=$(tar -tzf "$archive" | grep -c '\.github/hooks/' || true)
+          echo "  Hook files (canonical):  $hook_count"
+          echo "  Hook files (projected):  $projected_hook_count"
+          if [ "$hook_count" -lt 20 ]; then
+            echo "❌ Expected at least 20 canonical hook files, got $hook_count"
+            FAIL=1
+          fi
+          if [ "$projected_hook_count" -lt 20 ]; then
+            echo "❌ Expected at least 20 projected hook files, got $projected_hook_count"
+            FAIL=1
+          fi
+          # Verify templates are bundled (hook-config.json seeding)
+          template_count=$(tar -tzf "$archive" | grep -c '\.apm/templates/' || true)
+          echo "  Template files:         $template_count"
+          if [ "$template_count" -lt 1 ]; then
+            echo "❌ Expected at least 1 template file, got $template_count"
+            FAIL=1
+          fi
         fi
       done
       if [ -f "${APM_DIST_DIR}/SHA256SUMS" ]; then
@@ -333,6 +442,14 @@ release:tag-and-publish:
       fi
       TAG="v${VERSION}"
       echo "Version from apm.yml: ${VERSION}  →  Tag: ${TAG}"
+    - |
+      # Enforce CHANGELOG.md has an entry for this version
+      if ! grep -qE "^## \[${VERSION}\]" CHANGELOG.md; then
+        echo "❌ CHANGELOG.md has no entry for version ${VERSION}"
+        echo "   Add a '## [${VERSION}] — YYYY-MM-DD' section before merging."
+        exit 1
+      fi
+      echo "✅ CHANGELOG.md contains entry for ${VERSION}"
     - |
       git remote set-url origin "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
       REMOTE_TAGS=$(git ls-remote --tags origin "refs/tags/${TAG}" 2>/dev/null)

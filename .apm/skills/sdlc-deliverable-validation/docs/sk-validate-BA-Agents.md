@@ -104,8 +104,8 @@ For each DoR item, scan the filesystem to determine if the condition is met:
 
 | DoR item | How to verify |
 |----------|---------------|
-| All features [FT-xxx] have status `validated` | Scan `docs/1-prd/3-epics/ep-xxx-{slug}/ft-*/ft-*.md` — read each front matter `status` field |
-| All feature-level AC covered by E2E scenarios | Read FAC-xxx from each feature file → search for FAC-xxx references in `docs/1-prd/4-tests/e2e-plan-001.md` |
+| All features [FT-xxx] have status `validated` | Scan `outputs/docs/1-prd/3-epics/ep-xxx-{slug}/ft-*/ft-*.md` — read each front matter `status` field |
+| All feature-level AC covered by E2E scenarios | Read FAC-xxx from each feature file → search for FAC-xxx references in `outputs/docs/1-prd/4-tests/e2e-plan-001.md` |
 | All cross-feature dependencies resolved | Read each feature's `dependencies` front matter → verify referenced FT-xxx files exist |
 | No BLOCK in validation reports | Scan for `val-*.md` files in each feature directory → check verdict field |
 | All BR covered by test scenarios | Read BR-xxx references from epic → search for BR-xxx in SCE-xxx files |

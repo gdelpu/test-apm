@@ -10,7 +10,7 @@ Execute the **Steer System P1 — Planning** pipeline.
    - Wave 1: p1.0 (Sprint Planning — unified BA+Tech stagger).
    - Wave 2: p1.1 (Roadmap — phases, milestones, gates).
    - Wave 3: p1.2 (Risk Register — all 6 agentic risk types).
-4. Write to `docs/3-steer/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/3-steer/`. Do not merely display content in chat — use file-writing tools to create each file.
 5. Suggest gate validation by sponsor + architect.
 
 Prerequisites: P0 (init) deliverables must exist. BA scoping deliverables recommended.

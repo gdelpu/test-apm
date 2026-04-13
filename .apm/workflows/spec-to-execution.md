@@ -11,7 +11,7 @@ Transform a validated specification into an executable plan with risk analysis, 
 
 ## Prerequisites
 
-Expects these artifacts to already exist in `specs/features/<feature>/`:
+Expects these artifacts to already exist in `outputs/specs/features/<feature>/`:
 - `spec.md` — Feature specification
 - `clarifications.md` — Resolved ambiguities
 - `architecture-review.md` — Architecture assessment
@@ -30,7 +30,7 @@ Expects these artifacts to already exist in `specs/features/<feature>/`:
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `plan.md` — Implementation plan with dependencies
 - `risk-analysis.md` — Risk register with mitigations
 - `rollout-strategy.md` — Rollout and rollback procedures

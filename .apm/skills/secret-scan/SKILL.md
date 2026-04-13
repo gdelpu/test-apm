@@ -87,7 +87,7 @@ Check for references to sensitive paths in agent tool configurations:
 
 ## Output
 
-Structured JSON report following `station_out/security_report.json` schema:
+Structured JSON report following `outputs/station_out/security_report.json` schema:
 
 ```json
 {

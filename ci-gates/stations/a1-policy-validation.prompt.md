@@ -8,14 +8,14 @@ description: 'Validate agent and skill manifests against JSON Schema; enforce to
 ## Goal
 
 Validate every changed agent and skill manifest against workspace policy rules.
-Emit `station_out/policy_report.json`.
+Emit `outputs/station_out/policy_report.json`.
 
 ## Inputs
 
-- `station_out/work_order.json`
+- `outputs/station_out/work_order.json`
 - Changed files where `type == "agent"` or `type == "skill"`
-- `knowledge/governance/schemas/agent-manifest.schema.json`
-- `knowledge/governance/schemas/skill-manifest.schema.json`
+- `.apm/knowledge/governance/schemas/agent-manifest.schema.json`
+- `.apm/knowledge/governance/schemas/skill-manifest.schema.json`
 
 ## Target Selection
 
@@ -82,6 +82,23 @@ Missing field or wildcard `"*"` → `high`.
 
 A deleted `*.agent.md` file MUST reference a GitHub issue number in the PR description
 (`#<number>` pattern). Missing reference → `medium`.
+
+### P-07 · File-write capability
+
+All agents MUST retain the ability to write deliverables to disk. This rule has
+three sub-checks to prevent MRs from silently downgrading agents to read-only:
+
+**P-07a** — Every agent MUST have `edit/editFiles` in `tools`. If an agent is
+intentionally read-only (e.g. a pure analysis agent), it must declare
+`readOnly: true` in frontmatter to opt out. Missing `edit/editFiles` without
+`readOnly: true` → `high`.
+
+**P-07b** — When `edit/editFiles` is in `tools`, having only `allowedFilePathsReadOnly`
+(without `allowedFilePaths`) effectively makes the agent read-only. Missing
+`allowedFilePaths` when `allowedFilePathsReadOnly` is present → `high`.
+
+**P-07c** — When `allowedFilePaths` is declared, it MUST be a non-empty array with
+at least one writable path pattern. An empty array → `high`.
 
 ## Output Schema
 

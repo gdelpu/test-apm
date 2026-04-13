@@ -64,7 +64,7 @@ Station 4 (Architecture Decision Records) may produce multiple ADRs. Each signif
 
 ## Outputs
 
-All artifacts are written to `docs/2-tech/`:
+All artifacts are written to `outputs/docs/2-tech/`:
 - `tech-asis-001-technical-audit.md` — current stack assessment (optional)
 - `gap-001-technical-gap.md` — gap analysis with migration paths (optional)
 - `ctx-001-system-context.md` — C4 Level 1-2 system context

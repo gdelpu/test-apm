@@ -9,7 +9,7 @@ version: '1.0.0'
 
 ## Purpose
 
-Provide a generic, reusable audit checklist for assessing brand and accessibility compliance of applications, slide decks, documents, and communication assets. This is the provider-agnostic skill; for Sopra Steria specifics, see `soprasteria-audit-checklist`.
+Provide a generic, reusable audit checklist for assessing brand and accessibility compliance of applications, slide decks, documents, and communication assets. This is the provider-agnostic skill; for Sopra Steria defaults, see `brand-audit`.
 
 ## When to Use
 

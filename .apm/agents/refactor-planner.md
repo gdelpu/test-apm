@@ -1,7 +1,14 @@
 ---
 name: refactor-planner
 description: 'Analyse ADRs and as-is assessment to produce a detailed, phased migration plan with dependency ordering.'
-tools: ['codebase', 'search', 'edit/editFiles']
+tools: ['codebase', 'search', 'edit/editFiles', 'fetch']
+allowedNetworkDomains:
+  - learn.microsoft.com
+  - nodejs.org
+  - docs.npmjs.com
+  - github.com
+allowedFilePaths:
+  - 'refactor/docs/**'
 ---
 
 # Refactor Planner

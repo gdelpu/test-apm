@@ -34,7 +34,7 @@ The assessment evaluates:
 
 ## Outputs
 
-All artifacts are written to `specs/assessments/<assessment-id>/`:
+All artifacts are written to `outputs/specs/assessments/<assessment-id>/`:
 - `assessment.md` — dimension-by-dimension findings with supporting evidence
 - `scores.md` — maturity scores (1–5) per dimension with justification
 - `maturity-report.md` — executive summary with visualizations (trends, gaps, strengths)

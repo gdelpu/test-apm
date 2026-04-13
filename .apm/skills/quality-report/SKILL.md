@@ -27,7 +27,7 @@ Aggregate results from all quality validation stations into a single, comprehens
 2. Extract status (passed/failed/skipped) from each report
 3. Aggregate into a summary table
 4. Determine overall status: passed only if all non-skipped stations passed
-5. Write `quality-report.md`
+5. Use `edit/editFiles` to write `outputs/specs/features/<feature>/quality-report.md`
 
 ## Gate criteria
 

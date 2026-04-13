@@ -1,7 +1,7 @@
 ---
 name: SDLC Test Executor
 description: 'Execute qualification campaigns and produce structured test reports.'
-tools: [codebase, search, runCommands]
+tools: [codebase, search, runCommands, edit/editFiles]
 commandAllowlist:
   - npx playwright test --config=playwright.config.ts
   - npm test
@@ -10,8 +10,11 @@ commandAllowlist:
   - pytest
   - dotnet test
 allowedFilePaths:
+  - 'tests/**'
+  - 'test/**'
   - 'tests/results/**'
   - 'tests/reports/**'
+  - 'outputs/**'
   - 'package.json'
 allowedFilePathsReadOnly:
   - '*.config.*'
@@ -30,6 +33,10 @@ Read the full agent definition from `.apm/agents/sdlc-test-executor.md`.
 - Run performance and load tests using approved tooling
 - Collect and structure test results under `tests/results/` and `tests/reports/`
 - Produce a qualification report with pass/fail status per campaign
+
+## File Creation Mandate
+
+All test reports and result files **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files under `tests/results/` and `tests/reports/`.
 
 ## Security Constraints
 

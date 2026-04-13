@@ -24,7 +24,7 @@ Prepare steering committee (COPIL) presentation packs and produce Go/No-Go relea
 3. Produce steering committee presentation pack with both:
    - **Technical section**: architecture health, quality metrics, debt indicators
    - **Sponsor section**: progress overview, budget status, key decisions needed
-4. Write `docs/3-steer/1-committees/cop-{NNN}-copil.md` with identifier `[COP-NNN]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/1-committees/cop-{NNN}-copil.md` with identifier `[COP-NNN]`
 
 ### Phase 2 — Go/No-Go Decision (agent p3.2) — depends on Phase 1
 1. Load the Go/No-Go template from `resources/`
@@ -34,12 +34,12 @@ Prepare steering committee (COPIL) presentation packs and produce Go/No-Go relea
    - Test: campaign results `[CAMP-RPT-*]`, performance `[PERF-RPT-*]`
    - Steer: risk status, budget status, open decisions
 3. Produce structured Go/No-Go decision with criteria matrix
-4. Write `docs/3-steer/1-committees/gng-001-go-nogo.md` with identifier `[GNG-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/1-committees/gng-001-go-nogo.md` with identifier `[GNG-001]`
 
 ## Output
 
-- `docs/3-steer/1-committees/cop-{NNN}-copil.md` — `[COP-NNN]`
-- `docs/3-steer/1-committees/gng-001-go-nogo.md` — `[GNG-001]`
+- `outputs/docs/3-steer/1-committees/cop-{NNN}-copil.md` — `[COP-NNN]`
+- `outputs/docs/3-steer/1-committees/gng-001-go-nogo.md` — `[GNG-001]`
 
 ## Rules
 

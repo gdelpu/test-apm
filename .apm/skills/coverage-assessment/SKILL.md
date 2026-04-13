@@ -41,4 +41,4 @@ Coverage thresholds can be set via environment variable or project config:
 
 ## Output
 
-`coverage-report.md` following the quality-validator report format.
+Use `edit/editFiles` to write: `outputs/specs/features/<feature>/coverage-report.md`

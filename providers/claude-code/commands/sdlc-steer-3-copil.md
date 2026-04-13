@@ -9,7 +9,7 @@ Execute the **Steer System P3 — Steering Committee** pipeline.
 3. Execute:
    - Wave 1: p3.1 (COPIL Preparation — dual-register executive summary).
    - Wave 2: p3.2 (Release Go/No-Go — UAT + debt + NFR aggregation).
-4. Write to `docs/3-steer/`.
+4. **Write every artifact as an actual file on disk** under `outputs/docs/3-steer/`. Do not merely display content in chat — use file-writing tools to create each file.
 
 Prerequisites: P2 sprint reports, risk register, UAT report, tech debt report.
 

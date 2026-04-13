@@ -2,7 +2,7 @@
 
 Push a **single Markdown deliverable** to Confluence (create or update).
 
-$ARGUMENTS = path to the deliverable file (e.g., "docs/1-prd/1-scoping/glo-001-glossary.md")
+$ARGUMENTS = path to the deliverable file (e.g., "outputs/docs/1-prd/1-scoping/glo-001-glossary.md")
 
 ## Steps
 

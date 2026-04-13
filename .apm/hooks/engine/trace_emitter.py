@@ -30,7 +30,7 @@ def emit_trace(
     Args:
         record: The structured trace record dict (see schema).
         trace_file: Explicit path to the JSONL file.  Falls back to
-                     ``specs/features/<feature>/audit-trace.jsonl``.
+                     ``outputs/specs/features/<feature>/audit-trace.jsonl``.
         config: Hook configuration (for OTLP settings).
     """
     # --- Local JSONL ---

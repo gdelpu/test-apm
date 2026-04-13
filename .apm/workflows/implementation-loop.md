@@ -11,7 +11,7 @@ Agent-assisted development loop from task selection through code generation, rev
 
 ## Prerequisites
 
-Expects these artifacts to already exist in `specs/features/<feature>/`:
+Expects these artifacts to already exist in `outputs/specs/features/<feature>/`:
 - `tasks.md` — Decomposed, sequenced tasks
 - `plan.md` — Implementation plan
 
@@ -28,7 +28,7 @@ Expects these artifacts to already exist in `specs/features/<feature>/`:
 
 ## Outputs
 
-All artifacts are written to `specs/features/<feature>/`:
+All artifacts are written to `outputs/specs/features/<feature>/`:
 - `current-task.md` — Selected task context
 - `implementation-log.md` — Code changes and decisions
 - `review-notes.md` — Self-review findings

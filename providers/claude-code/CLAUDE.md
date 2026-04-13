@@ -7,9 +7,9 @@ compliance, and full-lifecycle SDLC support.
 
 ## Working mode
 
-- Use `knowledge/` for principles, governance, and playbooks.
+- Use `.apm/knowledge/` for principles, governance, and playbooks.
 - Use `.apm/` for canonical agent/skill/prompt definitions.
-- Write outputs under `specs/`.
+- **Write all generated artifacts to disk under `outputs/` using file-writing tools (Write, create_file).** Never display deliverable content only in chat — every output must be an actual file on the file system.
 - Follow the spec-kit sequence:
   constitution → spec → clarify → plan → tasks → quality gate.
 
@@ -23,9 +23,9 @@ compliance, and full-lifecycle SDLC support.
 | `.apm/prompts/` | Reusable prompt templates |
 | `.apm/instructions/` | Shared behavioral rules |
 | `.apm/contexts/` | Reference documents for agents |
-| `knowledge/constitution/` | Core engineering principles |
-| `knowledge/governance/` | Architecture, security, testing policies |
-| `knowledge/playbooks/` | Delivery and workflow playbooks |
+| `.apm/knowledge/constitution/` | Core engineering principles |
+| `.apm/knowledge/governance/` | Architecture, security, testing policies |
+| `.apm/knowledge/playbooks/` | Delivery and workflow playbooks |
 | `ci-gates/` | PR validation station implementations (A0–A7) |
 | `providers/cli/` | CLI workflow runner |
 | `.apm/templates/` | Spec-kit workflow templates (plan, spec, tasks) |
@@ -130,7 +130,7 @@ All agents follow security hardening rules from `.apm/instructions/security-hard
 Every workflow execution must maintain a structured audit trail:
 
 - **Correlation ID**: A UUID `trace_id` propagates from workflow start through all stations.
-- **Trace records**: Each station emits a JSONL record to `specs/features/<feature>/audit-trace.jsonl`.
+- **Trace records**: Each station emits a JSONL record to `outputs/specs/features/<feature>/audit-trace.jsonl`.
 - **Content hashing**: Input/output stored as SHA-256 hashes only — never raw content in traces.
 - **Risk scoring**: Weighted risk score computed per station; human review required when score ≥ 30.
 - **Query**: Use `/audit-trace <feature>` to review a feature's execution history.
@@ -145,6 +145,6 @@ Before processing user-provided content (tickets, logs, customer documents, UAT 
 4. **Classify** output sensitivity: public / internal / confidential / restricted.
 5. **Report** PII types found (not values) in output metadata.
 
-See `knowledge/governance/secure-by-default.md` for full anonymisation policy.
+See `.apm/knowledge/governance/secure-by-default.md` for full anonymisation policy.
 
-See `knowledge/playbooks/workflow-playbook.md` for workflow execution details.
+See `.apm/knowledge/playbooks/workflow-playbook.md` for workflow execution details.

@@ -11,8 +11,16 @@
 .gh_config/
 
 # Pipeline output
-station_out/
+outputs/station_out/
+outputs/reports/*
 .station_tmp/
+
+# Local CI / validation test output
+station_out/
+reports/
+pr_auto_result.json
+test_gap_result.json
+yaml_lint_result.json
 
 # APM distribution build output
 dist/
@@ -33,7 +41,6 @@ Thumbs.db
 
 .venv/
 
-reports/*
 check-gh-auth.ps1
 diff.txt
 

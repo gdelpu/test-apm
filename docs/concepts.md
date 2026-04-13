@@ -13,12 +13,13 @@ The AI SDLC Foundation is built from a set of composable concepts. This page exp
 | [Agents](#agents) | `.apm/agents/` | 23 | Autonomous roles that execute tasks |
 | [Workflows](#workflows) | `.apm/workflows/` | 19 | Multi-station pipelines with quality gates |
 | [Skills](#skills) | `.apm/skills/` | 89 | Reusable knowledge packages consumed by agents |
-| [Knowledge](#knowledge) | `knowledge/` | 4 areas | Constitution, governance, playbooks, brand |
+| [Knowledge](#knowledge) | `.apm/knowledge/` | 4 areas | Constitution, governance, playbooks, brand |
 | [Prompts](#prompts) | `.apm/prompts/` | 4 | Slash-command templates that trigger workflows |
 | [Instructions](#instructions) | `.apm/instructions/` | 7 | Behavioral rules auto-applied to matching files |
 | [Hooks](#hooks) | `.apm/hooks/` | 8 | Pre/post lifecycle hooks around stations |
 | [Templates](#templates) | `.apm/templates/` | 6 | Document templates for workflow outputs |
 | [Contexts](#contexts) | `.apm/contexts/` | 10 | Reference catalogs auto-loaded by agents |
+| [MCP Servers](#mcp-servers) | `.apm/contexts/mcp-registry.yaml` | 14 | Optional external-tool connectors for live data and services |
 | [Scripts](#scripts) | `scripts/`, `.apm/scripts/` | — | Automation for build, projection, validation |
 
 ---
@@ -84,13 +85,13 @@ If a gate fails, the workflow pauses and reports what needs to be fixed.
 
 **What**: The knowledge base contains foundational documents that define principles, governance rules, playbooks, and brand guidelines. These are reference materials that agents and skills consult — they establish the "what" and "why" behind decisions.
 
-**Where**: `knowledge/`
+**Where**: `.apm/knowledge/`
 
 **Areas**:
-- `knowledge/constitution/` — Engineering constitutions (architecture, quality, security, testing, observability principles)
-- `knowledge/governance/` — Architecture principles, testing policy, secure-by-default rules, observability requirements
-- `knowledge/playbooks/` — Step-by-step playbooks for greenfield, brownfield, modernization, and workflow execution
-- `knowledge/brand/` — Brand guidelines, asset inventories, templates (e.g., Sopra Steria brand)
+- `.apm/knowledge/constitution/` — Engineering constitutions (architecture, quality, security, testing, observability principles)
+- `.apm/knowledge/governance/` — Architecture principles, testing policy, secure-by-default rules, observability requirements
+- `.apm/knowledge/playbooks/` — Step-by-step playbooks for greenfield, brownfield, modernization, and workflow execution
+- `.apm/knowledge/brand/` — Brand guidelines, asset inventories, templates (e.g., Sopra Steria brand)
 
 **Examples**:
 - `speckit-constitution.md` — The master constitution template covering architecture decisions, quality standards, and testing requirements
@@ -125,7 +126,7 @@ If a gate fails, the workflow pauses and reports what needs to be fixed.
 **Examples**:
 - `apm-layer.instructions.md` (`applyTo: ".apm/**"`) — Rules for working inside the canonical APM packaging layer
 - `workflow.instructions.md` (`applyTo: ".apm/workflows/**"`) — Rules for defining station-based workflow pipelines
-- `knowledge-base.instructions.md` (`applyTo: "knowledge/**"`) — Rules for working inside the foundational knowledge base
+- `knowledge-base.instructions.md` (`applyTo: ".apm/knowledge/**"`) — Rules for working inside the foundational knowledge base
 
 ---
 
@@ -168,6 +169,34 @@ If a gate fails, the workflow pauses and reports what needs to be fixed.
 
 ---
 
+## MCP Servers
+
+**What**: MCP (Model Context Protocol) is an open standard that lets AI agents talk to external tools and services — think of it as a universal adapter. Instead of being limited to what the agent knows on its own, MCP lets it reach out to live systems: query a cloud dashboard, check a CI pipeline, browse documentation, or interact with a project management board.
+
+**Where**: `.apm/contexts/mcp-registry.yaml` (server catalog), `.apm/skills/mcp-configuration/` (setup skill), `.apm/skills/mcp-fallback/` (graceful degradation)
+
+**Key point — all MCP servers are optional**: Every workflow and agent works without any MCP server configured. MCP servers add enrichments (live data, platform integrations, browser automation) but are never required. If an MCP server is unavailable, agents automatically fall back to built-in capabilities.
+
+**How they're used**: The Hub Orchestrator can auto-detect your environment and recommend which servers to enable. Alternatively, teams configure servers manually via `.vscode/mcp.json`. Once configured, agents transparently use MCP servers when they need external data — no extra steps for the user.
+
+**Available server categories**:
+- **Cloud platforms** — Azure, AWS: query resources, check deployments, inspect configurations
+- **DevOps platforms** — GitHub, GitLab, Azure DevOps: manage work items, pull requests, pipelines
+- **Collaboration** — Atlassian (Jira/Confluence), Microsoft 365: access project boards, documents, wikis
+- **Quality & security** — SemGrep, SonarQube: run code analysis, retrieve findings
+- **Documentation** — Context7, MsLearn: look up current library docs and technical references
+- **Browser automation** — Playwright: interact with web UIs for testing or data gathering
+- **Design** — Figma: access design assets and specifications
+
+**Examples**:
+- An agent checking deployment health can query Azure resources via the Azure MCP server
+- A business analyst agent can pull the latest Jira tickets via the Atlassian MCP server
+- A quality agent can fetch SonarQube findings without leaving the workflow
+
+> **Further reading**: [MCP Setup Guide](consumer/mcp-setup-guide.md) (consumer) · [MCP Integration Guide](contributor/mcp-integration-guide.md) (contributor)
+
+---
+
 ## Scripts
 
 **What**: Scripts automate building, projection, validation, and distribution of the AI SDLC Foundation. They are the operational tooling that keeps the system consistent and deployable.
@@ -205,6 +234,7 @@ User intent
 │  (at station)    │   ← reads Knowledge for principles
 │                  │   ← uses Templates for output structure
 │                  │   ← Hooks run pre/post
+│                  │   ← MCP Servers provide live external data (optional)
 └────────┬─────────┘
          │ passes quality gate
          ▼
@@ -213,6 +243,7 @@ User intent
 
 **Prompts** are the user-facing entry points (`/workflow-feature`).
 **Instructions** shape agent behavior for specific file types.
+**MCP Servers** optionally connect agents to external tools and live data.
 **Scripts** build and project everything into the provider runtime.
 
 ---

@@ -1,7 +1,9 @@
 ---
 name: architecture-governance
 description: 'Review specifications and plans against architecture principles and guardrails.'
-tools: ['codebase', 'search']
+tools: ['codebase', 'search', 'edit/editFiles']
+allowedFilePaths:
+  - 'outputs/**'
 ---
 
 # Architecture Governance
@@ -20,6 +22,10 @@ Review specifications and plans against architecture principles, non-functional 
 - operability
 - compatibility
 - delivery risk
+
+## File creation mandate
+
+All review deliverables — including architecture review reports and governance assessments — **must be written to disk** as actual files using the `edit/editFiles` tool under `outputs/`. Do not merely display content in chat. Always create or update the file at the specified output path. Create parent directories as needed.
 
 ## Security Constraints
 

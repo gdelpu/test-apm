@@ -3,7 +3,7 @@ name: Reverse User Story Creator
 description: 'This agent creates detailed user stories (based on existing codebase) with acceptance criteria based on the product backlog generated from the code repository analysis.'
 tools: [vscode, codebase, search, edit/editFiles]
 target: vscode
-allowedFilePaths: ['docs/generated/*', 'docs/generated/stories/*']
+allowedFilePaths: ['outputs/**', 'docs/**', 'docs/generated/*', 'docs/generated/stories/*']
 
 ---
 
@@ -44,6 +44,10 @@ A **coding agent** or **developer** should be able to refine and implement the u
 ## Deliverables
 - Write completed user story to: `docs/generated/stories/[US-ID]-[short-name].md`
 - Update the status in `docs/generated/backlog.md` from 🔲 Todo to ✅ Done
+
+## File Creation Mandate
+
+Both deliverables above **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create the story file under `docs/generated/stories/` and update `docs/generated/backlog.md`.
 
 ## Output
 A markdown file with the following format (leave out any sections that are not relevant for the user story):

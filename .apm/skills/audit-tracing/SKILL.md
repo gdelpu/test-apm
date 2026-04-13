@@ -45,7 +45,7 @@ Each trace record captures:
 
 ## Storage
 
-- **Local**: One JSONL file per workflow run at `specs/features/<feature>/audit-trace.jsonl`
+- **Local**: One JSONL file per workflow run at `outputs/specs/features/<feature>/audit-trace.jsonl`
 - **Remote**: Optional OTLP export when `otlp_endpoint` configured in `hook-config.json`
 
 ## Schema

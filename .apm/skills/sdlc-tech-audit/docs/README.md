@@ -184,10 +184,10 @@ Tech-Agents/
 
 ## Output structure
 
-All Tech deliverables are written to `docs/2-tech/`:
+All Tech deliverables are written to `outputs/docs/2-tech/`:
 
 ```
-docs/2-tech/
+outputs/docs/2-tech/
   0-audit/                         T0: tech-asis-001, gap-001
   1-architecture/                  T1: ctx-001, stk-001
     adr/                           T1: adr-xxx-{slug}.md (incl. security + observability ADRs)
@@ -251,8 +251,8 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate audit | `/validate docs/2-tech/0-audit/tech-asis-001-*.md` | Stack assessment complete, compliance gaps flagged |
-| Validate gap | `/validate docs/2-tech/0-audit/gap-001-*.md` | Migration paths justified, effort estimates plausible |
+| Validate audit | `/validate outputs/docs/2-tech/0-audit/tech-asis-001-*.md` | Stack assessment complete, compliance gaps flagged |
+| Validate gap | `/validate outputs/docs/2-tech/0-audit/gap-001-*.md` | Migration paths justified, effort estimates plausible |
 
 **Key question:** Is the understanding of the existing technical landscape sufficient to start architecture?
 
@@ -260,10 +260,10 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate system context | `/validate docs/2-tech/1-architecture/ctx-001-*.md` | C4 L1/L2 consistent, all integrations listed |
-| Validate ADRs | `/validate docs/2-tech/1-architecture/adr/adr-xxx-*.md` | Alternatives evaluated, consequences honest |
-| Validate stack | `/validate docs/2-tech/1-architecture/stk-001-*.md` | Stack aligns with team skills, onboarding procedure complete |
-| Validate enablers | `/validate docs/2-tech/2-design/enablers/enb-*.md` | All ADR enablers specified, wave assignment correct |
+| Validate system context | `/validate outputs/docs/2-tech/1-architecture/ctx-001-*.md` | C4 L1/L2 consistent, all integrations listed |
+| Validate ADRs | `/validate outputs/docs/2-tech/1-architecture/adr/adr-xxx-*.md` | Alternatives evaluated, consequences honest |
+| Validate stack | `/validate outputs/docs/2-tech/1-architecture/stk-001-*.md` | Stack aligns with team skills, onboarding procedure complete |
+| Validate enablers | `/validate outputs/docs/2-tech/2-design/enablers/enb-*.md` | All ADR enablers specified, wave assignment correct |
 | Cross-check | `/coherence tech` | ADR decisions reflected in STK, security/obs ADRs present (>= 2 each), BA actors mapped to auth roles |
 
 **Key question:** Is the architecture sufficiently defined to start technical design?
@@ -272,11 +272,11 @@ Pipeline completes
 
 | Action | Command | What to check |
 |--------|---------|---------------|
-| Validate data model | `/validate docs/2-tech/2-design/dat-001-*.md` | All DOM-001 entities mapped, FK/indexes defined, migrations viable |
-| Validate API contracts | `/validate docs/2-tech/2-design/api/api-xxx-*.md` | All interactive US covered, error format standardised, OpenAPI valid |
-| Validate enablers | `/validate docs/2-tech/2-design/enablers/enb-xxx-*.md` | Acceptance criteria testable, wave assignment correct |
-| Validate test strategy | `/validate docs/2-tech/2-design/tst-001-*.md` | Test pyramid appropriate, NFR-TEST items resolved |
-| Validate impl. plan | `/validate docs/2-tech/2-design/imp-001-*.md` | Wave order respects dependencies, CLAUDE.md compiles correctly |
+| Validate data model | `/validate outputs/docs/2-tech/2-design/dat-001-*.md` | All DOM-001 entities mapped, FK/indexes defined, migrations viable |
+| Validate API contracts | `/validate outputs/docs/2-tech/2-design/api/api-xxx-*.md` | All interactive US covered, error format standardised, OpenAPI valid |
+| Validate enablers | `/validate outputs/docs/2-tech/2-design/enablers/enb-xxx-*.md` | Acceptance criteria testable, wave assignment correct |
+| Validate test strategy | `/validate outputs/docs/2-tech/2-design/tst-001-*.md` | Test pyramid appropriate, NFR-TEST items resolved |
+| Validate impl. plan | `/validate outputs/docs/2-tech/2-design/imp-001-*.md` | Wave order respects dependencies, CLAUDE.md compiles correctly |
 | Cross-check | `/coherence tech` | Full BA→Tech traceability: ENT→table, US→API, BR→constraints, ENB→plan |
 | Confluence review | `/confluence-pull` then `/impact` | Expert feedback analyzed and applied |
 
@@ -372,7 +372,7 @@ draft ──────→ review ──────→ validated
 |---------|-------------|
 | `/tech-agent review-workshop --scope <id>` | Prepare a Tech deliverable review session (facilitation guide + questions) |
 | `/impact "<change description>"` | Analyse change impact → propose & apply amendments → run `/coherence` |
-| `/validate <file>` | Audit a Tech deliverable (PASS / WARN / BLOCK) — auto-routed for `docs/2-tech/` |
+| `/validate <file>` | Audit a Tech deliverable (PASS / WARN / BLOCK) — auto-routed for `outputs/docs/2-tech/` |
 | `/coherence tech` | Tech cross-deliverable consistency check |
 | `/confluence-pull` | Sync status labels + extract comments (ready for `/impact`) |
 | `/to-word <file>` | Convert deliverable to Word |

@@ -22,18 +22,18 @@ Initialize the project steering framework with team composition, capacity alloca
 1. Load the project sheet template from `resources/`
 2. Define team composition, roles, and capacity allocation
 3. Establish budget structure (effort + token cost dual-axis)
-4. Write `docs/3-steer/pil-001-project-sheet.md` with identifiers `[PIL-001]`, `[CAP-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/pil-001-project-sheet.md` with identifiers `[PIL-001]`, `[CAP-001]`
 
 ### Phase 2 — KPI Baseline (agent p0.2) — depends on Phase 1
 1. Load the KPI baseline template from `resources/`
 2. Read project sheet `[PIL-001]` for capacity and budget data
 3. Establish baseline KPIs: effort budget, token budget, velocity targets
-4. Write `docs/3-steer/kpi-001-baseline.md` with identifier `[KPI-001]`
+4. Use the `edit/editFiles` tool to create `outputs/docs/3-steer/kpi-001-baseline.md` with identifier `[KPI-001]`
 
 ## Output
 
-- `docs/3-steer/pil-001-project-sheet.md` — `[PIL-001]`, `[CAP-001]`
-- `docs/3-steer/kpi-001-baseline.md` — `[KPI-001]`
+- `outputs/docs/3-steer/pil-001-project-sheet.md` — `[PIL-001]`, `[CAP-001]`
+- `outputs/docs/3-steer/kpi-001-baseline.md` — `[KPI-001]`
 
 ## Rules
 

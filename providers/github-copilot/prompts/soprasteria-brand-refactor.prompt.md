@@ -26,7 +26,7 @@ Refactor the provided application, document, presentation, or template into Sopr
 - create/update a reusable theme system
 - refactor shared components first
 - normalize headers, navigation, cards, forms, buttons, tables, charts, dialogs, and empty states
-- validate WCAG 2.1 AA compliance using the soprasteria-web-accessibility skill
+- validate WCAG 2.1 AA compliance using the brand-accessibility skill
 - verify color contrast for all brand pairings (especially orange and grey on white)
 - ensure focus indicators are visible on all brand backgrounds
 - verify keyboard navigation, ARIA usage, semantic HTML, and motion preferences
