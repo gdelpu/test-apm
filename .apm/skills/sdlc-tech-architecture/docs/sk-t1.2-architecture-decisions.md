@@ -161,6 +161,10 @@ Before finalising:
    - At least **2 Observability ADRs** exist → BLOCK if < 2
    - Every security ADR has a `## Threats addressed` section → WARN if missing
    - Every ADR has a `### Required enablers` section (even if empty with "None") → WARN if missing
+5. **Enabler density check:**
+   - Each ADR should declare **no more than 4 enablers** in its `### Required enablers` section.
+   - If you have listed more than 4 for a single ADR, merge closely related enablers before writing the final ADR (e.g., "Configure Flyway" + "Write V1 baseline migration" + "Add Testcontainers DB fixture" can merge into "Data Layer Bootstrap — Flyway + Testcontainers").
+   - Rule of thumb: one enabler per **technical concern**, not per **configuration step**.
 
 ### Step 6: Fitness Functions declaration
 
