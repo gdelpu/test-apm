@@ -188,6 +188,7 @@ if [[ "$FULL" == true ]]; then
     ["contexts"]=".apm/contexts"
     ["templates"]=".apm/templates"
     ["knowledge"]=".apm/knowledge"
+    ["hooks"]=".apm/hooks"
   )
 
   for type in "${!CANONICAL_DIRS[@]}"; do
@@ -224,6 +225,8 @@ if [[ "$FULL" == true ]]; then
     ".apm/agents/|${RUNTIME_REL}/agents/"
     ".apm/instructions/|${RUNTIME_REL}/instructions/"
     ".apm/knowledge/|${RUNTIME_REL}/knowledge/"
+    ".apm/hooks/|${RUNTIME_REL}/hooks/"
+    ".apm/hooks|${RUNTIME_REL}/hooks"
   )
 
   # Provider-specific rewrite

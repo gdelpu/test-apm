@@ -1,5 +1,5 @@
 name: ssg-ai-backbone
-version: 0.0.15
+version: 0.0.18
 description: >
   Sopra Steria Group AI SDLC Foundation — cross-provider collection of agents,
   skills, workflows, prompts, and foundational knowledge for specification-driven
@@ -21,6 +21,8 @@ exports:
   contexts: .apm/contexts
   workflows: .apm/workflows
   knowledge: .apm/knowledge
+  hooks: .apm/hooks
+  templates: .apm/templates
 
 providers:
   github-copilot:

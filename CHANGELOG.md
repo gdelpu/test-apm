@@ -12,6 +12,35 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - Skill updates: `sdlc-tech-architecture`
 
 
+## [0.0.18] — 2026-04-12
+
+### Changed
+- Script updates: `install-apm-bundle.ps1`, `install-apm-bundle.sh`, `project-copilot.sh`
+
+### Fixed
+- Project hooks into runtime dir, add rewrite pairs, bump to 0.0.18
+
+
+## [0.0.17] — 2026-04-12
+
+### Changed
+- Documentation updates: `apm-consumer-guide.md`, `quick-start.md`
+- Script updates: `bootstrap-apm.ps1`, `bootstrap-apm.sh`
+
+### Fixed
+- Bundle hooks+templates in distribution, add CI smoke checks
+
+
+## [0.0.16] — 2026-04-12
+
+### Added
+- `docs/consumer/hooks-setup.md`
+
+### Changed
+- Data anonymisation handling updated: 2 docs file(s)
+- Script updates: `install-apm-bundle.ps1`, `install-apm-bundle.sh`
+
+
 ## [0.0.15] — 2026-04-12
 
 ### Changed
