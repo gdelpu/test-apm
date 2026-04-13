@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Changed
+- Agent updates: `workflow-orchestrator`
+- Copilot provider agent updates: `workflow-orchestrator.agent`
+- 2 Copilot prompt(s) updated
+
+### Fixed
+- Re-display progress table after each station transition
+
+
 ## [0.0.18] — 2026-04-12
 
 ### Changed
