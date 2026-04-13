@@ -11,6 +11,7 @@ Execute the **full Test pipeline** (campaign + performance) without human gates.
    - Performance system: perf.1 (execution) + perf.2 (report).
 4. **Write every report as an actual file on disk.** Do not merely display content in chat — use file-writing tools to create each file.
 5. Display full summary with cumulative Go/No-Go.
+6. **After each station completes, re-display the full progress table** showing updated statuses (✅ completed, 🔄 in-progress, ⏳ pending) for all stations. Never leave the initial table stale.
 
 If $ARGUMENTS contains "gated", use `gate_mode: pause` between campaign and performance.
 

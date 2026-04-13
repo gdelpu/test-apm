@@ -41,6 +41,18 @@ Execute workflow definitions by driving stations sequentially, evaluating qualit
 | `--skip-gate <id>` | Force-continue past a blocker gate (requires human confirmation — see Guardrails) |
 | `--dry-run` | Parse workflow and list stations without executing |
 
+## Progress display
+
+After completing each station (and updating the workflow state file), **re-display the full progress table** to the user in chat. This ensures the user always sees the current status of every station — not a stale initial table.
+
+### Rules
+
+- Render the progress table **after every station transition** (started → completed, or started → failed).
+- Use the current workflow state as the source of truth for station statuses.
+- Mark the just-completed station as ✅ completed (or ❌ failed), mark the next station as 🔄 in-progress, and keep remaining stations as ⏳ pending.
+- Always display the **complete** table with all stations — never a partial subset.
+- If the workflow state file exists on disk, read it to derive statuses rather than relying on in-memory state alone.
+
 ## Station execution
 
 For each station:
@@ -57,8 +69,9 @@ For each station:
 4. Verify that declared outputs were produced
 5. Evaluate the station's quality gate criteria
 6. Update workflow state file
-7. If gate fails with severity `blocker`, halt and report
-8. If gate fails with severity `warning`, log and continue
+7. Re-display the full progress table to the user (see **Progress display** section)
+8. If gate fails with severity `blocker`, halt and report
+9. If gate fails with severity `warning`, log and continue
 
 ## Nested workflow support
 

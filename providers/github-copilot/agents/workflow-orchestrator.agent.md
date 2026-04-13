@@ -108,6 +108,15 @@ cd .apm/hooks && python -m engine --skill-event start --skill <name> \
 
 If `runCommands` is blocked, write `outputs/workflow-state-<workflow>-<feature>.md` directly using `edit/editFiles` following the exact Markdown table format. See `.apm/hooks/engine/schemas/workflow-state.schema.md` for the strict format spec. Always write the state file to the **root** of `outputs/` — never inside a workflow subfolder (e.g. not inside `output_dir`). Use the workflow name and feature/project name as suffix to avoid conflicts when multiple workflows or features run concurrently (e.g. `outputs/workflow-state-feature-implementation-login.md`). A post-hook validator will correct malformed entries.
 
+## Progress Display
+
+After completing each station (and updating the workflow state), **re-display the full progress table** to the user in chat. This ensures the user always sees the current status of every station — not a stale initial table.
+
+- Render the progress table **after every station transition** (started → completed, or started → failed).
+- Mark the just-completed station as ✅ completed (or ❌ failed), the next station as 🔄 in-progress, and remaining stations as ⏳ pending.
+- Always display the **complete** table with all stations — never a partial subset.
+- Read the workflow state file from disk as the source of truth for statuses.
+
 ## File Creation Mandate
 
 Workflow state files **must be written to disk** using the `edit/editFiles` tool. Do not merely display content in chat — always write workflow state to `outputs/`. Additionally, verify that all station agents write their declared outputs to disk (see File Output Enforcement below).
