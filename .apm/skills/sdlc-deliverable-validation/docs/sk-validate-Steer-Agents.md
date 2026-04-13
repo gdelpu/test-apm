@@ -46,12 +46,11 @@ If the `type` field is absent or unknown: BLOCK — the type must be declared to
 
 ### Doc Depth Awareness
 
-This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential`, `standard`, or `full`). If absent, default to `full`.
+This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential` or `full`). If absent, default to `full`.
 
 | Depth | Relaxations |
 |-------|-------------|
 | **essential** | Dual register verification is skipped (single version accepted). Actionability check relaxed: owner required, deadline optional. Sponsor accessibility check limited to critical sections only. |
-| **standard** | All checks apply. Dual register verification still required for COP and GNG types. |
 | **full** | All checks apply without relaxation. |
 
 ---

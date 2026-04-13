@@ -42,7 +42,7 @@ Initial release of the SSG AI SDLC Foundation.
 - Hub Orchestrator agent with dynamic dispatch and self-maintaining catalog
 - Refactoring agents and orchestrator for structured migration
 - DEP platform specialized agents and templates
-- Doc-depth support (essential/standard/full)
+- Doc-depth support (essential/full)
 - SpecKit Constitution for development standards
 - GitLab CI/CD station-gate pipeline with Copilot CLI integration
 - PR validation pipeline (validate + AI stations A0–A7)

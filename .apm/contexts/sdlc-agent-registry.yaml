@@ -72,7 +72,7 @@ agents:
     name: Existing Audit
     domain: BA
     system: S0
-    min_depth: standard
+    min_depth: essential
     skill: BA-Agents/skills/sk-0.1-existing-audit.md
     refs:
       conventions: *ba_cv_brownfield
@@ -90,7 +90,7 @@ agents:
     name: Delta Analysis
     domain: BA
     system: S0
-    min_depth: standard
+    min_depth: full
     skill: BA-Agents/skills/sk-0.2-delta-analysis.md
     refs:
       conventions: *ba_cv_brownfield
@@ -129,7 +129,7 @@ agents:
     name: Business Glossary
     domain: BA
     system: S1
-    min_depth: standard
+    min_depth: essential
     skill: BA-Agents/skills/sk-1.2-glossary.md
     refs:
       conventions: *ba_cv_base
@@ -149,7 +149,7 @@ agents:
     name: Actors & Roles
     domain: BA
     system: S1
-    min_depth: standard
+    min_depth: essential
     skill: BA-Agents/skills/sk-1.3-actors-roles.md
     refs:
       conventions: *ba_cv_base
@@ -170,7 +170,7 @@ agents:
     name: Functional Requirements
     domain: BA
     system: S1
-    min_depth: standard
+    min_depth: essential
     skill: BA-Agents/skills/sk-1.4-functional-requirements.md
     refs:
       conventions: *ba_cv_base
@@ -194,7 +194,7 @@ agents:
     name: Domain Model
     domain: BA
     system: S2
-    min_depth: standard
+    min_depth: essential
     skill: BA-Agents/skills/sk-2.1-domain-model.md
     refs:
       conventions: *ba_cv_base
@@ -249,7 +249,6 @@ agents:
       template: BA-Agents/refs/templates/tpl-feature.md
       template_variants:
         essential: BA-Agents/refs/templates/tpl-feature-essential.md
-        standard: BA-Agents/refs/templates/tpl-feature-standard.md
       upstream_pattern: "docs/1-prd/3-epics/{epic}/ep-*.md"
     tools:
       <<: *ba_tools_base
@@ -304,13 +303,11 @@ agents:
     name: User Stories
     domain: BA
     system: S3
-    min_depth: standard
+    min_depth: essential
     skill: BA-Agents/skills/sk-3.1-user-stories.md
     refs:
       conventions: *ba_cv_base
       template: BA-Agents/refs/templates/tpl-user-story.md
-      template_variants:
-        standard: BA-Agents/refs/templates/tpl-user-story-standard.md
       upstream_scope:
         - "{feature_path}/ft-*.md"
         - "{feature_path}/business-rules.md"   # per-feature business rules (dispatched by sk-2.3)
@@ -664,7 +661,7 @@ agents:
     name: Technical Audit
     domain: Tech
     system: T0
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t0.1-technical-audit.md
     refs:
       conventions: *tech_cv_base
@@ -684,7 +681,7 @@ agents:
     name: Technical Gap
     domain: Tech
     system: T0
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t0.2-technical-gap.md
     refs:
       conventions: *tech_cv_base
@@ -763,7 +760,7 @@ agents:
     name: Stack Consolidation
     domain: Tech
     system: T1
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t1.3b-stack-consolidation.md
     refs:
       conventions: *tech_cv_base
@@ -779,7 +776,7 @@ agents:
     name: Enabler Extraction (per ADR)
     domain: Tech
     system: T1
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t1.4-enablers.md
     refs:
       conventions: *tech_cv_base
@@ -796,7 +793,7 @@ agents:
     name: Enabler Index & Wave Resolution
     domain: Tech
     system: T1
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t1.4b-enabler-index.md
     refs:
       conventions: *tech_cv_base
@@ -811,7 +808,7 @@ agents:
     name: Data Model
     domain: Tech
     system: T2
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t2.1-data-model.md
     refs:
       conventions: *tech_cv_base
@@ -829,7 +826,7 @@ agents:
     name: API Contracts
     domain: Tech
     system: T2
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t2.2-api-contracts.md
     refs:
       conventions: *tech_cv_base
@@ -865,7 +862,7 @@ agents:
     name: Implementation Plan
     domain: Tech
     system: T2
-    min_depth: standard
+    min_depth: essential
     skill: Tech-Agents/skills/sk-t2.5-implementation-plan.md
     refs:
       conventions: *tech_cv_base
@@ -1116,7 +1113,7 @@ agents:
     name: Project Sheet
     domain: Steer
     system: P0
-    min_depth: standard
+    min_depth: essential
     skill: Steer-Agents/skills/sk-p0.1-project-sheet.md
     refs:
       conventions: *steer_cv_base
@@ -1150,7 +1147,7 @@ agents:
     name: Sprint Planning (AI-Native)
     domain: Steer
     system: P1
-    min_depth: standard
+    min_depth: essential
     skill: Steer-Agents/skills/sk-p1.3-sprint-planning-design.md
     refs:
       conventions: *steer_cv_base

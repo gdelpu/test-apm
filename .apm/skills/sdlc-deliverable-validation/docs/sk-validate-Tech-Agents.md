@@ -30,12 +30,11 @@ A Markdown report `[VAL-xxx]` named `val-[deliverable-id]-[date].md`.
 
 ## Doc Depth Awareness
 
-This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential`, `standard`, or `full`). If absent, default to `full`.
+This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential` or `full`). If absent, default to `full`.
 
 | Depth | Relaxations |
 |-------|-------------|
 | **essential** | BA→Tech traceability is relaxed to WARN-only (never BLOCK). Validate against template variants (`tpl-*-essential.md`) when available. |
-| **standard** | BA→Tech traceability remains mandatory but checks reference only produced BA deliverables. |
 | **full** | All checks apply without relaxation. |
 
 ## Detailed instructions
@@ -68,7 +67,7 @@ Verify consistency between declared score and analyses.
 | **WARN** | No BLOCK, but > 2 WARNs or >= 1 WARN on BA traceability |
 | **BLOCK** | >= 1 missing structural section, or >= 1 INSUFFICIENT semantic section |
 
-> **Doc Depth adjustment:** At `essential` depth, BA traceability issues are capped at WARN (never BLOCK). At `standard` depth, BA traceability BLOCKs only when the referenced BA deliverable exists but the link is broken.
+> **Doc Depth adjustment:** At `essential` depth, BA traceability issues are capped at WARN (never BLOCK).
 
 ## Output format
 
