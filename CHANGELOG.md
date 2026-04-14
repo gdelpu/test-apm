@@ -7,6 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Changed
+- Brownfield detection updated: agent(s) `sdlc-tech-architect`
+- File-writing tool declarations updated: skill(s) `sdlc-tech-design`
+- Skill updates: `sdlc-tech-design`
+- Copilot provider agent updates: `sdlc-tech-architect.agent`
+- 1 Copilot prompt(s) updated
+- 1 Claude Code command(s) updated
+- Workflow updates: `sdlc-tech`, `sdlc-tech`
+
+
 ## [0.0.21] — 2026-04-14
 
 ### Changed
