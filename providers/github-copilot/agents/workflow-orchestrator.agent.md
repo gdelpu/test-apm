@@ -18,8 +18,8 @@ commandAllowlist:
 allowedFilePaths:
   - 'outputs/**'
   - 'src/**'
-  - 'tests/**'
-  - 'test/**'
+  - 'tests/results/**'
+  - 'tests/reports/**'
   - 'docs/**'
   - 'specs/**'
 allowedFilePathsReadOnly:

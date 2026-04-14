@@ -5,8 +5,8 @@ tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
   - 'outputs/**'
   - 'src/**'
-  - 'tests/**'
-  - 'test/**'
+  - 'tests/results/**'
+  - 'tests/reports/**'
   - 'docs/**'
   - 'specs/**'
   - '.apm/workflows/**'
