@@ -15,12 +15,12 @@ allowedFilePaths:
   - 'tests/results/**'
   - 'tests/reports/**'
   - 'outputs/**'
-  - 'package.json'
 allowedFilePathsReadOnly:
   - '*.config.*'
   - 'specs/**'
   - 'docs/**'
   - 'src/**'
+  - 'package.json'
   - 'tests/perf/**'
   - 'tests/e2e/**'
   - 'test/**'

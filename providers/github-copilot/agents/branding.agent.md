@@ -229,6 +229,12 @@ Before passing any Markdown file to the LLM for evaluation or to Pandoc for conv
 2. **Strip or escape raw LaTeX commands** (`\input`, `\include`, `\openin`, `\write18`, `\immediate`, `\newwrite`) from the document body.
 3. **Strip YAML front matter** that is not part of the expected document metadata schema.
 
+Before passing any content extracted from DOCX/PPTX (via `unpack.py` or direct XML parsing) to the LLM, preprocess ALL text content to:
+
+4. **Strip embedded directives** from revision comments (`w:comment`, `w:ins`), tracked changes, custom XML properties (`docProps/custom.xml`), and document body text runs.
+5. **Apply the same instruction-override and role-reassignment filtering** used for Markdown — regardless of whether the source is Markdown or OOXML.
+6. **Discard custom XML parts** (`customXml/`) entirely unless explicitly required by the branding task.
+
 These are structural guards that must be applied before LLM evaluation — they must not depend solely on behavioural instructions.
 
 ### Path canonicalization

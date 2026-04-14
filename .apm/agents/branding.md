@@ -103,6 +103,10 @@ Ensure that applications, PowerPoint decks, Word documents, presentations, and o
   1. **Strip HTML comments** (`<!-- ... -->`) — log stripped segments for audit.
   2. **Strip or escape raw LaTeX commands** (`\input`, `\include`, `\openin`, `\write18`, `\immediate`, `\newwrite`) from the document body.
   3. **Strip YAML front matter** that is not part of the expected document metadata schema.
+- Before passing any content extracted from DOCX/PPTX (via `unpack.py` or direct XML parsing) to the LLM, preprocess ALL text runs to:
+  4. **Strip embedded directives** from revision comments (`w:comment`, `w:ins`), custom XML properties (`docProps/custom.xml`), and document body text runs.
+  5. **Apply the same instruction-override and role-reassignment filtering** used for Markdown — regardless of whether the source is Markdown or OOXML.
+  6. **Discard custom XML parts** (`customXml/`) entirely unless explicitly required by the branding task.
 - The `--no-shell-escape` flag is mandatory on all xelatex invocations (already declared in `commandAllowlist`).
 
 ### Path Safety
