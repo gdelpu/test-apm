@@ -54,6 +54,12 @@ All test reports and result files **must be written to disk** as actual files us
 | Max commands per-session | 20 |
 | Per-command timeout | 300 s |
 | Max files written per task | 50 |
+| Max test files per campaign run | 50 |
+
+### Pre-execution validation
+
+- Before executing any campaign, count the total number of test scripts to be run. If the count exceeds 50, refuse the campaign and report the limit exceeded.
+- **Early-abort rule**: If 3 consecutive commands timeout, halt the entire campaign immediately and report a consecutive-timeout error. Do not continue to the cumulative budget limit.
 
 ## Out of Scope
 
