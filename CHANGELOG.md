@@ -7,11 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.20] — 2026-04-14
+
 ### Changed
-- Agent file path permissions updated: 3 Copilot agent(s)
+- Agent file path permissions updated: agent(s) `branding`, 4 Copilot agent(s)
 - Workflow state tracking standardised: 1 Copilot agent(s)
+- Agent updates: `sdlc-tech-architect`, `sdlc-test-executor`
 - Skill updates: `sdlc-deliverable-validation`, `sdlc-scaffold`
 - Hook engine updates: `quality-control.md`
+- Copilot provider agent updates: `sdlc-tech-architect.agent`, `sdlc-test-executor.agent`
+- Agent file path permissions updated: 3 Copilot agent(s)
 
 ### Removed
 - Skill(s): `sdlc-ba-functional-design`, `sdlc-ba-specification`
