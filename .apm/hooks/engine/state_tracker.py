@@ -198,6 +198,12 @@ def init_workflow(
         metadata={"feature": feature, "stations": stations},
     )
 
+    # Write YAML companion (best-effort, non-fatal)
+    try:
+        _write_yaml_companion(path)
+    except Exception:
+        pass
+
     # Symlink + manifest (best-effort, non-fatal)
     if repo_root:
         _update_latest_symlink(path.parent)
@@ -292,6 +298,12 @@ def update_station(
 
     path.write_text(content, encoding="utf-8")
 
+    # Write YAML companion (best-effort, non-fatal)
+    try:
+        _write_yaml_companion(path)
+    except Exception:
+        pass
+
     # Auto-derive trace file as sibling if not provided
     if not trace_file:
         trace_file = str(path.parent / "audit-trace.jsonl")
@@ -343,6 +355,7 @@ def query_state(
     # Parse header fields
     workflow = _extract_header(content, "Workflow State")
     feature = _extract_header_field(content, "Feature")
+    wf_started = _extract_header_field(content, "Started")
     status = _extract_header_field(content, "Status")
     trace_id = _extract_header_field(content, "Trace ID")
 
@@ -373,6 +386,7 @@ def query_state(
     return {
         "workflow": workflow,
         "feature": feature,
+        "started": wf_started,
         "status": status,
         "trace_id": trace_id,
         "stations": stations,
@@ -530,6 +544,52 @@ def _update_manifest(
     manifest_path.write_text(
         json.dumps(entries, indent=2) + "\n", encoding="utf-8"
     )
+
+
+def _write_yaml_companion(md_path: Path) -> None:
+    """
+    Write a ``workflow-state.yml`` alongside the given ``workflow-state.md``.
+
+    Emits a machine-friendly YAML representation of the same state data.
+    Uses a minimal hand-written serialiser (no PyYAML dependency) since the
+    structure is simple: scalars + a list of flat dicts.
+    """
+    state = query_state(state_file=str(md_path))
+    yml_path = md_path.with_suffix(".yml")
+
+    lines = [
+        f"workflow: {_yaml_scalar(state['workflow'])}",
+        f"feature: {_yaml_scalar(state['feature'])}",
+        f"started: {_yaml_scalar(state.get('started', ''))}",
+        f"status: {_yaml_scalar(state['status'])}",
+        f"trace_id: {_yaml_scalar(state['trace_id'])}",
+        f"current_station: {_yaml_scalar(state.get('current_station') or '')}",
+        "stations:",
+    ]
+    for s in state["stations"]:
+        lines.append(f"  - id: {_yaml_scalar(s['id'])}")
+        lines.append(f"    status: {_yaml_scalar(s['status'])}")
+        lines.append(f"    started: {_yaml_scalar(s['started'])}")
+        lines.append(f"    completed: {_yaml_scalar(s['completed'])}")
+        lines.append(f"    gate: {_yaml_scalar(s['gate'])}")
+
+    yml_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _yaml_scalar(value: str) -> str:
+    """Quote a YAML scalar value when necessary."""
+    if not value:
+        return '""'
+    # Quote if it contains YAML-special chars, looks like a boolean/null, or starts with special chars
+    if (
+        any(c in value for c in ":#{}[]|>&*!%@`,")
+        or value.lower() in ("true", "false", "null", "yes", "no", "on", "off")
+        or value.startswith(("-", "?", " "))
+        or value != value.strip()
+    ):
+        escaped = value.replace('"', '\\"')
+        return f'"{escaped}"'
+    return value
 
 
 def _update_manifest_status(

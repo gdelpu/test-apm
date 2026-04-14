@@ -86,9 +86,11 @@ outputs/runs/
 │   ├── latest → 20260412-143000-login-a1b2c3d4/
 │   ├── 20260412-143000-login-a1b2c3d4/
 │   │   ├── workflow-state.md
+│   │   ├── workflow-state.yml   # Machine-readable YAML companion
 │   │   └── audit-trace.jsonl
 │   └── 20260411-091500-signup-e5f6a7b8/
 │       ├── workflow-state.md
+│       ├── workflow-state.yml
 │       └── audit-trace.jsonl
 ├── spec-kit/
 │   ├── latest → 20260412-150000-payments-c9d0e1f2/
@@ -135,3 +137,33 @@ The `status` field is updated to `passed` or `failed` when all stations resolve.
 
 When `--trace-file` is not explicitly provided, `audit-trace.jsonl` is
 automatically created as a sibling of `workflow-state.md` in the run directory.
+
+### YAML companion file
+
+Every `workflow-state.md` is accompanied by a `workflow-state.yml` in the same
+directory. This YAML file contains the same state data in a machine-friendly
+format suitable for CI pipelines, dashboards, and scripts that need to parse
+workflow progress without reading Markdown tables.
+
+The YAML companion is automatically generated and updated by the state tracker
+on every `init` and `update` operation. Example:
+
+```yaml
+workflow: feature-implementation
+feature: login
+started: "2026-04-12T14:30:00Z"
+status: in-progress
+trace_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+current_station: implement
+stations:
+  - id: spec
+    status: passed
+    started: "2026-04-12T14:30:05Z"
+    completed: "2026-04-12T14:35:00Z"
+    gate: pass
+  - id: implement
+    status: running
+    started: "2026-04-12T14:35:05Z"
+    completed: "—"
+    gate: "—"
+```
