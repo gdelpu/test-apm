@@ -151,7 +151,7 @@ log_step "Done!"
 echo ""
 if [ "${MODE}" = "standard" ]; then
     echo "  Next steps:"
-    echo "    git add .github/ .apm.lock.yaml"
+    echo "    git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml"
     echo "    git commit -m \"feat: install AI SDLC Foundation v${VERSION}\""
     echo "    git push"
     echo ""

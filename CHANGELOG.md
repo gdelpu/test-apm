@@ -16,6 +16,66 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - Agentic system fixes (Confluence fields, scaffold prompt, BA templates, bootstrap cleanup, output paths)
 
 
+## [0.0.20] — 2026-04-14
+
+### Changed
+- Agent file path permissions updated: agent(s) `branding`, 4 Copilot agent(s)
+- Workflow state tracking standardised: 1 Copilot agent(s)
+- Agent updates: `sdlc-tech-architect`, `sdlc-test-executor`
+- Skill updates: `sdlc-deliverable-validation`, `sdlc-scaffold`
+- Hook engine updates: `quality-control.md`
+- Copilot provider agent updates: `sdlc-tech-architect.agent`, `sdlc-test-executor.agent`
+- Agent file path permissions updated: 3 Copilot agent(s)
+
+### Removed
+- Skill(s): `sdlc-ba-functional-design`, `sdlc-ba-specification`
+
+
+## [0.0.19] — 2026-04-13
+
+### Changed
+- SonarQube integration updated: skill(s) `sdlc-tech-architecture`
+- Skill updates: `sdlc-tech-architecture`
+- Agent updates: `workflow-orchestrator`
+- Copilot provider agent updates: `workflow-orchestrator.agent`
+- 2 Copilot prompt(s) updated
+
+### Fixed
+- Re-display progress table after each station transition
+
+### Removed
+- `.apm/templates/template-corporate.docx`
+
+
+## [0.0.18] — 2026-04-12
+
+### Changed
+- Script updates: `install-apm-bundle.ps1`, `install-apm-bundle.sh`, `project-copilot.sh`
+
+### Fixed
+- Project hooks into runtime dir, add rewrite pairs, bump to 0.0.18
+
+
+## [0.0.17] — 2026-04-12
+
+### Changed
+- Documentation updates: `apm-consumer-guide.md`, `quick-start.md`
+- Script updates: `bootstrap-apm.ps1`, `bootstrap-apm.sh`
+
+### Fixed
+- Bundle hooks+templates in distribution, add CI smoke checks
+
+
+## [0.0.16] — 2026-04-12
+
+### Added
+- `docs/consumer/hooks-setup.md`
+
+### Changed
+- Data anonymisation handling updated: 2 docs file(s)
+- Script updates: `install-apm-bundle.ps1`, `install-apm-bundle.sh`
+
+
 ## [0.0.15] — 2026-04-12
 
 ### Changed
@@ -244,7 +304,7 @@ Initial release of the SSG AI SDLC Foundation.
 - Hub Orchestrator agent with dynamic dispatch and self-maintaining catalog
 - Refactoring agents and orchestrator for structured migration
 - DEP platform specialized agents and templates
-- Doc-depth support (essential/standard/full)
+- Doc-depth support (essential/full)
 - SpecKit Constitution for development standards
 - GitLab CI/CD station-gate pipeline with Copilot CLI integration
 - PR validation pipeline (validate + AI stations A0–A7)

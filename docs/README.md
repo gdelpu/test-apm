@@ -13,6 +13,7 @@ Teams installing and using the foundation in their own repositories.
 | [Quick Start](consumer/quick-start.md) | Install in 60 seconds, Hub Orchestrator, common workflows, per-provider usage |
 | [APM Consumer Guide](consumer/apm-consumer-guide.md) | Install modes, customization, `providers-local/` overlay, CI integration, troubleshooting |
 | [MCP Setup Guide](consumer/mcp-setup-guide.md) | Configure MCP servers, profiles, per-server setup, auto-detection via Hub Orchestrator |
+| [Hooks Setup Guide](consumer/hooks-setup.md) | Configure lifecycle hooks: PII scanning, risk scoring, audit tracing, per-provider usage |
 
 ---
 

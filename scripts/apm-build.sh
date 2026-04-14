@@ -80,6 +80,8 @@ CANONICAL_PATHS=(
     ".apm/workflows"
     ".apm/scripts"
     ".apm/knowledge"
+    ".apm/hooks"
+    ".apm/templates"
     "scripts/project-copilot.sh"
     "apm.yml"
 )

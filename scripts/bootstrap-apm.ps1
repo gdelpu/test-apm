@@ -169,7 +169,7 @@ Write-Step 'Done!'
 Write-Host ''
 if ($Mode -eq 'standard') {
     Write-Host '  Next steps:' -ForegroundColor Yellow
-    Write-Host '    git add .github/ .apm.lock.yaml'
+    Write-Host '    git add .github/ .apm/hooks/ hook-config.json .apm.lock.yaml'
     Write-Host "    git commit -m `"feat: install AI SDLC Foundation v$Version`""
     Write-Host '    git push'
     Write-Host ''

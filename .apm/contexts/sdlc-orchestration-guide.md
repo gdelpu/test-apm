@@ -246,7 +246,7 @@ agents:
 Each agent = **skill + refs + tools + hooks**, assembled at runtime by the coordinator.
 
 **New fields (doc_depth):**
-- `min_depth` — minimum `doc_depth` required for this agent to run (`essential`, `standard`, or `full`; default `full`)
+- `min_depth` — minimum `doc_depth` required for this agent to run (`essential` or `full`; default `full`)
 - `template_variants` — map of `{depth: template_path}` overrides for the default template
 
 ---
@@ -256,13 +256,13 @@ Each agent = **skill + refs + tools + hooks**, assembled at runtime by the coord
 The coordinator applies `doc_depth` filtering before resolving the DAG into waves.
 
 1. Read `doc_depth` from `outputs/docs/project.yml` (default: `full`).
-2. Define the depth hierarchy: `essential` < `standard` < `full`.
+2. Define the depth hierarchy: `essential` < `full`.
 3. For each agent, read `min_depth` from the registry (default: `full`). If the agent's `min_depth` exceeds the current `doc_depth`, remove it from the DAG.
 4. For remaining agents with `template_variants.{depth}`, resolve the variant template instead of the default.
 5. Re-wire the DAG: remove references to filtered-out agents from `depends_on` lists. Orphaned agents become root nodes.
 6. Pass `doc_depth` as scope context to all agents.
 
-Example at `essential` depth: only ~12 agents run (vision, epics, features, system context, ADRs, sprint planning) out of ~40 total.
+Example at `essential` depth: ~10 BA agents run (audit, vision, glossary, actors, requirements, domain model, epics, features, user stories) out of ~19 total.
 
 ---
 

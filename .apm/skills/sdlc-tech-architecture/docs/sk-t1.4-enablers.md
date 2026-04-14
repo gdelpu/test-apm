@@ -71,9 +71,10 @@ Based on the enabler's dependencies (inferred from the ADR context):
 
 - **Every enabler MUST trace to this ADR** — `adr_source` in the front matter
 - **An enabler has NO direct business value** — if it produces a user feature, it is a User Story
-- **Sub-tasks must be atomic** — 1 to 4h maximum per sub-task
+- **Sub-tasks represent meaningful delivery increments** — target 4 to 16 h per sub-task. Micro-tasks under 2 h should be merged into their nearest neighbour.
 - **Acceptance criteria must be automatically verifiable**
-- **Do not duplicate enablers from other ADRs** — if an enabler seems to overlap with another ADR's scope, produce it anyway with a note; the index agent will deduplicate if needed
+- **Cap per ADR: produce a maximum of 4 enablers per ADR.** If the ADR's `### Required enablers` section lists more than 4 items, group closely related ones into a single enabler with combined sub-tasks. Prefer fewer, richer enablers over many thin ones.
+- **Do not duplicate enablers from other ADRs** — if an enabler seems to overlap with another ADR's scope, produce it anyway with a note; the index agent will deduplicate and consolidate.
 
 ## Output format
 

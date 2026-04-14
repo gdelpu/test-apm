@@ -12,11 +12,10 @@ For **domain-specific** validation checklists (BA deliverable types, Tech delive
 
 ## Doc Depth Awareness
 
-This hook adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential`, `standard`, or `full`). If absent, default to `full`.
+This hook adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential` or `full`). If absent, default to `full`.
 
 **Depth-specific relaxations:**
 - **essential**: Traceability section is optional. Glossary cross-reference check is skipped (no glossary produced). Definition of Ready checklists are not required. Inline user stories and business rules in feature files are accepted (no separate files required).
-- **standard**: Traceability section is optional. Definition of Ready checklists are not required.
 - **full**: All checks apply without relaxation.
 
 ---
@@ -29,7 +28,7 @@ This hook adapts its checks based on the `doc_depth` setting in `docs/project.ym
 - [ ] The heading structure follows the hierarchy (H1 > H2 > H3 > H4)
 - [ ] All traceable elements have a unique identifier with the correct prefix
 - [ ] Cross-references point to existing identifiers
-- [ ] The traceability section is present at the end of the document — **skip if `doc_depth` is `essential` or `standard`**
+- [ ] The traceability section is present at the end of the document — **skip if `doc_depth` is `essential`**
 - [ ] The file naming follows the convention
 
 ### Content
@@ -58,14 +57,6 @@ This hook adapts its checks based on the `doc_depth` setting in `docs/project.ym
 - Business rules: >= 3 rules with IF/THEN structure
 - User Stories: >= 2 Given/When/Then acceptance criteria per story
 - Test scenarios: at least 1 nominal scenario + 1 error scenario per covered business rule
-
-### `standard` depth
-- Glossary: >= 5 defined terms
-- Actors & Roles: >= 2 actors, rights matrix present
-- Functional requirements: >= 3 requirements with `EX-xxx` identifiers
-- Domain model: >= 3 entities with attributes, Mermaid diagram present
-- Epics & Features: >= 1 epic with >= 2 features
-- User Stories: >= 2 Given/When/Then acceptance criteria per story
 
 ### `essential` depth
 - Epics & Features: >= 1 epic with >= 2 features

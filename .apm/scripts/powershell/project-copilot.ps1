@@ -172,6 +172,7 @@ if ($Full) {
         @{ Source = '.apm/contexts';   Target = 'contexts' }
         @{ Source = '.apm/templates';  Target = 'templates' }
         @{ Source = '.apm/knowledge';   Target = 'knowledge' }
+        @{ Source = '.apm/hooks';        Target = 'hooks' }
     )
 
     foreach ($mapping in $canonicalMappings) {
@@ -206,6 +207,8 @@ if ($Full) {
         ,@('.apm/prompts/',       "$runtimePrefix/prompts/")
         ,@('.apm/instructions/',  "$runtimePrefix/instructions/")
         ,@('.apm/knowledge/',      "$runtimePrefix/knowledge/")
+        ,@('.apm/hooks/',          "$runtimePrefix/hooks/")
+        ,@('.apm/hooks',           "$runtimePrefix/hooks")
     )
 
     # Only rewrite .apm/agents/ if the runtime is different from the source

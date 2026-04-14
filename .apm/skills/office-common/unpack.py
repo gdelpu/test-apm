@@ -14,6 +14,7 @@ Examples:
 """
 
 import argparse
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -29,6 +30,16 @@ SMART_QUOTE_REPLACEMENTS = {
     "\u2018": "&#x2018;",  
     "\u2019": "&#x2019;",  
 }
+
+# LaTeX commands that can read/write files and remain effective under --no-shell-escape.
+# \input, \include, \openin, \newread, \openout, \immediate, \write are all file-access
+# vectors that bypass the --no-shell-escape guard on \write18.
+_LATEX_FILE_OPS_RE = re.compile(
+    r"\\(?:input|include|openin|newread|openout|immediate|write)"
+    r"(?:\*)?"
+    r"(?:\s*\{[^}]{0,512}\}|\s*\d+\s*=\s*\S{0,256}|\s*\\[A-Za-z]+\s*=?\s*\S{0,256})?",
+    re.IGNORECASE,
+)
 
 
 def unpack(
@@ -59,6 +70,12 @@ def unpack(
 
         message = f"Unpacked {input_file} ({len(xml_files)} XML files)"
 
+        latex_stripped = 0
+        for xml_file in xml_files:
+            latex_stripped += _strip_latex_commands(xml_file)
+        if latex_stripped:
+            message += f", stripped {latex_stripped} dangerous LaTeX command(s)"
+
         if suffix == ".docx":
             if simplify_redlines:
                 simplify_count, _ = do_simplify_redlines(str(output_path))
@@ -77,6 +94,23 @@ def unpack(
         return None, f"Error: {input_file} is not a valid Office file"
     except Exception as e:
         return None, f"Error unpacking: {e}"
+
+
+def _strip_latex_commands(xml_file: Path) -> int:
+    """Strip dangerous LaTeX file-access commands from XML text content.
+
+    Targets commands effective under --no-shell-escape: \\input, \\include,
+    \\openin, \\newread, \\openout, \\immediate, \\write.
+    Returns the number of substitutions made.
+    """
+    try:
+        content = xml_file.read_text(encoding="utf-8")
+        stripped, count = _LATEX_FILE_OPS_RE.subn("", content)
+        if count:
+            xml_file.write_text(stripped, encoding="utf-8")
+        return count
+    except Exception:
+        return 0
 
 
 def _pretty_print_xml(xml_file: Path) -> None:
