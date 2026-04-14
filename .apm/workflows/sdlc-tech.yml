@@ -160,11 +160,28 @@ stations:
       - tst-001-test-strategy.md
     outputs:
       - imp-001-implementation-plan.md
+      - coding-agent-briefing.md
     gate:
       criteria:
         - "Ordered wave plan for implementation"
-        - "CLAUDE.md entry point compiled"
+        - "Coding agent briefing compiled"
       severity: blocker
+
+  - id: tech-provider-bootstrap
+    name: Provider Bootstrap
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-design
+    inputs:
+      - imp-001-implementation-plan.md
+      - coding-agent-briefing.md
+    outputs:
+      - provider-specific-artifacts/
+    optional: true  # skip if no provider detected or not needed
+    gate:
+      criteria:
+        - "Provider-specific artifacts generated for detected coding agent"
+      severity: warning
 
   # ─── System T3: Continuous Quality ─────────────────────────────────
   - id: tech-drift

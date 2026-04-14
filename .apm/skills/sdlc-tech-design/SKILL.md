@@ -8,7 +8,7 @@ triggers: ['technical design', 'data model', 'API contracts', 'implementation pl
 
 ## Goal
 
-Produce the technical design dossier: data model with DDL and migrations, OpenAPI-compliant API contracts, test strategy, and the implementation plan that compiles into the CLAUDE.md entry point.
+Produce the technical design dossier: data model with DDL and migrations, OpenAPI-compliant API contracts, test strategy, and the implementation plan that compiles into the coding agent briefing entry point.
 
 ## When to use
 
@@ -42,10 +42,10 @@ Produce the technical design dossier: data model with DDL and migrations, OpenAP
 ### Phase 4 — Implementation Plan (agent t2.5) — depends on Phase 3
 1. Load the implementation plan template from `resources/`
 2. Read upstream: all T1 + T2 deliverables, BA specifications
-3. Produce ordered wave plan for Claude Code implementation
-4. Compile `CLAUDE.md` as the entry point for code generation
+3. Produce ordered wave plan for automated coding agent implementation
+4. Compile `coding-agent-briefing.md` as the provider-neutral entry point for code generation
 5. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/2-design/imp-001-implementation-plan.md` with identifier `[IMP-001]`
-6. Use the `edit/editFiles` tool to create project root `CLAUDE.md`
+6. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/2-design/coding-agent-briefing.md`
 
 ## Output
 
@@ -53,7 +53,7 @@ Produce the technical design dossier: data model with DDL and migrations, OpenAP
 - `outputs/docs/2-tech/2-design/api-{id}-{slug}.md` — `[API-xxx]` (per API group)
 - `outputs/docs/2-tech/2-design/tst-001-test-strategy.md` — `[TST-001]`
 - `outputs/docs/2-tech/2-design/imp-001-implementation-plan.md` — `[IMP-001]`
-- `CLAUDE.md` — Claude Code entry point
+- `outputs/docs/2-tech/2-design/coding-agent-briefing.md` — Provider-neutral coding agent entry point
 
 ## Rules
 
@@ -62,6 +62,9 @@ Produce the technical design dossier: data model with DDL and migrations, OpenAP
 - API contracts must trace to user stories (every endpoint serves at least one US)
 - Test strategy must integrate both BA scenarios and technical test concerns
 - Implementation plan must include wave ordering suitable for automated code generation
+
+### Phase 5 — Provider Bootstrap (optional, post-T2)
+After T2 completion, invoke the provider bootstrap orchestrator (`sk-orchestrator-coding-agent`) to transform `coding-agent-briefing.md` into provider-specific artifacts (e.g. `CLAUDE.md` for Claude Code, Copilot agent files for GitHub Copilot). This phase is described in `docs/sk-orchestrator-coding-agent.md`.
 
 ## Resources
 

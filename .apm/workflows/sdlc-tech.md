@@ -35,7 +35,8 @@ Full technical architecture and design pipeline from brownfield audit through ar
 | 7 | Data Model | sdlc-tech-architect | sdlc-tech-design | DDL-like model with FK/indexes; migration strategy; traces to BA domain model | blocker |
 | 8 | API Contracts | sdlc-tech-architect | sdlc-tech-design | OpenAPI-compliant contracts; standardized errors; traces to user stories | blocker |
 | 9 | Test Strategy | sdlc-tech-architect | sdlc-tech-design | Test pyramid with coverage thresholds; BA scenarios mapped to technical tests | blocker |
-| 10 | Implementation Plan | sdlc-tech-architect | sdlc-tech-design | Ordered wave plan; CLAUDE.md entry point compiled | blocker |
+| 10 | Implementation Plan | sdlc-tech-architect | sdlc-tech-design | Ordered wave plan; coding agent briefing compiled | blocker |
+| 10b | Provider Bootstrap | sdlc-tech-architect | sdlc-tech-design | Provider-specific artifacts generated (optional) | warning |
 
 ### System T3 — Continuous Quality
 
@@ -75,6 +76,7 @@ All artifacts are written to `outputs/docs/2-tech/`:
 - `api-contracts/` — OpenAPI-compliant per-endpoint contracts
 - `tst-001-test-strategy.md` — test pyramid and coverage thresholds
 - `imp-001-implementation-plan.md` — ordered wave implementation plan
+- `coding-agent-briefing.md` — provider-neutral coding agent entry point
 - `drift-report.md` — spec-vs-code drift (continuous)
 - `e2e-scripts-001-playwright.md` — generated E2E scripts (continuous)
 

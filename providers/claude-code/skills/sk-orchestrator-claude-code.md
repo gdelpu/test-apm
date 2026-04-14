@@ -1,19 +1,19 @@
-# Skill: Claude Code Orchestrator
+# Skill: Claude Code Provider Bootstrap
 
 ## Identity
 
 - **ID:** agent-orchestrator-claude-code
-- **Type:** Transition tool (bridge between the Tech Agent and Claude Code)
-- **Triggered by:** An architect after validation of all T2 deliverables
+- **Type:** Provider-specific bootstrap (Claude Code adapter)
+- **Triggered by:** `sk-orchestrator-coding-agent` when provider is resolved to `claude-code`
 
 ## Mission
 
-You are a meta-orchestrator whose mission is to prepare the Claude Code environment for implementation. You compile the Tech Agent deliverables into operational instructions and generate the configuration files needed for Claude Code to execute the implementation plan autonomously.
+You are the Claude Code provider bootstrap. You receive the provider-neutral `coding-agent-briefing.md` and `t2.5-implementation-plan.md` from the canonical orchestrator and transform them into the Claude Code-specific artifacts needed for autonomous implementation.
 
 ## Inputs
 
-- **Final technical deliverables:**
-  - `CLAUDE.md` — compiled by T-2.5
+- **From canonical orchestrator:**
+  - `coding-agent-briefing.md` — provider-neutral briefing compiled by T-2.5
   - `t2.5-implementation-plan.md` — ordered implementation plan
   - `t2.3-enablers-summary.md` — enablers summary
 - **Project configuration:**
@@ -25,14 +25,14 @@ You are a meta-orchestrator whose mission is to prepare the Claude Code environm
 
 | Contract | Runtime check |
 |---------|---------------------------|
-| Required environment variables defined | `JIRA_PROJECT_KEY`, `GIT_BRANCH`, `IMPLEMENTATION_PLAN_PATH`, `CLAUDE_MD_PATH` |
+| Required environment variables defined | `JIRA_PROJECT_KEY`, `GIT_BRANCH`, `IMPLEMENTATION_PLAN_PATH`, `CODING_AGENT_BRIEFING_PATH` |
 | Critical MCP tools available | Jira MCP — if absent: stop and report |
 | Important MCP tools available | Xray MCP, Playwright MCP — if absent: logged degraded mode |
 | Log file ready | `.claude/orchestration-log.jsonl` writable |
 
 The orchestrator produces the following files at the root of the project repository:
 
-### 1. `CLAUDE.md` (enriched copy)
+### 1. `CLAUDE.md` (transformed from `coding-agent-briefing.md`)
 ### 2. `.claude/implementation-queue.json`
 ### 3. `.claude/workflow.md`
 
@@ -45,9 +45,9 @@ The orchestrator produces the following files at the root of the project reposit
 3. Check the `## Local startup` section in `[STK-001]`
 4. Check stub enablers (ADR-STUB)
 
-### Step 2: CLAUDE.md enrichment
+### Step 2: CLAUDE.md generation
 
-Add implementation plan summary and workflow instructions.
+Transform `coding-agent-briefing.md` into the Claude Code-specific `CLAUDE.md` format. Add implementation plan summary and workflow instructions.
 
 ### Step 3: Implementation queue generation
 
