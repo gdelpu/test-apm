@@ -12,6 +12,7 @@ Schema: `.apm/hooks/engine/schemas/workflow-state.schema.md`.
 Every workflow run creates a **run directory** under `outputs/runs/` containing:
 
 - `workflow-state.md` — Markdown table tracking station progress (human-readable)
+- `workflow-state.yml` — YAML companion for machine parsing (auto-generated alongside the `.md`)
 - `audit-trace.jsonl` — structured spans for every workflow, station, tool, and skill event
 
 The state tracker is a Python CLI (`python -m engine --state ...`) that all three providers call identically. No external dependencies — stdlib only (Python 3.10+).
@@ -54,9 +55,11 @@ outputs/runs/
 │   ├── latest → 20260412-143000-login-a1b2c3d4/   # Symlink to most recent
 │   ├── 20260412-143000-login-a1b2c3d4/
 │   │   ├── workflow-state.md
+│   │   ├── workflow-state.yml
 │   │   └── audit-trace.jsonl
 │   └── 20260411-091500-signup-e5f6a7b8/
 │       ├── workflow-state.md
+│       ├── workflow-state.yml
 │       └── audit-trace.jsonl
 ├── spec-kit/
 │   ├── latest → ...

@@ -7,6 +7,23 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.22] — 2026-04-14
+
+### Changed
+- Agent file path permissions updated: 4 Copilot agent(s)
+- Agent scope constraints updated: 1 Copilot agent(s)
+- Workflow state tracking standardised: 1 Copilot agent(s), 1 hooks file(s)
+- Agent updates: `branding`, `sdlc-tech-architect`, `sdlc-test-executor`, `workflow-orchestrator`
+- Skill updates: `office-common`, `sdlc-ba-functional-design`, `sdlc-ba-scoping`, `sdlc-ba-specification`, `sdlc-deliverable-validation`, `sdlc-scaffold`
+- Hook engine updates: `quality-control.md`, `state_tracker.py`
+- Copilot provider agent updates: `sdlc-tech-architect.agent`
+- 1 Copilot prompt(s) updated
+- Documentation updates: `workflow-tracking.md`
+- Script updates: `apm-build.sh`, `bootstrap-apm.ps1`, `install-apm-bundle.ps1`, `install-apm-bundle.sh`, `project-copilot.sh`
+
+### Removed
+- `orchestration/templates/project.yml`
+
 ## [0.0.21] — 2026-04-14
 
 ### Changed
