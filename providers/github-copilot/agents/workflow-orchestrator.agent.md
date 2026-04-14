@@ -192,9 +192,11 @@ Delegated agents MUST NOT have broader tool access, network access, or command s
 
 | Resource | Limit |
 |----------|-------|
+| Max stations per workflow | 50 |
 | Max files scanned per-session | 200 |
 | Max iterations per task | 10 |
 
+- **Station count enforcement**: At workflow YAML load time, before any station executes, count all declared stations. If the count exceeds 50, reject the workflow immediately with a blocker-severity error: `"error": "max_stations_exceeded", "count": <N>, "limit": 50`. Do not begin execution.
 - Do not recurse through the entire repository. Only operate on paths relevant to the current workflow scope.
 - If processing exceeds the limits above, stop and report partial results — never continue unbounded.
 

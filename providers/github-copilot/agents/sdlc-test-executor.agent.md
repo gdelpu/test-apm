@@ -10,12 +10,12 @@ commandAllowlist:
   - pytest
   - dotnet test
 allowedFilePaths:
-  - 'tests/**'
-  - 'test/**'
   - 'tests/results/**'
   - 'tests/reports/**'
   - 'outputs/**'
 allowedFilePathsReadOnly:
+  - 'tests/**'
+  - 'test/**'
   - '*.config.*'
   - 'specs/**'
   - 'docs/**'
@@ -46,6 +46,7 @@ All test reports and result files **must be written to disk** as actual files us
 - Do not read or reference credential files (`.env`, `**/secrets/**`, `**/*.key`, `**/*.pem`).
 - Command execution is restricted to the allowlisted commands only.
 - Network access is restricted to localhost only; no external endpoints beyond build registries.
+- **Write-then-execute prevention**: Test source directories (`tests/**`, `test/**`) are read-only. This agent may only write to `tests/results/`, `tests/reports/`, and `outputs/`. Never write files to directories that test execution commands (`pytest`, `npm test`, `dotnet test`, Playwright) will scan and execute — this prevents a write-then-execute chain.
 
 ## Resource Limits
 

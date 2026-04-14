@@ -23,7 +23,7 @@ allowedFilePaths:
   - 'build/**'
   - 'docs/**'
   - 'outputs/**'
-  - '*.md'
+  - 'outputs/**/*.md'
   - '*.css'
   - '*.scss'
   - '*.html'

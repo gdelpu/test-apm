@@ -10,12 +10,12 @@ commandAllowlist:
   - pytest
   - dotnet test
 allowedFilePaths:
-  - 'tests/**'
-  - 'test/**'
   - 'tests/results/**'
   - 'tests/reports/**'
   - 'outputs/**'
 allowedFilePathsReadOnly:
+  - 'tests/**'
+  - 'test/**'
   - '*.config.*'
   - 'specs/**'
   - 'docs/**'
