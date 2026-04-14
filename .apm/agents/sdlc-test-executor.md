@@ -5,8 +5,8 @@ tools: ['codebase', 'search', 'runCommands', 'edit/editFiles']
 commandAllowlist:
   - npx playwright test --config=playwright.config.ts
   - npm test
-  - k6 run tests/perf/**/*.js
-  - artillery run tests/perf/**/*.yml
+  - k6 run tests/perf/load.config.js
+  - artillery run tests/perf/load.config.yml
   - pytest
   - dotnet test
 allowedFilePaths:
