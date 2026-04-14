@@ -134,7 +134,7 @@ Read `.apm/skills/hub-classification/SKILL.md` for the full classification proto
 | PR, merge request | `pr-validation` (11 stations) |
 | Full project lifecycle | `sdlc-full` (11 stations) |
 | Business analysis, PRD | `sdlc-ba` (16 stations) |
-| Architecture, ADRs | `sdlc-tech` (12 stations) |
+| Architecture, ADRs, implementation | `sdlc-tech` (17 stations) |
 | Sprint governance | `sdlc-steer` (10 stations) |
 | Analyze codebase | `repository-analyzer` agent |
 | Branding, Sopra Steria | `branding` agent |

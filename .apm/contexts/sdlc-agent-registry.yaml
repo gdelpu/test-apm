@@ -876,12 +876,91 @@ agents:
     model: sonnet
     output: outputs/docs/2-tech/2-design/imp-001-implementation-plan.md
 
+  # ─── System T3: Implementation (iterative per sprint) ──────────────
+
   tech-t3.1:
-    name: Drift Detection
+    name: Task Resolution
     domain: Tech
     system: T3
+    min_depth: essential
+    skill: sdlc-tech-implementation
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write, run-commands]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "outputs/docs/2-tech/3-implementation/current-task-{item_id}.md"
+
+  tech-t3.2:
+    name: Code Generation
+    domain: Tech
+    system: T3
+    min_depth: essential
+    skill: sdlc-tech-implementation
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write, run-commands]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "outputs/docs/2-tech/3-implementation/impl-log-{item_id}.md"
+
+  tech-t3.3:
+    name: Test Implementation
+    domain: Tech
+    system: T3
+    min_depth: essential
+    skill: sdlc-tech-implementation
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write, run-commands]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "outputs/docs/2-tech/3-implementation/test-log-{item_id}.md"
+
+  tech-t3.4:
+    name: Build & Validate
+    domain: Tech
+    system: T3
+    min_depth: essential
+    skill: sdlc-tech-implementation
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write, run-commands]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "outputs/docs/2-tech/3-implementation/validation-{item_id}.md"
+
+  tech-t3.5:
+    name: Wave Gate
+    domain: Tech
+    system: T3
+    min_depth: essential
+    skill: sdlc-tech-implementation
+    refs:
+      conventions: *tech_cv_base
+    tools:
+      required: [file-read, file-write]
+    hooks:
+      <<: *tech_hooks_std
+    model: sonnet
+    output_pattern: "outputs/docs/2-tech/3-implementation/wave-{wave_id}-report.md"
+
+  # ─── System T4: Continuous Quality ─────────────────────────────────
+
+  tech-t4.1:
+    name: Drift Detection
+    domain: Tech
+    system: T4
     min_depth: full
-    skill: Tech-Agents/skills/sk-t3.1-drift-detection.md
+    skill: sdlc-tech-quality
     refs:
       conventions: *tech_cv_base
     tools:
@@ -890,14 +969,14 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: outputs/docs/2-tech/3-quality/dft-001-drift-report.md
+    output: outputs/docs/2-tech/4-quality/dft-001-drift-report.md
 
-  tech-t3.2:
+  tech-t4.2:
     name: Automated Code Review
     domain: Tech
-    system: T3
+    system: T4
     min_depth: full
-    skill: Tech-Agents/skills/sk-t3.2-code-review.md
+    skill: sdlc-tech-quality
     refs:
       conventions: *tech_cv_base
     tools:
@@ -906,7 +985,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output: outputs/docs/2-tech/3-quality/
+    output: outputs/docs/2-tech/4-quality/
 
   # ─── Tech Tools (on-demand) ──────────────────────────────────────────
 
@@ -939,7 +1018,7 @@ agents:
         - .apm/hooks/post/quality-control.md
         - .apm/hooks/post/confluence-push.md
     model: sonnet
-    output_pattern: "outputs/docs/2-tech/4-workshops/wrk-tech-{NNN}-{scope-slug}-review.md"
+    output_pattern: "outputs/docs/2-tech/5-workshops/wrk-tech-{NNN}-{scope-slug}-review.md"
 
   tech-coherence:
     name: Tech Coherence Check

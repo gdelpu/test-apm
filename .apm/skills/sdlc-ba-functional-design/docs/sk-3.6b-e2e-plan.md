@@ -98,7 +98,7 @@ For each flow `[E2E-FLX-xxx]`, write **at minimum**:
 **Required dataset:** Shared dataset [DAT-TEST-001] — CLIENT test accounts (john.smith@test.co.uk) + MANAGER (mary.jones@test.co.uk)
 **Entry criteria:**
   - Application deployed in qualification environment
-  - Waves 1 to 5 delivered and validated in T3.1 (no BLOCK)
+  - Waves 1 to 5 delivered and validated in T4.1 (no BLOCK)
   - Dataset `[DAT-TEST-001]` loaded in database
 
 **Extended Gherkin scenario:**
@@ -198,7 +198,7 @@ For the system qualification campaign to start:
 | Criterion | How to verify |
 |---|---|
 | All required waves delivered | Implementation plan — all waves for the flow ≤ status "Done" |
-| T3.1: no active BLOCK | Latest `drift-report-{date}.md` with global_status = pass or warn |
+| T4.1: no active BLOCK | Latest `drift-report-{date}.md` with global_status = pass or warn |
 | Dataset `[DAT-TEST-001]` loaded | Seed script executed without error on the target environment |
 | Qualification environment stable | CI/CD deployment of the last green build |
 | Xray campaign created | Campaign [CAM-E2E-001] in DRAFT status in Xray |

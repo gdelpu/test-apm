@@ -12,14 +12,14 @@ allowedFilePaths:
 
 ## Purpose
 
-Produce a complete technical architecture and design dossier from BA deliverables through a structured four-system pipeline: brownfield technical audit (T0), architecture definition (T1), incremental design (T2), and continuous quality (T3). Outputs include the implementation plan and coding agent briefing for code implementation.
+Produce a complete technical architecture and design dossier from BA deliverables through a structured five-system pipeline: brownfield technical audit (T0), architecture definition (T1), incremental design (T2), implementation (T3, delegated to implementer agent), and continuous quality (T4). Outputs include the implementation plan and coding agent briefing for code implementation.
 
 ## Responsibilities
 
 - Audit existing technical stack and identify migration gaps (T0)
 - Define system context (C4 L1-L2), generate ADRs with fan-out for stack extraction and enabler discovery (T1)
 - Produce data models, API contracts, test strategy, and implementation plan (T2)
-- Detect spec-vs-code drift, perform code reviews, generate E2E Playwright scripts (T3)
+- Detect spec-vs-code drift, perform code reviews, generate E2E Playwright scripts (T4)
 - Maintain traceability from BA deliverables: DOM→DAT, US→API, BR→Constraints, ADR→ENB, ACT→Auth
 
 ## Decision policy
@@ -28,7 +28,8 @@ Produce a complete technical architecture and design dossier from BA deliverable
 - **Brownfield** projects start at T0 (technical audit + gap analysis)
 - **Greenfield** projects start at T1 (architecture)
 - T2 runs incrementally per sprint scope
-- T3 runs continuously during implementation
+- T3 executes the implementation plan wave-by-wave per sprint (delegated to implementer agent)
+- T4 runs continuously during implementation
 
 ### Fan-out resolution (T1)
 - ADR generation produces N architecture decision records
@@ -50,7 +51,8 @@ All deliverables are written to `outputs/docs/2-tech/` with structured identifie
 | T0 | `[TECH-ASIS-001]` technical audit, `[GAP-001]` gap analysis |
 | T1 | `[CTX-001]` system context, `[ADR-xxx]` decisions, `[STK-001]` stack, `[ENB-xxx]` enablers |
 | T2 | `[DAT-001]` data model, `[API-xxx]` contracts, `[TST-001]` test strategy, `[IMP-001]` impl plan + `coding-agent-briefing.md` |
-| T3 | `[DFT-xxx]` drift reports, code reviews, `[E2E-SCRIPTS-001]` Playwright scripts |
+| T3 | Implementation logs, validation reports, wave reports, sprint summaries |
+| T4 | `[DFT-xxx]` drift reports, code reviews, `[E2E-SCRIPTS-001]` Playwright scripts |
 
 ## File creation mandate
 
@@ -72,7 +74,7 @@ All deliverables listed above **must be written to disk** as actual files using 
 | Max ADRs per session | 30 |
 | Max deliverables per session | 50 |
 
-- Do not recurse through the entire repository. Only analyse paths relevant to the current system (T0–T3).
+- Do not recurse through the entire repository. Only analyse paths relevant to the current system (T0–T4).
 - If analysis exceeds the limits above, stop and report partial results — never continue unbounded.
 
 ## Skills to invoke
@@ -82,7 +84,7 @@ All deliverables listed above **must be written to disk** as actual files using 
 | Technical audit (T0) | `sdlc-tech-audit` |
 | Architecture (T1) | `sdlc-tech-architecture` |
 | Design (T2) | `sdlc-tech-design` |
-| Continuous quality (T3) | `sdlc-tech-quality` |
+| Continuous quality (T4) | `sdlc-tech-quality` |
 | Cross-cutting | `sdlc-deliverable-validation`, `sdlc-change-impact`, `sdlc-confluence-sync` |
 
 ## Reference material

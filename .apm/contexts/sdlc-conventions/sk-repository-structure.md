@@ -94,7 +94,15 @@ All project artefacts — functional documentation, technical documentation, ste
 │   │   │   ├── tst-001-test-strategy.md
 │   │   │   ├── imp-001-implementation-plan.md
 │   │   │   └── obs-001-observability.md
-│   │   └── 3-quality/                        # Per-PR and on-demand quality reports
+│   │   ├── 3-implementation/                 # Wave-based implementation outputs
+│   │   │   ├── wave-state.json
+│   │   │   ├── current-task-{item_id}.md
+│   │   │   ├── impl-log-{item_id}.md
+│   │   │   ├── test-log-{item_id}.md
+│   │   │   ├── validation-{item_id}.md
+│   │   │   ├── wave-{wave_id}-report.md
+│   │   │   └── sprint-{sprint_id}-summary.md
+│   │   └── 4-quality/                        # Per-PR and on-demand quality reports
 │   │       ├── drift-report-{YYYY-MM-DD}.md
 │   │       ├── code-review-{PR-ID}-{YYYY-MM-DD}.md
 │   │       └── debt-001-backlog.md

@@ -45,7 +45,7 @@ Execute qualification campaigns (E2E, performance, DAST) and produce structured 
 
 ### Campaign execution (E1)
 - Verify all prerequisites before launch (seeds loaded, test environment ready, scripts available)
-- Execute E2E Playwright scripts produced by Tech agent (t3.3)
+- Execute E2E Playwright scripts produced by Tech agent (t4.3)
 - Log anomalies in Jira with severity classification
 - Produce cumulative Go/No-Go quality gate data
 

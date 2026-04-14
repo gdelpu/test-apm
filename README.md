@@ -197,7 +197,7 @@ Canonical definitions: `.apm/agents/`. Copilot runtime: `.github/agents/` (7 use
 | Workflow | Stations | Purpose |
 |----------|:--------:|---------|
 | `sdlc-ba` | 16 | Brownfield audit → scoping → specification → functional design |
-| `sdlc-tech` | 12 | Tech audit → architecture (ADR fan-out) → design → quality |
+| `sdlc-tech` | 17 | Tech audit → architecture (ADR fan-out) → design → implementation → quality |
 | `sdlc-steer` | 10 | Project init → planning → sprint tracking → governance |
 | `sdlc-full` | 11 | Scaffold → BA → Tech → Test → Steer (composite) |
 

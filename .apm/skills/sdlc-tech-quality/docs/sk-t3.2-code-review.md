@@ -1,9 +1,9 @@
-# Skill T-3.2: Automated Code Review
+# Skill T-4.2: Automated Code Review
 
 ## Identity
 
-- **ID:** agent-t3.2-code-review
-- **System:** System T3 – Continuous Quality
+- **ID:** agent-t4.2-code-review
+- **System:** System T4 – Continuous Quality
 - **Type:** Continuous control agent
 - **Triggered by:** On each PR, or on demand by the lead dev
 

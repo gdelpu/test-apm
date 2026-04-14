@@ -6,20 +6,34 @@ commandAllowlist:
   - npm install
   - npm run build
   - npm test
+  - npm run lint
   - dotnet build
   - dotnet test
   - pytest
   - mvn compile
   - mvn test
+  - mvn verify
+  - mvn compile -pl
+  - mvn test -pl
+  - npx playwright test
+  - docker compose up -d
+  - docker compose down
+  - helm template
   - git diff
+  - git status
 allowedFilePaths:
   - 'src/**'
   - 'tests/**'
   - 'test/**'
   - 'specs/**'
   - 'docs/**'
+  - 'outputs/**'
   - 'package.json'
+  - 'pom.xml'
   - '*.config.*'
+  - 'docker-compose*.yml'
+  - 'helm/**'
+  - 'playwright.config.*'
 ---
 
 # Implementer
@@ -39,6 +53,7 @@ Execute implementation tasks by reading task breakdowns and producing or modifyi
 ## Skills to invoke
 
 - `code-implementation` — Task execution, code generation, build/test verification
+- `sdlc-tech-implementation` — Wave-based implementation with full T0-T2 context injection (System T3 in sdlc-tech workflow)
 
 ## Execution approach
 

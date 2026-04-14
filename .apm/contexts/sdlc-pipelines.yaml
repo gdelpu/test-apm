@@ -155,13 +155,24 @@ pipelines:
       "t2.4": { depends_on: ["t2.2"] }
       "t2.5": { depends_on: ["t2.4"] }
 
-  tech-3-quality:
+  tech-3-impl:
     domain: Tech
     system: T3
-    gate_after: false
+    gate_after: true
     agents:
       "t3.1": {}
       "t3.2": { depends_on: ["t3.1"] }
+      "t3.3": { depends_on: ["t3.2"] }
+      "t3.4": { depends_on: ["t3.3"] }
+      "t3.5": { depends_on: ["t3.4"] }
+
+  tech-4-quality:
+    domain: Tech
+    system: T4
+    gate_after: false
+    agents:
+      "t4.1": {}
+      "t4.2": { depends_on: ["t4.1"] }
 
   # ─── Steer Pipelines ─────────────────────────────────────────────
 
@@ -233,13 +244,13 @@ composites:
     gate_mode: pause
 
   tech:
-    description: "Full Tech pipeline (T0 to T3), no human gates"
-    compose: [tech-0-audit, tech-1-archi, tech-2-design, tech-3-quality]
+    description: "Full Tech pipeline (T0 to T4), no human gates"
+    compose: [tech-0-audit, tech-1-archi, tech-2-design, tech-3-impl, tech-4-quality]
     gate_mode: skip
 
   tech-gated:
     description: "Full Tech pipeline with gates"
-    compose: [tech-0-audit, tech-1-archi, tech-2-design, tech-3-quality]
+    compose: [tech-0-audit, tech-1-archi, tech-2-design, tech-3-impl, tech-4-quality]
     gate_mode: pause
 
   test:

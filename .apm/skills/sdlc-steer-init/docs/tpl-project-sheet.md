@@ -92,7 +92,8 @@ jira_groups:
 | Tech Agent — System T0 (Technical audit) | ☐ Yes / ☐ No | <!-- --> |
 | Tech Agent — System T1 (Architecture) | ☑ Yes | — |
 | Tech Agent — System T2 (Technical design) | ☑ Yes | <!-- --> |
-| Tech Agent — System T3 (Continuous quality) | ☑ Yes | — |
+| Tech Agent — System T3 (Implementation) | ☑ Yes | — |
+| Tech Agent — System T4 (Continuous quality) | ☑ Yes | — |
 
 ---
 

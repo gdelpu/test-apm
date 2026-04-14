@@ -17,7 +17,7 @@ Composite SDLC pipeline orchestrating all four domains — BA specification, Tec
 | 2 | Init | Project Initialization (P0) | sdlc-steer-manager | sdlc-steer-init | Project sheet and KPI baselines established | blocker |
 | 3 | BA | BA Pipeline (S0-S3) | sdlc-coordinator | sdlc-ba-audit, sdlc-ba-scoping, sdlc-ba-specification, sdlc-ba-functional-design | All BA systems complete; traceability chain verified | blocker |
 | 4 | Planning | Sprint Planning (P1) | sdlc-steer-manager | sdlc-steer-planning | Features batched into sprints; roadmap and risk register complete | blocker |
-| 5 | Tech | Tech Pipeline (T0-T3) | sdlc-coordinator | sdlc-tech-audit, sdlc-tech-architecture, sdlc-tech-design, sdlc-tech-quality | All Tech systems complete; BA-Tech traceability; implementation plan compiled | blocker |
+| 5 | Tech | Tech Pipeline (T0-T4) | sdlc-coordinator | sdlc-tech-audit, sdlc-tech-architecture, sdlc-tech-design, sdlc-tech-implementation, sdlc-tech-quality | All Tech systems complete; BA-Tech traceability; implementation plan compiled and executed | blocker |
 | 6 | Impl | Code Implementation | implementer | code-implementation | Code compiles; all tests pass | blocker |
 | 7 | Test | E2E/UAT Campaign | sdlc-test-executor | sdlc-test-campaign | Campaign pass rate above threshold; critical anomalies resolved | blocker |
 | 8 | Test | Performance Campaign | sdlc-test-executor | sdlc-test-performance | Performance within defined thresholds (parallel with station 7) | blocker |
@@ -42,7 +42,7 @@ Composite SDLC pipeline orchestrating all four domains — BA specification, Tec
 ## Nested workflows
 
 - **Station 3** (BA Pipeline) invokes the `sdlc-ba` workflow as a nested sub-workflow, running all 16 BA stations.
-- **Station 5** (Tech Pipeline) invokes the `sdlc-tech` workflow as a nested sub-workflow, running all 12 Tech stations.
+- **Station 5** (Tech Pipeline) invokes the `sdlc-tech` workflow as a nested sub-workflow, running all 17 Tech stations.
 - **Station 10** (Quality Validation) invokes the `quality-validation` workflow for comprehensive code quality checks (lint, static analysis, SAST, dependency audit, coverage, DAST, report).
 
 ## Parallel stations

@@ -385,7 +385,7 @@ At the end of Mode B, always produce a routing summary:
 Routing summary — [WRK-TECH-xxx]
 
 Ready for /impact: [N] resolved items (Section B)
-  -> Run: /impact --input outputs/docs/2-tech/4-workshops/wrk-tech-{NNN}-{scope-slug}-review.md
+  -> Run: /impact --input outputs/docs/2-tech/5-workshops/wrk-tech-{NNN}-{scope-slug}-review.md
 
 Blocked — requires clarification before /impact: [N] open questions (Section C)
   Owners:

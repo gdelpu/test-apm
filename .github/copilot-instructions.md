@@ -99,7 +99,7 @@ Workflow pipelines are available, each with stations and quality gates:
 | Maturity Assessment | 4 | Assessment | Assessment → scoring → report → roadmap |
 | Delivery Retrospective | 5 | Assessment | Cycle time → defects → bottlenecks → improvements → playbook update |
 | SDLC BA | 16 | SDLC Harness | Brownfield audit → scoping → specification → per-feature functional design |
-| SDLC Tech | 12 | SDLC Harness | Tech audit → architecture (ADR fan-out) → design → continuous quality |
+| SDLC Tech | 17 | SDLC Harness | Tech audit → architecture (ADR fan-out) → design → implementation → continuous quality |
 | SDLC Steer | 10 | SDLC Harness | Project init → planning → sprint tracking → governance (COPIL) |
 | SDLC Full | 11 | SDLC Harness | Scaffold → BA → Tech → Test → Steer governance (composite) |
 
