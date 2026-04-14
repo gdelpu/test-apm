@@ -175,7 +175,7 @@ The BA test scenarios `[TS-xxx]` from the `[TST-001]` BA dossier are implemented
 
 ### Authoritative source: `[DAT-TEST-001]`
 
-> *The seeds catalogue `[DAT-TEST-001]`, produced by BA agent 3.6, is the authoritative source of test datasets. It defines the FK insertion graph, the shared dataset, and per-scenario datasets, with a business justification for each significant value. Claude Code generates factories, SQL seeds, and fixtures from this catalogue.*
+> *The seeds catalogue `[DAT-TEST-001]`, produced by BA agent 3.6, is the authoritative source of test datasets. It defines the FK insertion graph, the shared dataset, and per-scenario datasets, with a business justification for each significant value. The coding agent generates factories, SQL seeds, and fixtures from this catalogue.*
 
 | Deliverable | Status | Note |
 |-------------|--------|------|
@@ -235,13 +235,13 @@ For each external system identified in `[CTX-001]`, a stub enabler (`[ENB-STUB-X
 
 ### Readiness check
 
-Before any Playwright MCP navigation, Claude Code performs a readiness check:
+Before any Playwright MCP navigation, the coding agent performs a readiness check:
 
 ```
 curl -f http://localhost:{PORT}/health || echo "Application not ready — navigation blocked"
 ```
 
-If the check fails, Claude Code must flag the blocker and not continue.
+If the check fails, the coding agent must flag the blocker and not continue.
 
 ---
 

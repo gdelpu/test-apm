@@ -38,7 +38,7 @@ A file `t2.4-test-strategy.md` following the template `tpl-test-strategy.md`, co
 3. The BA scenario coverage matrix
 4. The **`Production confidence`** section (generated in Phase 0 and updated at final self-verification)
 
-> **Scope**: this agent produces **only** `t2.4-test-strategy.md`. The compilation of the `CLAUDE.md` file is the exclusive responsibility of **T-2.5**.
+> **Scope**: this agent produces **only** `t2.4-test-strategy.md`. The compilation of the `coding-agent-briefing.md` file is the exclusive responsibility of **T-2.5**.
 
 ## Detailed instructions
 
@@ -78,16 +78,16 @@ For each test level, define the tool consistently with `[STK-001]`.
 
 **E2E strategy in three phases:**
 
-0. **Environment preparation phase (strict prerequisite)** — Before any navigation, Claude Code must ensure the application is started and accessible:
+0. **Environment preparation phase (strict prerequisite)** — Before any navigation, the coding agent must ensure the application is started and accessible:
    - Read the `## Local startup` section of `[STK-001]`
    - Verify that all "External system stub" enablers are implemented
    - Start the application according to the documented procedure
    - Perform a **readiness check**
    - Load the seeds catalogue `[DAT-TEST-001]`
 
-1. **Discovery phase (Playwright MCP)** — Claude Code pilots a real browser via the Playwright MCP server.
+1. **Discovery phase (Playwright MCP)** — The coding agent pilots a real browser via the Playwright MCP server.
 
-2. **Generation phase (Playwright code)** — From the selectors collected in the previous step, Claude Code generates the definitive Playwright code for CI.
+2. **Generation phase (Playwright code)** — From the selectors collected in the previous step, the coding agent generates the definitive Playwright code for CI.
 
 #### Step A.3: Test conventions
 

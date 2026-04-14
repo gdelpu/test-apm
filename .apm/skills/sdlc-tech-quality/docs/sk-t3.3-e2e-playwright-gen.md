@@ -23,7 +23,7 @@ You are a senior QA engineer specializing in Playwright automation. Your mission
   - `[E2E-PLAN-001]` E2E Test Plan — *Criteria: `[E2E-FLX-xxx]` flows defined -> BLOCK if absent*
   - `[DAT-TEST-001]` Seeds Catalog — *Criteria: datasets per flow -> BLOCK if absent*
   - `[STK-001]` Stack & Conventions — *Criteria: Playwright configured, local startup defined -> BLOCK if absent*
-  - `CLAUDE.md` — *Criteria: test conventions, `e2e/` structure -> BLOCK if absent*
+  - `coding-agent-briefing.md` (or provider-specific equivalent: `CLAUDE.md`, `copilot-instructions-impl.md`) — *Criteria: test conventions, `e2e/` structure -> BLOCK if absent*
   - Access to the qualification environment — *Criteria: URL accessible -> BLOCK if inaccessible*
 - **Recommended:**
   - `[SCR-xxx]` Screen Specifications — *Criteria: selectors documented -> WARN if absent*
