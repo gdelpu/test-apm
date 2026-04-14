@@ -7,6 +7,21 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.20] — 2026-04-14
+
+### Changed
+- Agent file path permissions updated: agent(s) `branding`, 4 Copilot agent(s)
+- Workflow state tracking standardised: 1 Copilot agent(s)
+- Agent updates: `sdlc-tech-architect`, `sdlc-test-executor`
+- Skill updates: `sdlc-deliverable-validation`, `sdlc-scaffold`
+- Hook engine updates: `quality-control.md`
+- Copilot provider agent updates: `sdlc-tech-architect.agent`, `sdlc-test-executor.agent`
+- Agent file path permissions updated: 3 Copilot agent(s)
+
+### Removed
+- Skill(s): `sdlc-ba-functional-design`, `sdlc-ba-specification`
+
+
 ## [0.0.19] — 2026-04-13
 
 ### Changed
@@ -280,7 +295,7 @@ Initial release of the SSG AI SDLC Foundation.
 - Hub Orchestrator agent with dynamic dispatch and self-maintaining catalog
 - Refactoring agents and orchestrator for structured migration
 - DEP platform specialized agents and templates
-- Doc-depth support (essential/standard/full)
+- Doc-depth support (essential/full)
 - SpecKit Constitution for development standards
 - GitLab CI/CD station-gate pipeline with Copilot CLI integration
 - PR validation pipeline (validate + AI stations A0–A7)

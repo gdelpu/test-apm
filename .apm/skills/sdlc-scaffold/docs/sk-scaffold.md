@@ -70,9 +70,6 @@ docs/0-inputs/ba/3-design/{feature_id}/
 
 # --- essential depth: no sub-directories (stories and BR are inline in the feature file) ---
 
-# --- standard depth: add user-stories only ---
-{feature_path}/user-stories/
-
 # --- full depth: all agent output directories ---
 {feature_path}/user-stories/
 {feature_path}/journeys/
@@ -89,8 +86,7 @@ Where `{feature_id}` is the directory name of the feature (e.g., `ft-001-login`)
 
 | Depth | Sub-directories created per feature |
 |-------|-------------------------------------|
-| `essential` | *(none — all content is inline in the feature file)* |
-| `standard` | `user-stories/` |
+| `essential` | `user-stories/` |
 | `full` | `user-stories/`, `journeys/`, `screens/`, `prototypes/`, `batches/`, `notifications/`, `tests/` |
 
 ## Execution
@@ -117,12 +113,11 @@ Before writing `docs/project.yml`, collect three pieces of information:
    2. `lang` field in an existing deliverable's YAML front matter (scan `outputs/docs/1-prd/`, `outputs/docs/2-tech/`)
    3. If neither available, ask the user: *"What is the working language for deliverables? (e.g. en, fr, de, es)"*
 3. **`doc_depth`** — determine using the following priority order:
-   1. Explicit session declaration (e.g. `"depth: standard"`)
+   1. Explicit session declaration (e.g. `"depth: essential"`)
    2. `doc_depth` field in an existing `docs/project.yml`
    3. If neither available, ask the user:
       > *"What documentation depth do you need?"*
-      > - **essential** — Feature-centric, minimal docs. Ideal for POC, spike, or internal tool (~20 files)
-      > - **standard** — Features + User Stories + Architecture. Good balance for most projects (~60 files)
+      > - **essential** — Features + User Stories + Architecture. Good balance for most projects (~60 files)
       > - **full** — Complete SDLC documentation with journeys, screens, prototypes, test scenarios, enablers (~150+ files)
 
    Default to `full` if the user does not answer or skips.
@@ -133,7 +128,7 @@ Before writing `docs/project.yml`, collect three pieces of information:
 # docs/project.yml
 lang: {lang}              # ISO 639-1 code — en | fr | de | es | pt | nl | it | pl | ...
 project_name: {project_name}
-doc_depth: {doc_depth}    # essential | standard | full — controls agent selection and template verbosity
+doc_depth: {doc_depth}    # essential | full — controls agent selection and template verbosity
 confluence_enabled: true   # set to false to disable Confluence push globally
 ```
 

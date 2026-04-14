@@ -30,12 +30,11 @@ A Markdown report `[VAL-xxx]` produced in the directory of the audited deliverab
 
 ## Doc Depth Awareness
 
-This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential`, `standard`, or `full`). If absent, default to `full`.
+This skill adapts its checks based on the `doc_depth` setting in `docs/project.yml` (`essential` or `full`). If absent, default to `full`.
 
 | Depth | Relaxations |
 |-------|-------------|
 | **essential** | Traceability section optional. Glossary cross-ref check skipped. DoR verification skipped. Inline user stories in feature files accepted. Minimum counts reduced (see Step 1). |
-| **standard** | Traceability section optional. DoR verification skipped. Full minimum counts apply. |
 | **full** | All checks apply without relaxation. |
 
 ---
@@ -53,8 +52,7 @@ This skill adapts its checks based on the `doc_depth` setting in `docs/project.y
    - Unreplaced angle-bracket text: `<value>`
 4. Verify the front matter: all fields present and filled in with concrete values
 5. Verify minimum counts (depending on the deliverable type and `doc_depth` — see the post/quality-control hook for depth-scaled counts)
-   - At **essential** depth: only epic/feature/inline-US counts apply
-   - At **standard** depth: glossary, actors, requirements, domain, epics, user-stories counts apply (no business-rules or test-scenario minimums)
+   - At **essential** depth: only epic/feature/inline-US counts apply; glossary, actors, requirements, domain, epics, user-stories counts also apply (no business-rules or test-scenario minimums)
    - At **full** depth: all minimum counts apply
 
 **Expected result:** `STRUCTURAL` table with status per checked element
@@ -90,7 +88,7 @@ For each substantive section of the deliverable:
 
 ### Step 4: Definition of Ready Verification
 
-> **Doc Depth gate:** At `essential` or `standard` depth, skip this step entirely — DoR verification is only meaningful at `full` depth where all deliverable hierarchy levels are produced.
+> **Doc Depth gate:** At `essential` depth, skip this step entirely — DoR verification is only meaningful at `full` depth where all deliverable hierarchy levels are produced.
 
 This step applies only to deliverables that carry a `## Definition of Ready` section (Epics, Features, User Stories). For other deliverable types, skip to Step 5.
 
@@ -158,7 +156,7 @@ Calculate the verdict according to the following rule:
 
 A deliverable with a **BLOCK** verdict cannot receive `validated` status. Return to the producer (human or agent) is mandatory.
 
-> **Doc Depth adjustment:** At `essential` depth, the DoR column is always N/A, glossary cross-reference WARNs are suppressed, and the WARN threshold rises to <= 3 non-critical WARNs for a PASS. At `standard` depth, DoR is N/A and the WARN threshold remains <= 2.
+> **Doc Depth adjustment:** At `essential` depth, the DoR column is always N/A, glossary cross-reference WARNs are suppressed, and the WARN threshold rises to <= 3 non-critical WARNs for a PASS.
 
 **Note on DoR and verdict timing:** A Feature validated early in the pipeline (after agent 2.2b) will naturally have DoR NOT READY (no US exist yet). This is expected — the DoR becomes meaningful only at the gate after System 3 completes. When running `/validate` before S3, the DoR section is reported but does NOT contribute to the verdict. When running `/validate` after S3 (at the final gate), DoR contributes fully.
 
