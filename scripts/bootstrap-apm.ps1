@@ -153,8 +153,13 @@ try {
 finally {
     # --- Clean up temp files ---
     if (Test-Path $tempDir) {
-        Remove-Item $tempDir -Recurse -Force
-        Write-Info 'Cleaned up bootstrap temp files'
+        try {
+            Remove-Item $tempDir -Recurse -Force
+            Write-Info 'Cleaned up bootstrap temp files'
+        }
+        catch {
+            Write-Info "Could not remove temp dir (may be locked): $tempDir"
+        }
     }
 }
 

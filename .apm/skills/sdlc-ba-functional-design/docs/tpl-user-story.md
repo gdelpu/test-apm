@@ -10,6 +10,8 @@ author: agent-stories
 epic: EP-001
 feature: FT-001
 priority: Must
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [US-001] User Story Title

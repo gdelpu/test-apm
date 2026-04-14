@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-vision
 reviewers: []
 dependencies: []
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [VIS-001] Product Vision and Scope

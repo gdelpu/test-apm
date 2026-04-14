@@ -10,6 +10,8 @@ author: agent-epics
 reviewers: []
 dependencies: ["VIS-001", "GLO-001", "ACT-001", "DOM-001", "EXF-001"]
 requirements: ["EX-xxx", "EX-yyy"]   # EX-xxx requirements covered by this epic (R4J traceability)
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [EP-001] Epic Name

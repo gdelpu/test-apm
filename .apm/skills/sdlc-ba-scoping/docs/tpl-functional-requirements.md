@@ -11,6 +11,8 @@ reviewers: []
 dependencies: ["VIS-001", "GLO-001", "ACT-001"]
 r4j_synced: false
 r4j_mapping_file: r4j-mapping.json
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [EXF-001] Functional Requirements Catalogue

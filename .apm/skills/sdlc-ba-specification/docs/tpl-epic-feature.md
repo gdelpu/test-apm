@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-epics
 reviewers: []
 dependencies: ["VIS-001", "GLO-001", "ACT-001", "DOM-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [EP-001] Epic Name

@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.21] — 2026-04-14
+
+### Changed
+- Skill updates: `sdlc-ba-functional-design`, `sdlc-ba-scoping`, `sdlc-ba-specification`, `sdlc-scaffold`
+- 1 Copilot prompt(s) updated
+- Script updates: `bootstrap-apm.ps1`
+
+### Fixed
+- Agentic system fixes (Confluence fields, scaffold prompt, BA templates, bootstrap cleanup, output paths)
+
+
 ## [0.0.20] — 2026-04-14
 
 ### Changed

@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-features
 epic: EP-001
 doc_depth: essential
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [FT-001] Feature Name
