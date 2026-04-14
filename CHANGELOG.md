@@ -15,6 +15,11 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - 1 Copilot prompt(s) updated
 - 1 Claude Code command(s) updated
 - Workflow updates: `sdlc-tech`, `sdlc-tech`
+- MCP configuration updated: skill(s) `sdlc-tech-design`
+- Skill updates: `sdlc-tech-design`, `sdlc-tech-quality`
+
+### Fixed
+- Remove remaining Claude Code references from canonical skills and templates
 
 
 ## [0.0.21] — 2026-04-14
