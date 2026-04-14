@@ -3,7 +3,11 @@ name: Reverse User Story Creator
 description: 'This agent creates detailed user stories (based on existing codebase) with acceptance criteria based on the product backlog generated from the code repository analysis.'
 tools: [vscode, codebase, search, edit/editFiles]
 target: vscode
-allowedFilePaths: ['outputs/**', 'docs/**', 'docs/generated/*', 'docs/generated/stories/*']
+allowedFilePaths:
+  - 'outputs/**'
+  - 'docs/**'
+  - 'docs/generated/**'
+  - 'docs/generated/stories/**'
 
 ---
 

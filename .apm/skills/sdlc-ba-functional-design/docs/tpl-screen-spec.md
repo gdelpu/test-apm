@@ -10,6 +10,8 @@ author: agent-screens
 reviewers: []
 dependencies: ["DOM-001", "BRL-001"]
 stories: ["US-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [SCR-001] Screen Name

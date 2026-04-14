@@ -10,6 +10,8 @@ author: agent-notifications
 reviewers: []
 dependencies: ["DOM-001", "BRL-001"]
 stories: ["US-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [NTF-001] Notification Name

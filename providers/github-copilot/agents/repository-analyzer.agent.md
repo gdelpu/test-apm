@@ -4,7 +4,10 @@ description: 'This agent analyzes a code repository to provide a high level over
 tools: [vscode, codebase, search, edit/editFiles]
 model: '{{DEFAULT_MODEL}}'
 target: vscode
-allowedFilePaths: ['outputs/**', 'docs/**', 'docs/generated/*']
+allowedFilePaths:
+  - 'outputs/**'
+  - 'docs/**'
+  - 'docs/generated/**'
 
 handoffs: 
   - label: Reverse Engineer Product Backlog

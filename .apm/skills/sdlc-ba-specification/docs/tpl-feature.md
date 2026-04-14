@@ -10,6 +10,8 @@ author: agent-features
 epic: EP-001
 dependencies: ["EP-001", "GLO-001"]
 requirements: ["EX-xxx"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [FT-001] Feature Name

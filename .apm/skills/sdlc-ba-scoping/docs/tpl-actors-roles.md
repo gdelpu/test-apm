@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-actors
 reviewers: []
 dependencies: ["VIS-001", "GLO-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [ACT-001] Actors, Roles and Permissions

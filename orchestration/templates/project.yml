@@ -1,0 +1,5 @@
+# Project configuration — read by all agents. Do not edit manually.
+lang: {lang}              # ISO 639-1: en | fr | de | es | pt | nl | it | pl
+project_name: {project_name}
+doc_depth: {doc_depth}    # essential | standard | full
+confluence_enabled: {confluence_enabled}  # true | false

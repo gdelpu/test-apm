@@ -9,6 +9,8 @@ last_updated: YYYY-MM-DD
 author: agent-tests
 reviewers: []
 dependencies: ["DOM-001", "BRL-001"]
+confluence_id:
+confluence_sync_hash:
 ---
 
 # [TST-001] Functional Test Scenarios

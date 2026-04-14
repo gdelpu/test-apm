@@ -5,22 +5,22 @@ tools: ['codebase', 'search', 'runCommands', 'edit/editFiles']
 commandAllowlist:
   - npx playwright test --config=playwright.config.ts
   - npm test
-  - k6 run tests/perf/**/*.js
-  - artillery run tests/perf/**/*.yml
+  - k6 run tests/perf/load.config.js
+  - artillery run tests/perf/load.config.yml
   - pytest
   - dotnet test
 allowedFilePaths:
-  - 'tests/**'
-  - 'test/**'
   - 'tests/results/**'
   - 'tests/reports/**'
   - 'outputs/**'
-  - 'package.json'
 allowedFilePathsReadOnly:
+  - 'tests/**'
+  - 'test/**'
   - '*.config.*'
   - 'specs/**'
   - 'docs/**'
   - 'src/**'
+  - 'package.json'
   - 'tests/perf/**'
   - 'tests/e2e/**'
   - 'test/**'
@@ -81,6 +81,11 @@ Execute qualification campaigns (E2E, performance, DAST) and produce structured 
 - If a campaign run exceeds the limits above, stop and report partial results — never continue unbounded.
 - If total session elapsed time exceeds **3600 s**, halt all campaigns immediately and report partial results.
 - Track cumulative time spent in command execution across all campaigns. If cumulative command time exceeds **7200 s**, halt and report partial results regardless of per-command or per-campaign limits.
+
+### Pre-execution validation
+
+- Before executing any campaign, count the total number of test scripts to be run. If the count exceeds **Max test files per campaign run** (50), refuse the campaign and report: `"error": "campaign_file_limit_exceeded", "count": <N>, "limit": 50`.
+- **Early-abort rule**: If **3 consecutive commands** timeout (exceed the per-command 300 s limit), halt the entire campaign immediately and report: `"error": "consecutive_timeout_abort", "detail": "3 consecutive commands timed out"`. Do not continue to the cumulative budget limit.
 
 ### Network boundaries
 
