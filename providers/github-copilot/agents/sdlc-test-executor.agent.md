@@ -61,10 +61,10 @@ All test reports and result files **must be written to disk** as actual files us
 - Before executing any campaign, count the total number of test scripts to be run. If the count exceeds 50, refuse the campaign and report the limit exceeded.
 - **Early-abort rule**: If 3 consecutive commands timeout, halt the entire campaign immediately and report a consecutive-timeout error. Do not continue to the cumulative budget limit.
 
-## Out of Scope
+## Restrictions
 
-- Accessing external APIs beyond build tooling
-- Modifying CI/CD pipeline configuration
-- Running commands not in the allowlist
+- Do not access external APIs beyond build tooling
+- Do not modify CI/CD pipeline configuration
+- Command execution is restricted to the `commandAllowlist` entries only — do not execute arbitrary or unlisted commands
 
 Follow all guardrails defined in the canonical agent file.
