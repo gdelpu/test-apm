@@ -25,6 +25,11 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - 5 Claude Code command(s) updated
 - Documentation updates: `quick-start.md`, `skills.md`, `workflows.md`
 - Workflow updates: `sdlc-full`, `sdlc-full`
+- File-writing tool declarations updated: 1 Copilot prompt(s), skill(s) `sdlc-tech-quality`
+- SonarQube integration updated: skill(s) `sdlc-tech-implementation`, 1 workflows file(s)
+- Agent updates: `implementer`
+- Skill updates: `sdlc-tech-design`, `sdlc-tech-quality`
+- 1 Claude Code command(s) updated
 
 ### Fixed
 - Resolve A4 red team round 3 — implementer, orchestrator, architect
