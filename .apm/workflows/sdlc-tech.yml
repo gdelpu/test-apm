@@ -1,5 +1,5 @@
 name: sdlc-tech
-description: Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, and continuous quality monitoring.
+description: Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, sprint-iterative implementation, and continuous quality monitoring.
 type: delivery
 
 # Default hooks applied to all production stations unless overridden.
@@ -183,7 +183,108 @@ stations:
         - "Provider-specific artifacts generated for detected coding agent"
       severity: warning
 
-  # ─── System T3: Continuous Quality ─────────────────────────────────
+  # ─── System T3: Implementation (iterative per sprint) ───────────────
+  - id: tech-task-resolution
+    name: Task Resolution
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - imp-001-implementation-plan.md
+      - enb-000-index.md
+      - stk-001-stack-conventions.md
+    outputs:
+      - current-task.md
+    gate:
+      criteria:
+        - "Task prerequisites are verified as completed"
+        - "Context resolution includes relevant upstream references"
+        - "Task scope is bounded (≤ 8h estimated)"
+      severity: blocker
+
+  - id: tech-code-generation
+    name: Code Generation
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - current-task.md
+      - stk-001-stack-conventions.md
+      - dat-001-data-model.md
+      - api-contracts/
+      - adr/
+    outputs:
+      - implementation-log.md
+    gate:
+      criteria:
+        - "Code compiles without errors"
+        - "Generated code matches STK-001 naming conventions"
+        - "Database migrations match DAT-001 definitions"
+        - "API controllers match API-xxx contracts"
+        - "No files modified outside task scope"
+      severity: blocker
+
+  - id: tech-test-implementation
+    name: Test Implementation
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - current-task.md
+      - implementation-log.md
+      - tst-001-test-strategy.md
+      - api-contracts/
+    outputs:
+      - test-log.md
+    gate:
+      criteria:
+        - "Every mapped TST-001 test ID has a corresponding test file"
+        - "Tests pass"
+        - "Each test has BA traceability comment"
+        - "Test naming follows TST-001 conventions"
+      severity: blocker
+
+  - id: tech-validation
+    name: Build & Validate
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - implementation-log.md
+      - test-log.md
+    outputs:
+      - validation-report.md
+    gate:
+      criteria:
+        - "Full build passes"
+        - "All tests pass"
+        - "Coverage thresholds met"
+        - "0 secrets detected"
+        - "0 critical SAST findings"
+      severity: blocker
+
+  - id: tech-wave-gate
+    name: Wave Gate
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - imp-001-implementation-plan.md
+      - validation-report.md
+    outputs:
+      - wave-report.md
+    gate:
+      criteria:
+        - "All items in wave completed and validated"
+        - "Wave DoD from IMP-001 met"
+        - "No blocker issues pending"
+      severity: blocker
+    loop:
+      description: "Stations tech-task-resolution through tech-wave-gate repeat per item within a sprint, and per sprint within a wave. The wave gate fires only when all wave items are completed."
+      per_item: [tech-task-resolution, tech-code-generation, tech-test-implementation, tech-validation]
+      per_wave: [tech-wave-gate]
+
+  # ─── System T4: Continuous Quality ─────────────────────────────────
   - id: tech-drift
     name: Drift Detection
     agent: sdlc-tech-architect

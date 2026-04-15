@@ -77,7 +77,8 @@ Each has a Claude Code command in `providers/claude-code/commands/` and a Copilo
 | `sdlc-tech-0-audit.md` | `sdlc-tech-0-audit.prompt.md` | synced |
 | `sdlc-tech-1-archi.md` | `sdlc-tech-1-archi.prompt.md` | synced |
 | `sdlc-tech-2-design.md` | `sdlc-tech-2-design.prompt.md` | synced |
-| `sdlc-tech-3-quality.md` | `sdlc-tech-3-quality.prompt.md` | synced |
+| `sdlc-tech-3-impl.md` | `sdlc-tech-3-impl.prompt.md` | synced |
+| `sdlc-tech-3-quality.md` | `sdlc-tech-3-quality.prompt.md` | synced → renamed to T4 |
 | `sdlc-steer-0-init.md` | `sdlc-steer-0-init.prompt.md` | synced |
 | `sdlc-steer-1-planning.md` | `sdlc-steer-1-planning.prompt.md` | synced |
 | `sdlc-steer-2-sprint.md` | `sdlc-steer-2-sprint.prompt.md` | synced |

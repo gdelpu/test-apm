@@ -45,8 +45,9 @@ outputs/docs/2-tech/0-audit/
 outputs/docs/2-tech/1-architecture/adr/
 outputs/docs/2-tech/2-design/api/
 outputs/docs/2-tech/2-design/enablers/
-outputs/docs/2-tech/3-quality/
-outputs/docs/2-tech/4-workshops/
+outputs/docs/2-tech/3-implementation/
+outputs/docs/2-tech/4-quality/
+outputs/docs/2-tech/5-workshops/
 
 # Steer deliverables (outputs/docs/3-steer/)
 outputs/docs/3-steer/0-sprint-reports/

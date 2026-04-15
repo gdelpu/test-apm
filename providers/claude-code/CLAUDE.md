@@ -62,7 +62,7 @@ Available as Claude Code commands:
 |---------|----------|----------|
 | `/sdlc-full` | SDLC Full | 11 |
 | `/sdlc-ba` | SDLC BA | 16 |
-| `/sdlc-tech` | SDLC Tech | 12 |
+| `/sdlc-tech` | SDLC Tech | 17 |
 | `/sdlc-steer` | SDLC Steer | 10 |
 | `/sdlc-test` | SDLC Test | 4 |
 
@@ -77,7 +77,8 @@ Available as Claude Code commands:
 | `/sdlc-tech-0-audit` | T0 | Technical audit |
 | `/sdlc-tech-1-archi` | T1 | Architecture (C4, ADRs, stack, enablers) |
 | `/sdlc-tech-2-design` | T2 | Design (data model, APIs, test strategy, impl plan) |
-| `/sdlc-tech-3-quality` | T3 | Continuous quality (drift, E2E) |
+| `/sdlc-tech-3-impl` | T3 | Implementation (wave-based, sprint-iterative) |
+| `/sdlc-tech-4-quality` | T4 | Continuous quality (drift, E2E) |
 | `/sdlc-steer-0-init` | P0 | Project initialization |
 | `/sdlc-steer-1-planning` | P1 | Sprint planning, roadmap, risks |
 | `/sdlc-steer-2-sprint` | P2 | Sprint tracking (recurring) |

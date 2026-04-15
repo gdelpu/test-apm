@@ -98,7 +98,8 @@ Transforms validated BA deliverables into a technical dossier + implementation p
 | T0 Brownfield Audit | `/tech-0-audit` | t0.1, t0.2 | `[TECH-ASIS-001]`, `[GAP-001]` |
 | T1 Architecture | `/tech-1-archi` | t1.1 to t1.4 | System Context, ADRs, Stack, Security |
 | T2 Technical Design | `/tech-2-design` | t2.1 to t2.6 | Data Model, API, Enablers, Tests, Observability, Implementation Plan |
-| T3 Continuous Quality | `/tech-3-quality` | t3.1, t3.2 | Drift Detection, Code Review (per PR) |
+| T3 Implementation | `/tech-3-impl` | t3.1 to t3.5 | Task Resolution, Code, Tests, Validation, Wave Gate |
+| T4 Continuous Quality | `/tech-4-quality` | t4.1, t4.2 | Drift Detection, Code Review (per PR) |
 
 **Full pipeline:** `/tech` or `/tech gated`
 
@@ -131,7 +132,7 @@ Reads and aggregates deliverables from all other domains. Never modifies them.
 
 | Command | What it chains |
 |---------|---------------|
-| `/sdlc` | BA (S0-S3) then Tech (T0-T3) — no gates |
+| `/sdlc` | BA (S0-S3) then Tech (T0-T4) — no gates |
 | `/sdlc gated` | Same, with human gates between systems |
 
 Full value chain:
@@ -243,8 +244,8 @@ To migrate to another tool (Cursor, Aider, Agent SDK...):
 | 10-13 | User Stories, Journeys, UI/UX, Test Scenarios | BA 3.1 to 3.6b |
 | 14-17 | System Architecture, ADRs, Security, Stack | Tech T1.1 to T1.4 |
 | 18-22 | Data Model, API, Enablers, Test Strategy, Impl Plan | Tech T2.1 to T2.6 |
-| 23 | Implementation | Claude Code (driven by Tech T2.5) |
-| 24 | Continuous Quality | Tech T3.1 + T3.2 |
+| 23 | Implementation | Tech T3.1 to T3.5 (implementer agent) |
+| 24 | Continuous Quality | Tech T4.1 + T4.2 |
 | 25-26 | System E2E + Performance Tests | Test camp.1/2 + perf.1/2 |
 | 27 | DAST Security | Test agent-dast (on-demand) |
 | 28 | Release Management | Tech agent-release-manager (on-demand) |

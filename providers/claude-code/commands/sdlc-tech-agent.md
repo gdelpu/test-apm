@@ -2,7 +2,7 @@
 
 Execute a **single Tech agent** identified by its number.
 
-$ARGUMENTS = agent number (e.g., "t1.1", "t2.3", "t3.1")
+$ARGUMENTS = agent number (e.g., "t1.1", "t2.3", "t3.1", "t4.1")
 
 ## Steps
 

@@ -1,6 +1,6 @@
 # Workflow: SDLC Tech
 
-Full technical architecture and design pipeline from brownfield audit through architecture decisions, incremental design, and continuous quality monitoring.
+Full technical architecture and design pipeline from brownfield audit through architecture decisions, incremental design, sprint-iterative implementation, and continuous quality monitoring.
 
 ## When to use
 
@@ -38,12 +38,24 @@ Full technical architecture and design pipeline from brownfield audit through ar
 | 10 | Implementation Plan | sdlc-tech-architect | sdlc-tech-design | Ordered wave plan; coding agent briefing compiled | blocker |
 | 10b | Provider Bootstrap | sdlc-tech-architect | sdlc-tech-design | Provider-specific artifacts generated (optional) | warning |
 
-### System T3 — Continuous Quality
+### System T3 — Implementation (iterative per sprint)
 
 | # | Station | Agent | Skill | Gate | Severity |
 |---|---------|-------|-------|------|----------|
-| 11 | Drift Detection | sdlc-tech-architect | sdlc-tech-quality | Spec-vs-code discrepancies identified | warning |
-| 12 | E2E Playwright Generation | sdlc-tech-architect | sdlc-tech-quality | E2E scripts trace to BA test scenarios | warning |
+| 11 | Task Resolution | implementer | sdlc-tech-implementation | Task prerequisites verified; context resolved; scope ≤ 8h | blocker |
+| 12 | Code Generation | implementer | sdlc-tech-implementation | Code compiles; matches STK-001, DAT-001, API-xxx; no out-of-scope changes | blocker |
+| 13 | Test Implementation | implementer | sdlc-tech-implementation | All mapped test IDs have test files; tests pass; BA traceability present | blocker |
+| 14 | Build & Validate | implementer | sdlc-tech-implementation | Build passes; coverage met; 0 secrets; 0 critical SAST | blocker |
+| 15 | Wave Gate | implementer | sdlc-tech-implementation | All wave items done; wave DoD met; no blockers | blocker |
+
+Stations 11–14 loop **per item** within a sprint. Station 15 fires **per wave** (a wave may span multiple sprints).
+
+### System T4 — Continuous Quality
+
+| # | Station | Agent | Skill | Gate | Severity |
+|---|---------|-------|-------|------|----------|
+| 16 | Drift Detection | sdlc-tech-architect | sdlc-tech-quality | Spec-vs-code discrepancies identified | warning |
+| 17 | E2E Playwright Generation | sdlc-tech-architect | sdlc-tech-quality | E2E scripts trace to BA test scenarios | warning |
 
 ## BA → Tech traceability
 
@@ -52,7 +64,7 @@ The Tech pipeline consumes BA deliverables and maintains bidirectional traceabil
 - **Domain model** (T2) traces to BA domain model (`dom-001-domain-model.md`)
 - **API contracts** (T2) trace to BA user stories and functional requirements
 - **Test strategy** (T2) maps BA Gherkin scenarios to technical test types
-- **Drift detection** (T3) checks implementation against both BA and Tech specifications
+- **Drift detection** (T4) checks implementation against both BA and Tech specifications
 
 ## Brownfield vs. greenfield
 
@@ -77,6 +89,9 @@ All artifacts are written to `outputs/docs/2-tech/`:
 - `tst-001-test-strategy.md` — test pyramid and coverage thresholds
 - `imp-001-implementation-plan.md` — ordered wave implementation plan
 - `coding-agent-briefing.md` — provider-neutral coding agent entry point
+- `3-implementation/wave-state.json` — implementation progress tracking
+- `3-implementation/wave-{id}-report.md` — wave completion reports
+- `3-implementation/sprint-{id}-summary.md` — sprint summaries
 - `drift-report.md` — spec-vs-code drift (continuous)
 - `e2e-scripts-001-playwright.md` — generated E2E scripts (continuous)
 
@@ -87,7 +102,8 @@ This workflow has `nestable: true` and is invoked as the Tech phase inside `sdlc
 ## Key differences from feature-implementation
 
 - Focused on architecture and design, not end-to-end feature delivery
-- Produces ADRs, C4 diagrams, stack conventions, and enabler plans — not code
-- T3 (continuous quality) runs during implementation as a feedback loop, not a one-shot gate
-- 12 stations organized in 4 systems (vs. 9 sequential stations in feature-implementation)
+- Produces ADRs, C4 diagrams, stack conventions, enabler plans, and executes implementation — not just code
+- T3 (implementation) executes the plan wave-by-wave, iterating per sprint
+- T4 (continuous quality) runs during implementation as a feedback loop, not a one-shot gate
+- 17 stations organized in 5 systems (vs. 9 sequential stations in feature-implementation)
 - Designed to consume BA pipeline outputs and feed the implementation phase

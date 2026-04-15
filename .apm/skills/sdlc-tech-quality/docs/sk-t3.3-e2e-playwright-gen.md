@@ -1,10 +1,10 @@
-# Skill T-3.3: E2E Cross-US Playwright Script Generation
+# Skill T-4.3: E2E Cross-US Playwright Script Generation
 
 ## Identity
 
-- **ID:** agent-t3.3-e2e-playwright-gen
-- **System:** System T3 – Continuous Quality
-- **Execution order:** 3 (after T3.1 and T3.2)
+- **ID:** agent-t4.3-e2e-playwright-gen
+- **System:** System T4 – Continuous Quality
+- **Execution order:** 3 (after T4.1 and T4.2)
 - **Triggered by:** Manually, **before each qualification campaign**, once the `[E2E-FLX-xxx]` flows are stable and the qualification environment is accessible
 
 ## Mission

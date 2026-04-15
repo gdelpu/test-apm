@@ -25,7 +25,7 @@ Defines identifier prefixes, reporting conventions, and execution rules for Test
 | `E2E-PLAN-` | E2E test plan | BA agent-3.6b |
 | `E2E-FLX-` | E2E flow | BA agent-3.6b |
 | `E2E-TST-` | E2E test case | BA agent-3.6b |
-| `E2E-SCRIPTS-` | Playwright scripts | Tech agent-t3.3 |
+| `E2E-SCRIPTS-` | Playwright scripts | Tech agent-t4.3 |
 | `DAT-TEST-` | Test seeds | BA agent-3.6 |
 | `NFR-TEST-` | NFR test specs | Tech agent-nfr-test-specs |
 
