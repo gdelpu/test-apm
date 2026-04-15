@@ -19,6 +19,14 @@ commandAllowlist:
   - docker compose up -d
   - docker compose down
   - helm template
+  - git checkout -b
+  - git checkout main
+  - git add
+  - git commit -m
+  - git push origin
+  - git pull
+  - git log --oneline -5
+  - git branch
   - git diff
   - git status
 allowedFilePaths:

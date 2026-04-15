@@ -29,20 +29,29 @@ gate fires only when all wave items are completed.
 ```
 Sprint N scope (from IMP-001 + sprint planning):
 │
-│  For each item in sprint scope (dependency order):
-│  ┌─────────────────────────────────────────────────┐
-│  │ T3.1 Task Resolution   → current-task.md        │
-│  │ T3.2 Code Generation   → impl-log.md + code     │
-│  │ T3.3 Test Implementation → test-log.md + tests   │
-│  │ T3.4 Validation        → validation-report.md    │
-│  └─────────────────────────────────────────────────┘
-│         (loop per item)
+│  For each wave in sprint scope:
+│  ┌─────────────────────────────────────────────────────────┐
+│  │ T3.0 Branch Creation   → feat/W{id}-{slug} from main   │
+│  │                                                          │
+│  │ For each item in wave (dependency order, ≤ 10 items):   │
+│  │ ┌─────────────────────────────────────────────┐     │
+│  │ │ T3.1 Task Resolution   → current-task.md        │     │
+│  │ │ T3.2 Code Generation   → impl-log.md + code     │     │
+│  │ │ T3.3 Test Implementation → test-log.md + tests   │     │
+│  │ │ T3.4 Validation + Commit → validation + git commit│    │
+│  │ └─────────────────────────────────────────────┘     │
+│  │       (loop per item)                                    │
+│  │                                                          │
+│  │ T3.5 Wave Gate → wave-report.md                         │
+│  │ T4.1 Drift Detection (on branch, non-blocking)          │
+│  │ T3.6 Push & CI Validation → ci-validation-W{id}.md     │
+│  │ T3.7 Merge Request → MR merged to main                 │
+│  └─────────────────────────────────────────────────────────┘
 │
-├─ If all items in current wave are now completed:
-│  └─ T3.5 Wave Gate → wave-report.md → advance to next wave
+│  After last wave of sprint:
+│  └─ T4.3 E2E Campaign Generation (cross-feature, filtered)
 │
-└─ If wave has remaining items:
-   └─ Sprint complete → update wave-state.json → resume next sprint
+└─ Sprint summary → sprint-{sprint_id}-summary.md
 ```
 
 ## Inputs — full T0-T2 context
@@ -78,6 +87,23 @@ Each sprint execution also reads:
 - The **dependency graph** (JSON queue in IMP-001 §4) to determine item ordering
 
 ## Procedure
+
+### Phase T3.0 — Branch Creation
+
+**Purpose:** Create a feature branch for the current wave to isolate implementation work.
+
+1. Read [IMP-001] — identify current wave ID and name
+2. Read `wave-state.json` — verify previous wave is COMPLETED (or this is W0)
+3. Ensure working tree is on `main` and up to date (`git pull`)
+4. Create feature branch: `git checkout -b feat/W{wave_id}-{slug}`
+   - `{slug}` is derived from the wave name: lowercase, hyphens, max 40 chars
+   - Example: `feat/W1-application-foundations`
+5. Log branch creation in `wave-state.json` (field: `current_branch`)
+
+**Gate criteria:**
+- Previous wave merged to main (or this is W0)
+- Branch created successfully
+- Branch name follows convention `feat/W{id}-{slug}`
 
 ### Phase T3.1 — Task Resolution
 
@@ -165,7 +191,11 @@ project conventions and upstream specifications.
 3. Run lint checks
 4. Run security checks (secret scan, SAST on changed files)
 5. Verify ADR compliance (cross-module imports, security headers if applicable)
-6. Write validation report: `outputs/docs/2-tech/3-implementation/validation-{item_id}.md`
+6. Stage and commit changes for this item:
+   - `git add` all files modified during T3.2 and T3.3
+   - Commit message: `feat(W{wave_id}): {item_id} — {item_title}`
+   - Do NOT push yet (push happens at T3.6 after wave gate)
+7. Write validation report: `outputs/docs/2-tech/3-implementation/validation-{item_id}.md`
 
 **Gate criteria:**
 - Build passes
@@ -199,6 +229,61 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
 - Wave-specific DoD from [IMP-001] met
 - No blocker issues pending
 
+### Phase T3.6 — Push & CI Validation
+
+**Purpose:** Push the wave branch and validate that the CI pipeline passes all quality gates.
+
+1. Push the wave branch: `git push origin feat/W{wave_id}-{slug}`
+2. Wait for CI pipeline to complete. Expected checks:
+   - **Quality gate** (SonarQube or equivalent): code smells, technical debt, duplications
+   - **SAST full scan** (Checkmarx, Semgrep, or equivalent): full repo, not just changed files
+   - **Secret scan** (Gitleaks or equivalent): repo-wide
+   - **Full test suite**: unit + integration on CI infrastructure
+   - **Coverage gate**: thresholds from [TST-001]
+3. If CI fails:
+   a. Read CI failure report/logs
+   b. Fix issues on the wave branch (return to T3.2/T3.3 for the affected item)
+   c. Commit fix: `fix(W{wave_id}): {item_id} — {fix description}`
+   d. Push and re-validate (max 3 attempts)
+4. Write CI validation report: `outputs/docs/2-tech/3-implementation/ci-validation-W{wave_id}.md`
+
+**Gate criteria:**
+- CI pipeline passes all checks
+- 0 blocker findings from SAST
+- Quality gate passed
+- Full test suite green
+- Coverage thresholds met
+
+**Note:** This station involves an external system (CI server). The agent pushes and then verifies results. It does NOT execute CI checks locally — those were done in T3.4. This station validates that the same checks pass in the CI environment (different configurations, full repo scan, shared infrastructure).
+
+### Phase T3.7 — Merge Request
+
+**Purpose:** Create a Merge Request from the wave branch to main, await approval, and merge.
+
+1. Create MR/PR:
+   - Source: `feat/W{wave_id}-{slug}`
+   - Target: `main`
+   - Title: `feat: Wave W{wave_id} — {wave_name}`
+   - Description: include wave report summary, list of items, CI validation status
+   - Labels: `wave`, `W{wave_id}`, `sprint-S{sprint_id}`
+2. If `pr-validation` workflow is configured (CI station or agent-based):
+   - Wait for A0–A7 stations to complete
+   - Verify gate decision is PASS or CONDITIONAL_PASS
+3. If MR requires human review:
+   - Log MR URL and stop; await human merge
+   - Resume when notified or on next invocation
+4. After merge: update `wave-state.json`:
+   - Set `wave_status` to `MERGED`
+   - Set `merge_commit` to the merge commit SHA
+   - Set `merged_at` timestamp
+5. Return to main: `git checkout main && git pull`
+
+**Gate criteria:**
+- MR created with all required metadata
+- CI pipeline on MR branch is green
+- PR validation (A0–A7) passed (if configured)
+- MR merged to main
+
 ## Output
 
 | Output | ID | Location |
@@ -211,6 +296,9 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
 | Sprint summary | — | `outputs/docs/2-tech/3-implementation/sprint-{sprint_id}-summary.md` |
 | Wave state file | — | `outputs/docs/2-tech/3-implementation/wave-state.json` |
 | Source code | — | `src/` (project source tree) |
+| CI validation report | — | `outputs/docs/2-tech/3-implementation/ci-validation-W{wave_id}.md` |
+| Feature branch | — | `feat/W{wave_id}-{slug}` (git) |
+| Merge request | — | MR from wave branch to main |
 
 ## Rules
 
@@ -224,6 +312,10 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
 8. **Incremental state:** `wave-state.json` tracks completed items and sprint boundaries, allowing resume after interruption
 9. **Scope discipline:** each item generates only what its [IMP-001] entry specifies — no scope creep
 10. **Sprint summary:** at the end of each sprint invocation, write a sprint summary listing completed items, remaining wave backlog, and blockers
+11. **Branch per wave:** T3.0 creates a feature branch from the latest main. The branch name follows `feat/W{id}-{slug}`.
+12. **Commit per item:** After T3.4, each item is committed with message `feat(W{wave_id}): {item_id} — {item_title}`. No push until T3.6.
+13. **CI before MR:** T3.6 pushes and validates CI externally. T3.7 creates the MR only after CI passes.
+14. **Merge order = wave order:** Waves merge to main in strict sequence. W{n} branch is created from main after W{n-1} is merged.
 
 ## Context management
 

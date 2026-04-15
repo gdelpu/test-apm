@@ -30,11 +30,15 @@ critical_path_days: 0
 | User Stories | <!-- e.g. 15 --> |
 | NFR items | <!-- e.g. 4 — or "none" --> |
 
+> **SCM convention**: Each wave maps to a feature branch `feat/W{id}-{slug}` and a single Merge Request. Items within a wave are individual commits on the wave branch.
+
 ---
 
 ## 2. Implementation waves
 
 > **Mandatory parsing rule**: each row in the wave table has exactly the columns `wave_id`, `item_id`, `title`, `type`, `story_ref`, `estimate_h`, `deliverable`. The `story_ref` field is empty for enablers.
+
+> **Wave size limit**: Each wave MUST contain ≤ 10 implementation items. If a functional grouping exceeds 10 items, split into sub-waves (e.g., W2a, W2b) maintaining dependency order.
 
 ### Wave 0 — Setup & Foundations
 

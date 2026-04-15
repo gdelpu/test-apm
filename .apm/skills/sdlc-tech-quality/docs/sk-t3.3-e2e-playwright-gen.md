@@ -15,6 +15,29 @@ You are a senior QA engineer specializing in Playwright automation. Your mission
 - `agent-t2.4` produces tests **per user story / Gherkin scenario** (`[SCE-xxx]`) executed in CI per PR
 - **This agent** produces tests **cross-US by complete business flow** (`[E2E-FLX-xxx]`) executed during qualification campaigns
 
+## Testability filter
+
+This agent runs **once per sprint** after the last wave gate. Not all E2E flows may be testable at every sprint. The agent MUST apply a testability filter:
+
+1. Load `wave-state.json` to identify all completed items across all sprints
+2. For each `[E2E-FLX-xxx]` flow, extract all referenced `[US-xxx]` IDs
+3. Cross-reference: is every referenced US covered by a completed wave item?
+4. Classify each flow:
+   - **TESTABLE**: all US implemented → generate script
+   - **DEFERRED**: one or more US missing → log in index as deferred, list missing US
+   - **REGRESSION**: script already generated in prior sprint → do not regenerate unless specs changed
+
+### Cross-sprint accumulation
+
+Scripts are **additive**:
+- New scripts are added each sprint as more US become available
+- Existing scripts from prior sprints are preserved as regression tests
+- The `E2E-SCRIPTS-001-index.md` tracks the full history:
+  | Flow ID | Status | Since Sprint | Missing US (if deferred) |
+  |---------|--------|-------------|--------------------------|
+  | E2E-FLX-001 | TESTABLE | S1 | — |
+  | E2E-FLX-012 | DEFERRED | — | US-010, US-015 |
+
 ---
 
 ## Inputs

@@ -42,20 +42,25 @@ Full technical architecture and design pipeline from brownfield audit through ar
 
 | # | Station | Agent | Skill | Gate | Severity |
 |---|---------|-------|-------|------|----------|
+| 10c | Branch Creation | implementer | sdlc-tech-implementation | Feature branch created from main; branch name follows convention | blocker |
 | 11 | Task Resolution | implementer | sdlc-tech-implementation | Task prerequisites verified; context resolved; scope ≤ 8h | blocker |
 | 12 | Code Generation | implementer | sdlc-tech-implementation | Code compiles; matches STK-001, DAT-001, API-xxx; no out-of-scope changes | blocker |
 | 13 | Test Implementation | implementer | sdlc-tech-implementation | All mapped test IDs have test files; tests pass; BA traceability present | blocker |
 | 14 | Build & Validate | implementer | sdlc-tech-implementation | Build passes; coverage met; 0 secrets; 0 critical SAST | blocker |
 | 15 | Wave Gate | implementer | sdlc-tech-implementation | All wave items done; wave DoD met; no blockers | blocker |
+| 15b | CI Validation | implementer | sdlc-tech-implementation | CI pipeline green: SAST, quality gate, secret scan, full test suite | blocker |
+| 15c | Merge Request | implementer | sdlc-tech-implementation | MR created, approved, and merged to main | blocker |
 
-Stations 11–14 loop **per item** within a sprint. Station 15 fires **per wave** (a wave may span multiple sprints).
+Station 10c creates a feature branch per wave. Stations 11–14 loop **per item** with a commit after each item. Station 15 fires the wave gate. After drift detection (T4.1), station 15b validates via CI pipeline and station 15c creates and merges the MR.
 
 ### System T4 — Continuous Quality
 
 | # | Station | Agent | Skill | Gate | Severity |
 |---|---------|-------|-------|------|----------|
 | 16 | Drift Detection | sdlc-tech-architect | sdlc-tech-quality | Spec-vs-code discrepancies identified | warning |
-| 17 | E2E Playwright Generation | sdlc-tech-architect | sdlc-tech-quality | E2E scripts trace to BA test scenarios | warning |
+| 17 | E2E Playwright Campaign Generation | sdlc-tech-architect | sdlc-tech-quality | E2E campaign scripts generated for testable flows; testability filter applied | warning |
+
+Station 16 (Drift Detection) runs **per wave** on the wave branch (between T3.5 and T3.6). Station 17 (E2E Campaign Generation) runs **once per sprint** after the last wave gate.
 
 ## BA → Tech traceability
 
@@ -94,10 +99,36 @@ All artifacts are written to `outputs/docs/2-tech/`:
 - `3-implementation/sprint-{id}-summary.md` — sprint summaries
 - `drift-report.md` — spec-vs-code drift (continuous)
 - `e2e-scripts-001-playwright.md` — generated E2E scripts (continuous)
+- Feature branches: `feat/W{id}-{slug}` per wave
+- Merge requests: one MR per wave, gated by CI + pr-validation
 
 ## Nestable
 
 This workflow has `nestable: true` and is invoked as the Tech phase inside `sdlc-full`.
+
+## SCM Strategy
+
+The T3 implementation system follows a wave-scoped branching strategy:
+
+### Branch lifecycle
+
+1. **Branch creation (T3.0/10c)**: At the start of each wave, create `feat/W{id}-{slug}` from `main`
+2. **Item commits (T3.1–T3.4)**: Each item produces a commit after local validation passes: `feat(W{id}): {item_id} — {item_title}`
+3. **Wave gate (T3.5)**: Validates all wave items are complete
+4. **Drift detection (T4.1)**: Runs on the branch (non-blocking)
+5. **Push & CI (T3.6/15b)**: Push branch, wait for CI pipeline (SonarQube, SAST, secret scan, full test suite)
+6. **Merge Request (T3.7/15c)**: Create MR, await approval + pipeline green, merge to main
+
+### Naming conventions
+
+| Element | Convention | Example |
+|---------|-----------|--------|
+| Branch | `feat/W{id}-{slug}` | `feat/W2-ep001-user-auth` |
+| Commit | `feat(W{id}): {item_id} — {title}` | `feat(W1): IMP-W1-004 — JWT auth filter` |
+
+### Wave ordering and merge sequence
+
+Waves merge to main in strict order: W0 → W1 → W2 → WNFR. Each wave branch is created from the updated main after the previous wave's MR is merged.
 
 ## Key differences from feature-implementation
 
