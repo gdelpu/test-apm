@@ -225,6 +225,46 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
 9. **Scope discipline:** each item generates only what its [IMP-001] entry specifies — no scope creep
 10. **Sprint summary:** at the end of each sprint invocation, write a sprint summary listing completed items, remaining wave backlog, and blockers
 
+## Context management
+
+AI coding agents have finite context windows. The T3 pipeline applies the following rules to prevent context overflow during wave execution:
+
+### Per-item context isolation
+
+Each T3.1→T3.4 cycle operates on a **single item**. At the start of each item:
+
+1. **Reload only the upstream documents relevant to this item** (per [Context resolution rules](#context-resolution-rules) below). Do NOT carry forward the full context of all previous items.
+2. **Read `wave-state.json`** for current progress — this is a lightweight file (IDs + statuses only).
+3. **Do NOT accumulate previous items' impl-log, test-log, or validation reports** in the active context. They are written to disk and not needed for subsequent items.
+
+### Mandatory context pruning between items
+
+After completing T3.4 for an item:
+
+1. **Drop from active context:** `current-task-{prev_id}.md`, `impl-log-{prev_id}.md`, `test-log-{prev_id}.md`, `validation-{prev_id}.md`.
+2. **Retain in context:** `wave-state.json` (updated), [STK-001] (conventions are cross-cutting), and active sprint scope.
+3. **Reload on demand** for the next item: the relevant upstream docs are re-resolved in T3.1.
+
+### Wave size and sub-batching
+
+- Waves are capped at **12 items** by the upstream [IMP-001] plan (enforced in T2.5).
+- If a wave exceeds 12 items (legacy plan), the T3 executor **sub-batches** automatically: process 10 items, write a checkpoint to `wave-state.json`, and start a fresh context for the remaining items.
+- The **wave gate (T3.5) runs once** after all sub-batches complete — it reads validation reports from disk, not from context.
+
+### What stays loaded vs. what is reloaded per item
+
+| Document | Loaded once per sprint | Reloaded per item |
+|----------|----------------------|-------------------|
+| [STK-001] Stack conventions | ✅ | |
+| [IMP-001] §4 JSON queue | ✅ | |
+| `wave-state.json` | ✅ (updated in-place) | |
+| [DAT-001] Data model | | ✅ if item touches DB |
+| [API-xxx] API contracts | | ✅ if item touches endpoints |
+| [ADR-xxx] Decisions | | ✅ matching ADR only |
+| [TST-001] Test strategy | | ✅ relevant section only |
+| [BRL-*] Business rules | | ✅ matching rules only |
+| Previous item artifacts | ❌ never | ❌ never |
+
 ## Context resolution rules
 
 | Item characteristic | Documents to load |

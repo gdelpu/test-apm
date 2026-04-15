@@ -33,6 +33,13 @@ From the sprint scope:
 3. From the remaining items, select the first one whose `deps` are all `completed`
 4. If no item is eligible (all blocked), report `BLOCKED` and stop
 
+### 3b. Sub-batch boundary check
+
+If the wave contains more than 12 items (legacy plan without the wave size cap):
+1. Track a `sub_batch_count` in wave state (defaults to 0)
+2. After every 10 items completed within the same context session, write a checkpoint to `wave-state.json` and **signal a context reset** — the orchestrator must start a fresh context for the remaining items
+3. On context restart, reload only: `wave-state.json`, [STK-001], [IMP-001] §4 queue, and sprint scope
+
 ### 4. Resolve context
 
 For the selected item, determine which upstream documents are relevant using the context resolution rules from SKILL.md:
@@ -94,3 +101,4 @@ Mark the item as `in-progress` in `wave-state.json` with `started_at` timestamp.
 - [ ] Task prerequisites (deps) are verified as completed
 - [ ] Context resolution produced at least one relevant upstream reference
 - [ ] Task scope is bounded (estimated ≤ 8h)
+- [ ] Previous item artifacts (`current-task-{prev_id}`, `impl-log-{prev_id}`, etc.) are NOT in active context

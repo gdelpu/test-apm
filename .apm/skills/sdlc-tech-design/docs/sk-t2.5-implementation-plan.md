@@ -104,6 +104,12 @@ Perform a topological sort to order the work items:
 
 Produce the ordered waves with items, types, estimates, deliverables.
 
+#### Wave sizing constraints
+
+- **Maximum 12 items per wave.** If a topological sort produces a wave with more than 12 items, split it into sub-waves (e.g. W1a, W1b) along natural seams (epic boundary, functional domain, or dependency cluster). Each sub-wave gets its own gate.
+- **Target 6–10 items per wave** to keep each wave executable within a single sprint and within the context limits of AI coding agents.
+- Items within a sub-wave maintain the same dependency and ordering rules as regular waves.
+
 #### NFR Wave -- Non-Functional Tests
 
 > Prerequisite: NFR Gate — this wave can only start if the client NFR workshop has been completed.
@@ -164,6 +170,7 @@ Extract the 10 to 15 most critical rules from all deliverables.
 - **Enablers always come BEFORE stories**
 - **FK dependencies impose an order**
 - **Implementation sub-tasks are atomic** — max 4h per sub-task
+- **Wave size limit** — max 12 items per wave; target 6–10. Split into sub-waves if exceeded
 - **Gates are mandatory** between enabler waves and feature waves
 - **The plan must be sequentially executable by an AI agent**
 - **`coding-agent-briefing.md` references, it does not inline**
