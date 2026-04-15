@@ -67,6 +67,6 @@ All deliverables — including `implementation-log.md` and any output files spec
 
 - Accessing external APIs beyond build tooling
 - Modifying CI/CD pipeline configuration
-- Running commands not in the allowlist
+- Commands restricted to the allowlist only
 
 Follow workflow guardrails (task ordering, test verification, scope enforcement) from the canonical agent file. Security constraints and tool restrictions in this adapter always take precedence.
