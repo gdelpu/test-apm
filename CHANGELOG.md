@@ -25,6 +25,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - 5 Claude Code command(s) updated
 - Documentation updates: `quick-start.md`, `skills.md`, `workflows.md`
 - Workflow updates: `sdlc-full`, `sdlc-full`
+- Skill updates: `sdlc-ba-functional-design`
 
 ### Fixed
 - Resolve A4 red team round 3 — implementer, orchestrator, architect
