@@ -57,7 +57,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const crypto = require('crypto');
 const url = require('url');
 
@@ -66,6 +66,11 @@ const url = require('url');
 const ENV_PATH = path.join(__dirname, '..', '.env');
 const PANDOC = process.env.PANDOC_PATH || 'pandoc';
 const MMDC = process.env.MMDC_PATH || 'mmdc';
+
+// Validate external tool paths — reject shell metacharacters (S-03-D)
+const SAFE_PATH_RE = /^[a-zA-Z0-9_.\-\/\\:]+$/;
+if (!SAFE_PATH_RE.test(PANDOC)) throw new Error(`Invalid PANDOC_PATH: ${PANDOC}`);
+if (!SAFE_PATH_RE.test(MMDC))   throw new Error(`Invalid MMDC_PATH: ${MMDC}`);
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -610,7 +615,7 @@ function renderMermaidToPng(mmdContent, idx) {
   const mmdFile = `${tmpDir}/_mermaid_${idx}.mmd`;
   const pngFile = `${tmpDir}/_mermaid_${idx}.png`;
   fs.writeFileSync(mmdFile, mmdContent, 'utf8');
-  execSync(`${MMDC} -i "${mmdFile}" -o "${pngFile}" --backgroundColor white`, { stdio: 'pipe' });
+  execFileSync(MMDC, ['-i', mmdFile, '-o', pngFile, '--backgroundColor', 'white'], { stdio: 'pipe' });
   return pngFile;
 }
 
@@ -692,7 +697,7 @@ function mdToHtml(mdContent) {
   const tmpIn  = path.join(process.env.TEMP || '/tmp', '_cf_input.md');
   const tmpOut = path.join(process.env.TEMP || '/tmp', '_cf_output.html');
   fs.writeFileSync(tmpIn, mdContent, 'utf8');
-  execSync(`"${PANDOC}" -f markdown -t html --wrap=none -o "${tmpOut}" "${tmpIn}"`);
+  execFileSync(PANDOC, ['-f', 'markdown', '-t', 'html', '--wrap=none', '-o', tmpOut, tmpIn]);
   return fs.readFileSync(tmpOut, 'utf8');
 }
 
