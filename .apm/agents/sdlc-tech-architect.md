@@ -78,6 +78,7 @@ All deliverables listed above **must be written to disk** as actual files using 
 - Do not recurse through the entire repository. Only analyse paths relevant to the current system (T0–T4).
 - If analysis exceeds the limits above, stop and report partial results — never continue unbounded.
 - Before starting a T0 brownfield audit, require the user to confirm the scan boundary (target directories). Do not scan the full repository tree without explicit scope confirmation.
+- **Mid-session checkpoint**: After 3 codebase tool calls during a T0 audit, write partial findings to `outputs/docs/2-tech/[TECH-ASIS-001]-partial.md` and pause. Present the partial results to the user and require explicit confirmation before continuing with the remaining budget.
 
 ## Skills to invoke
 
