@@ -35,6 +35,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ### Fixed
 - Remove remaining Claude Code references from canonical skills and templates
+- Resolve A2 shell injection and A4 red team findings
 
 
 ## [0.0.21] — 2026-04-14
