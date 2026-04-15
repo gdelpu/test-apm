@@ -31,6 +31,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - 4 Claude Code command(s) updated
 - Documentation updates: `quick-start.md`, `skills.md`, `workflows.md`
 - Workflow updates: `sdlc-full`, `sdlc-full`
+- Skill updates: `sdlc-ba-functional-design`, `sdlc-confluence-sync`, `sdlc-scaffold`, `sdlc-steer-init`, `sdlc-tech-audit`, `sdlc-tech-design`, `sdlc-tech-quality`, `sdlc-test-campaign`
 
 ### Fixed
 - Remove remaining Claude Code references from canonical skills and templates
