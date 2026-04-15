@@ -35,12 +35,23 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - Skill updates: `sdlc-ba-functional-design`, `sdlc-confluence-sync`, `sdlc-scaffold`, `sdlc-steer-init`, `sdlc-tech-audit`, `sdlc-tech-design`, `sdlc-tech-quality`, `sdlc-test-campaign`
 - Agent updates: `hub-orchestrator`, `implementer`, `sdlc-test-executor`
 - Copilot provider agent updates: `hub-orchestrator.agent`, `implementer.agent`, `sdlc-test-executor.agent`
+- Agent scope constraints updated: agent(s) `implementer`, 1 Copilot agent(s), 1 workflows file(s)
+- File-writing tool declarations updated: skill(s) `sdlc-tech-design`, `sdlc-tech-quality`
+- Workflow state tracking standardised: agent(s) `hub-orchestrator`, 2 Copilot agent(s)
+- Agent updates: `sdlc-test-executor`
+- Hook engine updates: `state_tracker.py`, `workflow-state.schema.md`
+- Copilot provider agent updates: `sdlc-test-executor.agent`
+- 3 Copilot prompt(s) updated
+- 5 Claude Code command(s) updated
+- Documentation updates: `quick-start.md`, `skills.md`, `workflow-tracking.md`, `workflows.md`
+- Script updates: `apm-build.sh`, `install-apm-bundle.ps1`, `install-apm-bundle.sh`, `project-copilot.sh`
 
 ### Fixed
 - Remove remaining Claude Code references from canonical skills and templates
 - Resolve A2 shell injection and A4 red team findings
 - Resolve A4/A5 findings across 4 agents
 - Rephrase implementer Out of Scope to avoid PI-02b false positive
+- Resolve A4 red team round 3 — implementer, orchestrator, architect
 
 
 ## [0.0.21] — 2026-04-14
