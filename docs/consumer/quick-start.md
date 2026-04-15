@@ -308,7 +308,7 @@ Claude Code uses `CLAUDE.md` as its context file and provides slash commands for
 ```
 /sdlc-full              # Complete 11-station SDLC
 /sdlc-ba                # Business analysis (16 stations)
-/sdlc-tech              # Technical architecture (12 stations)
+/sdlc-tech              # Technical architecture & implementation (17 stations)
 /sdlc-steer             # Steering & governance (10 stations)
 ```
 
@@ -321,7 +321,8 @@ Claude Code uses `CLAUDE.md` as its context file and provides slash commands for
 /sdlc-tech-0-audit      # Technical stack audit
 /sdlc-tech-1-archi      # Architecture (C4, ADRs, stack)
 /sdlc-tech-2-design     # Data model, APIs, test strategy
-/sdlc-tech-3-quality    # Drift detection, E2E generation
+/sdlc-tech-3-impl      # Implementation (wave-based, sprint-iterative)
+/sdlc-tech-4-quality    # Drift detection, E2E generation
 ```
 
 **How it works**: Commands are defined in `providers/claude-code/commands/`. The `CLAUDE.md` file at `providers/claude-code/CLAUDE.md` provides system context that Claude Code reads automatically.

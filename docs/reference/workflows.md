@@ -373,9 +373,9 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 
 ---
 
-### `sdlc-tech` (12 stations)
+### `sdlc-tech` (17 stations)
 
-> Full technical pipeline from audit through architecture (ADR fan-out), incremental design, and continuous quality.
+> Full technical pipeline from audit through architecture (ADR fan-out), incremental design, sprint-iterative implementation, and continuous quality.
 
 | # | Station | Agent | Skills | Outputs | Gate Severity |
 |---|---------|-------|--------|---------|---------------|
@@ -389,14 +389,21 @@ Workflows migrated from the SDLC Agentic Harness. They provide a prescriptive, d
 | 8 | **API Contracts** | `sdlc-tech-architect` | `sdlc-tech-design` | `api-xxx-contracts.md` | Blocker |
 | 9 | **Test Strategy** | `sdlc-tech-architect` | `sdlc-tech-design` | `tst-001-test-strategy.md` | Blocker |
 | 10 | **Implementation Plan** | `sdlc-tech-architect` | `sdlc-tech-design` | `imp-001-plan.md` | Blocker |
-| 11 | **Drift Detection** | `sdlc-tech-architect` | `sdlc-tech-quality` | `drift-report.md` | Warning |
-| 12 | **E2E Generation** | `sdlc-tech-architect` | `sdlc-tech-quality` | `e2e-tests/` | Warning |
+| 11 | **Task Resolution** | `implementer` | `sdlc-tech-implementation` | `current-task.md` | Blocker |
+| 12 | **Code Generation** | `implementer` | `sdlc-tech-implementation` | `implementation-log.md` | Blocker |
+| 13 | **Test Implementation** | `implementer` | `sdlc-tech-implementation` | `test-log.md` | Blocker |
+| 14 | **Build & Validate** | `implementer` | `sdlc-tech-implementation` | `validation-report.md` | Blocker |
+| 15 | **Wave Gate** | `implementer` | `sdlc-tech-implementation` | `wave-report.md` | Blocker |
+| 16 | **Drift Detection** | `sdlc-tech-architect` | `sdlc-tech-quality` | `drift-report.md` | Warning |
+| 17 | **E2E Generation** | `sdlc-tech-architect` | `sdlc-tech-quality` | `e2e-tests/` | Warning |
 
-**Flow**: Audit → Gap Analysis → System Context → ADRs (fan-out) → Stack → Enablers → Data Model → API Contracts → Test Strategy → Implementation Plan → Drift Detection → E2E Generation
+Stations 11–14 loop **per item** within a sprint. Station 15 fires **per wave** (a wave may span multiple sprints).
+
+**Flow**: Audit → Gap Analysis → System Context → ADRs (fan-out) → Stack → Enablers → Data Model → API Contracts → Test Strategy → Implementation Plan → [Task Resolution → Code Gen → Tests → Validation]* → Wave Gate → Drift Detection → E2E Generation
 
 **Nestable**: Yes
 
-**Output directory**: `outputs/tech/`
+**Output directory**: `outputs/docs/2-tech/`
 
 ---
 

@@ -1,9 +1,9 @@
-# Skill T-3.1: Drift Detection
+# Skill T-4.1: Drift Detection
 
 ## Identity
 
-- **ID:** agent-t3.1-drift-detection
-- **System:** System T3 – Continuous Quality
+- **ID:** agent-t4.1-drift-detection
+- **System:** System T4 – Continuous Quality
 - **Type:** Continuous control agent
 - **Triggered by:** On each PR, on demand, or as a nightly CI job
 

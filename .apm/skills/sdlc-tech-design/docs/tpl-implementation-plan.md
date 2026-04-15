@@ -75,7 +75,7 @@ critical_path_days: 0
 
 ## 3. Implementation queue (machine-readable)
 
-> **⚠️ Critical section**: this JSON block is read directly by the Claude Code orchestrator to generate `.claude/implementation-queue.json`. The format is strict — do not modify the key structure. Every item listed in the wave tables must appear here.
+> **⚠️ Critical section**: this JSON block is read directly by the coding agent orchestrator to generate the implementation queue. The format is strict — do not modify the key structure. Every item listed in the wave tables must appear here.
 
 ```json
 {
@@ -154,12 +154,12 @@ critical_path_days: 0
 
 | gate_id | between | criterion | blocking | responsible |
 |---------|---------|-----------|----------|-------------|
-| GATE-W0 | W0 → W1 | Project compiles, CI passes empty, linter OK | true | Claude Code |
-| GATE-W1 | W1 → W2 | Migration executed, DB connection OK, auth operational, stub enablers Done, app starts per `[STK-001] § Local startup` | true | Claude Code |
-| GATE-ENV | before first Playwright navigation | App responds to readiness check, external system stubs active, seeds in place | true | Claude Code |
-| GATE-WN | WN → WN+1 | Passing tests, coverage ≥ 90%, XRay Test Execution 100% PASSED | true | Claude Code |
-| GATE-NFR | last functional wave → WNFR | Client workshop completed, thresholds defined, `agent-nfr-test-specs.md` executed, stories `EP-TECH-NFR-TESTS` in `To Do` | true | Human + Claude Code |
-| GATE-RELEASE | WNFR → Release | All `NFR-TEST-xxx` with `Critical` criticality are PASSED within their thresholds | true | Claude Code |
+| GATE-W0 | W0 → W1 | Project compiles, CI passes empty, linter OK | true | Coding agent |
+| GATE-W1 | W1 → W2 | Migration executed, DB connection OK, auth operational, stub enablers Done, app starts per `[STK-001] § Local startup` | true | Coding agent |
+| GATE-ENV | before first Playwright navigation | App responds to readiness check, external system stubs active, seeds in place | true | Coding agent |
+| GATE-WN | WN → WN+1 | Passing tests, coverage ≥ 90%, XRay Test Execution 100% PASSED | true | Coding agent |
+| GATE-NFR | last functional wave → WNFR | Client workshop completed, thresholds defined, `agent-nfr-test-specs.md` executed, stories `EP-TECH-NFR-TESTS` in `To Do` | true | Human + Coding agent |
+| GATE-RELEASE | WNFR → Release | All `NFR-TEST-xxx` with `Critical` criticality are PASSED within their thresholds | true | Coding agent |
 
 ---
 

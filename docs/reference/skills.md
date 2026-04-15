@@ -127,7 +127,8 @@ Canonical definitions: `.apm/skills/<name>/SKILL.md`.
 | `sdlc-tech-audit` | Technical stack audit and gap analysis (T0) |
 | `sdlc-tech-architecture` | System context (C4), ADR generation with fan-out, stack extraction, enablers (T1) |
 | `sdlc-tech-design` | Data model DDL, API contracts, test strategy, implementation plan (T2) |
-| `sdlc-tech-quality` | Continuous quality — drift detection, code review, E2E Playwright generation (T3) |
+| `sdlc-tech-implementation` | Wave-based sprint-iterative implementation with full T0-T2 context injection (T3) |
+| `sdlc-tech-quality` | Continuous quality — drift detection, code review, E2E Playwright generation (T4) |
 | `sdlc-steer-init` | Project initialization — project sheet, KPI baseline (P0) |
 | `sdlc-steer-planning` | Iteration planning — sprint plan, roadmap, risk register (P1) |
 | `sdlc-steer-sprint` | Sprint tracking — progress metrics, system health, sprint risks (P2) |

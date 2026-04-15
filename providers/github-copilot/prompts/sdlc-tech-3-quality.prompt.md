@@ -1,10 +1,10 @@
 ---
-name: sdlc-tech-3-quality
+name: sdlc-tech-4-quality
 mode: agent
-description: 'Run Tech System T3 — Continuous Quality (2 stations).'
+description: 'Run Tech System T4 — Continuous Quality (2 stations).'
 ---
 
-# /sdlc-tech-3-quality
+# /sdlc-tech-4-quality
 
 Run the Tech continuous quality pipeline.
 

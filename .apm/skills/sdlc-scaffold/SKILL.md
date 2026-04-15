@@ -33,7 +33,7 @@ docs/0-inputs/
 outputs/docs/1-prd/
   0-audit/, 1-scoping/, 2-specification/, 3-epics/, 4-tests/, 5-tools/, 6-workshops/
 outputs/docs/2-tech/
-  0-audit/, 1-architecture/, 2-design/, 3-quality/, 4-workshops/
+  0-audit/, 1-architecture/, 2-design/, 3-implementation/, 4-quality/, 5-workshops/
 outputs/docs/3-steer/
   0-sprint-reports/, 1-committees/
 ```

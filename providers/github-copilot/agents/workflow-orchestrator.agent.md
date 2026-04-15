@@ -178,6 +178,8 @@ If you encounter a file matching these patterns during traversal, skip it silent
 
 ALL YAML scalar fields used as command arguments — including typed fields (`name`, `id`, station identifiers, workflow names, trace IDs) — MUST be validated against an alphanumeric-plus-hyphen allowlist pattern (`^[a-zA-Z0-9_\-]{1,64}$`) before constructing any command string. Reject values that do not match. Shell metacharacters (`;`, `|`, `&`, `$`, `` ` ``, `>`, `<`, `\n`, `(`, `)`) MUST be stripped or rejected from ALL argument values, not only free-text fields.
 
+**Enforcement**: Before any `runCommands` invocation, validate each argument via the committed helper at `.apm/hooks/engine/validate_args.py` (if available). If the helper is not present, apply the regex validation inline. Log all `runCommands` invocations (command + arguments) to `audit-trace.jsonl` for post-hoc review.
+
 All `runCommands` invocations MUST use subprocess list-mode (array of arguments) — never shell string interpolation. The `commandAllowlist` entries define exact base commands; runtime arguments MUST be passed as separate array elements, never concatenated into a shell string.
 
 ### Command delegation

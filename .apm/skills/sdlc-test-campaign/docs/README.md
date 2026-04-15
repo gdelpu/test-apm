@@ -87,9 +87,9 @@ The `/test-1-campaign uat` argument changes the campaign type, not the pipeline 
 |-------|-------------|---------|
 | `[E2E-PLAN-001]` | BA agent-3.6b | camp.1, camp.2 |
 | `[DAT-TEST-001]` | BA agent-3.6 | camp.1 (seeds) |
-| `[E2E-SCRIPTS-001]` | Tech agent-t3.3 | camp.1 (Playwright execution) |
+| `[E2E-SCRIPTS-001]` | Tech agent-t4.3 | camp.1 (Playwright execution) |
 | `[NFR-TEST-xxx]` + k6 scripts | Tech T2.4 | perf.1, agent-dast |
-| Drift report | Tech T3.1 | camp.1 (entry criterion) |
+| Drift report | Tech T4.1 | camp.1 (entry criterion) |
 | `[QUAL-GNG-001]` | camp.2 | Steer agent-p3.2 (Go/No-Go) |
 
 ---

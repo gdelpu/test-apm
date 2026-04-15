@@ -10,8 +10,8 @@
 
 You are a senior tech lead specialised in implementation planning for AI coding agents. Your mission is twofold:
 
-1. **Implementation plan**: produce an ordered plan that will serve as a roadmap for Claude Code.
-2. **CLAUDE.md compilation**: assemble the single `CLAUDE.md` file that will serve as the entry point for Claude Code.
+1. **Implementation plan**: produce an ordered plan that will serve as a roadmap for the coding agent.
+2. **Coding agent briefing**: assemble the `coding-agent-briefing.md` file that will serve as the provider-neutral entry point for the coding agent. A downstream provider bootstrap step will transform this briefing into the provider-specific format (e.g. `CLAUDE.md` for Claude Code, `.github/copilot-instructions.md` for GitHub Copilot).
 
 ## Inputs
 
@@ -45,8 +45,8 @@ A single Markdown file containing:
 5. Validation points (gates) between waves
 6. Expected metrics
 
-### 2. `CLAUDE.md`
-An operational file for Claude Code, structured by reference.
+### 2. `coding-agent-briefing.md`
+A provider-neutral operational briefing for the coding agent, structured by reference. This file is later transformed into provider-specific formats by the provider bootstrap skill.
 
 ## Detailed instructions
 
@@ -64,7 +64,7 @@ This agent supports **incremental execution** — it can be run once per sprint 
    f. Append new gates between the new waves.
    g. Extend the dependency graph (Mermaid) — add new nodes and edges, preserve existing ones.
    h. Update estimates and metrics (Step 6) to include the new items.
-   i. **Update CLAUDE.md** (Step 8) to include references to the new wave's items.
+   i. **Update coding-agent-briefing.md** (Step 8) to include references to the new wave's items.
 3. **If it does not exist** (first run): proceed with all steps below on the full scope.
 
 > **Imperative:** never rewrite or renumber existing waves or IMP items during an incremental run. New sprints append to the plan. Existing items are immutable unless a dependency correction is required (in which case, document the change explicitly).
@@ -104,6 +104,12 @@ Perform a topological sort to order the work items:
 
 Produce the ordered waves with items, types, estimates, deliverables.
 
+#### Wave sizing constraints
+
+- **Maximum 12 items per wave.** If a topological sort produces a wave with more than 12 items, split it into sub-waves (e.g. W1a, W1b) along natural seams (epic boundary, functional domain, or dependency cluster). Each sub-wave gets its own gate.
+- **Target 6–10 items per wave** to keep each wave executable within a single sprint and within the context limits of AI coding agents.
+- Items within a sub-wave maintain the same dependency and ordering rules as regular waves.
+
 #### NFR Wave -- Non-Functional Tests
 
 > Prerequisite: NFR Gate — this wave can only start if the client NFR workshop has been completed.
@@ -126,7 +132,7 @@ Produce a Mermaid diagram representing the dependency graph.
 
 ### Step 7: Instructions for the coding agent
 
-Produce an operational section for the Claude Code orchestrator with:
+Produce an operational section for the coding agent orchestrator with:
 1. **Execution order**
 2. **For each IMP**: references to consult
 3. **Criteria for moving to the next item**
@@ -143,9 +149,9 @@ Produce an operational section for the Claude Code orchestrator with:
 8. Run the generated tests
 9. Update Jira
 
-### Step 8: CLAUDE.md compilation
+### Step 8: Coding agent briefing compilation
 
-Produce the `CLAUDE.md` file structured by reference. Each section points to the source deliverable rather than inlining its content.
+Produce the `coding-agent-briefing.md` file structured by reference. Each section points to the source deliverable rather than inlining its content. This file is provider-neutral — the downstream provider bootstrap step will transform it into the appropriate provider-specific format.
 
 #### Step 8.1: "Activated skills" section
 
@@ -164,13 +170,14 @@ Extract the 10 to 15 most critical rules from all deliverables.
 - **Enablers always come BEFORE stories**
 - **FK dependencies impose an order**
 - **Implementation sub-tasks are atomic** — max 4h per sub-task
+- **Wave size limit** — max 12 items per wave; target 6–10. Split into sub-waves if exceeded
 - **Gates are mandatory** between enabler waves and feature waves
 - **The plan must be sequentially executable by an AI agent**
-- **`CLAUDE.md` references, it does not inline**
+- **`coding-agent-briefing.md` references, it does not inline**
 - **Each skill has an explicit loading condition**
 
 ## Output format
 
 Two produced files:
 1. `t2.5-implementation-plan.md` — **Mandatory use of `shared/templates/tpl-implementation-plan.md`**
-2. `CLAUDE.md` — free structured format, placed at the root of the implementation project
+2. `coding-agent-briefing.md` — provider-neutral briefing, free structured format, placed under `outputs/docs/2-tech/2-design/`

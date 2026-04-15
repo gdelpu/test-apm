@@ -67,16 +67,33 @@ T2 now runs **incrementally per sprint batch** (scoped by the sprint plan from `
 
 Note: Enablers (ex-t2.3) and observability (ex-t2.6) are now in **T1** — enablers as t1.4, observability as ADR-OBS-* in t1.2.
 
-### T3 — Continuous quality (recurring, per PR)
+### T3 — Implementation (iterative per sprint)
 
 ```
-  /tech-3-quality (can run repeatedly)
+  /tech-3-impl (runs per sprint, per wave)
   +----------------------------+
-  | t3.1 Drift Detection       |               specs vs code comparison
+  | t3.1 Task Resolution       |               resolve context from T0-T2
   |         |                  |
-  | t3.2 Code Review           |               per PR or before release
+  | t3.2 Code Generation       |               produce code per spec
   |         |                  |
-  | t3.3 E2E Playwright Gen    |               cross-US scripts for Test-Agents
+  | t3.3 Test Implementation   |               BA-traced tests
+  |         |                  |
+  | t3.4 Validation            |               build, test, coverage, SAST
+  |         |                  |
+  | t3.5 Wave Gate             |               wave DoD from IMP-001
+  +----------------------------+
+```
+
+### T4 — Continuous quality (recurring, per PR)
+
+```
+  /tech-4-quality (can run repeatedly)
+  +----------------------------+
+  | t4.1 Drift Detection       |               specs vs code comparison
+  |         |                  |
+  | t4.2 Code Review           |               per PR or before release
+  |         |                  |
+  | t4.3 E2E Playwright Gen    |               cross-US scripts for Test-Agents
   +----------------------------+
          |
          v
@@ -194,7 +211,8 @@ outputs/docs/2-tech/
   2-design/                        T2: dat-001, tst-001, imp-001 (incremental per sprint)
     api/                           T2: api-xxx-{slug}.md (multiple contracts)
     enablers/                      T1.4: enb-xxx-{slug}.md (produced by T1, consumed by sprint plan)
-  3-quality/                       T3: dft-xxx, review reports
+  3-implementation/                T3: wave-state.json, impl-logs, test-logs, validation reports
+  4-quality/                       T4: dft-xxx, review reports
   tools/                           On-demand: coh-tech-001, impact-xxx, validation reports
 ```
 
@@ -362,8 +380,9 @@ draft ──────→ review ──────→ validated
 | `/tech-0-audit` | Brownfield technical audit (T0) |
 | `/tech-1-archi` | Architecture: context, ADRs (incl. security + observability), stack, enablers (T1) |
 | `/tech-2-design` | Technical design — incremental per sprint: data model, APIs, test strategy, impl plan (T2) |
-| `/tech-3-quality` | Continuous quality — drift + code review (T3, recurring) |
-| `/tech` | Full pipeline T0-T3 without gates |
+| `/tech-3-impl` | Implementation — wave-based, sprint-iterative execution (T3) |
+| `/tech-4-quality` | Continuous quality — drift + code review (T4, recurring) |
+| `/tech` | Full pipeline T0-T4 without gates |
 | `/tech-agent <TN.N>` | Single agent (e.g., `/tech-agent t2.5`) |
 
 ### Tool commands

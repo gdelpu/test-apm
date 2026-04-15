@@ -172,13 +172,14 @@ workflows:
       - Running alongside BA and Tech pipelines to provide continuous project oversight
 
   - name: sdlc-tech
-    description: Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, and continuous quality monitoring.
+    description: Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, sprint-iterative implementation, and continuous quality monitoring.
     type: delivery
-    stations: 12
+    stations: 17
     when_to_use:
       - Defining the target technical architecture for a new or modernized system
       - Producing C4 system context, ADRs, stack conventions, and enabler plans
       - Creating data models, API contracts, test strategies, and implementation plans
+      - Executing the implementation plan wave-by-wave per sprint with full T0-T2 context injection
       - When technical deliverables must trace back to BA functional requirements
       - Feeding the implementation phase with an ordered wave plan and compiled entry point
 

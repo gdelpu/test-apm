@@ -28,7 +28,7 @@ to select the right `run-workflow.sh` command.
 # BA pipeline (S0-S3)
 ./providers/cli/run-workflow.sh sdlc-ba my-project
 
-# Tech pipeline (T0-T3)
+# Tech pipeline (T0-T4)
 ./providers/cli/run-workflow.sh sdlc-tech my-project
 
 # Steer pipeline (P0-P3)
@@ -115,8 +115,13 @@ Use `--station <id>` to execute a single station from any workflow:
 | T2 | `tech-api-contracts` | API contracts |
 | T2 | `tech-test-strategy` | Test strategy |
 | T2 | `tech-impl-plan` | Implementation plan |
-| T3 | `tech-drift` | Drift detection |
-| T3 | `tech-e2e-gen` | E2E Playwright generation |
+| T3 | `tech-task-resolution` | Task resolution (iterative per sprint) |
+| T3 | `tech-code-generation` | Code generation |
+| T3 | `tech-test-implementation` | Test implementation |
+| T3 | `tech-validation` | Build & validate |
+| T3 | `tech-wave-gate` | Wave gate |
+| T4 | `tech-drift` | Drift detection |
+| T4 | `tech-e2e-gen` | E2E Playwright generation |
 
 ### sdlc-steer.yml
 

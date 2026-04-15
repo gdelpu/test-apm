@@ -79,12 +79,13 @@ stations:
 
   # ─── Phase 4: Technical Architecture & Design ──────────────────────
   - id: tech-pipeline
-    name: Tech Pipeline (T0-T3)
+    name: Tech Pipeline (T0-T4)
     agent: sdlc-coordinator
     skills:
       - sdlc-tech-audit
       - sdlc-tech-architecture
       - sdlc-tech-design
+      - sdlc-tech-implementation
       - sdlc-tech-quality
     inputs:
       - plan-001-sprint-planning.md
