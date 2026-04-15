@@ -140,7 +140,7 @@ ARCHIVE_NAME="${PACKAGE_NAME}-${TARGET}.tar.gz"
 DOWNLOAD_URL="${BASE_URL}/${ARCHIVE_NAME}"
 
 log_info "Downloading: ${ARCHIVE_NAME}"
-HTTP_CODE=$(curl --silent --output "${DEST_DIR}/${ARCHIVE_NAME}" --write-out "%{http_code}" \
+HTTP_CODE=$(curl --silent --location --output "${DEST_DIR}/${ARCHIVE_NAME}" --write-out "%{http_code}" \
     "${HEADER_ARGS[@]}" \
     "${DOWNLOAD_URL}")
 
@@ -155,7 +155,7 @@ log_ok "Downloaded: ${ARCHIVE_NAME}"
 if [[ "${VERIFY_CHECKSUMS}" == true ]]; then
     log_info "Downloading checksums"
     CHECKSUM_URL="${BASE_URL}/SHA256SUMS"
-    if curl --silent --fail "${HEADER_ARGS[@]}" "${CHECKSUM_URL}" -o "${DEST_DIR}/SHA256SUMS"; then
+    if curl --silent --fail --location "${HEADER_ARGS[@]}" "${CHECKSUM_URL}" -o "${DEST_DIR}/SHA256SUMS"; then
         log_info "Verifying SHA-256 checksum"
         cd "${DEST_DIR}"
         if command -v sha256sum &>/dev/null; then
@@ -226,7 +226,16 @@ if [[ "$MODE" == "standard" ]]; then
         PROJ_SCRIPT="${SCRIPT_DIR}/project-copilot.sh"
     fi
     chmod +x "$PROJ_SCRIPT"
+    PROJ_SCRIPT="$(cd "$(dirname "$PROJ_SCRIPT")" && pwd)/$(basename "$PROJ_SCRIPT")"
     (cd "$TEMP_DIR" && bash "$PROJ_SCRIPT" --provider "$PROVIDER" --full --clean)
+
+    # Remove repo-specific files that should not leak into consumer installs.
+    # copilot-instructions.md is the hub context for the foundation repo;
+    # it is NOT managed by projection and must not ship to consumers.
+    if [[ -f "$TEMP_DIR/.github/copilot-instructions.md" ]]; then
+        rm -f "$TEMP_DIR/.github/copilot-instructions.md"
+        log_info "Removed repo-specific copilot-instructions.md"
+    fi
 
     # Resolve runtime directory from apm.yml
     RUNTIME_DIR=$(get_provider_runtime "$TEMP_DIR/apm.yml" "$PROVIDER")

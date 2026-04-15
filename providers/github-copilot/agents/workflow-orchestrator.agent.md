@@ -114,7 +114,7 @@ cd .apm/hooks && python -m engine --skill-event start --skill <name> \
 
 ### Fallback (if runCommands unavailable)
 
-If `runCommands` is blocked, write `outputs/workflow-state-<workflow>-<feature>.md` directly using `edit/editFiles` following the exact Markdown table format. See `.apm/hooks/engine/schemas/workflow-state.schema.md` for the strict format spec. Always write the state file to the **root** of `outputs/` — never inside a workflow subfolder (e.g. not inside `output_dir`). Use the workflow name and feature/project name as suffix to avoid conflicts when multiple workflows or features run concurrently (e.g. `outputs/workflow-state-feature-implementation-login.md`). A post-hook validator will correct malformed entries.
+If `runCommands` is blocked, write `outputs/workflow-state-<workflow>-<feature>.md` directly using `edit/editFiles` following the exact Markdown table format. See `.apm/hooks/engine/schemas/workflow-state.schema.md` for the strict format spec. Always write the state file to the **root** of `outputs/` — never inside a workflow subfolder (e.g. not inside `output_dir`). Use the workflow name and feature/project name as suffix to avoid conflicts when multiple workflows or features run concurrently (e.g. `outputs/workflow-state-feature-implementation-login.md`). Also write a YAML companion file (`outputs/workflow-state-<workflow>-<feature>.yml`) with the same data for machine parsing — see the schema doc for the exact format. A post-hook validator will correct malformed entries.
 
 ## Progress Display
 

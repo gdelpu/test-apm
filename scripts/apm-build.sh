@@ -92,6 +92,13 @@ PROVIDER_DIR["copilot"]="providers/github-copilot"
 PROVIDER_DIR["claude"]="providers/claude-code"
 PROVIDER_DIR["cli"]="providers/cli"
 
+# --- Repo-specific files to exclude from distribution ---
+# .github/copilot-instructions.md is the repo-level hub context for THIS repo.
+# It is NOT managed by projection and must not leak into consumer installs.
+EXCLUDE_FROM_DIST=(
+    ".github/copilot-instructions.md"
+)
+
 # --- Validate that required paths exist ---
 log_step "Validating source paths"
 for path in "${CANONICAL_PATHS[@]}"; do
@@ -122,7 +129,13 @@ pack_target() {
         [[ -e "${p}" ]] && include_paths+=("${p}")
     done
 
-    tar -czf "${archive}" "${include_paths[@]}"
+    # Build --exclude flags for repo-specific files
+    local exclude_flags=()
+    for excl in "${EXCLUDE_FROM_DIST[@]}"; do
+        exclude_flags+=("--exclude=${excl}")
+    done
+
+    tar -czf "${archive}" "${exclude_flags[@]}" "${include_paths[@]}"
     log_ok "Packed: $(basename "${archive}")"
 }
 

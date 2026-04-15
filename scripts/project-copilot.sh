@@ -22,6 +22,13 @@
 # ==============================================================================
 set -euo pipefail
 
+# ── Bash version check (associative arrays & ${var^^} require bash 4+) ───────
+if (( BASH_VERSINFO[0] < 4 )); then
+  echo "ERROR: project-copilot.sh requires bash 4+. Found: bash ${BASH_VERSION}" >&2
+  echo "  macOS ships bash 3.2. Install a modern bash:  brew install bash" >&2
+  exit 1
+fi
+
 # ── Defaults ─────────────────────────────────────────────────────────────────
 PROVIDER="github-copilot"
 FULL=false

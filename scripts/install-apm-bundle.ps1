@@ -252,6 +252,15 @@ if ($Mode -eq 'standard') {
             exit 1
         }
 
+        # Remove repo-specific files that should not leak into consumer installs.
+        # copilot-instructions.md is the hub context for the foundation repo;
+        # it is NOT managed by projection and must not ship to consumers.
+        $repoOnlyFile = Join-Path $runtimeSrc 'copilot-instructions.md'
+        if (Test-Path $repoOnlyFile) {
+            Remove-Item $repoOnlyFile -Force
+            Write-Info 'Removed repo-specific copilot-instructions.md'
+        }
+
         # Copy runtime directory to consumer repo root (not into staging dir)
         $runtimeDst = Join-Path $repoRoot $runtimeDir
 
