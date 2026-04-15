@@ -7,36 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
-### Added
-- New skill(s): `sdlc-tech-implementation`
-- Claude Code command(s): `sdlc-tech-3-impl`, `sdlc-tech-4-quality`
-- CI gate file(s): `validate_briefing.py`
+## [0.0.23] — 2026-04-15
 
 ### Changed
-- Agent scope constraints updated: agent(s) `implementer`, 1 Copilot agent(s), 1 workflows file(s)
-- Brownfield detection updated: agent(s) `sdlc-tech-architect`, 1 Copilot prompt(s), 1 Copilot agent(s), 1 other file(s), 1 workflows file(s)
-- File-writing tool declarations updated: skill(s) `sdlc-tech-design`, `sdlc-tech-quality`
-- MCP configuration updated: skill(s) `sdlc-tech-design`
-- Workflow state tracking standardised: agent(s) `hub-orchestrator`, 1 Copilot agent(s)
-- Agent updates: `sdlc-test-executor`
-- Skill updates: `sdlc-ba-functional-design`, `sdlc-confluence-sync`, `sdlc-scaffold`, `sdlc-steer-init`, `sdlc-tech-audit`, `sdlc-tech-design`, `sdlc-tech-quality`, `sdlc-test-campaign`
-- Copilot provider agent updates: `sdlc-test-executor.agent`, `workflow-orchestrator.agent`
-- 3 Copilot prompt(s) updated
-- 5 Claude Code command(s) updated
-- Documentation updates: `quick-start.md`, `skills.md`, `workflows.md`
-- Workflow updates: `sdlc-full`, `sdlc-full`
 - File-writing tool declarations updated: 1 Copilot prompt(s), skill(s) `sdlc-tech-quality`
 - SonarQube integration updated: skill(s) `sdlc-tech-implementation`, 1 workflows file(s)
 - Agent updates: `implementer`
-- Skill updates: `sdlc-tech-design`, `sdlc-tech-quality`
-- 1 Claude Code command(s) updated
-
-### Fixed
-- Resolve A4 red team round 3 — implementer, orchestrator, architect
-- Rephrase implementer Out of Scope to avoid PI-02b false positive
-- Resolve A4/A5 findings across 4 agents
-- Resolve A2 shell injection and A4 red team findings
-- Remove remaining Claude Code references from canonical skills and templates
+- Workflow state tracking standardised: agent(s) `hub-orchestrator`, 1 Copilot agent(s)
+- Copilot provider agent updates: `sdlc-test-executor.agent`, `workflow-orchestrator.agent`
 
 
 ## [0.0.22] — 2026-04-14
