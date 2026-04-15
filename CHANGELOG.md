@@ -40,6 +40,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - Remove remaining Claude Code references from canonical skills and templates
 - Resolve A2 shell injection and A4 red team findings
 - Resolve A4/A5 findings across 4 agents
+- Rephrase implementer Out of Scope to avoid PI-02b false positive
 
 
 ## [0.0.21] — 2026-04-14
