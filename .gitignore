@@ -13,6 +13,7 @@
 # Pipeline output
 outputs/station_out/
 outputs/reports/*
+outputs/specs/*
 .station_tmp/
 
 # Local CI / validation test output
