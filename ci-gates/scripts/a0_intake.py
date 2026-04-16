@@ -24,6 +24,7 @@ from pathlib import Path
 TYPE_PATTERNS: list[tuple[str, str]] = [
     (r"agents/.*\.agent\.md$", "agent"),
     (r"skills/.*/SKILL\.md$", "skill"),
+    (r"skills/[^/]+/", "skill-doc"),
     (r"prompts/.*\.prompt\.md$", "prompt"),
     (r"instructions/.*\.instructions\.md$", "instruction"),
     (r"\.github/workflows/.*\.yml$", "workflow"),
@@ -95,7 +96,7 @@ def compute_risk_hints(diff_text: str, changed_files: list[dict]) -> list[str]:
 
 def determine_scope(changed_files: list[dict]) -> str:
     """Return 'agent-change' if any agent/skill/prompt/instruction changed."""
-    agent_types = {"agent", "skill", "prompt", "instruction"}
+    agent_types = {"agent", "skill", "skill-doc", "prompt", "instruction"}
     if any(f["type"] in agent_types for f in changed_files):
         return "agent-change"
     return "non-agent"
