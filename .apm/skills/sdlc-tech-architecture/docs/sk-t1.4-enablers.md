@@ -53,6 +53,11 @@ For each enabler listed:
    - For security enablers (`ENB-SEC-xxx`): include the ASVS control reference if mentioned in the ADR
    - For observability enablers (`ENB-OBS-xxx`): include the SLI/SLO reference if mentioned in the ADR
    - For stub enablers (`ENB-STUB-xxx`): specify the stub technology from the ADR
+   - **For DEP-backed enablers:** if the ADR's `### Required enablers` section mentions a DEP skill (e.g. "Implemented via skill `sk-dep1.1-gitlab-ci-setup`"), add the following to the enabler specification:
+     - A `dep_skill` field in YAML front matter (e.g. `dep_skill: sk-dep1.1-gitlab-ci-setup`)
+     - A `## DEP Skill Reference` section stating: "This enabler is implemented by invoking **{skill name}** from `.apm/skills/soprasteria-dep/`. The skill will consume `[STK-001]` and `[CTX-001]` as inputs and produce the configuration files directly. Refer to the skill's `## Detailed instructions` for the full procedure."
+     - The sub-tasks in Step 2.4 should reference the DEP skill steps rather than inventing ad-hoc implementation steps (e.g. "Run skill sk-dep1.1 Step 1: Stack analysis" rather than "Write .gitlab-ci.yml from scratch")
+     - DEP hooks (`pre-input-validation`, `post-quality-control` from `.apm/hooks/soprasteria-dep/`) apply automatically when the implementer invokes the DEP skill
 3. **Acceptance criteria**: in Given/When/Then format — must be automatically verifiable
 4. **Sub-tasks**: breakdown into atomic tasks (1-4h each)
 5. **Validation tests**: the tests to write to validate the enabler

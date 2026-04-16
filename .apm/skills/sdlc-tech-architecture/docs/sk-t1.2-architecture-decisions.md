@@ -49,6 +49,21 @@ A summary index file `outputs/docs/2-tech/1-architecture/adr/adr-000-index.md` l
 
 ## Detailed instructions
 
+### Step 0: DEP platform availability check
+
+Before writing any ADR, **ask the user** the following question:
+
+> **"Ce projet a-t-il accès à la plateforme DEP Sopra Steria (CI Library, Modern Workstation, Launchpad IaC) ?"**
+
+Accepted answers:
+- **Full access** → the three DEP assets (CI Library, Modern Workstation, Launchpad) are available. DEP options become the **recommended default** for ADR-CICD, ADR-ENV, and ADR-DEPLOY.
+- **Partial access** → specify which assets are available (e.g. "CI Library only"). DEP options are recommended only for the available assets.
+- **No access** → client infrastructure does not have access to DEP. Use generic options only. Do not reference DEP skills.
+
+Record the answer in the ADR index file (`adr-000-index.md`) under a new front matter field `dep_access: full | partial | none` and, if partial, `dep_assets: [ci, mw, iac]` listing the available assets.
+
+This information drives the option evaluation in ADR-CICD, ADR-ENV, and ADR-DEPLOY (see Step 3).
+
 ### Step 1: NFR extraction from BA deliverables
 
 Before writing the ADRs, extract all non-functional requirements from the BA deliverables:
@@ -76,8 +91,8 @@ List all decisions by category. The following categories are **mandatory** for e
 | External communications | 1 | Sync/async, messaging protocol |
 | Environment | 1 | Local dev environment (Docker Compose, dev scripts, env vars) |
 | External system stubs | 1 | Stub technology per external system (MSW, WireMock, sandbox) |
-| CI/CD | 1 | CI/CD tool, stages, quality gates |
-| Deployment | 1 | Cloud/on-prem, container strategy |
+| CI/CD | 1 | CI/CD tool, stages, quality gates (see DEP option below) |
+| Deployment | 1 | Cloud/on-prem, container strategy (see DEP option below) |
 | **Security** | **2+** | See Step 2b below |
 | **Observability** | **2+** | See Step 2c below |
 | Testing | 1 | Test pyramid, tools, coverage thresholds |
@@ -132,7 +147,19 @@ For each identified decision:
 4. **Consequences**: technical impacts, constraints introduced, trade-offs accepted
 5. **Traceability**: which BA requirements or `[CTX-001]` constraints justify this decision?
 
-**ADR-ENV specific rules:**
+**ADR-CICD specific rules (DEP-aware):**
+- If `dep_access` is `full` or `partial` with `ci` in `dep_assets`: include **"DEP CI Library (GitLab CI)"** as an evaluated option. This option uses the DEP CI Library (`dep/library/ci-library`) providing 56+ reusable jobs (gitleaks, sonarqube, trivy, mr-agent, build, deploy, etc.) via a single `include` directive — zero custom jobs required.
+- If DEP CI Library is selected as the decision: in `### Required enablers`, reference `[ENB-CICD-001]` and note `Implemented via skill sk-dep1.1-gitlab-ci-setup`.
+- If DEP is not available: evaluate only generic options (GitHub Actions, GitLab CI vanilla, Jenkins, Azure Pipelines).
+
+**ADR-DEPLOY specific rules (DEP-aware):**
+- If `dep_access` is `full` or `partial` with `iac` in `dep_assets`: include **"DEP Launchpad IaC (Terraform)"** as an evaluated option. This option uses the DEP Launchpad platform with per-environment `launchpad/` folder structure, integrated with the CI Library `iac` job.
+- If DEP Launchpad is selected as the decision: in `### Required enablers`, reference `[ENB-DEPLOY-001]` and note `Implemented via skill sk-dep3.1-launchpad-iac`.
+- If DEP is not available: evaluate only generic options (Terraform standalone, CloudFormation, Bicep, Pulumi).
+
+**ADR-ENV specific rules (DEP-aware):**
+- If `dep_access` is `full` or `partial` with `mw` in `dep_assets`: include **"DEP Modern Workstation"** as an evaluated option. This option uses a `mw-config.yml` file with 30+ modules (runtimes, databases, IDEs, containers) manageable via the `mwctl` CLI — cross-platform, no manual install scripts.
+- If DEP Modern Workstation is selected as the decision: in `### Required enablers`, reference `[ENB-ENV-001]` and note `Implemented via skill sk-dep2.1-modern-workstation`.
 - Must define the complete local startup procedure
 - Must specify: startup command (e.g. `docker compose up`), local URL, default port, required environment variables
 - This section feeds the `## Local startup` section of `[STK-001]` (agent T-1.3)

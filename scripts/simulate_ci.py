@@ -102,23 +102,31 @@ TOOL_ALLOWLIST = {
 
 # Get changed files from git (the pipeline only scans changed files for A2)
 def get_changed_files():
-    """Get list of files changed vs main branch (or uncommitted)."""
+    """Get list of files changed vs origin/main (matching run_stations.sh behaviour)."""
     changed = set()
     try:
-        # Staged + working tree changes
+        # Branch diff against origin/main — mirrors run_stations.sh logic
         result = subprocess.run(
-            ['git', 'diff', '--name-only', 'HEAD'],
+            ['git', 'diff', '--name-only', 'origin/main', 'HEAD'],
             capture_output=True, text=True, cwd=root
         )
         for line in result.stdout.strip().split('\n'):
             if line.strip():
                 changed.add(root / line.strip())
-        # Also include all uncommitted changes
+        # Also include uncommitted working-tree changes
         result2 = subprocess.run(
-            ['git', 'diff', '--name-only', '--cached'],
+            ['git', 'diff', '--name-only', 'HEAD'],
             capture_output=True, text=True, cwd=root
         )
         for line in result2.stdout.strip().split('\n'):
+            if line.strip():
+                changed.add(root / line.strip())
+        # Also include staged changes
+        result3 = subprocess.run(
+            ['git', 'diff', '--name-only', '--cached'],
+            capture_output=True, text=True, cwd=root
+        )
+        for line in result3.stdout.strip().split('\n'):
             if line.strip():
                 changed.add(root / line.strip())
     except Exception:

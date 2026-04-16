@@ -55,6 +55,16 @@ Followed by a structured extraction:
 |-------|-------------|--------|
 | {skill name if identifiable} | {path in skill-registry/ if known} | {ADR that motivates it} |
 
+> **DEP skill detection rule:** If the ADR decision references DEP assets (DEP CI Library, DEP Modern Workstation, DEP Launchpad IaC), add the corresponding DEP skill to the activation table:
+>
+> | ADR decision contains | Skill to activate | Registry path |
+> |---|---|---|
+> | "DEP CI Library" or "dep/library/ci-library" | `sk-dep1.1-gitlab-ci-setup` | `.apm/skills/soprasteria-dep/sk-dep1.1-gitlab-ci-setup.md` |
+> | "DEP Modern Workstation" or "mw-config.yml" | `sk-dep2.1-modern-workstation` | `.apm/skills/soprasteria-dep/sk-dep2.1-modern-workstation.md` |
+> | "DEP Launchpad" or "launchpad/" | `sk-dep3.1-launchpad-iac` | `.apm/skills/soprasteria-dep/sk-dep3.1-launchpad-iac.md` |
+>
+> These skills will be consolidated into `[STK-001]` by t1.3b and made available to the implementer agent during enabler implementation.
+
 ## Imperative rules
 
 - **Extract only — do not decide.** If the ADR does not fix a specific technology, write "Not specified — to be resolved in consolidation."
