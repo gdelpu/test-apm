@@ -8,13 +8,20 @@ Execute the **Tech System T3 — Implementation** pipeline.
 2. Read `.apm/contexts/sdlc-agent-registry.yaml` — agent compositions for tech-t3.1 through tech-t3.5.
 3. Load sprint scope — determine which items from [IMP-001] are in scope for this sprint.
 4. Load `wave-state.json` — determine current wave and completed items.
+4b. Create feature branch for the current wave: `git checkout -b feat/W{id}-{slug} main`
 5. For each item in sprint scope (dependency order):
    - T3.1: Resolve task context from T0-T2 deliverables
    - T3.2: Generate code following STK-001, DAT-001, API-xxx specs
    - T3.3: Generate tests with BA traceability (TST-001 mapping)
    - T3.4: Validate (build, test, coverage, SAST)
-6. If all wave items are now completed: run T3.5 wave gate.
+6. If all wave items are now completed:
+   a. Run T3.5 wave gate
+   b. Run T4.1 drift detection on the branch
+   c. Push branch: `git push origin feat/W{id}-{slug}`
+   d. Verify CI pipeline passes (T3.6)
+   e. Create MR to main (T3.7)
 7. Write sprint summary.
+7b. After last wave gate of sprint: run T4.3 E2E campaign generation with testability filter
 8. **Write every artifact as an actual file on disk** under `outputs/docs/2-tech/3-implementation/`. Do not merely display content in chat — use file-writing tools to create each file.
 
 This pipeline runs **iteratively per sprint**. A wave may span multiple sprints.

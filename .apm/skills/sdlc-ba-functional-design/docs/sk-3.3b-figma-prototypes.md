@@ -21,6 +21,7 @@ You are an agent specialising in translating functional screen specifications in
 - **Glossary:** [GLO-001] for labels — *Criteria: validated, ≥ 5 terms → absent: WARN*
 - **Actors & Roles:** [ACT-001] for conditional views by role — *Criteria: ≥ 2 distinct roles → absent: WARN*
 - **Corporate Design System / UI Kit**: if the company has existing CSS variables, tokens, or a component library
+- **Architecture Decision Records (ADRs):** `[ADR-xxx]` files from `outputs/docs/2-tech/1-architecture/adr/` — *Criteria: scan for design-system decisions → if an ADR mandates a specific design system (e.g. Vuetify, MUI, Ant Design, Carbon, custom tokens), the prototype MUST use that system's conventions, tokens, and component patterns → absent or no design-system ADR: WARN, fall back to default minimal CSS*
 
 ## Expected output
 
@@ -55,9 +56,27 @@ prototypes/
     └── (optional icons/images)
 ```
 
+### Step 0b: ADR design-system analysis
+
+Before building the stylesheet, scan ADR files for design-system decisions:
+
+1. **Read all ADR files** from `outputs/docs/2-tech/1-architecture/adr/adr-*.md`
+2. **Search for design-system decisions**: look for ADRs whose title or content references a design system, UI framework, component library, or design tokens (e.g. `design-system`, `UI kit`, `component library`, `Vuetify`, `MUI`, `Ant Design`, `Carbon`, `Tailwind`, `Bootstrap`, `Radix`, `Shadcn`, `PrimeVue`, `design tokens`)
+3. **If an ADR mandates a specific design system:**
+   - Record the ADR identifier `[ADR-xxx]` and the chosen system
+   - Determine whether the design system exposes **publicly accessible** documentation, token definitions, or a CDN-free CSS file that can be referenced or reproduced locally
+   - Extract the relevant design tokens (colours, typography, spacing, border-radius, component naming conventions) from the design system's documentation
+   - These tokens **replace** the default CSS variables in Step 1 — do not invent a parallel set
+   - Adopt the design system's **component class naming conventions** (e.g. `v-btn` for Vuetify, `MuiButton` for MUI) in the HTML output so the prototype visually and structurally reflects the chosen stack
+   - Add a comment block at the top of `styles.css`: `/* Design system: [name] — per [ADR-xxx] */`
+4. **If no ADR mentions a design system:** proceed with the default minimal CSS defined in Step 1
+5. **If the design system is not accessible** (no public docs, tokens behind auth): log a WARN in `3.3b-mapping-prototypes.md` and fall back to the default CSS, noting the ADR reference for future resolution
+
+> **Traceability**: The mapping file `3.3b-mapping-prototypes.md` must include a section **"Design System Source"** stating either the ADR reference and design system used, or "Default (no ADR design-system decision found)".
+
 ### Step 1: Design system stylesheet (`styles.css`)
 
-If no corporate kit is provided, create a minimal **functional** design system using CSS custom properties:
+If no corporate kit is provided **and no ADR mandates a specific design system** (see Step 0b), create a minimal **functional** design system using CSS custom properties:
 
 **CSS variables to define:**
 
@@ -232,6 +251,12 @@ status: draft
 
 ## Entry point
 File: prototypes/index.html
+
+## Design System Source
+
+| Source | Reference | Notes |
+|--------|-----------|-------|
+| ADR / Corporate kit / Default | [ADR-xxx] or N/A | Design system name or "Default minimal CSS" |
 
 ## Screen mapping
 
