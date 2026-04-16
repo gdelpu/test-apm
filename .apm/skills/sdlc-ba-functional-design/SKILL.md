@@ -37,8 +37,9 @@ Produce per-feature functional design deliverables: user stories, user journeys,
 3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/{feature}/scr-{id}-{slug}.md` with identifier `[SCR-xxx]`
 
 #### Phase 4 — Figma Prototypes (agent 3.3b) — conditional: `has_screens`, depends on 3.3
-1. Generate interactive HTML prototypes from screen specifications
-2. Optional Figma MCP integration for design system sync
+1. Scan ADR files (`outputs/docs/2-tech/1-architecture/adr/`) for design-system decisions; if an ADR mandates a specific design system, adopt its tokens and component conventions
+2. Generate interactive HTML prototypes from screen specifications
+3. Optional Figma MCP integration for design system sync
 
 #### Phase 5 — Batch Specifications (agent 3.3c) — conditional: `has_batches`
 1. Define batch process specifications: input/output formats, volumes, scheduling

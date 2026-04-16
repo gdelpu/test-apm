@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.24] — 2026-04-16
+
+### Changed
+- Skill updates: `sdlc-ba-functional-design`
+
+
 ## [0.0.23] — 2026-04-15
 
 ### Changed
