@@ -20,6 +20,8 @@ stations:
     inputs: []
     outputs:
       - outputs/
+    required_outputs:
+      - outputs/docs/
     gate:
       criteria:
         - "Directory structure created"
@@ -33,6 +35,9 @@ stations:
     inputs:
       - outputs/
     outputs:
+      - pil-001-project-sheet.md
+      - kpi-001-baseline.md
+    required_outputs:
       - pil-001-project-sheet.md
       - kpi-001-baseline.md
     gate:
@@ -53,10 +58,13 @@ stations:
       - pil-001-project-sheet.md
     outputs:
       - ba-validation-report.md
+    required_outputs:
+      - ba-validation-report.md
     gate:
       criteria:
         - "All BA systems complete"
         - "Traceability chain verified: EXF → EP → FT → US → BR → SCE"
+        - "If feature has_screens: user journeys (UF) exist for each feature with screens"
       severity: blocker
 
   # ─── Phase 3: Sprint Planning ──────────────────────────────────────
@@ -70,6 +78,9 @@ stations:
     outputs:
       - plan-001-sprint-planning.md
       - rdp-001-roadmap.md
+      - rsk-001-risk-register.md
+    required_outputs:
+      - plan-001-sprint-planning.md
       - rsk-001-risk-register.md
     gate:
       criteria:
@@ -92,6 +103,8 @@ stations:
       - ba-validation-report.md
     outputs:
       - imp-001-implementation-plan.md
+    required_outputs:
+      - imp-001-implementation-plan.md
     gate:
       criteria:
         - "All Tech systems complete"
@@ -109,6 +122,8 @@ stations:
       - imp-001-implementation-plan.md
     outputs:
       - implementation-log.md
+    required_outputs:
+      - implementation-log.md
     gate:
       criteria:
         - "Code compiles without errors"
@@ -125,6 +140,8 @@ stations:
       - implementation-log.md
     outputs:
       - campaign-report.md
+    required_outputs:
+      - campaign-report.md
     gate:
       criteria:
         - "Campaign pass rate above threshold"
@@ -139,6 +156,8 @@ stations:
     inputs:
       - implementation-log.md
     outputs:
+      - performance-report.md
+    required_outputs:
       - performance-report.md
     parallel: true  # can run in parallel with campaign
     gate:
@@ -158,6 +177,8 @@ stations:
     outputs:
       - sprint-progress.md
       - sprint-risks.md
+    required_outputs:
+      - sprint-progress.md
     gate:
       criteria:
         - "Sprint progress documented"
@@ -173,6 +194,8 @@ stations:
     inputs:
       - implementation-log.md
     outputs:
+      - quality-report.md
+    required_outputs:
       - quality-report.md
     gate:
       criteria:
@@ -191,6 +214,8 @@ stations:
       - performance-report.md
       - sprint-risks.md
     outputs:
+      - gng-001-go-nogo.md
+    required_outputs:
       - gng-001-go-nogo.md
     gate:
       criteria:

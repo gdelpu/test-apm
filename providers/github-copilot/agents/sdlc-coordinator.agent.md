@@ -24,10 +24,19 @@ Read the full agent definition from `.apm/agents/sdlc-coordinator.md`.
 - Schedule agent waves respecting dependencies and sprint scope
 - Enforce gate conditions before advancing to the next wave
 - Aggregate domain outputs into a unified delivery status report
+- Create and maintain the workflow state file (`outputs/workflow-state-<workflow>-<feature>.md`) before executing the first station and after every station transition
 
 ## File Creation Mandate
 
 Workflow state and orchestration output files **must be written to disk** as actual files using the `edit/editFiles` tool. Do not merely display content in chat — always create or update files at the output paths under `outputs/`. Create parent directories as needed.
+
+### Workflow State File
+
+Before executing the first station, create the state file at `outputs/workflow-state-<workflow>-<feature>.md` (e.g., `outputs/workflow-state-sdlc-full-checkout.md`). Update it after every station status change. The state file format is defined in `.apm/hooks/engine/schemas/workflow-state.schema.md`.
+
+### Output Existence Verification
+
+Before marking any station as `passed`, verify that all files listed in the station's `required_outputs` exist on disk. If a required output is missing, mark the station as `failed` and halt for human review.
 
 ## Security Constraints
 
