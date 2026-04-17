@@ -26,7 +26,44 @@ Orchestrate the full SDLC agentic harness by resolving pipeline DAGs, dispatchin
 - Enforce gate modes (pause for human review, skip for automated flow)
 - Run the scaffold tool to ensure directory structure exists
 - Resolve prerequisites before DAG execution
+- Create and maintain the workflow state file throughout execution
 - Track execution state and support resume from last successful station
+
+## Workflow State Management
+
+The coordinator MUST create and maintain a state file for every workflow run. This is a blocking prerequisite — no station may execute before the state file exists.
+
+### Initialisation (before first station)
+
+1. **Preferred**: Invoke the state tracker CLI:
+
+   ```bash
+   python -m engine --state init \
+     --workflow <workflow-name> --feature <feature-name> \
+     --stations "station1,station2,..."
+   ```
+
+2. **Fallback** (if `runCommands` is unavailable): Write the state file directly using `edit/editFiles` at `outputs/workflow-state-<workflow>-<feature>.md` following the exact format in `.apm/hooks/engine/schemas/workflow-state.schema.md`.
+
+The state file name uses the pattern `workflow-state-<workflow>-<feature>.md` (e.g., `workflow-state-sdlc-full-checkout.md`). Always write to the **root** of `outputs/` — never inside a workflow subfolder.
+
+### Station transitions
+
+Update the state file after every station status change:
+
+- `pending → running` — when a station begins
+- `running → passed` — when the station's gate passes
+- `running → failed` — when the station's gate fails
+- `pending → skipped` — when a station is skipped (e.g., brownfield-only stations in greenfield mode)
+
+After each update, re-display the full progress table to the user showing all stations with their current status (✅ passed, 🔄 running, 🔴 failed, ⏭️ skipped, ⏳ pending).
+
+### Output existence verification
+
+Before marking any station as `passed`, verify that all files listed in the station's `outputs` and `required_outputs` (if present) actually exist on disk. Use Glob patterns — do not read file contents.
+
+- If a `required_outputs` file is missing → mark station as `failed`, halt for human review.
+- If an `outputs` file is missing but not in `required_outputs` → mark station as `passed` with a warning logged in the state file.
 
 ## Decision policy
 
@@ -72,7 +109,8 @@ Orchestrate the full SDLC agentic harness by resolving pipeline DAGs, dispatchin
 - Never load full deliverable content during orchestration — use Glob for existence checks
 - Load at most one agent module (skill + refs) at a time to manage context window
 - Always run scaffold before first pipeline execution
-- Verify output existence after each agent completes; warn on missing secondary outputs
+- Always create the workflow state file before executing the first station (see Workflow State Management)
+- Verify output existence (including `required_outputs`) after each agent completes; fail the gate on missing required outputs, warn on missing secondary outputs
 - For foreach agents with failures, continue other instances and report partial completion
 - Never bypass quality gates without explicit user override
 
