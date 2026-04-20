@@ -20,6 +20,15 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 ### Fixed
 - Replace /** with /* in reviewer agent paths to pass S-03-F
 
+## [0.0.26] — 2026-04-17
+
+### Changed
+- Workflow state tracking standardised: agent(s) `sdlc-coordinator`, 1 Copilot agent(s)
+- Workflow updates: `sdlc-ba`, `sdlc-full`
+
+### Fixed
+- Enforce output existence verification in SDLC gates
+
 
 ## [0.0.25] — 2026-04-16
 
