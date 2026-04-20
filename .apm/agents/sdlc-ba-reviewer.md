@@ -5,7 +5,8 @@ tools: ['codebase', 'search']
 allowedFilePathsReadOnly:
   - 'outputs/docs/1-prd/*'
   - 'outputs/docs/0-inputs/*'
-  - '.apm/skills/*'
+  - '.apm/skills/sdlc-deliverable-validation/*'
+  - '.apm/skills/sdlc-review-arbitration/*'
   - '.apm/templates/*'
 allowedFilePaths:
   - 'outputs/docs/1-prd/reviews/*'
