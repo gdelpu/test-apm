@@ -10,7 +10,6 @@ allowedFilePathsReadOnly:
   - '.apm/templates/*'
 allowedFilePaths:
   - 'outputs/docs/1-prd/reviews/*'
-  - 'outputs/reviews/*'
 ---
 
 # SDLC BA Reviewer Agent

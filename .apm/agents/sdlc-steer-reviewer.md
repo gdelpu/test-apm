@@ -15,7 +15,6 @@ allowedFilePathsReadOnly:
   - 'performance-report.md'
 allowedFilePaths:
   - 'outputs/docs/3-steer/reviews/*'
-  - 'outputs/reviews/*'
 ---
 
 # SDLC Steer Reviewer Agent

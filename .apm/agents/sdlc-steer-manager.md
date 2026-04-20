@@ -3,8 +3,7 @@ name: sdlc-steer-manager
 description: 'Provide project steering, sprint tracking, and release governance decisions.'
 tools: ['codebase', 'search', 'edit/editFiles']
 allowedFilePaths:
-  - 'outputs/docs/3-steer/**'
-  - 'docs/**'
+  - 'outputs/docs/3-steer/*'
 ---
 
 # SDLC Steering Manager Agent

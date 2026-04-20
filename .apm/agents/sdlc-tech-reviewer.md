@@ -11,7 +11,6 @@ allowedFilePathsReadOnly:
   - '.apm/templates/*'
 allowedFilePaths:
   - 'outputs/docs/2-tech/reviews/*'
-  - 'outputs/reviews/*'
 ---
 
 # SDLC Tech Reviewer Agent
