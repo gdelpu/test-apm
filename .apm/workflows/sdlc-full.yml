@@ -67,6 +67,27 @@ stations:
         - "If feature has_screens: user journeys (UF) exist for each feature with screens"
       severity: blocker
 
+  # ─── Phase 2b: BA Independent Review ───────────────────────────────
+  - id: ba-review
+    name: BA Independent Review
+    agent: sdlc-ba-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - ba-validation-report.md
+    outputs:
+      - ba-review-report.md
+    required_outputs:
+      - ba-review-report.md
+    gate:
+      criteria:
+        - "All BA deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
+
   # ─── Phase 3: Sprint Planning ──────────────────────────────────────
   - id: sprint-planning
     name: Sprint Planning (P1)
@@ -74,7 +95,7 @@ stations:
     skills:
       - sdlc-steer-planning
     inputs:
-      - ba-validation-report.md
+      - ba-review-report.md
     outputs:
       - plan-001-sprint-planning.md
       - rdp-001-roadmap.md
@@ -111,6 +132,28 @@ stations:
         - "BA-Tech traceability verified"
         - "Implementation plan and CLAUDE.md compiled"
       severity: blocker
+
+  # ─── Phase 4b: Tech Independent Review ─────────────────────────────
+  - id: tech-review
+    name: Tech Independent Review
+    agent: sdlc-tech-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - imp-001-implementation-plan.md
+    outputs:
+      - tech-review-report.md
+    required_outputs:
+      - tech-review-report.md
+    gate:
+      criteria:
+        - "All Tech deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "BA-Tech traceability verified by independent reviewer"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
 
   # ─── Phase 5: Implementation ───────────────────────────────────────
   - id: implementation
@@ -203,8 +246,8 @@ stations:
       severity: blocker
 
   # ─── Phase 9: Governance ───────────────────────────────────────────
-  - id: copil
-    name: COPIL & Go/No-Go (P3)
+  - id: steer-copil
+    name: COPIL Preparation (P3)
     agent: sdlc-steer-manager
     skills:
       - sdlc-steer-governance
@@ -214,6 +257,55 @@ stations:
       - performance-report.md
       - sprint-risks.md
     outputs:
+      - copil.md
+    required_outputs:
+      - copil.md
+    gate:
+      criteria:
+        - "Technical and sponsor sections included"
+        - "Key decisions documented"
+      severity: blocker
+
+  # ─── Phase 9b: Steer Independent Review ────────────────────────────
+  - id: steer-review
+    name: Steer Independent Review
+    agent: sdlc-steer-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - copil.md
+      - quality-report.md
+      - campaign-report.md
+      - performance-report.md
+      - sprint-risks.md
+      - sprint-progress.md
+    outputs:
+      - steer-review-report.md
+    required_outputs:
+      - steer-review-report.md
+    gate:
+      criteria:
+        - "All Steer deliverables independently reviewed"
+        - "Cross-domain accuracy verified against source reports"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
+
+  # ─── Phase 9c: Go/No-Go Decision ──────────────────────────────────
+  - id: steer-go-nogo
+    name: Go/No-Go Decision (P3)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-governance
+    inputs:
+      - steer-review-report.md
+      - copil.md
+      - quality-report.md
+      - campaign-report.md
+      - performance-report.md
+    outputs:
       - gng-001-go-nogo.md
     required_outputs:
       - gng-001-go-nogo.md
@@ -221,6 +313,7 @@ stations:
       criteria:
         - "All domain data aggregated"
         - "Go/No-Go decision documented with evidence"
+        - "COPIL pack has been independently reviewed (steer-review passed)"
       severity: blocker
 
 config:

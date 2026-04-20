@@ -21,6 +21,8 @@ stations:
     inputs: []
     outputs:
       - pil-001-project-sheet.md
+    required_outputs:
+      - pil-001-project-sheet.md
     gate:
       criteria:
         - "Team composition and capacity defined"
@@ -35,6 +37,8 @@ stations:
     inputs:
       - pil-001-project-sheet.md
     outputs:
+      - kpi-001-baseline.md
+    required_outputs:
       - kpi-001-baseline.md
     gate:
       criteria:
@@ -51,6 +55,8 @@ stations:
     inputs: []
     outputs:
       - plan-001-sprint-planning.md
+    required_outputs:
+      - plan-001-sprint-planning.md
     gate:
       criteria:
         - "Features batched into sprints"
@@ -66,6 +72,8 @@ stations:
       - plan-001-sprint-planning.md
     outputs:
       - rdp-001-roadmap.md
+    required_outputs:
+      - rdp-001-roadmap.md
     gate:
       criteria:
         - "Phases, milestones, and gates defined"
@@ -79,6 +87,8 @@ stations:
     inputs:
       - rdp-001-roadmap.md
     outputs:
+      - rsk-001-risk-register.md
+    required_outputs:
       - rsk-001-risk-register.md
     gate:
       criteria:
@@ -95,6 +105,8 @@ stations:
     inputs: []
     outputs:
       - sprint-progress.md
+    required_outputs:
+      - sprint-progress.md
     gate:
       criteria:
         - "Velocity metrics and blockers documented"
@@ -108,6 +120,8 @@ stations:
     inputs:
       - sprint-progress.md
     outputs:
+      - system-health.md
+    required_outputs:
       - system-health.md
     gate:
       criteria:
@@ -123,6 +137,8 @@ stations:
       - sprint-progress.md
       - system-health.md
     outputs:
+      - sprint-risks.md
+    required_outputs:
       - sprint-risks.md
     gate:
       criteria:
@@ -141,11 +157,39 @@ stations:
       - sprint-risks.md
     outputs:
       - copil.md
+    required_outputs:
+      - copil.md
     gate:
       criteria:
         - "Technical and sponsor sections included"
         - "Key decisions documented"
       severity: blocker
+
+  # ─── System P3b: Steer Independent Review ──────────────────────────
+  - id: steer-review
+    name: Steer Independent Review
+    agent: sdlc-steer-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - copil.md
+      - sprint-progress.md
+      - sprint-risks.md
+      - rsk-001-risk-register.md
+      - kpi-001-baseline.md
+    outputs:
+      - steer-review-report.md
+    required_outputs:
+      - steer-review-report.md
+    gate:
+      criteria:
+        - "All Steer deliverables independently reviewed"
+        - "Cross-domain accuracy verified against source reports"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
 
   - id: steer-go-nogo
     name: Go/No-Go Decision
@@ -153,13 +197,17 @@ stations:
     skills:
       - sdlc-steer-governance
     inputs:
+      - steer-review-report.md
       - copil.md
     outputs:
+      - gng-001-go-nogo.md
+    required_outputs:
       - gng-001-go-nogo.md
     gate:
       criteria:
         - "All domain data aggregated"
         - "Decision criteria explicit and traceable"
+        - "COPIL pack has been independently reviewed (steer-review passed)"
       severity: blocker
 
 config:
