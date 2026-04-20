@@ -12,6 +12,10 @@ ba_dependencies: []
 adr_reference: ADR-xxx
 priority: Must
 wave: 0
+plannable: true          # false for enablers from client-owned ADRs — excluded from sprint plan
+ownership: team           # team | client — inherited from the source ADR
+# pb_coverage: null      # full | partial | none — only for qualification/CI-CD enablers
+# pb_scenario: null      # new_web_app | new_database | new_tool | ... — PB scenario backing this enabler (if any)
 ---
 
 # [ENB-001] Technical enabler title

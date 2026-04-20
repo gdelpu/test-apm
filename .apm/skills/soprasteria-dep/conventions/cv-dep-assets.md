@@ -154,3 +154,74 @@ variables:
   IAC_PATH: launchpad/
   DEPLOY_ENV: $CI_ENVIRONMENT_NAME
 ```
+
+---
+
+## 4. DEP Project Booster
+
+### What it is
+A platform API for automated provisioning of environments, databases, CI/CD pipelines, and application scaffolding on InnerShift (public cloud OpenShift) and Arcus (on-premise OpenShift). Accessible via REST API and CLI tool.
+
+### CLI tool
+Located at `scripts/project-booster/`. Run with:
+```bash
+python -m project_booster <command> [options]
+```
+
+### Supported scenario types
+
+| Type | Description | Target |
+|------|-------------|--------|
+| `new_web_app` | Create web application (mono or multi-component) | InnerShift / Arcus |
+| `new_web_doc` | Create static documentation site (GitLab Pages) | Innersource |
+| `new_tool` | Deploy tool/service (Nexus, Vault, SonarQube, …) | Arcus |
+| `update_service` | Update an existing deployed service | InnerShift / Arcus |
+| `new_database` | Deploy standalone database | InnerShift |
+| `update_database` | Update an existing database | InnerShift |
+| `new_launchpad` | Deploy infrastructure on cloud (Azure, AWS) | Cloud |
+| `new_repository` | Create Artifactory repository | Artifactory |
+| `configure_kube_green_for_service` | Configure Kube-Green (Arcus) | Arcus |
+| `configure_kube_green_for_app` | Configure Kube-Green (InnerShift) | InnerShift |
+| `configure_kasten_for_service` | Configure Kasten backup (Arcus) | Arcus |
+| `configure_kasten_for_app` | Configure Kasten backup (InnerShift) | InnerShift |
+| `remove_resources_for_service` | Remove resources (Arcus) | Arcus |
+| `remove_resources_for_application` | Remove resources (InnerShift) | InnerShift |
+
+### Supported databases
+
+| Engine | Versions | Notes |
+|--------|----------|-------|
+| PostgreSQL | Platform-managed | Deployed on InnerShift |
+| MySQL | Platform-managed | Deployed on InnerShift |
+| MongoDB | Platform-managed | Deployed on InnerShift |
+| Elasticsearch | Platform-managed | Deployed on InnerShift |
+
+### Deployable tools
+
+| Tool | Purpose |
+|------|---------|
+| SonarQube | Code quality analysis |
+| Nexus | Artifact repository |
+| Vault | Secrets management |
+| DefectDojo | Security vulnerability management |
+| Dependency-Track | Dependency vulnerability tracking |
+| Packmind | Code pattern detection |
+| Suricate | Security monitoring |
+
+### Provisioning flow
+1. **Check orchestrator** — verify connectivity to InnerShift/Arcus
+2. **Verify/create namespace** — test namespace creation or writability
+3. **Set quotas & role bindings** — configure resource limits and RBAC
+4. **Create scenario** — define what to provision (app, db, tool)
+5. **Trigger pipeline** — start automated provisioning
+6. **Wait for completion** — poll until COMPLETED / FAILED
+7. **Retrieve credentials** — database connections, GitLab tokens
+
+### Selection rules
+- **Databases** → `new_database` on InnerShift (close to application workloads)
+- **Applications** → `new_web_app` on InnerShift (includes GitLab project + CI/CD)
+- **Shared tools** → `new_tool` on Arcus (shared infrastructure)
+- **Always** check orchestrator connectivity before provisioning
+- **Always** set resource quotas on namespaces
+- **Always** provision dev first, then staging, then prod
+- **Never** provision production without explicit confirmation

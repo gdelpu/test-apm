@@ -75,6 +75,13 @@ Define conventions for each layer, consistent with the activated skills.
 2. Find the ADR-STUB extraction — it contains the list of external system stubs
 3. Combine into the `## Local startup` section
 
+### Step 7: Infrastructure needs aggregation
+
+1. Read the `### Infrastructure needs (for PB matching)` section from each extraction file
+2. Filter out "None" entries
+3. Produce a consolidated `## Infrastructure needs` section in `[STK-001]`, listing all needs with their type, details, and source ADR
+4. This aggregated list serves as input for ADR-ENV-QUALIF's PB matching analysis (sk-t1.2 Step 2d-i) during **incremental mode** — when sk-t1.2 is re-run after `[STK-001]` exists, it can read this section instead of re-parsing all ADRs
+
 ## Imperative rules
 
 - **Every stack choice MUST trace to an ADR extraction** — no technology choice without architectural justification

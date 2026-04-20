@@ -77,6 +77,7 @@ Compile the list of items to implement — in incremental mode, only the sprint'
 
 **1. Enablers (from `[ENB-XXX]`):**
 - List each enabler with its wave, dependencies and sub-tasks
+- If an enabler's front matter contains `pb_scenario`, its sub-tasks already describe the PB invocation (skill `sk-dep4.1-project-booster`) with pre-computed parameters. The plan preserves these sub-tasks as-is — they are executable by the coding agent without additional interpretation.
 
 **2. User Stories (from `[US-XXX]`):**
 For each user story, determine the standard implementation sub-tasks respecting the TDD order:
