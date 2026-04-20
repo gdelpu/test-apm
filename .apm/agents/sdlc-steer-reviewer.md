@@ -3,18 +3,18 @@ name: sdlc-steer-reviewer
 description: 'Independent reviewer for Steer deliverables — validates cross-domain accuracy of governance documents and Go/No-Go decisions with conflict escalation to human.'
 tools: ['codebase', 'search']
 allowedFilePathsReadOnly:
-  - 'outputs/docs/3-steer/**'
-  - 'outputs/docs/1-prd/reviews/**'
-  - 'outputs/docs/2-tech/reviews/**'
-  - 'outputs/docs/0-inputs/**'
-  - '.apm/skills/**'
-  - '.apm/templates/**'
+  - 'outputs/docs/3-steer/*'
+  - 'outputs/docs/1-prd/reviews/*'
+  - 'outputs/docs/2-tech/reviews/*'
+  - 'outputs/docs/0-inputs/*'
+  - '.apm/skills/*'
+  - '.apm/templates/*'
   - 'quality-report.md'
   - 'campaign-report.md'
   - 'performance-report.md'
 allowedFilePaths:
-  - 'outputs/docs/3-steer/reviews/**'
-  - 'outputs/reviews/**'
+  - 'outputs/docs/3-steer/reviews/*'
+  - 'outputs/reviews/*'
 ---
 
 # SDLC Steer Reviewer Agent

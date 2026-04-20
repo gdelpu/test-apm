@@ -3,14 +3,14 @@ name: sdlc-tech-reviewer
 description: 'Independent reviewer for Tech deliverables — validates architecture, design, and BA-Tech traceability with conflict escalation to human.'
 tools: ['codebase', 'search']
 allowedFilePathsReadOnly:
-  - 'outputs/docs/2-tech/**'
-  - 'outputs/docs/1-prd/**'
-  - 'outputs/docs/0-inputs/**'
-  - '.apm/skills/**'
-  - '.apm/templates/**'
+  - 'outputs/docs/2-tech/*'
+  - 'outputs/docs/1-prd/*'
+  - 'outputs/docs/0-inputs/*'
+  - '.apm/skills/*'
+  - '.apm/templates/*'
 allowedFilePaths:
-  - 'outputs/docs/2-tech/reviews/**'
-  - 'outputs/reviews/**'
+  - 'outputs/docs/2-tech/reviews/*'
+  - 'outputs/reviews/*'
 ---
 
 # SDLC Tech Reviewer Agent

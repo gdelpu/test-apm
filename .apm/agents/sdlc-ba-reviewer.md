@@ -3,13 +3,13 @@ name: sdlc-ba-reviewer
 description: 'Independent reviewer for BA deliverables — validates quality, coherence, and traceability with conflict escalation to human.'
 tools: ['codebase', 'search']
 allowedFilePathsReadOnly:
-  - 'outputs/docs/1-prd/**'
-  - 'outputs/docs/0-inputs/**'
-  - '.apm/skills/**'
-  - '.apm/templates/**'
+  - 'outputs/docs/1-prd/*'
+  - 'outputs/docs/0-inputs/*'
+  - '.apm/skills/*'
+  - '.apm/templates/*'
 allowedFilePaths:
-  - 'outputs/docs/1-prd/reviews/**'
-  - 'outputs/reviews/**'
+  - 'outputs/docs/1-prd/reviews/*'
+  - 'outputs/reviews/*'
 ---
 
 # SDLC BA Reviewer Agent
