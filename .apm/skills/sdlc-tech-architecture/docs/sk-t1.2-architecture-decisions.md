@@ -24,6 +24,10 @@ You are a senior software architect specialised in architecture decision documen
 ### Optional brownfield inputs
 - `[GAP-001]` Technical gap analysis (brownfield only) — migration constraints to integrate into ADRs
 
+### Optional DEP context inputs (if `dep_access` ≠ `none`)
+- `.apm/skills/soprasteria-dep/refs/pb-scenario-example-new-web-app.json` — PB scenario structure reference (JSON schema example for `new_web_app`)
+- `.apm/skills/soprasteria-dep/sk-dep4.1-project-booster.md` — PB capability reference (scenario types, parameters, limitations) — **if available** (may not yet exist; the inline table in Step 2d-ii is self-sufficient)
+
 > **Context budget:** this agent does NOT read `[DOM-001]`, `[BRL-001]`, or `[EXF-001]`. Domain complexity is already reflected in `[CTX-001]`. Business rules and detailed requirements are consumed by T2 agents (data model, API contracts), not by architecture decisions.
 
 ## Expected output
@@ -49,20 +53,26 @@ A summary index file `outputs/docs/2-tech/1-architecture/adr/adr-000-index.md` l
 
 ## Detailed instructions
 
-### Step 0: DEP platform availability check
+### Step 0: DEP platform availability check ⛔ BLOCKING
+
+> **This step is a mandatory prerequisite.** No ADR may be written before Step 0 is completed and the `dep_access` value is recorded. If this step is skipped, the `adr-completeness` post-hook will reject the entire ADR output.
 
 Before writing any ADR, **ask the user** the following question:
 
 > **"Ce projet a-t-il accès à la plateforme DEP Sopra Steria (CI Library, Modern Workstation, Launchpad IaC) ?"**
 
 Accepted answers:
-- **Full access** → the three DEP assets (CI Library, Modern Workstation, Launchpad) are available. DEP options become the **recommended default** for ADR-CICD, ADR-ENV, and ADR-DEPLOY.
+- **Full access** → the three DEP assets (CI Library, Modern Workstation, Launchpad) are available. DEP options become the **recommended default** for ADR-CICD, ADR-ENV, and ADR-DEPLOY. Read the PB scenario reference at `.apm/skills/soprasteria-dep/refs/pb-scenario-example-new-web-app.json` to understand the JSON structure that `pb-provisioning-plan.json` must produce.
 - **Partial access** → specify which assets are available (e.g. "CI Library only"). DEP options are recommended only for the available assets.
 - **No access** → client infrastructure does not have access to DEP. Use generic options only. Do not reference DEP skills.
 
-Record the answer in the ADR index file (`adr-000-index.md`) under a new front matter field `dep_access: full | partial | none` and, if partial, `dep_assets: [ci, mw, iac]` listing the available assets.
+Record the answer **immediately** in the ADR index file (`adr-000-index.md`) under a new front matter field `dep_access: full | partial | none` and, if partial, `dep_assets: [ci, mw, iac]` listing the available assets. **Do not proceed to Step 1 until this file is written to disk.**
 
-This information drives the option evaluation in ADR-CICD, ADR-ENV, and ADR-DEPLOY (see Step 3).
+This information drives:
+- The option evaluation in ADR-CICD, ADR-ENV-DEV, and ADR-DEPLOY (see Step 3)
+- The infrastructure provisioning plan in ADR-ENV-QUALIF (see Step 2d)
+- The generation of `pb-provisioning-plan.json` (see Step 2d-iv)
+- The conditional execution of DEP pre-hooks by the workflow orchestrator
 
 ### Step 1: NFR extraction from BA deliverables
 
@@ -89,7 +99,9 @@ List all decisions by category. The following categories are **mandatory** for e
 | Data strategy | 1 | Database type, ORM, migration strategy |
 | Authentication | 1 | Auth provider, protocol (JWT, OAuth2...) |
 | External communications | 1 | Sync/async, messaging protocol |
-| Environment | 1 | Local dev environment (Docker Compose, dev scripts, env vars) |
+| **Environment — Dev** | **1** | Local dev environment (Docker Compose, dev scripts, env vars). See Step 2d |
+| **Environment — Qualification** | **1** | Qualification environment provisioning (DEP/PB vs manual IaC). See Step 2d |
+| **Environment — Client** | **1** | Client-managed environments (recette, pré-prod, prod). `ownership: client`. See Step 2d |
 | External system stubs | 1 | Stub technology per external system (MSW, WireMock, sandbox) |
 | CI/CD | 1 | CI/CD tool, stages, quality gates (see DEP option below) |
 | Deployment | 1 | Cloud/on-prem, container strategy (see DEP option below) |
@@ -137,6 +149,114 @@ Observability decisions were previously in a separate document `[OBS-001]`. They
 
 > **Guiding principle**: observability is not an afterthought — it is a design-time pillar alongside security.
 
+#### Step 2d: Environment ADRs (3 mandatory sub-categories)
+
+The "Environment" category is split into **three distinct ADRs** covering different environment tiers with different ownership models:
+
+| ADR | Subject | Ownership | Enablers plannable? |
+|-----|---------|-----------|---------------------|
+| **ADR-ENV-DEV** | Local development environment | `team` | Yes |
+| **ADR-ENV-QUALIF** | Qualification / integration test environment | `team` | Yes |
+| **ADR-ENV-CLIENT** | Client environments (recette, pré-prod, prod) | `client` | **No** (`plannable: false`) |
+
+**ADR-ENV-DEV** — local startup procedure, Docker Compose, dev scripts, .env templates, database setup, dependent services. Feeds `[STK-001]` "Local startup" section. If `dep_access` ≠ `none` with `mw` in `dep_assets`: evaluate "DEP Modern Workstation" as an option (see Step 3).
+
+**ADR-ENV-QUALIF** — uses a **requirement-driven provisioning analysis**. This ADR is the central integration point between architecture decisions and DEP/PB provisioning.
+
+##### Step 2d-i: Extract infrastructure requirements
+
+Collect all infrastructure needs from **all ADRs written so far in this session** and from **`[CTX-001]`**:
+
+| Source | Needs to extract |
+|--------|-----------------|
+| ADR-ARCH-* | Application components (backend, frontend, BFF…), their technologies |
+| ADR-DATA-* | Databases (engine, version, sizing) |
+| ADR-CICD | CI/CD pipeline, quality gates, SAST/DAST tools |
+| ADR-DEPLOY | Container orchestration, IaC approach |
+| ADR-SEC-* | Secret management tool (Vault), security scanning tool (DefectDojo) |
+| ADR-OBS-* | Monitoring/observability tools (if self-hosted) |
+| `[CTX-001]` | Qualification environment hosting location, network constraints |
+
+##### Step 2d-ii: Match requirements against Project Booster capabilities
+
+**If `dep_access` is `none`:** skip this sub-step — all needs are provisioned manually. Set `pb_coverage: none` (or omit the field). Go directly to Step 2d-iii.
+
+**If `dep_access` is `full` or `partial`:** for each infrastructure need, look up the matching Project Booster scenario type. Read the reference at `.apm/skills/soprasteria-dep/refs/pb-scenario-example-new-web-app.json` for the JSON structure.
+
+| Infrastructure need | PB scenario type | PB capable? | Notes |
+|---------------------|------------------|-------------|-------|
+| Web application (container-based) + CI/CD | `new_web_app` | ✅ | **Only scenario that creates CI/CD pipelines.** Bundles: GitLab project + CI pipeline + deployment on InnerShift/Arcus |
+| Static documentation site | `new_web_doc` | ✅ | GitLab Pages |
+| PostgreSQL / MySQL / MongoDB / Elasticsearch | `new_database` | ✅ | Returns credentials automatically |
+| Oracle / SQL Server / other DB engine | — | ❌ | Not supported by PB — manual provisioning required |
+| SonarQube, Nexus, Vault, DefectDojo, Dependency-Track | `new_tool` | ✅ | Deployed on Arcus |
+| Artifactory repository | `new_repository` | ✅ | |
+| Cloud IaC (Azure, AWS, AzureStack) | `new_launchpad` | ✅ | Terraform-based |
+| Kube-Green sleep schedule | `configure_kube_green_for_app/service` | ✅ | Cost optimization |
+| Kasten backup | `configure_kasten_for_app/service` | ✅ | Disaster recovery |
+| VM-based deployment (no containers) | — | ❌ | **PB only supports container targets (InnerShift/Arcus)** |
+| Standalone CI/CD pipeline (no app deployment) | — | ❌ | **CI is bundled with `new_web_app` — no standalone scenario.** Use DEP CI Library (`sk-dep1.1`) |
+| Custom middleware / legacy service | — | ❌ | Manual provisioning |
+
+For each need: record the PB scenario if capable, or manual fallback method.
+
+Derive `pb_coverage`:
+- `full` — every need has a PB scenario match (100%)
+- `partial` — some needs covered by PB, some manual
+- `none` — no PB scenario matches (or `dep_access: none`)
+
+##### Step 2d-iii: Produce the infrastructure provisioning plan
+
+Write a **`## Infrastructure provisioning plan`** section in ADR-ENV-QUALIF. **This section is mandatory regardless of `dep_access`.**
+
+When `dep_access` is `full` or `partial`:
+
+```markdown
+## Infrastructure provisioning plan
+
+| # | Need | Source ADR | PB scenario | Coverable by PB? | Provisioning method |
+|---|------|-----------|-------------|-------------------|---------------------|
+| 1 | Namespace + quotas + RBAC | ADR-ENV-QUALIF | env management | ✅ | PB: env create + quotas |
+| 2 | PostgreSQL 15 (10Gi) | ADR-DATA-001 | `new_database` | ✅ | PB: deploy db postgresql |
+| 3 | Backend Spring Boot | ADR-ARCH-001 | `new_web_app` | ✅ | PB: deploy app (includes CI/CD) |
+| 4 | SonarQube | ADR-CICD | `new_tool` | ✅ | PB: deploy tool sonarqube |
+| 5 | Legacy VM service | ADR-MIGRATION | — | ❌ | Manual: Ansible playbook |
+
+**PB coverage: 4/5** → `pb_coverage: partial`
+```
+
+When `dep_access` is `none`:
+
+```markdown
+## Infrastructure provisioning plan
+
+| # | Need | Source ADR | Provisioning method |
+|---|------|-----------|---------------------|
+| 1 | Namespace + quotas + RBAC | ADR-ENV-QUALIF | Manual: Terraform module |
+| 2 | PostgreSQL 15 (10Gi) | ADR-DATA-001 | Manual: Helm chart |
+| 3 | Backend Spring Boot | ADR-ARCH-001 | Manual: Docker + GitLab CI vanilla |
+| 4 | SonarQube | ADR-CICD | Manual: Helm chart |
+
+All infrastructure provisioned manually — no DEP/PB available.
+```
+
+YAML front matter for ADR-ENV-QUALIF must include:
+- `dep_access: full | partial | none` (from Step 0) — **always required**
+- `pb_coverage: full | partial | none` (computed) — **required only if `dep_access` ≠ `none`**
+
+##### Step 2d-iv: Generate the PB provisioning JSON (conditional)
+
+**If `pb_coverage` is `full` or `partial`:** produce a `pb-provisioning-plan.json` file alongside the ADR. Use the structure from `.apm/skills/soprasteria-dep/refs/pb-scenario-example-new-web-app.json` as reference. Place it in `outputs/docs/2-tech/1-architecture/adr/pb-provisioning-plan.json`.
+
+**If `pb_coverage` is `none` or `dep_access` is `none`:** do NOT produce the JSON.
+
+**ADR-ENV-CLIENT** — documents the specifications for the client's environments, with `ownership: client`:
+- Must list: expected environments (recette, pré-prod, prod), their purpose, promotion flow
+- Must define: what the client is responsible for (infrastructure, networking, access credentials)
+- Must define: what the team needs from the client (list of prerequisites, VPN access, service accounts, firewall rules)
+- Must define: pipeline adaptation requirements for client environments (different registry, different deployment target, different secrets)
+- Enablers generated from this ADR carry `plannable: false` — they appear in the enabler index for traceability but are **excluded from the sprint plan** because the team does not control client infrastructure provisioning timelines
+
 ### Step 3: For each ADR — options evaluation
 
 For each identified decision:
@@ -157,9 +277,10 @@ For each identified decision:
 - If DEP Launchpad is selected as the decision: in `### Required enablers`, reference `[ENB-DEPLOY-001]` and note `Implemented via skill sk-dep3.1-launchpad-iac`.
 - If DEP is not available: evaluate only generic options (Terraform standalone, CloudFormation, Bicep, Pulumi).
 
-**ADR-ENV specific rules (DEP-aware):**
+**ADR-ENV-DEV specific rules (DEP-aware):**
 - If `dep_access` is `full` or `partial` with `mw` in `dep_assets`: include **"DEP Modern Workstation"** as an evaluated option. This option uses a `mw-config.yml` file with 30+ modules (runtimes, databases, IDEs, containers) manageable via the `mwctl` CLI — cross-platform, no manual install scripts.
 - If DEP Modern Workstation is selected as the decision: in `### Required enablers`, reference `[ENB-ENV-001]` and note `Implemented via skill sk-dep2.1-modern-workstation`.
+- **Applies to ADR-ENV-DEV only** — ADR-ENV-QUALIF and ADR-ENV-CLIENT have their own rules (see Step 2d).
 - Must define the complete local startup procedure
 - Must specify: startup command (e.g. `docker compose up`), local URL, default port, required environment variables
 - This section feeds the `## Local startup` section of `[STK-001]` (agent T-1.3)
@@ -186,6 +307,8 @@ Before finalising:
 4. **Mandatory coverage check:**
    - At least **2 Security ADRs** exist → BLOCK if < 2
    - At least **2 Observability ADRs** exist → BLOCK if < 2
+   - **ADR-ENV-DEV, ADR-ENV-QUALIF, ADR-ENV-CLIENT** all exist → BLOCK if any missing
+   - ADR-ENV-QUALIF has `dep_access` in YAML front matter → BLOCK if missing
    - Every security ADR has a `## Threats addressed` section → WARN if missing
    - Every ADR has a `### Required enablers` section (even if empty with "None") → WARN if missing
 5. **Enabler density check:**
@@ -215,7 +338,12 @@ Rules for Fitness Functions:
 ## Mandatory rules
 
 - **Every ADR must have >= 2 options** — a single-option ADR is not an ADR, it is a decree
-- **ADR-ENV, ADR-STUB, ADR-CICD, ADR-DEPLOY are mandatory** for every project
+- **ADR-ENV-DEV, ADR-ENV-QUALIF, ADR-ENV-CLIENT, ADR-STUB, ADR-CICD, ADR-DEPLOY are mandatory** for every project
+- **ADR-ENV-CLIENT must have `ownership: client`** in YAML front matter — its enablers are `plannable: false`
+- **ADR-ENV-QUALIF must have `dep_access`** in YAML front matter — determined by Step 0 (always required, even if `none`)
+- **ADR-ENV-QUALIF must have `pb_coverage`** in YAML front matter — required only if `dep_access` ≠ `none` (determined by Step 2d-ii)
+- **ADR-ENV-QUALIF must include an infrastructure provisioning plan** (Markdown table) — always produced regardless of `dep_access`
+- **ADR-ENV-QUALIF must produce `pb-provisioning-plan.json`** if `pb_coverage` is `full` or `partial` — this JSON is consumed by skill `sk-dep4.1-project-booster`
 - **Security category: >= 2 ADRs mandatory** — BLOCK if absent. Must include STRIDE threats and ASVS level.
 - **Observability category: >= 2 ADRs mandatory** — BLOCK if absent. Must include SLI/SLO definitions.
 - **Every ADR must have a `### Required enablers` section** — even if "None". This is the sole input for the Enablers agent (t1.4).
@@ -230,7 +358,11 @@ Rules for Fitness Functions:
 - Named `adr-{NNN}-{slug}.md` (e.g. `adr-001-architecture-style.md`, `adr-010-security-defence-in-depth.md`)
 - Placed in `outputs/docs/2-tech/1-architecture/adr/`
 - Each follows the template `tpl-adr.md`
-- YAML front matter includes: `id`, `title`, `category` (one of: architecture, data, auth, comm, environment, stubs, cicd, deployment, security, observability, testing, other), `status: draft`
+- YAML front matter includes: `id`, `title`, `category` (one of: architecture, data, auth, comm, env-dev, env-qualif, env-client, stubs, cicd, deployment, security, observability, testing, other), `status: draft`, and optionally `ownership: team | client`, `dep_access: full | partial | none`, `pb_coverage: full | partial | none`
+
+**ADR-ENV-QUALIF additional output:**
+- `pb-provisioning-plan.json` placed in `outputs/docs/2-tech/1-architecture/adr/` — only if `pb_coverage` is `full` or `partial`
+- This JSON file is consumed by skill `sk-dep4.1-project-booster` during enabler implementation
 
 **Index file:**
 - Named `adr-000-index.md`
