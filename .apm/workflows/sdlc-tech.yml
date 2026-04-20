@@ -158,6 +158,7 @@ stations:
       - sdlc-tech-design
     inputs:
       - tst-001-test-strategy.md
+      - plan-001-sprint-planning.md
     outputs:
       - imp-001-implementation-plan.md
       - coding-agent-briefing.md
@@ -165,6 +166,7 @@ stations:
       criteria:
         - "Ordered wave plan for implementation"
         - "Coding agent briefing compiled"
+        - "Enabler/feature allocation matches sprint planning per PLAN-001; deviations documented with justification in ## Deviations from sprint plan"
       severity: blocker
 
   - id: tech-provider-bootstrap

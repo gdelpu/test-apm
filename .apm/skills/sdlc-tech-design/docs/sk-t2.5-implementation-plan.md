@@ -90,6 +90,24 @@ For each user story, determine the standard implementation sub-tasks respecting 
 - **AI validation via Playwright MCP** (if critical journey)
 - **Playwright CI tests** generated from collected selectors
 
+### Step 1.5: Sprint fidelity cross-reference
+
+Before ordering items, verify the allocation against the sprint planning source of truth:
+
+1. **Load `[PLAN-001]` sprint planning** (declared input). Extract the list of enabler IDs and feature IDs assigned to each sprint in scope.
+2. **Compare with collected work items** (Step 1): for each ID in PLAN-001's sprint scope, verify it is present in the collected items.
+3. **Detect deviations:**
+   - **Missing items**: IDs present in PLAN-001 for the sprint but absent from the collected items → **BLOCK** — add them or document why they are excluded.
+   - **Sprint reallocation**: items that the agent would place in a different sprint than PLAN-001 specifies (e.g., moved earlier/later for dependency reasons) → document with justification.
+   - **Infrastructure/IaC items** (namespace creation, Helm deployments, Project Booster calls): these MUST NOT be filtered out even if they produce no application code.
+4. **Produce `## Deviations from sprint plan` section** in the output. For each deviation:
+   - Item ID, original sprint (per PLAN-001), actual sprint (in IMP-001), rationale.
+   - If no deviations exist, write: `No deviations from PLAN-001 sprint allocation.`
+
+> **Imperative:** the sprint planning is the steering source of truth. The implementation plan may reorder items *within* a sprint for technical dependency reasons, but items MUST NOT silently move between sprints without explicit documentation.
+
+---
+
 ### Step 2: Topological sort
 
 Perform a topological sort to order the work items:
@@ -161,6 +179,16 @@ For each skill listed in `[STK-001]`: indicate the relative path, the loading co
 #### Step 8.2: Conventions synthesis and imperative rules
 
 Extract the 10 to 15 most critical rules from all deliverables.
+
+#### Step 8.3: Infrastructure waves (non-code)
+
+List all waves classified as infrastructure (IaC, Helm, Project Booster, namespace creation, CronJob manifests, etc.). For each infrastructure wave:
+1. **Wave ID and items** — reference the IMP items from the implementation plan.
+2. **Activated skills** — specify the skills required for execution (e.g., `sk-dep4.1-project-booster` for PB scenarios, Helm skills for chart deployments).
+3. **Execution mode** — indicate whether the item is executed via coding agent (e.g., generating `values-*.yaml`), via PB API call, or via manual operator action.
+4. **Pre-conditions** — infrastructure dependencies (e.g., "namespace must exist before Helm install").
+
+> **Rule:** Infrastructure waves MUST NOT be omitted from the briefing even if they produce no application code. The coding agent or its orchestrator must be aware of these waves to sequence execution correctly.
 
 ## Mandatory rules
 
