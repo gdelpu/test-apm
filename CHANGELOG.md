@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Added
+- New canonical agent(s): `sdlc-ba-reviewer`, `sdlc-steer-reviewer`, `sdlc-tech-reviewer`
+- New skill(s): `sdlc-review-arbitration`
+- GitHub Copilot provider agent(s): Sdlc Ba Reviewer, Sdlc Steer Reviewer, Sdlc Tech Reviewer
+
+### Changed
+- Workflow updates: `sdlc-ba`, `sdlc-full`, `sdlc-steer`, `sdlc-tech`
+
+
 ## [0.0.25] — 2026-04-16
 
 ### Changed
