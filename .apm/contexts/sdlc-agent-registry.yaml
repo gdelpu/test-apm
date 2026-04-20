@@ -891,7 +891,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "outputs/docs/2-tech/3-implementation/current-task-{item_id}.md"
+    output_pattern: "outputs/docs/2-tech/3-implementation/W{wave_id}/current-task-{item_id}.md"
 
   tech-t3.2:
     name: Code Generation
@@ -906,7 +906,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "outputs/docs/2-tech/3-implementation/impl-log-{item_id}.md"
+    output_pattern: "outputs/docs/2-tech/3-implementation/W{wave_id}/impl-log-{item_id}.md"
 
   tech-t3.3:
     name: Test Implementation
@@ -921,7 +921,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "outputs/docs/2-tech/3-implementation/test-log-{item_id}.md"
+    output_pattern: "outputs/docs/2-tech/3-implementation/W{wave_id}/test-log-{item_id}.md"
 
   tech-t3.4:
     name: Build & Validate
@@ -936,7 +936,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "outputs/docs/2-tech/3-implementation/validation-{item_id}.md"
+    output_pattern: "outputs/docs/2-tech/3-implementation/W{wave_id}/validation-{item_id}.md"
 
   tech-t3.5:
     name: Wave Gate
@@ -951,7 +951,7 @@ agents:
     hooks:
       <<: *tech_hooks_std
     model: sonnet
-    output_pattern: "outputs/docs/2-tech/3-implementation/wave-{wave_id}-report.md"
+    output_pattern: "outputs/docs/2-tech/3-implementation/W{wave_id}/wave-{wave_id}-report.md"
 
   # ─── System T4: Continuous Quality ─────────────────────────────────
 

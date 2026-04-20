@@ -58,7 +58,7 @@ For items touching architecture-sensitive areas:
 
 ### 7. Write validation report
 
-Create `outputs/docs/2-tech/3-implementation/validation-{item_id}.md` with:
+Create `outputs/docs/2-tech/3-implementation/W{wave_id}/validation-{item_id}.md` with:
 - Build results (pass/fail per module)
 - Test results (pass/fail with counts)
 - Coverage metrics

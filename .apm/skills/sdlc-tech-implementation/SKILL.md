@@ -119,7 +119,7 @@ full context, and produce a self-contained task description.
    c. Which [API-xxx] endpoints are relevant? (from `story_ref`)
    d. Which [TST-001] test IDs should be implemented? (from `story_ref`)
    e. Which [BRL-*] business rules apply?
-5. Write `outputs/docs/2-tech/3-implementation/current-task-{item_id}.md` containing:
+5. Write `outputs/docs/2-tech/3-implementation/W{wave_id}/current-task-{item_id}.md` containing:
    - Item metadata (id, title, type, wave, estimate, deps, sprint)
    - Resolved context (relevant ADR excerpts, DAT columns, API contract, test IDs)
    - Acceptance criteria (from [IMP-001] deliverable column + relevant gate criteria)
@@ -154,7 +154,7 @@ project conventions and upstream specifications.
    a. Read relevant [ADR-xxx] for decision details
    b. Read [ENB-000] for enabler scope and included tasks
 7. After code generation, run build command (per project conventions)
-8. Write implementation log: `outputs/docs/2-tech/3-implementation/impl-log-{item_id}.md`
+8. Write implementation log: `outputs/docs/2-tech/3-implementation/W{wave_id}/impl-log-{item_id}.md`
 
 **Gate criteria:**
 - Code compiles without errors
@@ -174,7 +174,7 @@ project conventions and upstream specifications.
    b. Generate test file following TST-001 naming conventions
    c. Include BA traceability comment (e.g. `// Implements: [BR-xxx], [US-xxx]`)
 4. Run test suite
-5. Write test log: `outputs/docs/2-tech/3-implementation/test-log-{item_id}.md`
+5. Write test log: `outputs/docs/2-tech/3-implementation/W{wave_id}/test-log-{item_id}.md`
 
 **Gate criteria:**
 - Every test ID from [TST-001] mapped to this item has a corresponding test file
@@ -195,7 +195,7 @@ project conventions and upstream specifications.
    - `git add` all files modified during T3.2 and T3.3
    - Commit message: `feat(W{wave_id}): {item_id} — {item_title}`
    - Do NOT push yet (push happens at T3.6 after wave gate)
-7. Write validation report: `outputs/docs/2-tech/3-implementation/validation-{item_id}.md`
+7. Write validation report: `outputs/docs/2-tech/3-implementation/W{wave_id}/validation-{item_id}.md`
 
 **Gate criteria:**
 - Build passes
@@ -218,7 +218,7 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
    - Wave-specific criteria met (from [IMP-001] §6)
 4. If gate passes:
    a. Mark wave as COMPLETED in `wave-state.json`
-   b. Write wave report: `outputs/docs/2-tech/3-implementation/wave-{wave_id}-report.md`
+   b. Write wave report: `outputs/docs/2-tech/3-implementation/W{wave_id}/wave-{wave_id}-report.md`
    c. Trigger T4 Quality — drift detection on newly implemented code
 5. If gate fails:
    a. Write failure report with specific blocking items
@@ -245,7 +245,7 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
    b. Fix issues on the wave branch (return to T3.2/T3.3 for the affected item)
    c. Commit fix: `fix(W{wave_id}): {item_id} — {fix description}`
    d. Push and re-validate (max 3 attempts)
-4. Write CI validation report: `outputs/docs/2-tech/3-implementation/ci-validation-W{wave_id}.md`
+4. Write CI validation report: `outputs/docs/2-tech/3-implementation/W{wave_id}/ci-validation-W{wave_id}.md`
 
 **Gate criteria:**
 - CI pipeline passes all checks
@@ -288,15 +288,15 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
 
 | Output | ID | Location |
 |--------|----|----------|
-| Resolved task (per item) | — | `outputs/docs/2-tech/3-implementation/current-task-{item_id}.md` |
-| Implementation log (per item) | — | `outputs/docs/2-tech/3-implementation/impl-log-{item_id}.md` |
-| Test log (per item) | — | `outputs/docs/2-tech/3-implementation/test-log-{item_id}.md` |
-| Validation report (per item) | — | `outputs/docs/2-tech/3-implementation/validation-{item_id}.md` |
-| Wave completion report | — | `outputs/docs/2-tech/3-implementation/wave-{wave_id}-report.md` |
+| Resolved task (per item) | — | `outputs/docs/2-tech/3-implementation/W{wave_id}/current-task-{item_id}.md` |
+| Implementation log (per item) | — | `outputs/docs/2-tech/3-implementation/W{wave_id}/impl-log-{item_id}.md` |
+| Test log (per item) | — | `outputs/docs/2-tech/3-implementation/W{wave_id}/test-log-{item_id}.md` |
+| Validation report (per item) | — | `outputs/docs/2-tech/3-implementation/W{wave_id}/validation-{item_id}.md` |
+| Wave completion report | — | `outputs/docs/2-tech/3-implementation/W{wave_id}/wave-{wave_id}-report.md` |
 | Sprint summary | — | `outputs/docs/2-tech/3-implementation/sprint-{sprint_id}-summary.md` |
 | Wave state file | — | `outputs/docs/2-tech/3-implementation/wave-state.json` |
 | Source code | — | `src/` (project source tree) |
-| CI validation report | — | `outputs/docs/2-tech/3-implementation/ci-validation-W{wave_id}.md` |
+| CI validation report | — | `outputs/docs/2-tech/3-implementation/W{wave_id}/ci-validation-W{wave_id}.md` |
 | Feature branch | — | `feat/W{wave_id}-{slug}` (git) |
 | Merge request | — | MR from wave branch to main |
 
@@ -305,7 +305,7 @@ evaluate the wave gate criteria from [IMP-001] and decide whether to proceed.
 1. **Phases are sequential per item:** T3.1 → T3.2 → T3.3 → T3.4 (loop per item within a sprint)
 2. **T3.5 runs once per wave** after all items in that wave are completed (may span multiple sprints)
 3. **Wave ordering is strict:** W0 → W1 → W2 → ... → WNFR. No wave starts until the previous wave's gate passes.
-4. **Sprint scoping is flexible:** A sprint may contain items from a single wave only. The sprint scope is the intersection of the wave backlog and the sprint planning selection.
+4. **Sprint scoping is flexible:** A sprint may contain items from multiple waves (e.g. finishing W1 and starting W2). The sprint scope is the intersection of the wave backlogs and the sprint planning selection. Wave ordering (Rule 3) is still enforced: items from W{n} cannot start until W{n-1}'s gate passes.
 5. **Context injection is mandatory:** T3.2 must NOT generate code without first reading the relevant upstream documents (DAT, API, STK, ADRs)
 6. **Traceability is mandatory:** every test must have a BA traceability comment
 7. **No deviation from specs:** generated code must match DAT-001 columns, API-xxx contracts, and STK-001 conventions exactly

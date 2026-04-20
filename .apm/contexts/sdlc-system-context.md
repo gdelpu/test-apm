@@ -23,7 +23,8 @@ docs/
     0-audit/      # Technical audit + gap analysis
     1-architecture/ # System context, ADRs, stack, enablers
     2-design/     # Data model, APIs, test strategy, impl plan
-    3-implementation/ # Wave-state, impl-logs, test-logs, validation reports
+    3-implementation/ # Wave-state, sprint summaries, per-wave subdirs (W0/, W1/, ...)
+      W{wave_id}/   # impl-logs, test-logs, validation reports, wave reports
     4-quality/    # Drift reports, code reviews, E2E scripts
     5-workshops/  # Tech review reports
   3-steer/        # Steering deliverables

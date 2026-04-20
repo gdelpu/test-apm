@@ -7,7 +7,7 @@ conventions and upstream specifications exactly.
 
 ## Pre-conditions
 
-- Resolved task file exists: `current-task-{item_id}.md`
+- Resolved task file exists: `W{wave_id}/current-task-{item_id}.md`
 - [STK-001] Stack Conventions is available
 - Relevant upstream documents identified in the resolved task
 
@@ -15,7 +15,7 @@ conventions and upstream specifications exactly.
 
 ### 1. Load resolved task
 
-Read `outputs/docs/2-tech/3-implementation/current-task-{item_id}.md` to get:
+Read `outputs/docs/2-tech/3-implementation/W{wave_id}/current-task-{item_id}.md` to get:
 - Item metadata (type, scope, dependencies)
 - Resolved context (ADRs, DAT, API, test IDs)
 - Acceptance criteria
@@ -63,7 +63,7 @@ Execute the project build command to verify compilation:
 
 ### 5. Write implementation log
 
-Create `outputs/docs/2-tech/3-implementation/impl-log-{item_id}.md` using the `tpl-impl-log.md` template with:
+Create `outputs/docs/2-tech/3-implementation/W{wave_id}/impl-log-{item_id}.md` using the `tpl-impl-log.md` template with:
 - Context loaded (documents read, sections referenced)
 - Changes made (files created/modified with descriptions)
 - Build result (output, status)
