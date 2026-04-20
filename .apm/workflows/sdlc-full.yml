@@ -299,6 +299,9 @@ stations:
     agent: sdlc-steer-manager
     skills:
       - sdlc-steer-governance
+    hooks:
+      pre:
+        - .apm/hooks/pre/verify-source-manifest.md
     inputs:
       - steer-review-report.md
       - copil.md
