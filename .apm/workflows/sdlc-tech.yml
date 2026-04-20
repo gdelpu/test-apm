@@ -313,6 +313,28 @@ stations:
         - "E2E scripts trace to BA test scenarios"
       severity: warning
 
+  # ─── Independent Review ────────────────────────────────────────────
+  - id: tech-review
+    name: Tech Independent Review
+    agent: sdlc-tech-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - imp-001-implementation-plan.md
+    outputs:
+      - tech-review-report.md
+    required_outputs:
+      - tech-review-report.md
+    gate:
+      criteria:
+        - "All Tech deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "BA-Tech traceability verified by independent reviewer"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause
+
 config:
   output_dir: outputs/docs/2-tech/
   state_file: workflow-state.md
