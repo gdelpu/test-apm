@@ -7,11 +7,18 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Added
+- `scripts/generate-marketplace.py`
+- `scripts/hooks/pre-commit`
+- `scripts/hooks/setup-hooks.py`
+
 ### Changed
 - Brownfield detection updated: 1 Copilot agent(s), 1 workflows file(s)
 - Workflow state tracking standardised: 3 Claude Code command(s)
 - Copilot provider agent updates: `sdlc-ba-analyst.agent`, `sdlc-coordinator.agent`, `sdlc-steer-manager.agent`, `sdlc-tech-architect.agent`, `sdlc-test-executor.agent`
 - Workflow updates: `sdlc-ba`, `sdlc-tech`
+- Brownfield detection updated: 1 copilot runtime file(s), 1 other file(s)
+- Documentation updates: `contributing.md`
 
 ### Fixed
 - Add handoff-based context isolation for SDLC pipeline
