@@ -118,7 +118,7 @@ function Get-PrototypeStructure {
     }
     
     # Get all TypeScript/JavaScript files
-    $allFiles = Get-ChildItem -Path $PROTOTYPE_SRC -Recurse -Include *.tsx,*.ts,*.jsx,*.js -File
+    $allFiles = @(Get-ChildItem -Path $PROTOTYPE_SRC -Recurse -Include *.tsx,*.ts,*.jsx,*.js -File)
     $structure.totalFiles = $allFiles.Count
     
     return $structure

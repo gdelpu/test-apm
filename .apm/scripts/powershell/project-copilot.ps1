@@ -315,8 +315,8 @@ Write-Host "`nProjection complete. Runtime assets written to $targetPath."
 $canonicalAgentDir = Join-Path $repoRoot '.apm/agents'
 $providerAgentDir  = Join-Path $repoRoot "$adapterValue/agents"
 if ((Test-Path $canonicalAgentDir) -and (Test-Path $providerAgentDir)) {
-    $canonicalNames = (Get-ChildItem $canonicalAgentDir -Filter '*.md').BaseName
-    $providerNames  = (Get-ChildItem $providerAgentDir -Filter '*.agent.md').BaseName | ForEach-Object { $_ -replace '\.agent$', '' }
+    $canonicalNames = @(Get-ChildItem $canonicalAgentDir -Filter '*.md' | ForEach-Object { $_.BaseName })
+    $providerNames  = @(Get-ChildItem $providerAgentDir -Filter '*.agent.md' | ForEach-Object { $_.BaseName -replace '\.agent$', '' })
     $missing = $canonicalNames | Where-Object { $_ -notin $providerNames }
     if ($missing) {
         Write-Host ""
