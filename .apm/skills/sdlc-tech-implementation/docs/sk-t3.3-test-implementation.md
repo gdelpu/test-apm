@@ -7,8 +7,8 @@ ensuring full coverage of the implemented item.
 
 ## Pre-conditions
 
-- Resolved task file exists: `current-task-{item_id}.md`
-- Implementation log exists: `impl-log-{item_id}.md` (code is generated)
+- Resolved task file exists: `W{wave_id}/current-task-{item_id}.md`
+- Implementation log exists: `W{wave_id}/impl-log-{item_id}.md` (code is generated)
 - [TST-001] Test Strategy is available
 
 ## Steps
@@ -59,7 +59,7 @@ Execute the project test command for affected modules.
 
 ### 4. Write test log
 
-Create `outputs/docs/2-tech/3-implementation/test-log-{item_id}.md` with:
+Create `outputs/docs/2-tech/3-implementation/W{wave_id}/test-log-{item_id}.md` with:
 - Test IDs implemented (linking to TST-001)
 - Test files created
 - Test execution results

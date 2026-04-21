@@ -77,7 +77,7 @@ A single file `outputs/docs/3-steer/plan-001-sprint-planning.md` containing:
 | Complexity | Complexity |
 | Dependencies | Dependencies (feature IDs and cross-epic refs) |
 
-**Enablers:** If enabler files exist in `outputs/docs/2-tech/2-design/enablers/`, read their YAML front matter to extract ID, name, wave, and dependencies. If enablers are not yet produced, infer the main enabler categories from the project context:
+**Enablers:** If enabler files exist in `outputs/docs/2-tech/2-design/enablers/`, read their YAML front matter to extract ID, name, wave, dependencies, **and `plannable` flag**. If enablers are not yet produced, infer the main enabler categories from the project context:
 - Infrastructure / CI-CD setup
 - Authentication / authorization
 - Database initial migration
@@ -86,7 +86,9 @@ A single file `outputs/docs/3-steer/plan-001-sprint-planning.md` containing:
 
 Mark inferred enablers as `[estimated]`.
 
-**Consolidated inventory** — all work items in one table:
+**Enablers pour mémoire (non-plannable):** Enablers with `plannable: false` in their YAML front matter (typically from ADRs with `ownership: client`) are **excluded** from the active sprint inventory. They are listed in a dedicated section **"Enablers pour mémoire — hors périmètre d'implémentation"** at the end of the plan, with their ID, name, source ADR, and reason for exclusion. These enablers exist for traceability and documentation but represent work that the team does not control (e.g., client environment provisioning).
+
+**Consolidated inventory** — all **plannable** work items in one table:
 
 | ID | Name | Type | Epic | MoSCoW | Complexity | Dependencies | Depth |
 |----|------|------|------|--------|------------|--------------|-------|
@@ -266,6 +268,7 @@ Note: durations are indicative — in an agentic pipeline, a sprint may take hou
 - **Enabler Tech work starts immediately with the sprint** — no BA dependency.
 - **BA Sprint N+1 runs in parallel with Tech Sprint N** — maximize throughput.
 - **Enablers before Features at same priority and depth** — they unblock Tech foundations.
+- **Enablers with `plannable: false` are NEVER placed in a sprint batch** — they appear only in the "Enablers pour mémoire" section at the end of the plan. They must not be counted in `total_enablers` or `total_items` YAML front matter fields.
 - **agent 3.6b (E2E Plan)** must appear in the **last sprint only**.
 - **E2E Test Campaign and Performance Tests** appear after the last Tech Sprint.
 
@@ -282,8 +285,27 @@ Note: durations are indicative — in an agentic pipeline, a sprint may take hou
   total_items: {N}
   total_features: {N}
   total_enablers: {N}
+  non_plannable_enablers: {N}
   total_sprints: {N}
   max_concurrency: {N}
   ---
   ```
 - **Initial status:** `draft`
+
+### Section "Enablers pour mémoire"
+
+After the last sprint section and before the Summary, include:
+
+```markdown
+## Enablers pour mémoire — hors périmètre d'implémentation
+
+Les enablers suivants sont documentés pour traçabilité mais ne sont pas planifiés
+car leur réalisation dépend d'acteurs externes (client, infogérance tierce).
+
+| ID | Name | Source ADR | Ownership | Reason |
+|----|------|-----------|-----------|--------|
+| ENB-ENV-CLIENT | Client environment specifications | ADR-ENV-CLIENT | client | Client provisions their own environments |
+| ENB-CICD-CLIENT | Pipeline adaptation for client envs | ADR-ENV-CLIENT | client | Depends on client environment availability |
+```
+
+These items should be reviewed with the client during project governance meetings (COPIL) to track their progress.

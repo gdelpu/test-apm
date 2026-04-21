@@ -1,0 +1,151 @@
+function resizeMain() {
+    const leftPanelHidden = sessionStorage.getItem('hide-left-panel');
+    const rightPanelHidden = sessionStorage.getItem('hide-right-panel');
+    if (leftPanelHidden && rightPanelHidden) {
+        document.querySelectorAll('[role="main"]')[0].style.flex = '0 0 100%';
+        document.querySelectorAll('[role="main"]')[0].style.maxWidth = '100%';
+    } else if ((leftPanelHidden || rightPanelHidden) && window.innerWidth >= 768 && window.innerWidth < 1200) {
+        document.querySelectorAll('[role="main"]')[0].style.flex = '0 0 100%';
+        document.querySelectorAll('[role="main"]')[0].style.maxWidth = '100%';
+    } else if ((leftPanelHidden || rightPanelHidden) && window.innerWidth >= 1200) {
+        document.querySelectorAll('[role="main"]')[0].style.flex = '0 0 83.3333333%';
+        document.querySelectorAll('[role="main"]')[0].style.maxWidth = '83.3333333%';
+    } else {
+        document.querySelectorAll('[role="main"]')[0].removeAttribute('style');
+    }
+    return false;
+}
+
+function manageLeftPanel() {
+    if (document.getElementsByClassName('td-sidebar').length > 0) {
+        const leftPanel = document.getElementsByClassName('td-sidebar')[0];
+        const leftPanelButton = document.getElementById('left-panel-manager');
+        const leftPanelHidden = sessionStorage.getItem('hide-left-panel');
+        if (leftPanelHidden) {
+            leftPanel.setAttribute('style', 'display: none !important');
+            leftPanelButton.setAttribute('class', 'button-left-open');
+            leftPanelButton.setAttribute('title', 'Show sidebar');
+        } else {
+            leftPanel.removeAttribute('style');
+            leftPanelButton.setAttribute('class', 'button-left');
+            leftPanelButton.setAttribute('title', 'Hide sidebar');
+        }
+    }
+}
+
+function manageRightPanel() {
+    if (document.getElementsByClassName('td-sidebar-toc').length > 0) {
+        const rightPanel = document.getElementsByClassName('td-sidebar-toc')[0];
+        const rightPanelButton = document.getElementById('right-panel-manager');
+        const rightPanelHidden = sessionStorage.getItem('hide-right-panel');
+        if (rightPanelHidden) {
+            rightPanel.setAttribute('style', 'display: none !important');
+            rightPanelButton.setAttribute('class', 'button-right-open');
+            rightPanelButton.setAttribute('title', 'Show sidebar');
+        } else {
+            rightPanel.removeAttribute('style');
+            rightPanelButton.setAttribute('class', 'button-right');
+            rightPanelButton.setAttribute('title', 'Hide sidebar');
+        }
+    }
+}
+
+const onClickOutside = (element) => {
+    document.addEventListener('click', e => {
+      if (!element.contains(e.target)) {
+        const cleaner = document.getElementsByClassName('pagefind-ui__search-clear')[0];
+        cleaner.click();
+      };
+    });
+  };
+
+  const onClickSearchResult = () => {
+    document.addEventListener('focusout', e => {
+        const inputSearch = document.getElementsByClassName('pagefind-ui__search-input')[0];
+        if (inputSearch.contains(e.target)) {
+            const msgSearch = document.getElementsByClassName('pagefind-ui__message')[0];
+            let someResults = true;
+
+            if (msgSearch.innerHTML.startsWith('No results for')) {
+                someResults = false;
+            }
+            let options = { method: 'HEAD' };            
+            let params = { value: inputSearch.value, hadResults: someResults };
+            let url = '/search?' + ( new URLSearchParams( params ) ).toString();
+            fetch( url, options ).then();
+        }
+    });
+  };
+
+
+jQuery(document).ready(function() {
+    // Trace search input
+    onClickSearchResult();
+
+    // Hide search panel when clicking outside
+    onClickOutside(document.getElementById('searchPagefind'));
+
+    /** Hide right panel button when displaying search results */
+    // Select the node that will be observed for mutations
+    var targetNode = document.getElementsByClassName('pagefind-ui__drawer')[0];
+
+    // Options for the observer (which mutations to observe)
+    var config = { attributes: false, childList: true, subtree: false };
+
+    // Callback function to execute when mutations are observed
+    var callback = function(mutationsList) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                const rightPanel = document.getElementById('right-panel-manager');
+                if (mutation.addedNodes.length > 0) {
+                    if (rightPanel != null && mutation.addedNodes[0].textContent !== '') {
+                        rightPanel.setAttribute('style', 'display: none !important');
+                    }
+                }
+                if (rightPanel != null && mutation.removedNodes.length > 0) {
+                    rightPanel.removeAttribute('style');
+                }
+            }
+        }
+    };
+
+    // Create an observer instance linked to the callback function
+    var observer = new MutationObserver(callback);
+
+    // Start observing the target node for configured mutations
+    observer.observe(targetNode, config);
+    /** END */
+
+    jQuery($('#left-panel-manager')).click(function() {
+        const leftPanelHidden = sessionStorage.getItem('hide-left-panel');
+        if (leftPanelHidden) {
+            sessionStorage.removeItem('hide-left-panel');
+        } else {
+            sessionStorage.setItem('hide-left-panel', 'true');
+        }
+        manageLeftPanel();
+        manageRightPanel();
+        resizeMain();
+    });
+
+    jQuery($('#right-panel-manager')).click(function() {
+        const rightPanelHidden = sessionStorage.getItem('hide-right-panel');
+        if (rightPanelHidden) {
+            sessionStorage.removeItem('hide-right-panel');
+        } else {
+            sessionStorage.setItem('hide-right-panel', 'true');
+        }
+        manageLeftPanel();
+        manageRightPanel();
+        resizeMain();
+    });
+    if (window.innerWidth < 768) {
+        sessionStorage.removeItem('hide-right-panel');
+        sessionStorage.removeItem('hide-left-panel');
+    } else if (window.innerWidth < 1200) {
+        sessionStorage.removeItem('hide-right-panel');
+    }
+    manageLeftPanel();
+    manageRightPanel();
+    resizeMain();
+});

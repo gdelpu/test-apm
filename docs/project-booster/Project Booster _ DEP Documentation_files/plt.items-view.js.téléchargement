@@ -1,0 +1,6 @@
+"use strict";(self.odspNextWebpackJsonp=self.odspNextWebpackJsonp||[]).push([["plt.items-view"],{359(a,b,c){c.d(b,{a:()=>e,b:()=>f,c:()=>h,d:()=>g,e:()=>d});let d={NO_PERMISSION:0,OPEN_IN_EXCEL:1,OPEN_IN_ONENOTE:2,OPEN_IN_POWERPOINT:3,OPEN_IN_WORD:4,OPEN_IN_VISIO:5,OPEN_IN_PROJECT:6,OPEN_IN_PUBLISHER:7},e=d.OPEN_IN_EXCEL,f=d.OPEN_IN_POWERPOINT,g=d.OPEN_IN_WORD,h=d.OPEN_IN_VISIO;d.OPEN_IN_ONENOTE}
+,372(a,b,c){c.d(b,{a:()=>e,b:()=>f});var d=c(31);let e=!c(0).a.isActivated("3B743EF2-9494-4DB5-AB99-86AF4BD63A63");function f(a,b){let c=new d.a(a).authority;return a.indexOf("/v2.")>-1&&!b?`${c}/_api/v2.1`:`${c}/v1.0`}}
+,356(a,b,c){c.d(b,{a:()=>d});function d(a){return a.remoteItem?.parentReference||a.parentReference}}
+,370(a,b,c){c.d(b,{a:()=>e});var d=c(371);function e(a){return(0,d.a)({endpoint:a.endpoint,driveId:a.driveId,itemId:a.itemId})}}
+,360(a,b,c){var d,e;c.d(b,{a:()=>f,b:()=>g}),(e=d||(d={}))[e.all=31]="all",e[e.folders=2]="folders",e[e.photos=8]="photos",e[e.documents=16]="documents",e[e.music=32]="music";let f="ft",g="ext"}
+}]),define("plt.items-view",[],{});

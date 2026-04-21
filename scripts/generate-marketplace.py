@@ -35,11 +35,11 @@ def count_dirs(directory: Path) -> int:
     return len([d for d in directory.iterdir() if d.is_dir()])
 
 
-def count_recursive_files(directory: Path) -> int:
-    """Count all files recursively."""
+def count_recursive_files(directory: Path, pattern: str = "*") -> int:
+    """Count files matching pattern recursively."""
     if not directory.is_dir():
         return 0
-    return len([f for f in directory.rglob("*") if f.is_file()])
+    return len([f for f in directory.rglob(pattern) if f.is_file()])
 
 
 def count_assets() -> dict:
@@ -52,7 +52,7 @@ def count_assets() -> dict:
         "instructions": count_files(APM_DIR / "instructions"),
         "templates": count_files(APM_DIR / "templates", "*"),
         "contexts": count_files(APM_DIR / "contexts", "*"),
-        "hooks": count_recursive_files(APM_DIR / "hooks"),
+        "hooks": count_recursive_files(APM_DIR / "hooks", "*.md"),
         "knowledgeFiles": count_recursive_files(APM_DIR / "knowledge"),
     }
 

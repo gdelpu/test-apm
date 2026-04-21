@@ -10,6 +10,9 @@ author: agent-t1.2-architecture-decisions
 reviewers: []
 dependencies: ["CTX-001"]
 ba_dependencies: ["VIS-001", "DOM-001", "BRL-001"]
+ownership: team          # team | client — client ADRs generate plannable:false enablers
+# dep_access: null       # full | partial | none — only for ADR-ENV-QUALIF (from Step 0)
+# pb_coverage: null      # full | partial | none — only for ADR-ENV-QUALIF (computed from PB matching)
 ---
 
 # [ADR-001] Architecture decision title
@@ -141,3 +144,34 @@ Be explicit: "We choose Option X because..."
 | [VIS-001] | Business constraints motivating the NFRs |
 | [DOM-001] | Domain complexity influencing the architecture style |
 | [BRL-001] | Business rules influencing the data strategy |
+
+---
+
+<!-- ============================================================
+     SECTION BELOW: ONLY for ADR-ENV-QUALIF (category: env-qualif)
+     Delete this entire section for all other ADR categories.
+     ============================================================ -->
+
+## Infrastructure provisioning plan
+
+<!-- 
+  Built by matching infrastructure needs (from all ADRs + STK-001) 
+  against Project Booster scenario types (see sk-dep4.1-project-booster).
+  
+  If dep_access is "none": all rows have "Manual" as provisioning method.
+  If dep_access is "full" or "partial": match each need against PB scenarios.
+-->
+
+| # | Need | Source ADR | PB scenario | Coverable by PB? | Provisioning method |
+|---|------|-----------|-------------|-------------------|---------------------|
+| 1 | <!-- e.g. Namespace + quotas --> | <!-- ADR-ENV-QUALIF --> | <!-- env management --> | <!-- ✅ / ❌ --> | <!-- PB: env create / Manual: kubectl --> |
+
+**PB coverage: X/Y** → `pb_coverage: full | partial | none`
+
+### Bootstrap scaffold strategy
+
+<!-- 
+  For PB-covered app components (new_web_app): scaffold is automatic.
+  For manual components: describe the minimal compilable app + 1 passing TU.
+  NEVER lower quality gate thresholds as a workaround.
+-->

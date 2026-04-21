@@ -40,6 +40,12 @@ critical_path_days: 0
 
 > **Wave size limit**: Each wave MUST contain ≤ 10 implementation items. If a functional grouping exceeds 10 items, split into sub-waves (e.g., W2a, W2b) maintaining dependency order.
 
+> **Wave categories**: Waves are classified into two mandatory categories. Both MUST be present when the sprint planning includes items of each type:
+> - **Application waves** — produce application code (Java, React, tests, migrations, etc.)
+> - **Infrastructure waves** — produce IaC artifacts, Helm values, Project Booster invocations, namespace creation, CronJob manifests, or other DevOps deliverables (type: `enabler-iac`, `enabler-helm`, `enabler-pb`, `enabler-devops`)
+>
+> If the sprint planning includes infrastructure enablers, the plan MUST contain at least one infrastructure wave. Omitting infrastructure waves is a gate failure.
+
 ### Wave 0 — Setup & Foundations
 
 | wave_id | item_id | title | type | story_ref | estimate_h | deliverable |
@@ -227,3 +233,15 @@ graph TD
 | XRay Test Execution | 100% PASSED per wave | GATE-WN |
 | Atomic sub-tasks | ≤ 4h per item | Plan validation |
 | No cycle in graph | 0 cycles | Plan validation |
+
+---
+
+## 9. Deviations from sprint plan
+
+> Cross-reference with `[PLAN-001]`. List any item whose sprint allocation in this plan differs from the sprint planning source of truth. If no deviations exist, state explicitly.
+
+| item_id | title | PLAN-001 sprint | IMP-001 sprint | rationale |
+|---------|-------|----------------|----------------|-----------|
+| <!-- ENB-XXX --> | <!-- title --> | <!-- S3 --> | <!-- S2 --> | <!-- justification --> |
+
+> `No deviations from PLAN-001 sprint allocation.` *(delete this line if deviations exist)*

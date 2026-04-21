@@ -123,6 +123,21 @@ For every selected job, record the justification in the "Selected jobs" table.
 - **Always trace** every job choice back to a project characteristic from the inputs.
 - **If `[STK-001]` is absent**: produce a minimal pipeline and clearly mark every technology assumption as `Assumption` in Points of attention.
 
+### Project Booster integration
+
+If the qualification environment is bootstrapped via **Project Booster** (skill `sk-dep4.1-project-booster`), the `.gitlab-ci.yml` and initial pipeline configuration are created automatically by Project Booster during the "Initialize a new application" scenario. In this case:
+
+1. **This skill (DEP-1.1) is still required** — Project Booster creates a standard pipeline, but the team may need to customise it (add security gates, adjust branch strategy, add environment-specific deployment jobs).
+2. **Use the Project Booster-generated `.gitlab-ci.yml` as the baseline** — do not start from scratch. Read the generated file, then apply the job selection rules from Step 2 to add missing jobs or adjust variables.
+3. **Document delta** — the Markdown deliverable should include a "Project Booster baseline" section listing what PB created, followed by a "Customisations" section listing what this skill added or modified.
+
+### Bootstrap scaffold and quality gate strategy
+
+When the pipeline is first activated, the project may have no application code yet. To avoid quality gate failures on an empty project:
+
+- **Recommended approach: scaffold bootstrap** — deploy a minimal compilable application with 1 passing unit test (see enabler ENB-SCAFFOLD or Project Booster scaffold). Quality gate thresholds (`sonarqube` coverage, `trivy` vulnerability count) are set to their **target values from day one**.
+- **Forbidden approach: lower thresholds** — never set coverage to 0% or disable quality gates temporarily. This creates a risk of forgetting to restore them, leading to silent technical debt accumulation.
+
 ## Output format
 
 File 1 (Markdown deliverable):

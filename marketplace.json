@@ -1,6 +1,6 @@
 {
   "name": "ssg-ai-backbone",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "displayName": "AI SDLC Foundation",
   "description": "Sopra Steria Group AI SDLC Foundation — cross-provider collection of agents, skills, workflows, prompts, and foundational knowledge for specification-driven delivery, quality validation, security governance, brand compliance, and full-lifecycle SDLC support. Designed for reuse as an MCP server across projects with dynamic workflows covering the entire software development lifecycle.",
   "publisher": "sopra-steria-group",
@@ -45,7 +45,7 @@
     "instructions": 10,
     "templates": 6,
     "contexts": 11,
-    "hooks": 27,
+    "hooks": 14,
     "knowledgeFiles": 24
   },
   "exports": {
@@ -156,5 +156,5 @@
     ]
   },
   "dependencies": [],
-  "generatedAt": "2026-04-21T11:39:49Z"
+  "generatedAt": "2026-04-21T13:00:12Z"
 }

@@ -49,6 +49,16 @@ Followed by a structured extraction:
 - {If this is ADR-STUB: list of stubs needed}
 - {Otherwise: "None"}
 
+### Infrastructure needs (for PB matching)
+
+> **Extraction rule:** If this ADR implies an infrastructure need for the qualification environment (database, service, tool, container platform…), extract it here. The consolidation agent (t1.3b) will aggregate all infrastructure needs and pass them to ADR-ENV-QUALIF for PB scenario matching (Step 2d-ii).
+
+| Need | Type | Details |
+|------|------|---------|
+| {e.g. PostgreSQL database} | {database / application / tool / infrastructure} | {version, sizing, engine — from the ADR decision} |
+
+> If this ADR has no infrastructure implications: "None"
+
 ### Skills to activate
 
 | Skill | Registry path | Reason |

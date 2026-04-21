@@ -20,11 +20,11 @@ Part of the [**AI Backbone**](https://steria.sharepoint.com/sites/aibackbone/Sit
 | Agents | 31 | `.apm/agents/` |
 | Skills | 127 | `.apm/skills/` |
 | Workflows | 20 | `.apm/workflows/` |
-| Hooks | 27 | `.apm/hooks/` |
+| Hooks | 14 | `.apm/hooks/` |
 | Prompts | 16 | `.apm/prompts/` |
 | Instructions | 10 | `.apm/instructions/` |
-| Templates | 6 | `.apm/templates/` |
-| Contexts | 11 | `.apm/contexts/` |
+| Templates | 5 | `.apm/templates/` |
+| Contexts | 10 | `.apm/contexts/` |
 | Knowledge areas | 4 (24 files) | `.apm/knowledge/` |
 
 ---

@@ -44,9 +44,12 @@ After inventorying all individual enablers, group them by technical domain using
 
 | Thematic domain | Typical candidates to group |
 |---|---|
-| Infrastructure & Platform | K8s namespaces, Helm charts, OVH/infogérance actions, environment provisioning |
+| Dev Environment & Scaffold | Docker Compose, .env templates, dev scripts, bootstrap scaffold (compilable hello-world + 1 TU) |
+| Qualification Environment (DEP or Manual) | Namespace provisioning, DEP Project Booster setup, or manual IaC (Terraform/Ansible), qualification DB |
+| Qualification CI/CD Pipeline | DEP CI Library or manual GitLab CI / GitHub Actions, SonarQube, quality gates on qualification env |
+| Client Environments *(plannable: false)* | Recette / pré-prod / prod specifications, promotion flow, client prerequisites `[MÉMOIRE]` |
+| Client CI/CD Adaptation *(plannable: false)* | Pipeline adaptation for client registry/deployment targets, client-specific secrets `[MÉMOIRE]` |
 | Project Scaffold & Docker | Monorepo structure, Docker Compose, service templates, Nx/Maven multi-module |
-| CI/CD Pipeline & Quality Gates | GitLab CI / GitHub Actions stages, Trivy, SonarQube, coverage gate |
 | Data Layer (DB, Migrations, ORM) | Flyway, JPA/Hibernate config, HikariCP, Testcontainers DB |
 | Backend Foundation (Security, API) | Spring Security, Keycloak adapter, JWT filter, OpenAPI/SpringDoc config |
 | Async & Batch Processing | CronJobs, message broker setup, email dispatch state machine |
@@ -62,6 +65,8 @@ After inventorying all individual enablers, group them by technical domain using
 4. If an individual enabler does not fit any theme, create a new theme rather than skipping it.
 5. Mark conditional enablers (e.g., contingent on a legal or architectural decision) explicitly with `[CONDITIONAL — <condition>]` and assign them to the highest wave.
 6. The index YAML front matter must reflect the consolidated count: `total_enablers: <10-15>`.
+7. **Plannable flag propagation:** if ALL members of a thematic group have `plannable: false`, the thematic enabler inherits `plannable: false` and is displayed with the marker `[MÉMOIRE]` in the index table. These enablers are produced for documentation and traceability but excluded from the sprint plan.
+8. **PB coverage propagation:** if the enabler has `pb_coverage: full | partial | none`, display it in the index table. If `pb_scenario` is set, display the scenario type. This helps the sprint planner understand which enablers are automated via Project Booster and which require manual provisioning.
 
 > **BLOCK condition:** If after Step 1b the count of thematic enablers is still > 15 — STOP. Re-merge themes before proceeding to Step 2.
 

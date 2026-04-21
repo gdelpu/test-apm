@@ -95,8 +95,11 @@ All artifacts are written to `outputs/docs/2-tech/`:
 - `imp-001-implementation-plan.md` — ordered wave implementation plan
 - `coding-agent-briefing.md` — provider-neutral coding agent entry point
 - `3-implementation/wave-state.json` — implementation progress tracking
-- `3-implementation/wave-{id}-report.md` — wave completion reports
-- `3-implementation/sprint-{id}-summary.md` — sprint summaries
+- `3-implementation/sprint-{id}-summary.md` — sprint summaries (cross-wave)
+- `3-implementation/W{id}/` — per-wave subdirectory containing:
+  - `wave-{id}-report.md` — wave completion report
+  - `current-task-{item_id}.md`, `impl-log-{item_id}.md`, `test-log-{item_id}.md`, `validation-{item_id}.md`
+  - `ci-validation-W{id}.md`
 - `drift-report.md` — spec-vs-code drift (continuous)
 - `e2e-scripts-001-playwright.md` — generated E2E scripts (continuous)
 - Feature branches: `feat/W{id}-{slug}` per wave

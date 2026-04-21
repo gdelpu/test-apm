@@ -31,7 +31,7 @@ Read [IMP-001] — extract the DoD criteria for the current wave:
 
 ### 2. Aggregate validation reports
 
-Collect all `validation-{item_id}.md` files for items in this wave:
+Collect all `W{wave_id}/validation-{item_id}.md` files for items in this wave:
 - Compile cumulative build/test/coverage metrics
 - Identify any items with warnings or non-critical findings
 
@@ -47,7 +47,7 @@ For each wave DoD criterion from [IMP-001]:
 If all criteria are met:
 1. Mark wave as `completed` in `wave-state.json` with `completed_at` timestamp
 2. Mark the next wave as `in-progress`
-3. Write wave report: `outputs/docs/2-tech/3-implementation/wave-{wave_id}-report.md` using the `tpl-wave-report.md` template
+3. Write wave report: `outputs/docs/2-tech/3-implementation/W{wave_id}/wave-{wave_id}-report.md` using the `tpl-wave-report.md` template
 4. Log that T4 Quality (drift detection) should be triggered on the wave's code
 
 ### 5. Gate fails

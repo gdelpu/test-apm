@@ -55,7 +55,7 @@ For the selected item, determine which upstream documents are relevant using the
 
 ### 5. Write resolved task
 
-Create `outputs/docs/2-tech/3-implementation/current-task-{item_id}.md` with:
+Create `outputs/docs/2-tech/3-implementation/W{wave_id}/current-task-{item_id}.md` with:
 
 ```markdown
 # Resolved Task — {item_id}

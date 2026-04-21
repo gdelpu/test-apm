@@ -59,7 +59,7 @@ A summary index file `outputs/docs/2-tech/1-architecture/adr/adr-000-index.md` l
 
 Before writing any ADR, **ask the user** the following question:
 
-> **"Ce projet a-t-il accès à la plateforme DEP Sopra Steria (CI Library, Modern Workstation, Launchpad IaC) ?"**
+> **"Does this project have access to the Sopra Steria DEP platform (CI Library, Modern Workstation, Launchpad IaC)?"**
 
 Accepted answers:
 - **Full access** → the three DEP assets (CI Library, Modern Workstation, Launchpad) are available. DEP options become the **recommended default** for ADR-CICD, ADR-ENV, and ADR-DEPLOY. Read the PB scenario reference at `.apm/skills/soprasteria-dep/refs/pb-scenario-example-new-web-app.json` to understand the JSON structure that `pb-provisioning-plan.json` must produce.
