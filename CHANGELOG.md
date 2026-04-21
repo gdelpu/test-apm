@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.33] — 2026-04-21
+
+### Changed
+- Version bump (fill in details)
+
+
 ## [0.0.32] — 2026-04-21
 
 ### Fixed
