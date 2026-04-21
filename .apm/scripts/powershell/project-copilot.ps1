@@ -191,7 +191,7 @@ if ($Full) {
 
         Copy-Item $src -Destination $dst -Recurse -Force
 
-        $count = (Get-ChildItem $dst -File -Recurse).Count
+        $count = @(Get-ChildItem $dst -File -Recurse).Count
         Write-Host "  FULL-COPY $($mapping.Target) -- $count files -> $dst"
     }
 

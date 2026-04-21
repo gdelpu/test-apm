@@ -92,9 +92,9 @@ $apiBase = "$GitLabUrl/api/v4/projects/$ProjectId"
 if ($Version -eq 'latest') {
     Write-Step 'Resolving latest version'
     try {
-        $tags = Invoke-RestMethod -Uri "$apiBase/repository/tags?order_by=version&sort=desc&per_page=1" `
-            -Headers $headers -UseBasicParsing
-        if ($tags -and $tags.Count -gt 0) {
+        $tags = @(Invoke-RestMethod -Uri "$apiBase/repository/tags?order_by=version&sort=desc&per_page=1" `
+            -Headers $headers -UseBasicParsing)
+        if ($tags.Count -gt 0) {
             $Version = $tags[0].name -replace '^v', ''
             Write-Info "Latest version: $Version"
         }
