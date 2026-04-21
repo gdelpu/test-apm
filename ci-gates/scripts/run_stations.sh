@@ -233,6 +233,13 @@ invoke_station() {
   # extract_json.py handles output from both assistant text and create-tool calls.
   local copilot_exit=0
   local attempt=0
+
+  # Write the diff and changed-file list to bounded workspace files so the
+  # agent can read them via the `view` tool.  Inlining them into the -p
+  # argument caused "Argument list too long" (ARG_MAX) on large MRs.
+  local truncated_diff="${STATION_OUT}/diff_truncated.patch"
+  head -n "${MAX_DIFF}" "${DIFF_FILE}" > "${truncated_diff}"
+
   while true; do
     attempt=$(( attempt + 1 ))
     timeout "${TIMEOUT_SECS}" copilot -s --output-format json \
@@ -242,11 +249,9 @@ invoke_station() {
 ${PROMPT}
 
 MR_IID: ${CI_MERGE_REQUEST_IID:-0}
-CHANGED_FILES:
-$(cat "${CHANGED_FILE}")
 
-DIFF (first ${MAX_DIFF} lines):
-$(head -n "${MAX_DIFF}" "${DIFF_FILE}")
+CHANGED_FILES: Use the view tool to read ${CHANGED_FILE}
+DIFF (first ${MAX_DIFF} lines): Use the view tool to read ${truncated_diff}
 
 OUTPUT FORMAT: Respond with ONLY a raw JSON object, no markdown fences, no prose.
 " > "${raw_out}" || copilot_exit=$?
