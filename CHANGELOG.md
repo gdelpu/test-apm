@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.28] — 2026-04-21
+
 ### Changed
 - Brownfield detection updated: 1 Copilot agent(s), 1 workflows file(s)
 - Workflow state tracking standardised: 3 Claude Code command(s)
