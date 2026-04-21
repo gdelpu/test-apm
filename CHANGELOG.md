@@ -7,6 +7,18 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Added
+- `docs/correction-report-epic-granularity.md`
+
+### Changed
+- Skill updates: `sdlc-ba-scoping`, `sdlc-ba-specification`
+- Workflow updates: `sdlc-ba`, `sdlc-full`
+
+### Fixed
+- Enforce epic/feature granularity constraints and propagate DCO-001 inputs
+- Add missing ba-discovery station to sdlc-full and sdlc-ba workflows
+
+
 ## [0.0.34] — 2026-04-21
 
 ### Fixed
