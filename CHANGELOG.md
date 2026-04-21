@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.34] — 2026-04-21
+
+### Fixed
+- Wrap Get-WhenToUse return in @() for PS 5.1 .Count compat
+
+
 ## [0.0.33] — 2026-04-21
 
 ### Changed
