@@ -213,12 +213,62 @@ stations:
       - sdlc-ba-functional-design
     inputs:
       - user-stories/
+      - user-journeys/
     outputs:
       - screen-specs/
-    optional: true  # conditional: has_screens
+    conditional: has_screens
     gate:
       criteria:
         - "Components, fields, and validation rules defined"
+      severity: blocker
+
+  - id: ba-figma-prototypes
+    name: Interactive HTML Prototypes (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - screen-specs/
+      - user-journeys/
+    outputs:
+      - prototypes/
+    conditional: has_screens  # only for features with UI screens
+    gate:
+      criteria:
+        - "Navigable HTML/CSS prototype generated for each screen spec"
+        - "Prototype navigation matches user journeys"
+      severity: blocker
+
+  - id: ba-batch-specs
+    name: Batch Specifications (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - features/
+      - business-rules/
+    outputs:
+      - batch-specs/
+    conditional: has_batches
+    gate:
+      criteria:
+        - "Input/output formats, volumes, and scheduling defined"
+      severity: blocker
+
+  - id: ba-notifications
+    name: Notification Specifications (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - user-stories/
+      - user-journeys/
+    outputs:
+      - notifications/
+    conditional: has_notifications
+    gate:
+      criteria:
+        - "Channels, recipients, triggers, and content templates defined"
       severity: blocker
 
   - id: ba-test-scenarios
@@ -229,6 +279,8 @@ stations:
     inputs:
       - user-journeys/
       - screen-specs/
+      - batch-specs/
+      - notifications/
     outputs:
       - test-scenarios/
     required_outputs:
@@ -239,6 +291,22 @@ stations:
         - "Coverage matrix included"
       severity: blocker
 
+  - id: ba-test-data
+    name: Test Data Catalogue (per feature)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-ba-functional-design
+    inputs:
+      - test-scenarios/
+    outputs:
+      - test-data/
+    required_outputs:
+      - test-data/
+    gate:
+      criteria:
+        - "Structured test dataset catalogue with pre-conditions for each scenario"
+      severity: blocker
+
   - id: ba-e2e-plan
     name: E2E Test Plan (project scope)
     agent: sdlc-ba-analyst
@@ -246,6 +314,7 @@ stations:
       - sdlc-ba-functional-design
     inputs:
       - test-scenarios/
+      - test-data/
     outputs:
       - e2e-plan-001.md
     required_outputs:
@@ -273,7 +342,11 @@ stations:
         - "All deliverables pass quality audit"
         - "Cross-deliverable coherence verified"
         - "Traceability chain complete: EXF → EP → FT → US → BR → SCE"
-        - "If feature has_screens: user journeys (UF) exist for each feature with screens"
+        - "If feature has_screens: user journeys (UF) and screen specs exist for each feature with screens"
+        - "If feature has_screens: HTML prototypes generated and navigation matches journeys"
+        - "If feature has_batches: batch specifications exist"
+        - "If feature has_notifications: notification specifications exist"
+        - "Test data catalogue produced for each feature"
         - "All required_outputs from upstream stations exist on disk"
       severity: blocker
 

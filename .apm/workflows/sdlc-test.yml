@@ -1,0 +1,95 @@
+name: sdlc-test
+description: Qualification test pipeline executing E2E/UAT campaigns and performance tests, producing structured reports with Go/No-Go quality gate data.
+type: delivery
+
+# Default hooks applied to all stations.
+default_hooks:
+  pre:
+    - .apm/hooks/pre/input-validation/base.md
+  post:
+    - .apm/hooks/post/quality-control.md
+
+stations:
+  # ─── System E1: E2E/UAT Campaign ──────────────────────────────────
+  - id: test-campaign-launch
+    name: Campaign Launch
+    agent: sdlc-test-executor
+    skills:
+      - sdlc-test-campaign
+    inputs:
+      - e2e-scripts-001-playwright.md
+      - e2e-plan-001.md
+      - test-scenarios/
+      - test-data/
+    outputs:
+      - campaign-execution-results.md
+    required_outputs:
+      - campaign-execution-results.md
+    gate:
+      criteria:
+        - "Prerequisites verified: seeds loaded, test environment ready, scripts available"
+        - "Playwright scripts executed"
+        - "Anomalies logged with severity classification"
+      severity: blocker
+
+  - id: test-campaign-report
+    name: Campaign Report
+    agent: sdlc-test-executor
+    skills:
+      - sdlc-test-campaign
+    inputs:
+      - campaign-execution-results.md
+    outputs:
+      - campaign-report.md
+    required_outputs:
+      - campaign-report.md
+    gate:
+      criteria:
+        - "Pass/fail rates calculated against thresholds"
+        - "Anomalies classified by severity and impact"
+        - "Go/No-Go quality gate data produced"
+      severity: blocker
+
+  # ─── System E2: Performance Campaign ───────────────────────────────
+  - id: test-perf-execution
+    name: Performance Execution
+    agent: sdlc-test-executor
+    skills:
+      - sdlc-test-performance
+    inputs:
+      - tst-001-test-strategy.md
+    outputs:
+      - perf-execution-results.md
+    required_outputs:
+      - perf-execution-results.md
+    parallel: true  # can run in parallel with E1
+    gate:
+      criteria:
+        - "k6/Artillery performance tests executed"
+        - "JSON results collected: response times, throughput, error rates"
+      severity: blocker
+
+  - id: test-perf-report
+    name: Performance Report
+    agent: sdlc-test-executor
+    skills:
+      - sdlc-test-performance
+    inputs:
+      - perf-execution-results.md
+    outputs:
+      - performance-report.md
+    required_outputs:
+      - performance-report.md
+    gate:
+      criteria:
+        - "Results analyzed against defined thresholds"
+        - "Baseline comparison for regression detection"
+        - "Bottlenecks and degradation patterns identified"
+      severity: blocker
+
+config:
+  output_dir: outputs/docs/4-test/
+  state_file: workflow-state.md
+  allow_resume: true
+  allow_skip_gate: true
+  nestable: true

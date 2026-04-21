@@ -1,5 +1,5 @@
 name: sdlc-full
-description: Composite SDLC pipeline orchestrating all four domains — BA specification, Tech architecture, Test campaigns, and Steer governance — with inter-domain quality gates.
+description: Composite SDLC pipeline orchestrating all four domains — BA specification, Tech architecture, Test campaigns, and Steer governance — with inter-domain quality gates and sprint-iterative execution.
 type: delivery
 
 # Hooks are inherited from sub-workflows (sdlc-ba, sdlc-tech, sdlc-steer).
@@ -45,26 +45,30 @@ stations:
         - "Project sheet and KPI baselines established"
       severity: blocker
 
-  # ─── Phase 2: Business Analysis ────────────────────────────────────
-  - id: ba-pipeline
-    name: BA Pipeline (S0-S3)
+  # ─── Phase 2: BA Specification (S0-S2) ─────────────────────────────
+  # Brownfield audit (S0), scoping (S1), and specification (S2) only.
+  # Functional design (S3) is deferred to the sprint loop.
+  - id: ba-spec-pipeline
+    name: BA Specification Pipeline (S0-S2)
     agent: sdlc-coordinator
     skills:
       - sdlc-ba-audit
       - sdlc-ba-scoping
       - sdlc-ba-specification
-      - sdlc-ba-functional-design
     inputs:
       - pil-001-project-sheet.md
     outputs:
-      - ba-validation-report.md
+      - exf-001-functional-requirements.md
+      - dom-001-domain-model.md
+      - features/
+      - business-rules/
     required_outputs:
-      - ba-validation-report.md
+      - exf-001-functional-requirements.md
+      - features/
     gate:
       criteria:
-        - "All BA systems complete"
-        - "Traceability chain verified: EXF → EP → FT → US → BR → SCE"
-        - "If feature has_screens: user journeys (UF) exist for each feature with screens"
+        - "BA S0-S2 complete: vision, glossary, actors, requirements, domain model, epics, features, business rules"
+        - "Traceability chain verified: EXF → EP → FT"
       severity: blocker
 
   # ─── Phase 2b: BA Independent Review ───────────────────────────────
@@ -88,13 +92,46 @@ stations:
       severity: blocker
       on_conflict: pause  # halt for human arbitration when CONFLICT detected
 
-  # ─── Phase 3: Sprint Planning ──────────────────────────────────────
+  # ─── Phase 3: Technical Architecture (T0-T1) ──────────────────────
+  # Brownfield audit (T0) and architecture (T1) only.
+  # Design (T2) and implementation (T3) are deferred to the sprint loop.
+  - id: tech-archi-pipeline
+    name: Tech Architecture Pipeline (T0-T1)
+    agent: sdlc-coordinator
+    skills:
+      - sdlc-tech-audit
+      - sdlc-tech-architecture
+    inputs:
+      - exf-001-functional-requirements.md
+      - dom-001-domain-model.md
+    outputs:
+      - ctx-001-system-context.md
+      - adr/
+      - stk-001-stack-conventions.md
+      - enb-000-index.md
+    required_outputs:
+      - ctx-001-system-context.md
+      - stk-001-stack-conventions.md
+    gate:
+      criteria:
+        - "C4 system context and ADRs produced"
+        - "Stack conventions consolidated"
+        - "Enablers prioritized with wave resolution"
+      severity: blocker
+
+  # ─── Phase 4: Sprint Planning (P1) ────────────────────────────────
+  # Sprint planning requires BA specs (S0-S2), BA review, and tech
+  # architecture (T0-T1) to batch features into sprints with constraints.
   - id: sprint-planning
     name: Sprint Planning (P1)
     agent: sdlc-steer-manager
     skills:
       - sdlc-steer-planning
     inputs:
+      - exf-001-functional-requirements.md
+      - features/
+      - enb-000-index.md
+      - stk-001-stack-conventions.md
       - ba-review-report.md
     outputs:
       - plan-001-sprint-planning.md
@@ -105,32 +142,68 @@ stations:
       - rsk-001-risk-register.md
     gate:
       criteria:
-        - "Features batched into sprints"
+        - "Features batched into sprints with technical constraints considered"
         - "Roadmap and risk register complete"
       severity: blocker
 
-  # ─── Phase 4: Technical Architecture & Design ──────────────────────
-  - id: tech-pipeline
-    name: Tech Pipeline (T0-T4)
+  # ─── Phase 5: Sprint Loop ─────────────────────────────────────────
+  # Per-sprint iteration: BA functional design → Tech design →
+  # Tech implementation (waves) → Tech quality → Sprint tracking.
+  # The loop repeats for each sprint defined in plan-001.
+
+  - id: ba-functional-design
+    name: BA Functional Design (S3)
     agent: sdlc-coordinator
     skills:
-      - sdlc-tech-audit
-      - sdlc-tech-architecture
+      - sdlc-ba-functional-design
+    inputs:
+      - plan-001-sprint-planning.md
+      - features/
+      - business-rules/
+    outputs:
+      - user-stories/
+      - user-journeys/
+      - screen-specs/
+      - prototypes/
+      - test-scenarios/
+      - test-data/
+      - e2e-plan-001.md
+      - ba-validation-report.md
+    required_outputs:
+      - user-stories/
+      - test-scenarios/
+      - ba-validation-report.md
+    gate:
+      criteria:
+        - "All S3 deliverables for sprint scope produced"
+        - "Traceability chain complete: FT → US → BR → SCE"
+        - "If feature has_screens: screen specs, prototypes, and user journeys produced"
+        - "Test data catalogue produced for each feature in sprint scope"
+      severity: blocker
+
+  - id: tech-design
+    name: Tech Design (T2)
+    agent: sdlc-coordinator
+    skills:
       - sdlc-tech-design
-      - sdlc-tech-implementation
-      - sdlc-tech-quality
     inputs:
       - plan-001-sprint-planning.md
       - ba-validation-report.md
+      - stk-001-stack-conventions.md
+      - adr/
     outputs:
+      - dat-001-data-model.md
+      - api-contracts/
+      - tst-001-test-strategy.md
       - imp-001-implementation-plan.md
+      - coding-agent-briefing.md
     required_outputs:
       - imp-001-implementation-plan.md
     gate:
       criteria:
-        - "All Tech systems complete"
+        - "Data model, API contracts, test strategy, and implementation plan produced"
         - "BA-Tech traceability verified"
-        - "Implementation plan and CLAUDE.md compiled"
+        - "Implementation plan aligned with sprint planning"
       severity: blocker
 
   # ─── Phase 4b: Tech Independent Review ─────────────────────────────
@@ -160,27 +233,76 @@ stations:
     name: Code Implementation
     agent: implementer
     skills:
-      - code-implementation
+      - sdlc-tech-implementation
     inputs:
       - imp-001-implementation-plan.md
+      - stk-001-stack-conventions.md
+      - dat-001-data-model.md
+      - api-contracts/
+      - enb-000-index.md
     outputs:
+      - wave-report.md
       - implementation-log.md
     required_outputs:
-      - implementation-log.md
+      - wave-report.md
     gate:
       criteria:
-        - "Code compiles without errors"
-        - "All tests pass"
+        - "All sprint wave items implemented and validated"
+        - "Code compiles and all tests pass"
       severity: blocker
 
+  - id: tech-quality
+    name: Tech Continuous Quality (T4)
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-quality
+    inputs:
+      - imp-001-implementation-plan.md
+      - tst-001-test-strategy.md
+      - wave-report.md
+    outputs:
+      - drift-report.md
+      - e2e-scripts-001-playwright.md
+    gate:
+      criteria:
+        - "Drift detection completed for sprint scope"
+        - "E2E Playwright scripts generated for testable flows"
+      severity: warning
+
+  - id: sprint-tracking
+    name: Sprint Tracking (P2)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-sprint
+    inputs:
+      - wave-report.md
+      - drift-report.md
+    outputs:
+      - sprint-progress.md
+      - sprint-risks.md
+    required_outputs:
+      - sprint-progress.md
+    gate:
+      criteria:
+        - "Sprint progress documented"
+        - "Risks assessed"
+      severity: warning
+    loop:
+      description: "Stations ba-functional-design through sprint-tracking repeat for each sprint defined in plan-001-sprint-planning.md. Each sprint scopes a subset of features from the backlog."
+      per_sprint: [ba-functional-design, tech-design, tech-implementation, tech-quality, sprint-tracking]
+      max_iterations: 12  # hard cap — prevents unbounded sprint loop from resource exhaustion
+
   # ─── Phase 6: Test Campaigns ───────────────────────────────────────
+  # Run after all sprints are completed.
   - id: test-campaign
-    name: E2E/UAT Campaign
+    name: E2E/UAT Campaign (E1)
     agent: sdlc-test-executor
     skills:
       - sdlc-test-campaign
     inputs:
-      - implementation-log.md
+      - e2e-scripts-001-playwright.md
+      - e2e-plan-001.md
+      - test-scenarios/
     outputs:
       - campaign-report.md
     required_outputs:
@@ -192,12 +314,12 @@ stations:
       severity: blocker
 
   - id: test-performance
-    name: Performance Campaign
+    name: Performance Campaign (E2)
     agent: sdlc-test-executor
     skills:
       - sdlc-test-performance
     inputs:
-      - implementation-log.md
+      - tst-001-test-strategy.md
     outputs:
       - performance-report.md
     required_outputs:
@@ -208,27 +330,7 @@ stations:
         - "Performance within defined thresholds"
       severity: blocker
 
-  # ─── Phase 7: Sprint Tracking ──────────────────────────────────────
-  - id: sprint-tracking
-    name: Sprint Tracking (P2)
-    agent: sdlc-steer-manager
-    skills:
-      - sdlc-steer-sprint
-    inputs:
-      - campaign-report.md
-      - performance-report.md
-    outputs:
-      - sprint-progress.md
-      - sprint-risks.md
-    required_outputs:
-      - sprint-progress.md
-    gate:
-      criteria:
-        - "Sprint progress documented"
-        - "Risks assessed"
-      severity: warning
-
-  # ─── Phase 8: Quality Validation ───────────────────────────────────
+  # ─── Phase 7: Quality Validation ───────────────────────────────────
   - id: quality-validation
     name: Quality Validation
     agent: workflow-orchestrator
