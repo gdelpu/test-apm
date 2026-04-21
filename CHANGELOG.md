@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.32] — 2026-04-21
+
+### Fixed
+- Comprehensive PS 5.1 StrictMode compat — @() wrap all cmdlet results before .Count
+
+
 ## [0.0.31] — 2026-04-21
 
 ### Fixed
