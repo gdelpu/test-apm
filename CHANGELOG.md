@@ -7,6 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+### Changed
+- Brownfield detection updated: 1 Copilot agent(s), 1 workflows file(s)
+- Workflow state tracking standardised: 3 Claude Code command(s)
+- Copilot provider agent updates: `sdlc-ba-analyst.agent`, `sdlc-coordinator.agent`, `sdlc-steer-manager.agent`, `sdlc-tech-architect.agent`, `sdlc-test-executor.agent`
+- Workflow updates: `sdlc-ba`, `sdlc-tech`
+
+### Fixed
+- Add handoff-based context isolation for SDLC pipeline
+- Pyramidal context isolation for top-level SDLC commands
+- Fix sdlc-tech.yml T3/T4 loop + create sdlc-test.yml
+- Restructure sdlc-full.yml phase ordering + ba-validation gate
+
+
 ## [0.0.27] — 2026-04-20
 
 ### Added
