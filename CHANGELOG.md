@@ -12,6 +12,11 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - `scripts/hooks/pre-commit`
 - `scripts/hooks/setup-hooks.py`
 
+### Changed
+- Brownfield detection updated: 1 copilot runtime file(s), 1 other file(s)
+- Documentation updates: `contributing.md`
+
+
 ## [0.0.28] — 2026-04-21
 
 ### Changed
