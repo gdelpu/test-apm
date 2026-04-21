@@ -45,6 +45,27 @@ stations:
         - "Project sheet and KPI baselines established"
       severity: blocker
 
+  # ─── Phase 1b: Discovery Workshop ──────────────────────────────────
+  # Produces [DCO-001] — structured context from raw source documents.
+  # Must run before scoping (S1) so all BA agents have structured input.
+  - id: ba-discovery
+    name: Discovery Workshop (S0.5)
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-deliverable-validation
+    skill_doc: sdlc-deliverable-validation/docs/sk-discovery.md
+    inputs:
+      - docs/0-inputs/ba/_source/
+    outputs:
+      - dco-001-discovery.md
+    required_outputs:
+      - dco-001-discovery.md
+    gate:
+      criteria:
+        - "Discovery document [DCO-001] produced with structured context, stakeholder mapping, and proto-glossary"
+        - "All raw source documents have been processed"
+      severity: blocker
+
   # ─── Phase 2: BA Specification (S0-S2) ─────────────────────────────
   # Brownfield audit (S0), scoping (S1), and specification (S2) only.
   # Functional design (S3) is deferred to the sprint loop.
@@ -57,6 +78,7 @@ stations:
       - sdlc-ba-specification
     inputs:
       - pil-001-project-sheet.md
+      - dco-001-discovery.md
     outputs:
       - exf-001-functional-requirements.md
       - dom-001-domain-model.md
