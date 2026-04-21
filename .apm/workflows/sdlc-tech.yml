@@ -7,6 +7,9 @@ default_hooks:
   pre:
     - .apm/hooks/pre/input-validation/base.md
     - .apm/hooks/pre/input-validation/tech.md
+    - hook: .apm/hooks/soprasteria-dep/pre-input-validation.md
+      severity: warning
+      condition: "config.dep_access != 'none'"
   post:
     - .apm/hooks/post/quality-control.md
     - .apm/hooks/post/confluence-push.md
@@ -67,10 +70,23 @@ stations:
       - ctx-001-system-context.md
     outputs:
       - adr/
+    post_hooks:
+      - hook: post/quality-control.md
+        severity: blocker
+      - hook: post/adr-completeness.md
+        severity: blocker
+      - hook: post/confluence-push.md
+        severity: warning
     gate:
       criteria:
         - "Each ADR has context, decision, rationale, confidence level"
         - "Security and observability ADRs included"
+        - "adr-000-index.md has dep_access field set (full|partial|none)"
+        - "ADR-ENV-DEV, ADR-ENV-QUALIF, ADR-ENV-CLIENT all exist"
+        - "ADR-ENV-QUALIF has dep_access in YAML front matter (always required)"
+        - "ADR-ENV-QUALIF has pb_coverage in YAML front matter (required only if dep_access != none)"
+        - "pb-provisioning-plan.json exists if pb_coverage is full or partial"
+        - "All 3 environment ADRs include an infrastructure provisioning plan section"
       severity: blocker
 
   - id: tech-stack
