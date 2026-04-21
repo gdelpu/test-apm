@@ -91,6 +91,8 @@ stations:
       criteria:
         - "BA S0-S2 complete: vision, glossary, actors, requirements, domain model, epics, features, business rules"
         - "Traceability chain verified: EXF → EP → FT"
+        - "Epic count between 1 and 5 (1 for simple apps, 2-4 typical); each epic has 4-8 features; each feature passes the litmus test (decomposable, actor-scoped, demonstrable)"
+        - "Requirements catalogue at capability level (target 15-30 requirements, not individual rules)"
       severity: blocker
 
   # ─── Phase 2b: BA Independent Review ───────────────────────────────

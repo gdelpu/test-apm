@@ -178,6 +178,25 @@ After processing functional requirements domain by domain, identify **cross-cutt
 - **Exhaustiveness**: the entire IN scope of the vision must be covered
 - **Traceability**: each requirement references its documentary source
 
+### Requirements granularity guideline
+
+Requirements in [EXF-001] should be at **capability level**, not at individual-rule level. Each requirement should map to a feature (not a user story).
+
+**Target**: 15–30 requirements for a typical project.
+
+| ❌ Too granular (rule-level) | ✅ Correct (capability-level) |
+|---|---|
+| REQ: Admin can create ADMIN accounts | REQ: The system shall manage the full lifecycle of user accounts across all role types (creation, activation, credential management, suspension) |
+| REQ: Password expires after 12 months | *(covered by the above — this is a business rule, not a requirement)* |
+| REQ: No duplicate email addresses | *(covered by the above — this is a validation rule)* |
+
+**Distinction**: A *requirement* describes WHAT capability the system must provide. A *business rule* describes HOW or under what constraints. Business rules are captured in [BRL-xxx], not in [EXF-001].
+
+**Self-check before finalising**: If the catalogue exceeds 40 requirements, review for:
+1. Business rules disguised as requirements → move to BRL staging
+2. Individual CRUD operations listed separately → merge into one lifecycle requirement
+3. Identical patterns on different entities listed separately → consider a single cross-cutting requirement
+
 ## Output format
 
 The produced file must:

@@ -85,6 +85,26 @@ For each `[EP-xxx]` file:
 
 For each feature in the list, produce `ft-xxx-{slug}/ft-xxx-{slug}.md` following `tpl-feature.md`:
 
+#### Feature granularity check (per feature, BLOCKING)
+
+Before writing each feature file, apply this litmus test:
+
+1. **Decomposition test**: Can this feature be broken down into 2–8 distinct user stories, each with a different Given/When/Then?
+   - ✅ "Training management" → US: create session, US: register for session, US: cancel registration, US: mark attendance, US: enforce training gate → 5 stories → valid feature
+   - ❌ "Password management" → US: reset password... and that's it → this IS a user story, not a feature
+
+2. **Actor test**: Does this feature serve a clearly identified actor with a demonstrable end-to-end capability?
+   - ✅ "AQ import and worker matching" → Admin imports a file AND reviews match results → demonstrable flow
+   - ❌ "S3 upload audit log" → no actor interaction; this is a technical acceptance criterion of the "Data Export" feature
+
+3. **Demonstration test**: Could you show this feature to a stakeholder in a 5-minute demo and they would understand the business value?
+   - ✅ "Worker sampling and inclusion" → show form, show algorithm result, show worker record created
+   - ❌ "Automated enrollment reminders" → cannot demo in isolation; part of the broader "Campaign Coordination" feature
+
+If a candidate feature fails any of these three tests, demote it to a user story under its parent feature.
+
+#### File production
+
 1. **YAML front matter**
    - `id`: `FT-xxx` (exact identifier from the epic index)
    - `epic`: parent `EP-xxx` identifier

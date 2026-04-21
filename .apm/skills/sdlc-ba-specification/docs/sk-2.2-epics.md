@@ -92,13 +92,60 @@ If no epic file exists, proceed normally with the full pipeline below.
    - ✅ "Customer portfolio management" (business)
 4. **Granularity principle — prefer fewer, larger Epics:**
    - An Epic should address **one kind of stakeholder** or one major business domain. It is the highest-level grouping and will itself be broken down into Features, then into User Stories. Each extra level of decomposition multiplies the number of artefacts — so epics must stay large enough to justify the hierarchy.
-   - **Target: 2 to 4 Epics per project.** Only exceed 4 if the scope contains genuinely independent business domains with different stakeholders.
+   - **Target: 1 to 4 Epics per project.** 1 epic is valid for simple applications with a single business domain. Only exceed 4 if the scope contains genuinely independent business domains with different stakeholders (hard cap: 5).
    - An Epic should contain between **4 and 8 Features**. Below 4 features, the epic is too thin — merge it with a related one. Above 8 features, consider splitting only if the features serve different stakeholders.
    - ❌ Do NOT create one Epic per functional screen or per entity — that produces dozens of tiny Epics and hundreds of micro User Stories.
    - ✅ Group related capabilities that a single stakeholder persona uses end-to-end into one Epic.
    - **Anti-pattern to avoid:** splitting "Reservation creation", "Reservation modification", "Reservation cancellation" into three separate Epics — these all belong to a single "Reservation management" Epic.
+
+#### Common anti-patterns and corrections
+
+| ❌ Anti-pattern (entity-per-epic) | ✅ Correct (capability-per-epic) |
+|---|---|
+| EP: User Management, EP: Survey Unit, EP: Enrollment, EP: Sampling, EP: Questionnaire | **EP: Field Survey Execution** (one end-to-end journey for the field actor) |
+| EP: Campaign Management, EP: Dashboards, EP: Notifications | **EP: Campaign Orchestration** (Admin drives a campaign end-to-end) |
+| EP: Data Export, EP: Reference Data | **EP: Data Collection & Export** (Admin manages the data flow) |
+| EP: Notifications (standalone) | Not an epic — distribute notification features into each epic they support |
+
+**Grouping heuristic**: If two candidate epics share the same primary actor AND the same business goal, they belong in the same epic.
+
 5. Name each Epic with an action verb or action noun:
    - "Order management", "Delivery tracking", "Billing"
+
+### Step 1b: Granularity validation gate (BLOCKING)
+
+Before writing any epic file, validate:
+
+1. **Epic count**: must be between 1 and 5 inclusive.
+   - **1 epic** is valid for simple applications with a single business domain and one primary actor.
+   - **2–4 epics** is the typical range for most projects.
+   - If > 5: **STOP**. Merge epics that share the same primary stakeholder or the same end-to-end business journey. Common merges:
+     - All survey-execution capabilities (unit, enrollment, sampling, questionnaires) → single epic
+     - All data-flow capabilities (export, import, reference data) → single epic
+     - Transversal services (notifications, reminders) are NOT epics — distribute as features across the epics they serve
+
+2. **Feature count per epic**: must be between 4 and 8.
+   - If < 4: the epic is too thin — merge it into a related epic.
+   - If > 8: consider splitting ONLY if features serve genuinely different stakeholders.
+
+3. **Feature litmus test**: for each feature, ask: "Can this feature be decomposed into 2–8 distinct user stories?"
+   - If NO → it is a user story, not a feature. Demote it.
+   - If YES → it is a feature. Keep it.
+
+Only proceed to Step 2 (file writing) after all three checks pass.
+
+### Worked example — Survey management platform (4 epics)
+
+For a platform managing annual surveys with field doctors, admin coordination, and statistical data export:
+
+| Epic | Business Capability | Primary Actor | Features (count) |
+|---|---|---|---|
+| EP-001 Campaign Orchestration | Create and drive annual survey campaigns end-to-end | Admin | 5: Campaign lifecycle · Doctor invitation & enrollment · Monitoring dashboards · Notifications · Geographical hierarchy |
+| EP-002 Field Survey Execution | Conduct the survey in the field | RU (Doctor) | 6: Survey unit management · Worker sampling · Professional questionnaire · AQ import & matching · Training management · Unit member management |
+| EP-003 User & Access Management | Manage identities and authorisations | Admin / All | 4: Account lifecycle · Self-registration flow · Role-based access control · Password & credential management |
+| EP-004 Data Collection & Export | Collect, store, and export survey data | Admin / System | 4: Automated weekly export · Manual export · Reference data management (NAF/PCS) · Batch processing (purge, email dispatch) |
+
+**Total: 4 epics, 19 features** — each feature decomposes into 2–8 user stories in S3.
 
 ### Step 2: Feature decomposition
 
