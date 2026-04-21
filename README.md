@@ -17,13 +17,15 @@ Part of the [**AI Backbone**](https://steria.sharepoint.com/sites/aibackbone/Sit
 
 | Asset | Count | Canonical Path |
 |-------|------:|----------------|
-| Agents | 23 | `.apm/agents/` |
-| Skills | 89 | `.apm/skills/` |
-| Workflows | 19 | `.apm/workflows/` |
-| Hooks | 7 + engine | `.apm/hooks/` |
-| Prompts | 4 | `.apm/prompts/` |
-| Instructions | 7 | `.apm/instructions/` |
-| Knowledge areas | 4 | `.apm/knowledge/` |
+| Agents | 31 | `.apm/agents/` |
+| Skills | 127 | `.apm/skills/` |
+| Workflows | 20 | `.apm/workflows/` |
+| Hooks | 27 | `.apm/hooks/` |
+| Prompts | 16 | `.apm/prompts/` |
+| Instructions | 10 | `.apm/instructions/` |
+| Templates | 6 | `.apm/templates/` |
+| Contexts | 11 | `.apm/contexts/` |
+| Knowledge areas | 4 (24 files) | `.apm/knowledge/` |
 
 ---
 
@@ -48,7 +50,7 @@ Part of the [**AI Backbone**](https://steria.sharepoint.com/sites/aibackbone/Sit
 ┌─────────────────────────────────────────────────────────────┐
 │                    CANONICAL LAYER                          │
 │  .apm/agents/  .apm/skills/  .apm/workflows/ .apm/knowledge/│
-│  (23 agents)   (89 skills)   (19 workflows)   (principles,  │
+│  (31 agents)   (127 skills)  (20 workflows)   (principles,  │
 │                                                governance,  │
 │                                                playbooks)   │
 └──────────────┬──────────────────────┬───────────────────────┘
@@ -122,7 +124,7 @@ Documentation is split by audience. See the [docs hub](docs/README.md) for the f
 
 ## Agents
 
-23 provider-agnostic agent definitions. See [full catalog](docs/reference/agents.md) for key skills and details.
+31 provider-agnostic agent definitions. See [full catalog](docs/reference/agents.md) for key skills and details.
 
 | Agent | Description |
 |-------|-------------|
@@ -133,36 +135,45 @@ Documentation is split by audience. See the [docs hub](docs/README.md) for the f
 | `security-reviewer` | Prompt injection, data exfiltration, OWASP LLM Top 10 |
 | `branding` | Brand compliance audit, document generation, Office manipulation |
 | `workflow-orchestrator` | Station-based workflow execution with quality gates |
+| `station-orchestrator` | Single-station execution within workflow pipelines |
 | `analysis-agent` | Production incident diagnosis |
 | `bug-fixer` | Structured bug triage → fix → regression testing |
 | `modernization-agent` | Baseline assessment → migration planning |
 | `modernization-orchestrator` | Sub-agent coordination for brownfield modernization |
 | `architecture-governance` | Architecture principles and guardrail review |
 | `bmad-orchestrator` | Build → Measure → Analyze → Decide feedback loop |
+| `pr-validator` | Pull request validation against CI gate stations |
 | `repository-analyzer` | High-level codebase overview |
 | `reverse-backlog` | Legacy code → product backlog |
 | `reverse-user-story` | Codebase → user stories with acceptance criteria |
+| `refactor-assessor` | Refactoring impact assessment and risk analysis |
+| `refactor-implementer` | Execute refactoring plans with safety checks |
+| `refactor-orchestrator` | Coordinate multi-step refactoring workflows |
 | `refactor-parity-checker` | Side-by-side comparison after refactoring |
+| `refactor-planner` | Refactoring strategy and plan generation |
 | `sdlc-coordinator` | Full SDLC orchestration — DAG, waves, gates |
 | `sdlc-ba-analyst` | Business analysis pipeline |
+| `sdlc-ba-reviewer` | Independent BA deliverable review and arbitration |
 | `sdlc-tech-architect` | Technical architecture pipeline |
+| `sdlc-tech-reviewer` | Independent tech deliverable review and arbitration |
 | `sdlc-steer-manager` | Project steering and governance |
+| `sdlc-steer-reviewer` | Independent steering deliverable review and arbitration |
 | `sdlc-test-executor` | E2E/UAT and performance test campaigns |
 
-Canonical definitions: `.apm/agents/`. Copilot runtime: `.github/agents/` (7 user-facing agents).
+Canonical definitions: `.apm/agents/`. Copilot runtime: `.github/agents/` (31 user-facing agents).
 
 ---
 
 ## Workflows
 
-19 workflow pipelines organized by type. See [full catalog](docs/reference/workflows.md) for detailed station tables.
+20 workflow pipelines organized by type. See [full catalog](docs/reference/workflows.md) for detailed station tables.
 
 ### Delivery
 
 | Workflow | Stations | Purpose |
 |----------|:--------:|---------|
-| `feature-implementation` | 10 | Constitution → spec → plan → implement → quality gate |
-| `modernization` | 10 | Baseline → decisions → target → implement → quality |
+| `feature-implementation` | 11 | Constitution → spec → plan → implement → quality gate |
+| `modernization` | 11 | Baseline → decisions → target → implement → quality |
 | `bug-fixing` | 7 | Triage → reproduce → root-cause → fix → regression |
 | `incident-resolution` | 7 | Analysis → root-cause → fix → regression → knowledge |
 | `bmad` | 4 | Build → Measure → Analyze → Decide (loop) |
@@ -173,7 +184,7 @@ Canonical definitions: `.apm/agents/`. Copilot runtime: `.github/agents/` (7 use
 | Workflow | Stations | Purpose |
 |----------|:--------:|---------|
 | `idea-to-spec` | 7 | Idea → context → spec → clarify → NFR → architecture |
-| `spec-kit` | 8 | Constitution → spec → plan → tasks → test strategy |
+| `spec-kit` | 9 | Constitution → spec → clarify → review → plan → tasks → test strategy |
 | `spec-to-execution` | 6 | Plan → risk → rollout → tasks → test → readiness |
 
 ### Validation
@@ -196,10 +207,11 @@ Canonical definitions: `.apm/agents/`. Copilot runtime: `.github/agents/` (7 use
 
 | Workflow | Stations | Purpose |
 |----------|:--------:|---------|
-| `sdlc-ba` | 16 | Brownfield audit → scoping → specification → functional design |
-| `sdlc-tech` | 17 | Tech audit → architecture (ADR fan-out) → design → implementation → quality |
-| `sdlc-steer` | 10 | Project init → planning → sprint tracking → governance |
-| `sdlc-full` | 11 | Scaffold → BA → Tech → Test → Steer (composite) |
+| `sdlc-ba` | 21 | Brownfield audit → scoping → specification → functional design |
+| `sdlc-tech` | 22 | Tech audit → architecture (ADR fan-out) → design → implementation → quality |
+| `sdlc-steer` | 11 | Project init → planning → sprint tracking → governance |
+| `sdlc-full` | 18 | Scaffold → BA → BA review → Tech arch → Sprint planning → Sprint loop → Test → Governance |
+| `sdlc-test` | 4 | E2E/UAT campaign → performance campaign → report → validation |
 
 Canonical definitions: `.apm/workflows/`. Schema: `.apm/workflows/_schema.md`.
 
@@ -207,7 +219,7 @@ Canonical definitions: `.apm/workflows/`. Schema: `.apm/workflows/_schema.md`.
 
 ## Skills
 
-94 skills organized by category. See [full catalog](docs/reference/skills.md) for individual descriptions.
+127 skills organized by category. See [full catalog](docs/reference/skills.md) for individual descriptions.
 
 | Category | Count | Examples |
 |----------|:-----:|---------|

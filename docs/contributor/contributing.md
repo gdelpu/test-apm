@@ -18,6 +18,15 @@
 | Podman | — | Local pipeline execution (optional) |
 | Pandoc | — | Brand Styler document conversion (optional) |
 
+### First-time setup after cloning
+
+```bash
+# Install git hooks (marketplace freshness, etc.)
+python scripts/hooks/setup-hooks.py
+```
+
+This installs a **pre-commit hook** that automatically regenerates `marketplace.json` from `apm.yml` and `.apm/` asset counts before every commit, so the file is never stale. Safe to run repeatedly — it appends to existing hooks rather than overwriting them.
+
 ---
 
 ## Adding Capabilities

@@ -11,7 +11,7 @@ compliance, and full-lifecycle SDLC support.
 ┌─────────────────────────────────────────────────────────────┐
 │                    CANONICAL LAYER                           │
 │  .apm/agents/  .apm/skills/  .apm/workflows/  .apm/knowledge/│
-│  (23 agents)   (89 skills)   (19 workflows)   (principles,  │
+│  (31 agents)   (127 skills)  (20 workflows)   (principles,  │
 │                                                governance,   │
 │                                                playbooks)    │
 └──────────────┬──────────────────────┬───────────────────────┘
@@ -21,10 +21,10 @@ compliance, and full-lifecycle SDLC support.
   │                                                      │
   │  providers/github-copilot/   providers/claude-code/  │
   │    conventions.md              CLAUDE.md             │
-│    sync-map.md                 commands/ (40)        │
-│    agents/ (7)               providers/cli/          │
-│    prompts/ (45)               lib/ (5)              │
-  │    instructions/ (6)           run-workflow.sh       │
+│    sync-map.md                 commands/ (45)        │
+│    agents/ (31)               providers/cli/          │
+│    prompts/ (49)               lib/ (5)              │
+  │    instructions/ (10)           run-workflow.sh       │
   │                                                      │
   └──────────────────────┬───────────────────────────────┘
                          │
@@ -83,8 +83,8 @@ Workflow pipelines are available, each with stations and quality gates:
 
 | Workflow | Stations | Type | Purpose |
 |----------|----------|------|---------|
-| Feature Implementation | 10 | Delivery | End-to-end: constitution → brownfield context (if brownfield) → spec → plan → implement → quality → gate |
-| Modernization | 10 | Delivery | Baseline → decisions → target → review → plan → risk → tasks → implement → quality |
+| Feature Implementation | 11 | Delivery | End-to-end: constitution → brownfield context (if brownfield) → spec → plan → implement → quality → gate |
+| Modernization | 11 | Delivery | Baseline → decisions → target → review → plan → risk → tasks → implement → quality |
 | Bug Fixing | 7 | Delivery | Triage → reproduce → root-cause → fix → regression → quality → close |
 | Incident Resolution | 7 | Delivery | Analysis → root-cause → reproduction → fix → regression → validation → knowledge |
 | BMAD | 4 | Delivery | Build → measure → analyze → decide (loop) |
@@ -98,10 +98,11 @@ Workflow pipelines are available, each with stations and quality gates:
 | Release Readiness | 6 | Validation | Spec → tests → security → observability → deployment → go/no-go |
 | Maturity Assessment | 4 | Assessment | Assessment → scoring → report → roadmap |
 | Delivery Retrospective | 5 | Assessment | Cycle time → defects → bottlenecks → improvements → playbook update |
-| SDLC BA | 16 | SDLC Harness | Brownfield audit → scoping → specification → per-feature functional design |
-| SDLC Tech | 17 | SDLC Harness | Tech audit → architecture (ADR fan-out) → design → implementation → continuous quality |
-| SDLC Steer | 10 | SDLC Harness | Project init → planning → sprint tracking → governance (COPIL) |
-| SDLC Full | 11 | SDLC Harness | Scaffold → BA → Tech → Test → Steer governance (composite) |
+| SDLC BA | 21 | SDLC Harness | Brownfield audit → scoping → specification → per-feature functional design |
+| SDLC Tech | 22 | SDLC Harness | Tech audit → architecture (ADR fan-out) → design → implementation → continuous quality |
+| SDLC Steer | 11 | SDLC Harness | Project init → planning → sprint tracking → governance (COPIL) |
+| SDLC Full | 18 | SDLC Harness | Scaffold → BA → BA review → Tech arch → Sprint planning → Sprint loop → Test → Governance (composite) |
+| SDLC Test | 4 | SDLC Harness | E2E/UAT campaign → performance campaign → report → validation |
 
 Workflows are defined in `.apm/workflows/` (YAML).
 Quality validation and PR validation can be nested inside delivery workflows.
