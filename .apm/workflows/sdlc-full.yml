@@ -71,6 +71,27 @@ stations:
         - "Traceability chain verified: EXF → EP → FT"
       severity: blocker
 
+  # ─── Phase 2b: BA Independent Review ───────────────────────────────
+  - id: ba-review
+    name: BA Independent Review
+    agent: sdlc-ba-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - ba-validation-report.md
+    outputs:
+      - ba-review-report.md
+    required_outputs:
+      - ba-review-report.md
+    gate:
+      criteria:
+        - "All BA deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
+
   # ─── Phase 3: Technical Architecture (T0-T1) ──────────────────────
   # Brownfield audit (T0) and architecture (T1) only.
   # Design (T2) and implementation (T3) are deferred to the sprint loop.
@@ -99,8 +120,8 @@ stations:
       severity: blocker
 
   # ─── Phase 4: Sprint Planning (P1) ────────────────────────────────
-  # Sprint planning requires BA specs (S0-S2) and tech architecture (T0-T1)
-  # to properly batch features into sprints with technical constraints.
+  # Sprint planning requires BA specs (S0-S2), BA review, and tech
+  # architecture (T0-T1) to batch features into sprints with constraints.
   - id: sprint-planning
     name: Sprint Planning (P1)
     agent: sdlc-steer-manager
@@ -111,6 +132,7 @@ stations:
       - features/
       - enb-000-index.md
       - stk-001-stack-conventions.md
+      - ba-review-report.md
     outputs:
       - plan-001-sprint-planning.md
       - rdp-001-roadmap.md
@@ -184,9 +206,32 @@ stations:
         - "Implementation plan aligned with sprint planning"
       severity: blocker
 
-  - id: tech-implementation
-    name: Tech Implementation (T3)
-    agent: sdlc-coordinator
+  # ─── Phase 4b: Tech Independent Review ─────────────────────────────
+  - id: tech-review
+    name: Tech Independent Review
+    agent: sdlc-tech-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - imp-001-implementation-plan.md
+    outputs:
+      - tech-review-report.md
+    required_outputs:
+      - tech-review-report.md
+    gate:
+      criteria:
+        - "All Tech deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "BA-Tech traceability verified by independent reviewer"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
+
+  # ─── Phase 5: Implementation ───────────────────────────────────────
+  - id: implementation
+    name: Code Implementation
+    agent: implementer
     skills:
       - sdlc-tech-implementation
     inputs:
@@ -301,9 +346,9 @@ stations:
         - "All quality validation stations pass"
       severity: blocker
 
-  # ─── Phase 8: Governance ───────────────────────────────────────────
-  - id: copil
-    name: COPIL & Go/No-Go (P3)
+  # ─── Phase 9: Governance ───────────────────────────────────────────
+  - id: steer-copil
+    name: COPIL Preparation (P3)
     agent: sdlc-steer-manager
     skills:
       - sdlc-steer-governance
@@ -313,6 +358,58 @@ stations:
       - performance-report.md
       - sprint-risks.md
     outputs:
+      - copil.md
+    required_outputs:
+      - copil.md
+    gate:
+      criteria:
+        - "Technical and sponsor sections included"
+        - "Key decisions documented"
+      severity: blocker
+
+  # ─── Phase 9b: Steer Independent Review ────────────────────────────
+  - id: steer-review
+    name: Steer Independent Review
+    agent: sdlc-steer-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - copil.md
+      - quality-report.md
+      - campaign-report.md
+      - performance-report.md
+      - sprint-risks.md
+      - sprint-progress.md
+    outputs:
+      - steer-review-report.md
+    required_outputs:
+      - steer-review-report.md
+    gate:
+      criteria:
+        - "All Steer deliverables independently reviewed"
+        - "Cross-domain accuracy verified against source reports"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause  # halt for human arbitration when CONFLICT detected
+
+  # ─── Phase 9c: Go/No-Go Decision ──────────────────────────────────
+  - id: steer-go-nogo
+    name: Go/No-Go Decision (P3)
+    agent: sdlc-steer-manager
+    skills:
+      - sdlc-steer-governance
+    hooks:
+      pre:
+        - .apm/hooks/pre/verify-source-manifest.md
+    inputs:
+      - steer-review-report.md
+      - copil.md
+      - quality-report.md
+      - campaign-report.md
+      - performance-report.md
+    outputs:
       - gng-001-go-nogo.md
     required_outputs:
       - gng-001-go-nogo.md
@@ -320,6 +417,7 @@ stations:
       criteria:
         - "All domain data aggregated"
         - "Go/No-Go decision documented with evidence"
+        - "COPIL pack has been independently reviewed (steer-review passed)"
       severity: blocker
 
 config:

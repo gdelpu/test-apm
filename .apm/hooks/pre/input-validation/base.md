@@ -17,7 +17,12 @@ For each input declared in the agent's skill:
 ### Mandatory inputs
 - [ ] The file is available (provided or accessible at the declared path)
 - [ ] The YAML front matter contains an `id` field matching the expected identifier
-- [ ] The `status` field is set to `validated` (not `draft` or absent)
+- [ ] The `status` field is set to `validated` or `draft`:
+  - `validated` → input is fully approved — **GO**
+  - `draft` → check provenance:
+    - If the input was produced **within the same workflow run** (same `trace_id` or present in the workflow state as a completed station output) → accept with **WARN** ("intra-workflow draft input — not yet externally validated")
+    - If the input comes from a **previous workflow run** or external source → **STOP** ("input has status: draft and was not produced in this workflow run — require validation before consumption")
+  - Absent or unrecognised status → **STOP**
 - [ ] The `dependencies` declared in that file are themselves satisfied (cascading check, 1 level)
 
 **If a mandatory input fails any of these criteria:**

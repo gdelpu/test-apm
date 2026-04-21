@@ -350,6 +350,27 @@ stations:
         - "All required_outputs from upstream stations exist on disk"
       severity: blocker
 
+  # ─── Independent Review ────────────────────────────────────────────
+  - id: ba-review
+    name: BA Independent Review
+    agent: sdlc-ba-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - ba-validation-report.md
+    outputs:
+      - ba-review-report.md
+    required_outputs:
+      - ba-review-report.md
+    gate:
+      criteria:
+        - "All BA deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause
+
 config:
   output_dir: outputs/docs/1-prd/
   state_file: workflow-state.md

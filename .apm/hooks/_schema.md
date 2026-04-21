@@ -83,9 +83,13 @@ Each hook is a Markdown file with the following conventions:
 │       ├── tech.md                     # Tech-specific extensions
 │       ├── steer.md                    # Steer-specific extensions
 │       └── test.md                     # Test-specific extensions (strict mode)
-└── post/
-    ├── quality-control.md              # Universal quality checklist
-    └── confluence-push.md              # Best-effort Confluence publication
+├── post/
+│   ├── quality-control.md              # Universal quality checklist
+│   ├── adr-completeness.md             # ADR category, 3-env, DEP field validation
+│   └── confluence-push.md              # Best-effort Confluence publication
+└── soprasteria-dep/
+    ├── pre-input-validation.md         # DEP-specific input validation (conditional)
+    └── post-quality-control.md         # DEP-specific quality control
 ```
 
 ## Interaction with Gates
@@ -102,9 +106,47 @@ Each hook is a Markdown file with the following conventions:
 | Post-hook returns STOP (severity: warning) | Gate evaluation proceeds; WARN logged |
 | Post-hook with `never_block: true` returns STOP | Always downgraded to WARN; gate evaluation proceeds |
 
+## Conditional Hooks
+
+Hooks can be declared with a `condition` field that determines whether the hook fires for a given station. This allows domain-specific or client-specific hooks to be included in `default_hooks` without executing when irrelevant.
+
+### Syntax
+
+```yaml
+default_hooks:
+  pre:
+    - .apm/hooks/pre/input-validation/base.md          # Always fires (no condition)
+    - .apm/hooks/pre/input-validation/tech.md           # Always fires
+    - hook: .apm/hooks/soprasteria-dep/pre-input-validation.md
+      severity: warning
+      condition: "config.dep_access != 'none'"          # Fires only when DEP is available
+  post:
+    - .apm/hooks/post/quality-control.md
+    - hook: .apm/hooks/post/adr-completeness.md
+      severity: blocker
+      condition: "station.id == 'tech-adrs'"            # Fires only on the ADR station
+```
+
+### Condition evaluation
+
+| Expression form | Meaning |
+|---|---|
+| `config.<key> != '<value>'` | Checks a workflow-level config variable (set in `config:` block or by a prior station) |
+| `config.<key> == '<value>'` | Equality check on config variable |
+| `station.id == '<id>'` | Fires only for the named station |
+| `station.id in ['<id1>', '<id2>']` | Fires only for listed stations |
+| `file_exists('<relative-path>')` | Fires only if the file exists on disk |
+
+### Resolution rules
+
+1. **String shorthand** (e.g., `.apm/hooks/pre/input-validation/base.md`) — always fires, severity inherits from `default_hooks` level (blocker for pre, blocker for post unless `never_block`).
+2. **Object form** (e.g., `{hook: ..., severity: ..., condition: ...}`) — fires only when `condition` evaluates to true. If `condition` is absent, always fires.
+3. **Station-level `pre_hooks`/`post_hooks`** override `default_hooks` entirely for that station. Use this for stations that need a completely different hook set.
+4. **Condition variables** are resolved from: the workflow's `config:` block, the station's front matter fields written by prior stations (e.g., `dep_access` written to `adr-000-index.md`), and built-in context (`station.id`, `station.agent`).
+
 ## Conventions
 
-- Hook files live under `.apm/hooks/pre/` or `.apm/hooks/post/`.
+- Hook files live under `.apm/hooks/pre/` or `.apm/hooks/post/` (or domain-specific subdirectories like `soprasteria-dep/`).
 - Domain-specific hooks extend a `base.md` — read the base first, then the domain extension.
 - Hook references in workflow YAML use paths relative to `.apm/hooks/` (e.g., `pre/input-validation/ba`).
 - Hook references in the agent registry use the same relative paths.
