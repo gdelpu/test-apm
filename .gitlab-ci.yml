@@ -149,6 +149,26 @@ validate:test-gaps:
   allow_failure: true
 
 
+validate:marketplace:
+  extends: .mr_only
+  stage: validate
+  image: python:3.11-slim
+
+  before_script:
+    - pip install --quiet PyYAML
+
+  script:
+    - python3 scripts/generate-marketplace.py -o marketplace.json.fresh
+    - diff -q marketplace.json marketplace.json.fresh || {
+        echo "❌ marketplace.json is stale. Run 'python scripts/generate-marketplace.py' and commit the result.";
+        diff --unified marketplace.json marketplace.json.fresh;
+        exit 1;
+      }
+    - echo "✅ marketplace.json is up to date"
+
+  allow_failure: false
+
+
 validate:changelog:
   extends: .mr_only
   stage: validate
