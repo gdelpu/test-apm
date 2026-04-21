@@ -63,7 +63,7 @@ If $ARGUMENTS contains "inline", execute all phases in a single context (not rec
 ## Inputs
 
 - Project context or existing codebase (brownfield)
-- Client input documents in `docs/0-inputs/`
+- Client input documents in `inputs/`
 
 ## Outputs
 

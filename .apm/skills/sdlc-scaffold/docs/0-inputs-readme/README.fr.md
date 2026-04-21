@@ -1,4 +1,4 @@
-# docs/0-inputs/ — Documents client
+# inputs/ — Documents client
 
 Ce repertoire est le **point de depot unique** pour tous les documents fournis par le client ou le sponsor du projet. Les agents y lisent leurs inputs client ; ils n'y ecrivent jamais.
 
@@ -9,7 +9,7 @@ Chaque sous-repertoire suit la convention `{domaine}/{systeme}/` correspondant a
 ### Structure
 
 ```
-docs/0-inputs/
+inputs/
   ba/
     source/                      # Documents bruts initiaux (CdC, notes, PPT, mails, CR...)
     0-audit/                     # Documents de l'existant a auditer (brownfield)
@@ -50,7 +50,7 @@ docs/0-inputs/
 ## Exemples concrets
 
 ```
-docs/0-inputs/
+inputs/
   ba/
     source/
       cahier-des-charges-v2.pdf

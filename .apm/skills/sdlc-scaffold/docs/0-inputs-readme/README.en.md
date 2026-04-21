@@ -1,4 +1,4 @@
-# docs/0-inputs/ — Client documents
+# inputs/ — Client documents
 
 This directory is the **single drop-off point** for all documents provided by the client or project sponsor. Agents read their client inputs here; they never write to this directory.
 
@@ -9,7 +9,7 @@ Each subdirectory follows the `{domain}/{system}/` convention matching the targe
 ### Structure
 
 ```
-docs/0-inputs/
+inputs/
   ba/
     source/                      # Raw initial documents (specs, notes, PPT, emails, meeting notes...)
     0-audit/                     # Existing system documentation to audit (brownfield)
@@ -50,7 +50,7 @@ docs/0-inputs/
 ## Concrete examples
 
 ```
-docs/0-inputs/
+inputs/
   ba/
     source/
       requirements-document-v2.pdf

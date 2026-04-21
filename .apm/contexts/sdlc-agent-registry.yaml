@@ -78,7 +78,7 @@ agents:
       conventions: *ba_cv_brownfield
       template: BA-Agents/refs/templates/tpl-existing-audit.md
       upstream: []
-    client_inputs: docs/0-inputs/ba/0-audit/
+    client_inputs: inputs/ba/0-audit/
     tools:
       <<: *ba_tools_base
     hooks:
@@ -117,7 +117,7 @@ agents:
       template: BA-Agents/refs/templates/tpl-product-vision.md
       upstream:
         - outputs/docs/1-prd/1-scoping/dco-001-discovery.md
-    client_inputs: docs/0-inputs/ba/1-scoping/
+    client_inputs: inputs/ba/1-scoping/
     tools:
       <<: *ba_tools_base
     hooks:
@@ -137,7 +137,7 @@ agents:
       upstream:
         - outputs/docs/1-prd/1-scoping/dco-001-discovery.md
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
-    client_inputs: docs/0-inputs/ba/1-scoping/
+    client_inputs: inputs/ba/1-scoping/
     tools:
       <<: *ba_tools_base
     hooks:
@@ -158,7 +158,7 @@ agents:
         - outputs/docs/1-prd/1-scoping/dco-001-discovery.md
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
         - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
-    client_inputs: docs/0-inputs/ba/1-scoping/
+    client_inputs: inputs/ba/1-scoping/
     tools:
       <<: *ba_tools_base
     hooks:
@@ -179,7 +179,7 @@ agents:
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
         - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
-    client_inputs: docs/0-inputs/ba/1-scoping/
+    client_inputs: inputs/ba/1-scoping/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, r4j-api]
@@ -204,7 +204,7 @@ agents:
         - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
         - outputs/docs/1-prd/0-audit/delta-001-delta-analysis.md
-    client_inputs: docs/0-inputs/ba/2-spec/
+    client_inputs: inputs/ba/2-spec/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, mermaid]
@@ -228,7 +228,7 @@ agents:
         - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
         - outputs/docs/1-prd/1-scoping/exf-001-functional-requirements.md
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
-    client_inputs: docs/0-inputs/ba/2-spec/
+    client_inputs: inputs/ba/2-spec/
     tools:
       <<: *ba_tools_base
     hooks:
@@ -314,7 +314,7 @@ agents:
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
         - outputs/docs/1-prd/1-scoping/glo-001-glossary.md
         - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, r4j-api]
@@ -335,7 +335,7 @@ agents:
       upstream_scope:
         - "{feature_path}/user-stories/"
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
     hooks:
@@ -355,7 +355,7 @@ agents:
       upstream_scope:
         - "{feature_path}/user-stories/"
         - "{feature_path}/journeys/"
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
     hooks:
@@ -373,7 +373,7 @@ agents:
       conventions: *ba_cv_base
       upstream_scope:
         - "{feature_path}/screens/"
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       required: [file-read, file-write]
       optional: [figma-mcp]  # generate_figma_design for optional import into Figma
@@ -393,7 +393,7 @@ agents:
       upstream_scope:
         - "{feature_path}/user-stories/"
         - outputs/docs/1-prd/2-specification/dom-001-domain-model.md
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
     hooks:
@@ -414,7 +414,7 @@ agents:
         - "{feature_path}/user-stories/"
         - "{feature_path}/journeys/"
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       <<: *ba_tools_base
     hooks:
@@ -438,7 +438,7 @@ agents:
         - "{feature_path}/batches/"
         - "{feature_path}/notifications/"
         - "{feature_path}/business-rules.md"   # per-feature business rules (dispatched by sk-2.3)
-    client_inputs: "docs/0-inputs/ba/3-design/{feature_id}/"
+    client_inputs: "inputs/ba/3-design/{feature_id}/"
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, xray-api]
@@ -514,7 +514,7 @@ agents:
     refs:
       conventions: *ba_cv_base
       template: null
-    client_inputs: docs/0-inputs/ba/_source/
+    client_inputs: inputs/ba/_source/
     tools:
       <<: *ba_tools_base
     hooks:
@@ -667,8 +667,8 @@ agents:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-audit-technique.md
     client_inputs:
-      - docs/0-inputs/tech/_source/
-      - docs/0-inputs/tech/0-audit/
+      - inputs/tech/_source/
+      - inputs/tech/0-audit/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -686,7 +686,7 @@ agents:
     refs:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-migration-plan.md
-    client_inputs: docs/0-inputs/tech/0-audit/
+    client_inputs: inputs/tech/0-audit/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -708,7 +708,7 @@ agents:
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
         - outputs/docs/2-tech/1-architecture/dco-tech-001-discovery.md
-    client_inputs: docs/0-inputs/tech/1-archi/
+    client_inputs: inputs/tech/1-archi/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, mermaid, context7-mcp, mslearn-mcp]
@@ -731,7 +731,7 @@ agents:
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
         - outputs/docs/2-tech/1-architecture/dco-tech-001-discovery.md
-    client_inputs: docs/0-inputs/tech/1-archi/
+    client_inputs: inputs/tech/1-archi/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -813,7 +813,7 @@ agents:
     refs:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-data-model.md
-    client_inputs: docs/0-inputs/tech/2-design/
+    client_inputs: inputs/tech/2-design/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp, mermaid, context7-mcp]
@@ -831,7 +831,7 @@ agents:
     refs:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-api-contract.md
-    client_inputs: docs/0-inputs/tech/2-design/
+    client_inputs: inputs/tech/2-design/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -849,7 +849,7 @@ agents:
     refs:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-test-strategy.md
-    client_inputs: docs/0-inputs/tech/2-design/
+    client_inputs: inputs/tech/2-design/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -867,7 +867,7 @@ agents:
     refs:
       conventions: *tech_cv_base
       template: Tech-Agents/refs/templates/tpl-implementation-plan.md
-    client_inputs: docs/0-inputs/tech/2-design/
+    client_inputs: inputs/tech/2-design/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -1075,8 +1075,8 @@ agents:
         - outputs/docs/1-prd/1-scoping/vis-001-product-vision.md
         - outputs/docs/1-prd/1-scoping/act-001-actors-roles.md
     client_inputs:
-      - docs/0-inputs/tech/_source/
-      - docs/0-inputs/tech/1-archi/
+      - inputs/tech/_source/
+      - inputs/tech/1-archi/
     tools:
       required: [file-read, file-write]
     hooks:
@@ -1199,7 +1199,7 @@ agents:
     refs:
       conventions: *steer_cv_base
       template: Steer-Agents/refs/templates/tpl-fiche-projet.md
-    client_inputs: docs/0-inputs/steer/
+    client_inputs: inputs/steer/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]
@@ -1333,7 +1333,7 @@ agents:
     refs:
       conventions: *steer_cv_base
       template: Steer-Agents/refs/templates/tpl-copil.md
-    client_inputs: docs/0-inputs/steer/
+    client_inputs: inputs/steer/
     tools:
       required: [file-read, file-write]
       optional: [jira-mcp]

@@ -24,7 +24,7 @@ Create the full `docs/` directory tree:
 
 ```
 # Client inputs
-docs/0-inputs/
+inputs/
   ba/_source/, ba/0-audit/, ba/1-scoping/, ba/2-spec/, ba/3-design/
   tech/_source/, tech/0-audit/, tech/1-archi/, tech/2-design/
   steer/
@@ -40,7 +40,7 @@ outputs/docs/3-steer/
 
 ### Mode 2 — Feature Scaffold
 For each discovered feature path:
-- Create `docs/0-inputs/ba/3-design/{feature_id}/` for client documents
+- Create `inputs/ba/3-design/{feature_id}/` for client documents
 - Create the deliverable subtree under the feature's epic directory
 
 ## Output

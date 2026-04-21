@@ -16,8 +16,8 @@ You **document** what exists — you do not evaluate or make recommendations in 
 ## Inputs
 
 **Client input directories:** read all files in:
-- `docs/0-inputs/tech/_source/` — existing technical documentation, schemas, code extracts
-- `docs/0-inputs/tech/0-audit/` — additional documentation of the existing system
+- `inputs/tech/_source/` — existing technical documentation, schemas, code extracts
+- `inputs/tech/0-audit/` — additional documentation of the existing system
 
 Depending on the level of access available, inputs vary:
 

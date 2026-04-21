@@ -6,7 +6,7 @@ allowedFilePaths:
   - 'outputs/docs/1-prd/reviews/*'
 allowedFilePathsReadOnly:
   - 'outputs/docs/1-prd/*'
-  - 'outputs/docs/0-inputs/*'
+  - 'inputs/*'
   - '.apm/skills/sdlc-deliverable-validation/*'
   - '.apm/skills/sdlc-review-arbitration/*'
   - '.apm/templates/*'

@@ -19,17 +19,17 @@ Creates the full deliverable tree and the client input directories.
 **Directories to create:**
 
 ```bash
-# Client inputs (docs/0-inputs/)
-docs/0-inputs/ba/_source/
-docs/0-inputs/ba/0-audit/
-docs/0-inputs/ba/1-scoping/
-docs/0-inputs/ba/2-spec/
-docs/0-inputs/ba/3-design/
-docs/0-inputs/tech/_source/
-docs/0-inputs/tech/0-audit/
-docs/0-inputs/tech/1-archi/
-docs/0-inputs/tech/2-design/
-docs/0-inputs/steer/
+# Client inputs (inputs/)
+inputs/ba/_source/
+inputs/ba/0-audit/
+inputs/ba/1-scoping/
+inputs/ba/2-spec/
+inputs/ba/3-design/
+inputs/tech/_source/
+inputs/tech/0-audit/
+inputs/tech/1-archi/
+inputs/tech/2-design/
+inputs/steer/
 
 # BA deliverables (outputs/docs/1-prd/)
 outputs/docs/1-prd/0-audit/
@@ -67,7 +67,7 @@ When epics and features have been discovered (after agents `ba-2.2` / `ba-2.2b`)
 
 ```bash
 # Client input directory (all depths)
-docs/0-inputs/ba/3-design/{feature_id}/
+inputs/ba/3-design/{feature_id}/
 
 # --- essential depth: no sub-directories (stories and BR are inline in the feature file) ---
 
@@ -139,14 +139,14 @@ This file is read by all agents as the first source of truth for language and Co
 
 ## README language detection
 
-After creating `docs/0-inputs/`, if `docs/0-inputs/README.md` does not exist, copy the language-appropriate template from `orchestration/templates/0-inputs-readme/`.
+After creating `inputs/`, if `inputs/README.md` does not exist, copy the language-appropriate template from `orchestration/templates/inputs-readme/`.
 
 Use the `lang` value resolved above (from `docs/project.yml` or from the collection step).
 
 Template selection:
 
 ```
-orchestration/templates/0-inputs-readme/README.{lang}.md
+orchestration/templates/inputs-readme/README.{lang}.md
 ```
 
 If no template exists for the detected language, fall back to `README.en.md`.

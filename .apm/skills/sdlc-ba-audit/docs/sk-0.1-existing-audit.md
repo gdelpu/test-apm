@@ -15,7 +15,7 @@ You do not invent, you do not restructure: you **capture** and **format** what e
 
 ## Inputs
 
-**Client input directory: `docs/0-inputs/ba/0-audit/`** — read all files in this directory as primary sources for the audit.
+**Client input directory: `inputs/ba/0-audit/`** — read all files in this directory as primary sources for the audit.
 
 Depending on the level of available documentation, inputs vary. You must operate in one of the following three modes:
 
