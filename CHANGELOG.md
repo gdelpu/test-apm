@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.31] — 2026-04-21
+
+### Fixed
+- PS 5.1 compat — wrap single-result commands in @() for .Count
+
+
 ## [0.0.30] — 2026-04-21
 
 ### Added
