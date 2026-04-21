@@ -167,7 +167,7 @@ if (Test-Path $workflowsDir) {
 
         # Extract "When to use" from companion .md
         $mdPath  = Join-Path $workflowsDir ($file.BaseName + '.md')
-        $bullets = Get-WhenToUse $mdPath
+        $bullets = @(Get-WhenToUse $mdPath)
         if ($bullets.Count -gt 0) {
             $entry += "    when_to_use:`n"
             foreach ($b in $bullets) {
