@@ -159,9 +159,12 @@ validate:marketplace:
 
   script:
     - python3 scripts/generate-marketplace.py -o marketplace.json.fresh
-    - diff -q marketplace.json marketplace.json.fresh || {
+    # Strip volatile generatedAt timestamp before comparing
+    - "grep -v '\"generatedAt\"' marketplace.json > marketplace.json.stable"
+    - "grep -v '\"generatedAt\"' marketplace.json.fresh > marketplace.json.fresh.stable"
+    - diff -q marketplace.json.stable marketplace.json.fresh.stable || {
         echo "❌ marketplace.json is stale. Run 'python scripts/generate-marketplace.py' and commit the result.";
-        diff --unified marketplace.json marketplace.json.fresh;
+        diff --unified marketplace.json.stable marketplace.json.fresh.stable;
         exit 1;
       }
     - echo "✅ marketplace.json is up to date"
