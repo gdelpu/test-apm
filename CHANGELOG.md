@@ -7,6 +7,65 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 
 ## [Unreleased]
 
+## [0.0.30] — 2026-04-21
+
+### Added
+- `docs/project-booster/Build DEP showcase _ DEP Documentation.html`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/main.min.0052c7fb119df6d3ad47db642b8de02781e26d3b562225f7785253681f2208ef.css`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/prism.css`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-component-choice.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-defectdojo.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-deploy-site.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-execute.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-gitlab-pipeline.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-gitlab.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-init.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-java-deploy.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-links.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-namespace.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-pipeline-choice.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-pipeline-view.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-select-web.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-service-finalize.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-service-setup.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-sonar-create.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-sonar-namespace.png`
+- `docs/project-booster/Build DEP showcase _ DEP Documentation_files/showcase-tool-db.png`
+- `docs/project-booster/Project Booster _ DEP Documentation.html`
+- `docs/project-booster/Project Booster _ DEP Documentation_files/embed.html`
+- `docs/project-booster/Project Booster _ DEP Documentation_files/main.min.0052c7fb119df6d3ad47db642b8de02781e26d3b562225f7785253681f2208ef.css`
+- `docs/project-booster/Project Booster _ DEP Documentation_files/onePlayer2.css`
+- `docs/project-booster/Project Booster _ DEP Documentation_files/prism.css`
+- `docs/project-booster/Project booster backend API - Full documentation.html`
+- `docs/project-booster/Project booster backend API - Full documentation_files/css`
+- `docs/project-booster/Project booster backend API - Full documentation_files/font-awesome.min.css`
+- `docs/project-booster/ProjectBooster.html`
+- `docs/project-booster/ProjectBooster_db.html`
+- `docs/project-booster/ProjectBooster_db_files/styles.6ddd163e82ba8735.css`
+- `docs/project-booster/ProjectBooster_files/styles.6ddd163e82ba8735.css`
+- `docs/project-booster/Swagger UI.html`
+- `docs/project-booster/Swagger UI_files/index.css`
+- `docs/project-booster/Swagger UI_files/swagger-ui.css`
+- `scripts/project-booster/README.md`
+- `scripts/project-booster/__init__.py`
+- `scripts/project-booster/__main__.py`
+- `scripts/project-booster/booster_client.py`
+- `scripts/project-booster/cli.py`
+- `scripts/project-booster/config.py`
+
+### Changed
+- Agent scope constraints updated: skill(s) `soprasteria-dep`
+- SonarQube integration updated: skill(s) `sdlc-tech-architecture`, `soprasteria-dep`
+- Agent updates: `sdlc-steer-manager`
+- Skill updates: `sdlc-steer-planning`, `sdlc-tech-architecture`, `sdlc-tech-design`, `sdlc-tech-implementation`, `soprasteria-dep`
+- Copilot provider agent updates: `sdlc-steer-manager.agent`
+- Script updates: `generate-marketplace.py`
+- Workflow updates: `sdlc-tech`
+
+### Fixed
+- Sprint fidelity check for IMP-001 vs PLAN-001 drift
+
+
 ## [0.0.29] — 2026-04-21
 
 ### Added
