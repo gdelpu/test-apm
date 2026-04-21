@@ -7,6 +7,9 @@ default_hooks:
   pre:
     - .apm/hooks/pre/input-validation/base.md
     - .apm/hooks/pre/input-validation/tech.md
+    - hook: .apm/hooks/soprasteria-dep/pre-input-validation.md
+      severity: warning
+      condition: "config.dep_access != 'none'"
   post:
     - .apm/hooks/post/quality-control.md
     - .apm/hooks/post/confluence-push.md
@@ -67,10 +70,23 @@ stations:
       - ctx-001-system-context.md
     outputs:
       - adr/
+    post_hooks:
+      - hook: post/quality-control.md
+        severity: blocker
+      - hook: post/adr-completeness.md
+        severity: blocker
+      - hook: post/confluence-push.md
+        severity: warning
     gate:
       criteria:
         - "Each ADR has context, decision, rationale, confidence level"
         - "Security and observability ADRs included"
+        - "adr-000-index.md has dep_access field set (full|partial|none)"
+        - "ADR-ENV-DEV, ADR-ENV-QUALIF, ADR-ENV-CLIENT all exist"
+        - "ADR-ENV-QUALIF has dep_access in YAML front matter (always required)"
+        - "ADR-ENV-QUALIF has pb_coverage in YAML front matter (required only if dep_access != none)"
+        - "pb-provisioning-plan.json exists if pb_coverage is full or partial"
+        - "All 3 environment ADRs include an infrastructure provisioning plan section"
       severity: blocker
 
   - id: tech-stack
@@ -166,7 +182,7 @@ stations:
       criteria:
         - "Ordered wave plan for implementation"
         - "Coding agent briefing compiled"
-        - "Enabler/feature allocation matches sprint planning per PLAN-001; deviations documented with justification in ## Deviations from sprint plan"
+        - "Enabler/feature allocation matches sprint planning per PLAN-001; deviations documented with justification"
       severity: blocker
 
   - id: tech-provider-bootstrap
@@ -281,12 +297,8 @@ stations:
         - "Wave DoD from IMP-001 met"
         - "No blocker issues pending"
       severity: blocker
-    loop:
-      description: "Stations tech-task-resolution through tech-wave-gate repeat per item within a sprint, and per sprint within a wave. The wave gate fires only when all wave items are completed."
-      per_item: [tech-task-resolution, tech-code-generation, tech-test-implementation, tech-validation]
-      per_wave: [tech-wave-gate]
 
-  # ─── System T4: Continuous Quality ─────────────────────────────────
+  # ─── T4.1: Drift Detection (per wave, non-blocking) ─────────────────
   - id: tech-drift
     name: Drift Detection
     agent: sdlc-tech-architect
@@ -294,6 +306,7 @@ stations:
       - sdlc-tech-quality
     inputs:
       - imp-001-implementation-plan.md
+      - wave-report.md
     outputs:
       - drift-report.md
     gate:
@@ -301,6 +314,63 @@ stations:
         - "Spec-vs-code discrepancies identified"
       severity: warning
 
+  # ─── T3.6: Push & CI Validation (per wave) ──────────────────────────
+  - id: tech-push-ci
+    name: Push & CI Validation
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - wave-report.md
+      - drift-report.md
+    outputs:
+      - ci-validation-report.md
+    gate:
+      criteria:
+        - "Branch pushed to remote"
+        - "CI pipeline passes"
+      severity: blocker
+
+  # ─── T3.7: Merge Request (per wave) ────────────────────────────────
+  - id: tech-merge-request
+    name: Merge Request
+    agent: implementer
+    skills:
+      - sdlc-tech-implementation
+    inputs:
+      - ci-validation-report.md
+    outputs:
+      - merge-request-report.md
+    gate:
+      criteria:
+        - "MR created and merged to main"
+      severity: blocker
+
+    loop:
+      description: "T3 implementation loop: per-item stations repeat for each task in a wave. Per-wave stations (wave-gate, drift, push/CI, MR) fire after all items in the wave are completed. T4.2 code review runs per-wave. T4.3 E2E generation runs once after the last wave of each sprint."
+      per_item: [tech-task-resolution, tech-code-generation, tech-test-implementation, tech-validation]
+      per_wave: [tech-wave-gate, tech-drift, tech-push-ci, tech-merge-request, tech-code-review]
+      per_sprint: [tech-e2e-gen]
+
+  # ─── T4.2: Code Review (per wave) ──────────────────────────────────
+  - id: tech-code-review
+    name: Code Review
+    agent: sdlc-tech-architect
+    skills:
+      - sdlc-tech-quality
+    inputs:
+      - wave-report.md
+      - adr/
+      - stk-001-stack-conventions.md
+    outputs:
+      - code-review-report.md
+    gate:
+      criteria:
+        - "ADR compliance verified"
+        - "Security practices and observability patterns checked"
+      severity: warning
+
+  # ─── T4.3: E2E Playwright Generation (per sprint) ──────────────────
   - id: tech-e2e-gen
     name: E2E Playwright Generation
     agent: sdlc-tech-architect
@@ -308,12 +378,37 @@ stations:
       - sdlc-tech-quality
     inputs:
       - tst-001-test-strategy.md
+      - e2e-plan-001.md
+      - wave-report.md
     outputs:
       - e2e-scripts-001-playwright.md
     gate:
       criteria:
         - "E2E scripts trace to BA test scenarios"
+        - "Testability filter applied: only flows with all US implemented"
       severity: warning
+
+  # ─── Independent Review ────────────────────────────────────────────
+  - id: tech-review
+    name: Tech Independent Review
+    agent: sdlc-tech-reviewer
+    skills:
+      - sdlc-deliverable-validation
+      - sdlc-review-arbitration
+    inputs:
+      - imp-001-implementation-plan.md
+    outputs:
+      - tech-review-report.md
+    required_outputs:
+      - tech-review-report.md
+    gate:
+      criteria:
+        - "All Tech deliverables independently reviewed"
+        - "No CONFLICT verdicts, OR human has arbitrated all conflicts"
+        - "BA-Tech traceability verified by independent reviewer"
+        - "Status promotions issued for validated deliverables"
+      severity: blocker
+      on_conflict: pause
 
 config:
   output_dir: outputs/docs/2-tech/

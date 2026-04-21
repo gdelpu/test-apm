@@ -38,6 +38,17 @@ All deliverables are written to `outputs/docs/2-tech/` with structured identifie
 ## Core Responsibilities
 
 - Audit existing technical stack and identify migration gaps (T0)
+
+## Resume from Workflow State
+
+When invoked via handoff from the SDLC Coordinator, this agent receives the workflow context through the state file on disk. On startup:
+
+1. Read `outputs/workflow-state-*.md` to determine which stations are completed, in-progress, or pending.
+2. Identify the next pending station from the workflow YAML (`.apm/workflows/sdlc-tech.yml`).
+3. Read the station's inputs from their declared paths on disk.
+4. Execute the station's skill, write outputs to disk.
+5. Update the workflow state file after each station transition.
+6. Continue until all assigned stations are complete, then inform the user to return to the Coordinator.
 - Define target architecture with ADRs for key decisions (T1)
 - Produce incremental design documents per feature or sprint (T2)
 - Enforce continuous quality gates (T4)

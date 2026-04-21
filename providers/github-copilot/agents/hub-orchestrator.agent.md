@@ -29,7 +29,7 @@ handoffs:
     send: true
   - label: Run SDLC Full
     agent: SDLC Coordinator
-    prompt: 'Read .apm/workflows/sdlc-full.yml and execute the full SDLC pipeline. First determine whether this is a brownfield (existing system) or greenfield (new) project. If brownfield, execute S0/T0 audit stations. If greenfield, skip audit stations and start from S1/T1. Write all artifacts to outputs/. Use the conversation context for project details.'
+    prompt: 'Read .apm/workflows/sdlc-full.yml and orchestrate the full SDLC pipeline using handoff-based context isolation. First determine whether this is a brownfield (existing system) or greenfield (new) project. Create the workflow state file, then dispatch each phase via handoff buttons: BA S0-S2 → Tech T0-T1 → Sprint Planning P1 → Sprint loop (BA S3, Tech T2, Tech T3, P2) → Test Campaigns → COPIL. Use the conversation context for project details.'
     send: true
   - label: Run Spec Kit
     agent: Workflow Orchestrator

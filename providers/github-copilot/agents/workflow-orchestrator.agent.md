@@ -35,11 +35,16 @@ Read the full agent definition from `.apm/agents/workflow-orchestrator.md`.
 
 - Load the target workflow definition from `.apm/workflows/`
 - Resolve station sequence and dependency graph
+- **Resolve and execute pre-hooks** (`default_hooks.pre` + station-level `pre_hooks`) before each station — a STOP from a blocker pre-hook halts execution
 - Dispatch each station to the appropriate agent with an explicit tool scope
 - Collect station outputs and enforce quality gates before advancing
+- **Resolve and execute post-hooks** (`default_hooks.post` + station-level `post_hooks`) after each station — a STOP from a blocker post-hook marks the gate as failed
 - Write workflow state to `outputs/runs/<workflow>/` via the canonical state tracker
+- Support conditional hooks (see `.apm/hooks/_schema.md` § Conditional Hooks)
 
 > All station declarations in workflow YAML MUST include an explicit `allowed_tools` list. Stations without one inherit `[]` (no tools).
+
+> **Hook execution protocol**: See the canonical agent definition (`.apm/agents/workflow-orchestrator.md` § Station Execution, steps 3 and 6) for the full pre-hook and post-hook resolution and execution procedure. Hooks are NOT optional metadata — they are mandatory execution gates.
 
 ## State Tracker (Provider-Independent)
 
