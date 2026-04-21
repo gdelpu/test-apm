@@ -290,6 +290,7 @@ stations:
     loop:
       description: "Stations ba-functional-design through sprint-tracking repeat for each sprint defined in plan-001-sprint-planning.md. Each sprint scopes a subset of features from the backlog."
       per_sprint: [ba-functional-design, tech-design, tech-implementation, tech-quality, sprint-tracking]
+      max_iterations: 12  # hard cap — prevents unbounded sprint loop from resource exhaustion
 
   # ─── Phase 6: Test Campaigns ───────────────────────────────────────
   # Run after all sprints are completed.
