@@ -29,7 +29,7 @@ $outputFile   = Join-Path $repoRoot '.apm/contexts/hub-catalog.yaml'
 function Get-YamlFrontmatter {
     param([string]$Path)
 
-    $lines = Get-Content $Path -Encoding utf8
+    $lines = @(Get-Content $Path -Encoding utf8)
     $result = @{}
 
     if ($lines.Count -lt 2 -or $lines[0].Trim() -ne '---') {
@@ -121,7 +121,7 @@ function Format-YamlString {
 $agentEntries = @()
 
 if (Test-Path $agentsDir) {
-    $agentFiles = Get-ChildItem $agentsDir -Filter '*.md' | Where-Object { $_.Name -ne '_schema.md' } | Sort-Object Name
+    $agentFiles = @(Get-ChildItem $agentsDir -Filter '*.md' | Where-Object { $_.Name -ne '_schema.md' } | Sort-Object Name)
     foreach ($file in $agentFiles) {
         $fm = Get-YamlFrontmatter $file.FullName
         if (-not $fm['name']) { continue }
@@ -151,7 +151,7 @@ if (Test-Path $agentsDir) {
 $workflowEntries = @()
 
 if (Test-Path $workflowsDir) {
-    $ymlFiles = Get-ChildItem $workflowsDir -Filter '*.yml' | Where-Object { $_.Name -ne '_schema.yml' } | Sort-Object Name
+    $ymlFiles = @(Get-ChildItem $workflowsDir -Filter '*.yml' | Where-Object { $_.Name -ne '_schema.yml' } | Sort-Object Name)
     foreach ($file in $ymlFiles) {
         $name        = Get-YamlField $file.FullName 'name'
         $description = Get-YamlField $file.FullName 'description'
