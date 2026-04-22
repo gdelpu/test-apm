@@ -38,7 +38,7 @@ You do **not** invent jobs or custom CI logic: every pipeline step must come fro
   - [ ] Sprint timeline available (helps choose which security gates to enable early)
   → Action on absence: GO — timeline not required for pipeline generation
 
-- **Client input supplement** (`docs/0-inputs/dep/ci/`): any existing `.gitlab-ci.yml`, pipeline constraints document, or team CI conventions note.
+- **Client input supplement** (`inputs/dep/ci/`): any existing `.gitlab-ci.yml`, pipeline constraints document, or team CI conventions note.
 
 ## Expected output
 
@@ -60,7 +60,7 @@ Two files:
 
 1. Read `[STK-001]` (if available) — extract: language, runtime version, build tool, artefact type, test frameworks.
 2. Read `[CTX-001]` (if available) — extract: deployment target, number of environments, cloud provider, Kubernetes/OpenShift flag.
-3. Read client supplement files in `docs/0-inputs/dep/ci/` (if any).
+3. Read client supplement files in `inputs/dep/ci/` (if any).
 4. If no inputs are available: declare a minimal generic pipeline (init + lint + build + test + sonarqube) and flag all assumptions.
 
 ### Step 2: Job selection

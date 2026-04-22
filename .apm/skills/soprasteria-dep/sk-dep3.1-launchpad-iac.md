@@ -42,7 +42,7 @@ You do **not** invent infrastructure not justified by the project's requirements
   - [ ] Environment promotion order identified (dev → staging → prod)
   → Action on absence: WARN — assume standard dev → staging → prod promotion flow
 
-- **Client input supplement** (`docs/0-inputs/dep/iac/`): existing infrastructure diagrams, network policies, cost constraints, compliance requirements (ISO 27001, HDS, RGPD…).
+- **Client input supplement** (`inputs/dep/iac/`): existing infrastructure diagrams, network policies, cost constraints, compliance requirements (ISO 27001, HDS, RGPD…).
 
 ## Expected output
 
@@ -70,7 +70,7 @@ Two artefacts:
 
 1. Read `[CTX-001]` — extract: cloud provider(s), environments, compute types, external systems, networking constraints, compliance requirements.
 2. Read `[STK-001]` (if available) — extract: database engine/version, container platform (AKS, EKS, OpenShift), storage needs.
-3. Read client supplement files in `docs/0-inputs/dep/iac/` (if any) — look for network diagrams, sizing constraints, cost budgets.
+3. Read client supplement files in `inputs/dep/iac/` (if any) — look for network diagrams, sizing constraints, cost budgets.
 4. If `[CTX-001]` is absent: STOP (see mandatory rules).
 
 ### Step 2: Cloud provider selection and resource mapping

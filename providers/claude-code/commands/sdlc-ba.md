@@ -44,7 +44,7 @@ If $ARGUMENTS contains "inline", execute all systems in a single context (not re
 
 ## Inputs
 
-- Client input documents in `docs/0-inputs/ba/_source/`
+- Client input documents in `inputs/ba/_source/`
 - Existing system documents (brownfield) or project brief (greenfield)
 
 ## Outputs

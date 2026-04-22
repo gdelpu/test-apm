@@ -16,7 +16,7 @@ Create the docs/ directory scaffold for the project, configure the working langu
    a. Collect `project_name`, `lang`, and `doc_depth` from the session context or by asking the user.
    b. Create all directories (Mode 1 — base scaffold).
    c. Create `docs/project.yml` if it does not already exist (use the flat schema with `lang`, `project_name`, `doc_depth`, `confluence_enabled`).
-   d. Copy the language-appropriate `README.md` to `docs/0-inputs/` if it does not already exist.
+   d. Copy the language-appropriate `README.md` to `inputs/` if it does not already exist.
    e. Run the **Confluence configuration check** (Steps 1–4 of the Confluence section):
       - Check `.env` for `CONFLUENCE_INSTANCE_URL`, `CONFLUENCE_USER_EMAIL`, `CONFLUENCE_API_TOKEN`, `CONFLUENCE_SPACE_KEY`.
       - If credentials are missing, ask the user to provide them or type `skip`.

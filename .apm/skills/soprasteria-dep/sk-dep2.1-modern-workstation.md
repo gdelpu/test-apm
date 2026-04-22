@@ -32,7 +32,7 @@ You do **not** write installation scripts or manual procedures: every tool must 
   - [ ] Developer roles distinguished from ops/devops roles
   → Action on absence: WARN — produce a single unified config for all roles
 
-- **Client input supplement** (`docs/0-inputs/dep/mw/`): existing workstation setup docs, team OS survey, or specific tool version constraints.
+- **Client input supplement** (`inputs/dep/mw/`): existing workstation setup docs, team OS survey, or specific tool version constraints.
 
 ## Expected output
 
@@ -53,7 +53,7 @@ Two files:
 
 1. Read `[STK-001]` (if available) — extract: language + version, build tool, databases, container tooling (Docker/Podman), IDE preferences.
 2. Read `[ACT-001]` (if available) — identify distinct team roles and their tooling needs (developer vs ops vs QA).
-3. Read client supplement files in `docs/0-inputs/dep/mw/` (if any).
+3. Read client supplement files in `inputs/dep/mw/` (if any).
 4. If no inputs: declare a minimal config (git + vscode) and flag all stack assumptions.
 
 ### Step 2: Module selection

@@ -20,7 +20,7 @@ Define the product scope through vision statement, business glossary (DDD ubiqui
 
 ### Phase 1 — Product Vision (agent 1.1)
 1. Load the vision template from `resources/`
-2. Read discovery document `[DCO-001]` and client inputs from `docs/0-inputs/ba/1-scoping/`
+2. Read discovery document `[DCO-001]` and client inputs from `inputs/ba/1-scoping/`
 3. Define measurable objectives, clear IN/OUT scope, success criteria
 4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/1-scoping/vis-001-product-vision.md` with identifier `[VIS-001]`
 
