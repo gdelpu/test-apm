@@ -19,8 +19,10 @@ stations:
       - sdlc-scaffold
     inputs: []
     outputs:
+      - inputs/
       - outputs/
     required_outputs:
+      - inputs/
       - outputs/docs/
     gate:
       criteria:

@@ -11,12 +11,18 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - `docs/correction-report-epic-granularity.md`
 
 ### Changed
-- Skill updates: `sdlc-ba-scoping`, `sdlc-ba-specification`
+- Brownfield detection updated: 1 other file(s)
+- Agent updates: `sdlc-ba-reviewer`, `sdlc-steer-reviewer`, `sdlc-tech-reviewer`
+- Skill updates: `sdlc-ba-audit`, `sdlc-ba-scoping`, `sdlc-ba-specification`, `sdlc-deliverable-validation`, `sdlc-scaffold`, `sdlc-steer-init`, `sdlc-tech-audit`, `sdlc-tech-quality`, `soprasteria-dep`
+- Copilot provider agent updates: `sdlc-ba-reviewer.agent`, `sdlc-steer-reviewer.agent`, `sdlc-tech-reviewer.agent`
+- 1 Copilot prompt(s) updated
+- 4 Claude Code command(s) updated
 - Workflow updates: `sdlc-ba`, `sdlc-full`
 
 ### Fixed
 - Enforce epic/feature granularity constraints and propagate DCO-001 inputs
 - Add missing ba-discovery station to sdlc-full and sdlc-ba workflows
+- Simplify SDLC input folders — docs/0-inputs/ → inputs/
 
 
 ## [0.0.34] — 2026-04-21

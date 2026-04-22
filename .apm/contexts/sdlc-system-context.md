@@ -6,13 +6,13 @@
 ## Deliverable Structure
 
 ```
-docs/
-  0-inputs/       # Client-provided documents (read-only for agents)
-    ba/           # Functional inputs (_source, 0-audit, 1-scoping, 2-spec, 3-design)
-    tech/         # Technical inputs (_source, 0-audit, 1-archi, 2-design)
-    steer/        # COPIL decisions, arbitrations, scope changes
-  1-prd/          # BA deliverables (Product Requirements Document)
-    0-audit/      # (brownfield) AS-IS audit + delta analysis
+inputs/               # Client-provided documents (read-only for agents)
+  ba/                 # Functional inputs (_source, 0-audit, 1-scoping, 2-spec, 3-design)
+  tech/               # Technical inputs (_source, 0-audit, 1-archi, 2-design)
+  steer/              # COPIL decisions, arbitrations, scope changes
+outputs/docs/
+  1-prd/              # BA deliverables (Product Requirements Document)
+    0-audit/          # (brownfield) AS-IS audit + delta analysis
     1-scoping/    # Vision, glossary, actors, functional requirements
     2-specification/  # Domain model, cross-cutting business rules
     3-epics/      # Hierarchical: epic > feature > stories, journeys, screens, tests
@@ -55,7 +55,7 @@ Files are named with the identifier as lowercase prefix: `ep-001-authentication.
 - Technical identifiers and YAML keys remain in English
 
 ### Client Inputs Convention
-- Agents read, users write. Agents never deposit files in `0-inputs/`
+- Agents read, users write. Agents never deposit files in `inputs/`
 - Directory naming follows `{domain}/{system}/` matching the target agent
 - An empty directory never blocks an agent
 

@@ -20,7 +20,7 @@ Perform a functional snapshot of an existing system (brownfield audit) and produ
 
 ### Phase 1 — Existing Audit (agent 0.1)
 1. Load brownfield conventions and the existing audit template from `resources/`
-2. Read client-provided documentation from `docs/0-inputs/ba/0-audit/`
+2. Read client-provided documentation from `inputs/ba/0-audit/`
 3. Select audit mode based on documentation richness:
    - **Mode A** — Rich documentation: structured extraction from existing specs
    - **Mode B** — Partial documentation: inference + gap identification  

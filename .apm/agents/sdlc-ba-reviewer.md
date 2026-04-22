@@ -4,7 +4,7 @@ description: 'Independent reviewer for BA deliverables — validates quality, co
 tools: ['codebase', 'search']
 allowedFilePathsReadOnly:
   - 'outputs/docs/1-prd/*'
-  - 'outputs/docs/0-inputs/*'
+  - 'inputs/*'
   - '.apm/skills/sdlc-deliverable-validation/*'
   - '.apm/skills/sdlc-review-arbitration/*'
   - '.apm/templates/*'

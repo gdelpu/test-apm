@@ -20,7 +20,7 @@ Perform a technical stack assessment and gap analysis for brownfield projects, i
 
 ### Phase 1 — Technical Audit (agent t0.1)
 1. Load the technical audit template from `resources/`
-2. Read client-provided technical documentation from `docs/0-inputs/tech/0-audit/`
+2. Read client-provided technical documentation from `inputs/tech/0-audit/`
 3. Assess current stack: languages, frameworks, infrastructure, CI/CD, observability
 4. Identify compliance gaps against governance standards
 5. Use the `edit/editFiles` tool to create `outputs/docs/2-tech/0-audit/tech-asis-001-technical-audit.md` with identifier `[TECH-ASIS-001]`

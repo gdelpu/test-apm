@@ -7,7 +7,7 @@ Execute the **BA System S1 — Scoping** pipeline.
 1. Read `.apm/workflows/sdlc-ba.yml` — stations `ba-vision` through `ba-requirements`.
 2. Read `.apm/contexts/sdlc-agent-registry.yaml` — agent compositions for ba-1.1 through ba-1.4.
 3. Execute:
-   - **Resolve prerequisites**: if discovery document does not exist, produce it from raw sources in `docs/0-inputs/ba/_source/`.
+   - **Resolve prerequisites**: if discovery document does not exist, produce it from raw sources in `inputs/ba/_source/`.
    - Resolve DAG into waves (1.1 // 1.2 parallel, then 1.3, then 1.4).
    - For each agent: assemble prompt (hooks + conventions + template + skill), then launch.
    - Verify output file exists before proceeding to next agent.

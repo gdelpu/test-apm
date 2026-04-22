@@ -111,7 +111,7 @@ Each sprint produces:
 
 | System | Agent | Skill | Output | Input |
 |--------|-------|-------|--------|-------|
-| P0 | p0.1 Project Sheet | `sk-p0.1-project-sheet` | `[PIL-001]` + `[CAP-001]` | `docs/0-inputs/steer/` |
+| P0 | p0.1 Project Sheet | `sk-p0.1-project-sheet` | `[PIL-001]` + `[CAP-001]` | `inputs/steer/` |
 | P0 | p0.2 KPI Baseline | `sk-p0.2-kpi-baseline` | `[KPI-001]` | `[PIL-001]` |
 | **P1** | **p1.3 Sprint Planning** | `sk-p1.3-sprint-planning-design` | **`[PLAN-001]`** — unified BA+Tech sprint plan | **Epic files only** (`ep-*/ep-*.md`) |
 | P1 | p1.1 Roadmap | `sk-p1.1-roadmap` | `[RDP-001]` | `[PLAN-001]` |
