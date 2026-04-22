@@ -26,15 +26,19 @@ Build the domain model, decompose into epics and features, and consolidate busin
 5. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/2-specification/dom-001-domain-model.md` with identifier `[DOM-001]`
 
 ### Phase 2 — Epic Decomposition (agent 2.2)
+> ⚠️ **MANDATORY**: Read `docs/sk-2.2-epics.md` in full BEFORE producing any epic file. It contains binding granularity rules (1–5 epics, 4–8 features per epic).
 1. Load the epic template from `resources/`
-2. Read upstream: `[DOM-001]` domain model
-3. Decompose into N epic files with hierarchical structure
+2. **Read `docs/sk-2.2-epics.md`** — this contains binding granularity rules and the pre-write validation gate
+3. Read upstream: `[DOM-001]` domain model
+4. Decompose into N epic files with hierarchical structure (respecting hard caps from sk-2.2-epics.md)
 4. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/ep-{id}-{slug}/ep-{id}-{slug}.md` per epic with identifier `[EP-xxx]`
 5. Register the `epics` collection for downstream fan-out
 
 ### Phase 3 — Feature Specification (agent 2.2b) — fan-out per epic
+> ⚠️ **MANDATORY**: Read `docs/sk-2.2b-features.md` in full BEFORE producing any feature file. It contains the feature vs user-story litmus test.
 1. Load the feature template from `resources/`
-2. For each epic in the `epics` collection, produce feature specifications
+2. **Read `docs/sk-2.2b-features.md`** — this contains the binding feature granularity checks
+3. For each epic in the `epics` collection, produce feature specifications
 3. Use the `edit/editFiles` tool to create `outputs/docs/1-prd/3-epics/{epic}/ft-{id}-{slug}/ft-{id}-{slug}.md` per feature with identifier `[FT-xxx]`
 4. Register the `features` collection for S3 fan-out
 

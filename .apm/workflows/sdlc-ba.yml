@@ -44,13 +44,35 @@ stations:
         - "Every functional area is classified as new/evolving/preserved/deprecated"
       severity: blocker
 
+  # ─── System S0.5: Discovery Workshop ────────────────────────────────
+  # Produces [DCO-001] — structured context from raw source documents.
+  # Must run before scoping so all S1 agents have structured input.
+  - id: ba-discovery
+    name: Discovery Workshop
+    agent: sdlc-ba-analyst
+    skills:
+      - sdlc-deliverable-validation
+    skill_doc: sdlc-deliverable-validation/docs/sk-discovery.md
+    inputs:
+      - docs/0-inputs/ba/_source/
+    outputs:
+      - dco-001-discovery.md
+    required_outputs:
+      - dco-001-discovery.md
+    gate:
+      criteria:
+        - "Discovery document [DCO-001] produced with structured context, stakeholder mapping, and proto-glossary"
+        - "All raw source documents have been processed"
+      severity: blocker
+
   # ─── System S1: Scoping ────────────────────────────────────────────
   - id: ba-vision
     name: Product Vision & Scope
     agent: sdlc-ba-analyst
     skills:
       - sdlc-ba-scoping
-    inputs: []
+    inputs:
+      - dco-001-discovery.md
     outputs:
       - vis-001-product-vision.md
     gate:
@@ -64,7 +86,8 @@ stations:
     agent: sdlc-ba-analyst
     skills:
       - sdlc-ba-scoping
-    inputs: []
+    inputs:
+      - dco-001-discovery.md
     outputs:
       - glo-001-glossary.md
     parallel: true  # can run in parallel with vision
@@ -80,6 +103,7 @@ stations:
       - sdlc-ba-scoping
     inputs:
       - glo-001-glossary.md
+      - dco-001-discovery.md
     outputs:
       - act-001-actors-roles.md
     gate:
@@ -97,6 +121,7 @@ stations:
       - vis-001-product-vision.md
       - glo-001-glossary.md
       - act-001-actors-roles.md
+      - dco-001-discovery.md
     outputs:
       - exf-001-functional-requirements.md
     gate:
@@ -136,6 +161,8 @@ stations:
       criteria:
         - "Epics cover all functional requirements"
         - "Each epic has clear scope and boundaries"
+        - "Epic count is between 1 and 5 inclusive (1 for simple apps, 2-4 typical, hard cap 5 — see sk-2.2-epics.md Step 1b)"
+        - "Each epic contains between 4 and 8 features in its index"
       severity: blocker
 
   - id: ba-features
@@ -151,6 +178,7 @@ stations:
       criteria:
         - "Each feature has a clear scope within its parent epic"
         - "Feature identifiers are sequential and unique"
+        - "Each feature passes the litmus test: decomposable into 2-8 user stories, serves an identified actor, demonstrable in 5 min"
       severity: blocker
 
   - id: ba-business-rules
