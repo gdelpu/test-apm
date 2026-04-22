@@ -1,0 +1,15 @@
+{
+  "name": "sdlc-tech-architect",
+  "description": "Produce technical architecture and design dossier with ADRs and implementation plans.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../sdlc-tech-architect.md"
+  ]
+}

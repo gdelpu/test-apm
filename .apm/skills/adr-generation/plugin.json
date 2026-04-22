@@ -1,0 +1,13 @@
+{
+  "name": "adr-generation",
+  "description": "Generate Architecture Decision Records (ADRs) capturing architecturally significant decisions with rationale, alternatives, and consequences.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

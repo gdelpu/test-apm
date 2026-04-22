@@ -1,0 +1,13 @@
+{
+  "name": "figma-design-sync",
+  "description": "Interact with Figma via MCP — read designs, extract component specs, validate against design system tokens. Formalises the existing optional Figma integration.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "pr-validator",
+  "description": "Run deterministic merge request validation checks including frontmatter, naming conventions, YAML lint, and test gap detection.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../pr-validator.md"
+  ]
+}

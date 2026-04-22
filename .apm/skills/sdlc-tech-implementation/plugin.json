@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-tech-implementation",
+  "description": "Execute the implementation plan wave-by-wave per sprint, producing code with full T0-T2 context injection, BA-traced tests, and wave gate validation.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

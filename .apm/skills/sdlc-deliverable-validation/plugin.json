@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-deliverable-validation",
+  "description": "Audit any SDLC deliverable for quality: template conformance, completeness, placeholder removal, traceability integrity, and production confidence scoring.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

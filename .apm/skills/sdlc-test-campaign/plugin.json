@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-test-campaign",
+  "description": "Launch E2E/UAT test campaigns by executing Playwright scripts, logging anomalies, and producing qualification reports with Go/No-Go quality gate data.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

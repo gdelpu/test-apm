@@ -1,0 +1,15 @@
+{
+  "name": "sdlc-steer-reviewer",
+  "description": "Independent reviewer for Steer deliverables — validates cross-domain accuracy of governance documents and Go/No-Go decisions with conflict escalation to human.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../sdlc-steer-reviewer.md"
+  ]
+}

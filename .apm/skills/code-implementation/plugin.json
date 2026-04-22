@@ -1,0 +1,13 @@
+{
+  "name": "code-implementation",
+  "description": "Execute implementation tasks from a task breakdown, producing or modifying code while following project conventions.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

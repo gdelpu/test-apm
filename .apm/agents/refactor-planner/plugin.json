@@ -1,0 +1,15 @@
+{
+  "name": "refactor-planner",
+  "description": "Analyse ADRs and as-is assessment to produce a detailed, phased migration plan with dependency ordering.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../refactor-planner.md"
+  ]
+}

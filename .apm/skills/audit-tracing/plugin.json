@@ -1,0 +1,13 @@
+{
+  "name": "audit-tracing",
+  "description": "Emit structured audit traces for every workflow station execution with correlation IDs, input/output hashes, sensitivity tags, risk scores, model metadata, and redaction status. Supports local JSON...",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

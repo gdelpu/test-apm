@@ -1,0 +1,28 @@
+{
+  "name": "SSG AI SDLC Foundation",
+  "version": "0.0.34",
+  "description": "Sopra Steria Group AI SDLC Foundation — cross-provider collection of agents, skills, workflows, prompts, and foundational knowledge for specification-driven delivery, quality validation, security governance, brand compliance, and full-lifecycle SDLC support.",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "ai-agents",
+    "sdlc",
+    "copilot",
+    "claude-code",
+    "specification-driven",
+    "quality-validation",
+    "security-governance",
+    "brand-compliance",
+    "workflows",
+    "architecture",
+    "testing",
+    "modernization"
+  ],
+  "agents": ".apm/agents/",
+  "skills": ".apm/skills/",
+  "commands": ".apm/prompts/",
+  "instructions": ".apm/instructions/",
+  "hooks": ".apm/hooks/"
+}

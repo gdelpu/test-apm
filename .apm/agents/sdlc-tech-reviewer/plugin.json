@@ -1,0 +1,15 @@
+{
+  "name": "sdlc-tech-reviewer",
+  "description": "Independent reviewer for Tech deliverables — validates architecture, design, and BA-Tech traceability with conflict escalation to human.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../sdlc-tech-reviewer.md"
+  ]
+}

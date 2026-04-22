@@ -1,0 +1,17 @@
+{
+  "name": "ssg-ai-instructions",
+  "version": "0.0.34",
+  "description": "Coding standards, output metadata, security hardening, workflow conventions, MCP integration guidelines, and SDLC hook instructions for AI coding agents.",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "instructions",
+    "standards",
+    "governance",
+    "security",
+    "sdlc"
+  ],
+  "instructions": "./"
+}

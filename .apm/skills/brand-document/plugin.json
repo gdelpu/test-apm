@@ -1,0 +1,13 @@
+{
+  "name": "brand-document",
+  "description": "Adapt PowerPoint, Word, PDF, proposal, dossier, memo, brochure, and similar assets to a target brand identity. Converts Markdown to branded DOCX and PDF via Pandoc. Default brand: Sopra Steria.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

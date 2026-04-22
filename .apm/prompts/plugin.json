@@ -1,0 +1,17 @@
+{
+  "name": "ssg-ai-prompts",
+  "version": "0.0.34",
+  "description": "Workflow prompt commands for SDLC orchestration, brand audits, document conversion, and more. Includes workflow entry-point prompts for feature implementation, bug fixing, spec kit, quality validation, PR validation, modernization, and more.",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "prompts",
+    "commands",
+    "workflows",
+    "sdlc",
+    "brand"
+  ],
+  "commands": "./"
+}

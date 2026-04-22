@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-tech-design",
+  "description": "Produce the technical design dossier: data model with DDL and migrations, OpenAPI-compliant API contracts, test strategy, and the implementation plan.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

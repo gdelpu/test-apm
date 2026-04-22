@@ -1,0 +1,20 @@
+{
+  "name": "ssg-ai-skills",
+  "version": "0.0.34",
+  "description": "127 reusable agent skills covering SDLC, architecture, security, testing, API design, cloud ops, frontend, brand compliance, document generation, and more.",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "skills",
+    "sdlc",
+    "architecture",
+    "security",
+    "testing",
+    "frontend",
+    "cloud",
+    "brand"
+  ],
+  "skills": "./"
+}

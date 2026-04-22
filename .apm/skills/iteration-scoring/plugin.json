@@ -1,0 +1,13 @@
+{
+  "name": "iteration-scoring",
+  "description": "Score BMAD iteration outcomes using quantitative metrics and qualitative assessment to track progress across build-measure-analyze-decide cycles.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

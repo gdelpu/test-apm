@@ -1,0 +1,13 @@
+{
+  "name": "ai-backbone-pr-checks",
+  "description": "Deterministic merge request validation for Copilot assets: frontmatter, workflow YAML quality, and repository-specific test-gap advisories. Runs on GitLab CI.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

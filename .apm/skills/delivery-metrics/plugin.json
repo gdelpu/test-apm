@@ -1,0 +1,13 @@
+{
+  "name": "delivery-metrics",
+  "description": "Collect and analyze delivery metrics including cycle time, defect rates, throughput, and bottleneck identification for retrospectives.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

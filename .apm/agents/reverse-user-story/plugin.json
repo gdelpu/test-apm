@@ -1,0 +1,15 @@
+{
+  "name": "reverse-user-story",
+  "description": "Generate detailed user stories with acceptance criteria from existing codebase.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../reverse-user-story.md"
+  ]
+}

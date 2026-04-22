@@ -1,0 +1,13 @@
+{
+  "name": "agent-policy-guard",
+  "description": "Validate agent and skill manifest frontmatter against JSON Schema and enforce tool allowlists, safety field requirements, and structural policy rules (P-01 through P-06).",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

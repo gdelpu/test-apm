@@ -1,0 +1,13 @@
+{
+  "name": "office-common",
+  "description": "Shared OOXML utilities for packing, unpacking, validating, and converting Office documents (.docx, .pptx, .xlsx). Provides LibreOffice integration, XML schema validation, tracked-change helpers, an...",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

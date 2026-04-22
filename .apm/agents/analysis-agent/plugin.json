@@ -1,0 +1,15 @@
+{
+  "name": "analysis-agent",
+  "description": "Diagnose production incidents by analyzing logs, traces, and identifying root causes.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../analysis-agent.md"
+  ]
+}

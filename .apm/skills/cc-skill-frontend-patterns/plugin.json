@@ -1,0 +1,13 @@
+{
+  "name": "cc-skill-frontend-patterns",
+  "description": "Frontend development patterns for React, Next.js, state management, performance optimization, and UI best practices.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

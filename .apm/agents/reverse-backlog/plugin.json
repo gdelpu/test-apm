@@ -1,0 +1,15 @@
+{
+  "name": "reverse-backlog",
+  "description": "Extract business capabilities and generate structured product backlog from codebase.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../reverse-backlog.md"
+  ]
+}

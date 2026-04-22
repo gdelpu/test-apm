@@ -1,0 +1,20 @@
+{
+  "name": "ssg-ai-agents",
+  "version": "0.0.34",
+  "description": "31 specialized AI SDLC agents for specification-driven delivery, quality validation, security governance, code refactoring, modernization, and full-lifecycle SDLC orchestration.",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "agents",
+    "sdlc",
+    "copilot",
+    "claude-code",
+    "orchestration",
+    "quality-validation",
+    "security",
+    "modernization"
+  ],
+  "agents": "./"
+}

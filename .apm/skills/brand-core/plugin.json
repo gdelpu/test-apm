@@ -1,0 +1,13 @@
+{
+  "name": "brand-core",
+  "description": "Reusable core rules of a visual identity: logo, colors, typography, icons, imagery, and layout. Foundation for every brand audit or refactor. Default brand: Sopra Steria. Extensible for other clien...",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "station-orchestrator",
+  "description": "Orchestrate sequential AI station execution within the PR validation pipeline (A0–A7).",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "agents",
+    "sdlc"
+  ],
+  "agents": [
+    "../station-orchestrator.md"
+  ]
+}
