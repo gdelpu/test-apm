@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and follows
 - 1 Copilot prompt(s) updated
 - 4 Claude Code command(s) updated
 - Workflow updates: `sdlc-ba`, `sdlc-full`
+- Skill updates: `sdlc-ba-scoping`, `sdlc-ba-specification`
 
 ### Fixed
 - Enforce epic/feature granularity constraints and propagate DCO-001 inputs
