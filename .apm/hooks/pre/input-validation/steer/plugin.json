@@ -1,0 +1,17 @@
+{
+  "name": "pre-input-validation-steer",
+  "description": "Steer agents consume BA and Tech deliverables but NEVER modify them. The pre-hook verifies presence and readability only — no status gate needed on upstream deliverables beyond confirming they exist and are parseable.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "hooks",
+    "pre-hook",
+    "sdlc"
+  ],
+  "hookType": "pre",
+  "severity": "blocker",
+  "hooks": ".apm/hooks/pre/input-validation/steer.md"
+}

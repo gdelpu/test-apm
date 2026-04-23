@@ -1,0 +1,19 @@
+{
+  "name": "soprasteria-brand-refactor",
+  "description": "Refactor an application, document, presentation, or template into Sopra Steria brand style with audit, strategy, implementation, and validation.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "brand",
+    "prompts",
+    "refactor",
+    "sdlc"
+  ],
+  "commands": [
+    "../soprasteria-brand-refactor.prompt.md",
+    "../soprasteria-brand-refactor.md"
+  ]
+}

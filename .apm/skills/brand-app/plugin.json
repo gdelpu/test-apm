@@ -1,13 +1,19 @@
 {
   "name": "brand-app",
-  "description": "Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for o...",
+  "description": "Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<clien...",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "app-branding",
+    "application-theming",
+    "brand",
+    "design-tokens",
+    "sdlc",
     "skills",
-    "sdlc"
+    "ui-branding"
   ],
   "skills": "./"
 }

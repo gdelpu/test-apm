@@ -5,9 +5,14 @@
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "accessibility-snapshot",
+    "browser-automation",
+    "playwright-browser",
+    "sdlc",
     "skills",
-    "sdlc"
+    "web-testing-mcp"
   ],
   "skills": "./"
 }

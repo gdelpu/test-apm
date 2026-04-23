@@ -1,13 +1,19 @@
 {
   "name": "brand-assets",
-  "description": "Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for ...",
+  "description": "Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<clie...",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
-    "skills",
-    "sdlc"
+    "asset-discovery",
+    "brand",
+    "brand-inventory",
+    "brand-resources",
+    "logo-files",
+    "sdlc",
+    "skills"
   ],
   "skills": "./"
 }

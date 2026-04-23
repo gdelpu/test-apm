@@ -1,0 +1,34 @@
+{
+  "name": "maturity-assessment",
+  "description": "Assess SDLC maturity across key dimensions and produce a scored report with an improvement roadmap.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "assessment-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "assessment",
+  "stations": 4,
+  "agents": [
+    "../../../.apm/agents/repository-analyzer/repository-analyzer.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/repo-analysis",
+    "../../../.apm/skills/spec-clarify",
+    "../../../.apm/skills/spec-feature",
+    "../../../.apm/skills/spec-plan"
+  ],
+  "dependencies": [
+    "../.apm/agents/repository-analyzer",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/repo-analysis",
+    "../.apm/skills/spec-clarify",
+    "../.apm/skills/spec-feature",
+    "../.apm/skills/spec-plan"
+  ]
+}

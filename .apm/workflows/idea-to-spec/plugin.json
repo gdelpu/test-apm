@@ -1,0 +1,43 @@
+{
+  "name": "idea-to-spec",
+  "description": "Transform a raw idea into a validated, unambiguous specification with NFRs and architecture sketch.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "spec",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 7,
+  "agents": [
+    "../../../.apm/agents/architecture-governance/architecture-governance.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/architecture-guardrails",
+    "../../../.apm/skills/brownfield-context",
+    "../../../.apm/skills/intent-capture",
+    "../../../.apm/skills/nfr-review",
+    "../../../.apm/skills/repo-analysis",
+    "../../../.apm/skills/spec-clarify",
+    "../../../.apm/skills/spec-feature",
+    "../../../.apm/skills/spec-quality-gate"
+  ],
+  "dependencies": [
+    "../.apm/agents/architecture-governance",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/architecture-guardrails",
+    "../.apm/skills/brownfield-context",
+    "../.apm/skills/intent-capture",
+    "../.apm/skills/nfr-review",
+    "../.apm/skills/repo-analysis",
+    "../.apm/skills/spec-clarify",
+    "../.apm/skills/spec-feature",
+    "../.apm/skills/spec-quality-gate"
+  ]
+}

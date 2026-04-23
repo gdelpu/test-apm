@@ -1,0 +1,38 @@
+{
+  "name": "sdlc-ba",
+  "description": "Full business analysis pipeline from brownfield audit through scoping, specification, and per-feature functional design with fan-out/fan-in orchestration.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 22,
+  "agents": [
+    "../../../.apm/agents/sdlc-ba-analyst/sdlc-ba-analyst.md",
+    "../../../.apm/agents/sdlc-ba-reviewer/sdlc-ba-reviewer.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/sdlc-ba-audit",
+    "../../../.apm/skills/sdlc-ba-functional-design",
+    "../../../.apm/skills/sdlc-ba-scoping",
+    "../../../.apm/skills/sdlc-ba-specification",
+    "../../../.apm/skills/sdlc-deliverable-validation",
+    "../../../.apm/skills/sdlc-review-arbitration"
+  ],
+  "dependencies": [
+    "../.apm/agents/sdlc-ba-analyst",
+    "../.apm/agents/sdlc-ba-reviewer",
+    "../.apm/skills/sdlc-ba-audit",
+    "../.apm/skills/sdlc-ba-functional-design",
+    "../.apm/skills/sdlc-ba-scoping",
+    "../.apm/skills/sdlc-ba-specification",
+    "../.apm/skills/sdlc-deliverable-validation",
+    "../.apm/skills/sdlc-review-arbitration"
+  ]
+}

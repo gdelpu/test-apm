@@ -1,13 +1,18 @@
 {
   "name": "frontend-dev-guidelines",
-  "description": "Opinionated frontend development standards for modern React + TypeScript applications. Covers Suspense-first data fetching, lazy loading, feature-based architecture, MUI v7 styling, TanStack Router...",
+  "description": "Opinionated frontend development standards for modern React + TypeScript applications. Covers Suspense-first data fetching, lazy loading, feature-based architecture, MUI v7 styling, TanStack Router, and testing conventions.",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "frontend",
+    "frontend-standards",
+    "react-standards",
+    "sdlc",
     "skills",
-    "sdlc"
+    "typescript-standards"
   ],
   "skills": "./"
 }

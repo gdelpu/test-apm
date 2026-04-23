@@ -1,0 +1,34 @@
+{
+  "name": "compliance-check",
+  "description": "Validate compliance, privacy, and AI governance requirements including PII scanning, prompt injection detection, and risk scoring.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "sdlc",
+    "validation-workflow",
+    "workflows"
+  ],
+  "type": "validation",
+  "stations": 6,
+  "agents": [
+    "../../../.apm/agents/quality-validator/quality-validator.md",
+    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/governance-rules",
+    "../../../.apm/skills/quality-report",
+    "../../../.apm/skills/risk-scoring",
+    "../../../.apm/skills/security-scan"
+  ],
+  "dependencies": [
+    "../.apm/agents/quality-validator",
+    "../.apm/agents/workflow-orchestrator",
+    "../.apm/skills/governance-rules",
+    "../.apm/skills/quality-report",
+    "../.apm/skills/risk-scoring",
+    "../.apm/skills/security-scan"
+  ]
+}

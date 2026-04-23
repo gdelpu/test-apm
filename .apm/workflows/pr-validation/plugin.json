@@ -1,0 +1,40 @@
+{
+  "name": "pr-validation",
+  "description": "Multi-stage merge request/pull request validation pipeline with deterministic checks and AI-powered security stations acting as a CI/CD gate on code changes.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "sdlc",
+    "validation-workflow",
+    "workflows"
+  ],
+  "type": "validation",
+  "stations": 11,
+  "agents": [
+    "../../../.apm/agents/pr-validator/pr-validator.md",
+    "../../../.apm/agents/station-orchestrator/station-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/ai-backbone-pr-checks",
+    "../../../.apm/skills/injection-detection",
+    "../../../.apm/skills/policy-gate",
+    "../../../.apm/skills/red-team-simulation",
+    "../../../.apm/skills/sandbox-execution",
+    "../../../.apm/skills/secret-scan",
+    "../../../.apm/skills/soprasteria-agent-policy-guard"
+  ],
+  "dependencies": [
+    "../.apm/agents/pr-validator",
+    "../.apm/agents/station-orchestrator",
+    "../.apm/skills/ai-backbone-pr-checks",
+    "../.apm/skills/injection-detection",
+    "../.apm/skills/policy-gate",
+    "../.apm/skills/red-team-simulation",
+    "../.apm/skills/sandbox-execution",
+    "../.apm/skills/secret-scan",
+    "../.apm/skills/soprasteria-agent-policy-guard"
+  ]
+}

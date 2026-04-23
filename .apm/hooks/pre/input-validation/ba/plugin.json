@@ -1,0 +1,17 @@
+{
+  "name": "pre-input-validation-ba",
+  "description": "- When verifying mandatory input IDs (Phase 0a), match against the BA namespace prefixes above.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "hooks",
+    "pre-hook",
+    "sdlc"
+  ],
+  "hookType": "pre",
+  "severity": "blocker",
+  "hooks": ".apm/hooks/pre/input-validation/ba.md"
+}

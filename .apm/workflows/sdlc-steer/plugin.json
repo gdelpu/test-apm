@@ -1,0 +1,38 @@
+{
+  "name": "sdlc-steer",
+  "description": "Project steering pipeline from initialization through sprint planning, recurring sprint tracking, and governance decisions (COPIL + Go/No-Go).",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 11,
+  "agents": [
+    "../../../.apm/agents/sdlc-steer-manager/sdlc-steer-manager.md",
+    "../../../.apm/agents/sdlc-steer-reviewer/sdlc-steer-reviewer.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/sdlc-deliverable-validation",
+    "../../../.apm/skills/sdlc-review-arbitration",
+    "../../../.apm/skills/sdlc-steer-governance",
+    "../../../.apm/skills/sdlc-steer-init",
+    "../../../.apm/skills/sdlc-steer-planning",
+    "../../../.apm/skills/sdlc-steer-sprint"
+  ],
+  "dependencies": [
+    "../.apm/agents/sdlc-steer-manager",
+    "../.apm/agents/sdlc-steer-reviewer",
+    "../.apm/skills/sdlc-deliverable-validation",
+    "../.apm/skills/sdlc-review-arbitration",
+    "../.apm/skills/sdlc-steer-governance",
+    "../.apm/skills/sdlc-steer-init",
+    "../.apm/skills/sdlc-steer-planning",
+    "../.apm/skills/sdlc-steer-sprint"
+  ]
+}

@@ -1,13 +1,19 @@
 {
   "name": "react-flow-node-ts",
-  "description": "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing no...",
+  "description": "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing node-based interfaces.",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "flow-components",
+    "react",
+    "react-flow-nodes",
+    "sdlc",
     "skills",
-    "sdlc"
+    "typescript",
+    "zustand"
   ],
   "skills": "./"
 }

@@ -1,0 +1,54 @@
+{
+  "name": "incident-resolution",
+  "description": "Structured incident diagnosis and resolution from analysis through fix, regression testing, and knowledge capture.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 7,
+  "agents": [
+    "../../../.apm/agents/analysis-agent/analysis-agent.md",
+    "../../../.apm/agents/implementer/implementer.md",
+    "../../../.apm/agents/quality-validator/quality-validator.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/adr-generation",
+    "../../../.apm/skills/bug-reproduction",
+    "../../../.apm/skills/code-implementation",
+    "../../../.apm/skills/coverage-assessment",
+    "../../../.apm/skills/fix-planning",
+    "../../../.apm/skills/incident-analysis",
+    "../../../.apm/skills/knowledge-update",
+    "../../../.apm/skills/lint-analysis",
+    "../../../.apm/skills/repo-analysis",
+    "../../../.apm/skills/root-cause-analysis",
+    "../../../.apm/skills/security-scan",
+    "../../../.apm/skills/test-strategy"
+  ],
+  "dependencies": [
+    "../.apm/agents/analysis-agent",
+    "../.apm/agents/implementer",
+    "../.apm/agents/quality-validator",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/adr-generation",
+    "../.apm/skills/bug-reproduction",
+    "../.apm/skills/code-implementation",
+    "../.apm/skills/coverage-assessment",
+    "../.apm/skills/fix-planning",
+    "../.apm/skills/incident-analysis",
+    "../.apm/skills/knowledge-update",
+    "../.apm/skills/lint-analysis",
+    "../.apm/skills/repo-analysis",
+    "../.apm/skills/root-cause-analysis",
+    "../.apm/skills/security-scan",
+    "../.apm/skills/test-strategy"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "sdlc-tech",
+  "description": "Full technical architecture and design pipeline from brownfield audit through architecture decisions, incremental design, sprint-iterative implementation, and continuous quality monitoring.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 22,
+  "agents": [
+    "../../../.apm/agents/implementer/implementer.md",
+    "../../../.apm/agents/sdlc-tech-architect/sdlc-tech-architect.md",
+    "../../../.apm/agents/sdlc-tech-reviewer/sdlc-tech-reviewer.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/sdlc-deliverable-validation",
+    "../../../.apm/skills/sdlc-review-arbitration",
+    "../../../.apm/skills/sdlc-tech-architecture",
+    "../../../.apm/skills/sdlc-tech-audit",
+    "../../../.apm/skills/sdlc-tech-design",
+    "../../../.apm/skills/sdlc-tech-implementation",
+    "../../../.apm/skills/sdlc-tech-quality"
+  ],
+  "dependencies": [
+    "../.apm/agents/implementer",
+    "../.apm/agents/sdlc-tech-architect",
+    "../.apm/agents/sdlc-tech-reviewer",
+    "../.apm/skills/sdlc-deliverable-validation",
+    "../.apm/skills/sdlc-review-arbitration",
+    "../.apm/skills/sdlc-tech-architecture",
+    "../.apm/skills/sdlc-tech-audit",
+    "../.apm/skills/sdlc-tech-design",
+    "../.apm/skills/sdlc-tech-implementation",
+    "../.apm/skills/sdlc-tech-quality"
+  ]
+}

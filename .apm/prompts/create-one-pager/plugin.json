@@ -1,0 +1,17 @@
+{
+  "name": "create-one-pager",
+  "description": "Create a concise branded one-pager in Markdown following Sopra Steria brand guidelines.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "prompts",
+    "sdlc"
+  ],
+  "commands": [
+    "../create-one-pager.prompt.md",
+    "../create-one-pager.md"
+  ]
+}

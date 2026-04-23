@@ -1,13 +1,19 @@
 {
   "name": "code-refactoring-refactor-clean",
-  "description": "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its...",
+  "description": "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its readability, maintainability, and adherence to be...",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "clean-code",
+    "code-quality",
+    "refactor",
+    "refactoring",
+    "sdlc",
     "skills",
-    "sdlc"
+    "solid-principles"
   ],
   "skills": "./"
 }

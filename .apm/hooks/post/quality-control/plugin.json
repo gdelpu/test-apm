@@ -1,0 +1,18 @@
+{
+  "name": "post-quality-control",
+  "description": "Executed **after the agent has produced its deliverable**, before returning to the coordinator. The agent MUST run this complete checklist and correct any non-conforming items before considering the deliverable complete. All modifications to the d...",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "hooks",
+    "post-hook",
+    "quality",
+    "sdlc"
+  ],
+  "hookType": "post",
+  "severity": "blocker",
+  "hooks": ".apm/hooks/post/quality-control.md"
+}

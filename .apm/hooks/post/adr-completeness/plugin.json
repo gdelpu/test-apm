@@ -1,0 +1,17 @@
+{
+  "name": "post-adr-completeness",
+  "description": "Executed **after** the `tech-adrs` station produces its ADR outputs. Verifies that the mandatory ADR categories are complete, the 3-environment pattern is respected, and DEP integration fields are populated when applicable.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "hooks",
+    "post-hook",
+    "sdlc"
+  ],
+  "hookType": "post",
+  "severity": "blocker",
+  "hooks": ".apm/hooks/post/adr-completeness.md"
+}

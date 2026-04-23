@@ -5,9 +5,15 @@
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "e2e-testing",
+    "qualification-report",
+    "sdlc",
     "skills",
-    "sdlc"
+    "test",
+    "test-campaign",
+    "uat"
   ],
   "skills": "./"
 }

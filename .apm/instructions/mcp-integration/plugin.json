@@ -1,0 +1,17 @@
+{
+  "name": "mcp-integration",
+  "description": "Shared behavioral rules for all agents when MCP (Model Context Protocol) tools are available or unavailable.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "instructions",
+    "sdlc"
+  ],
+  "applyTo": "**",
+  "instructions": [
+    "../mcp-integration.md"
+  ]
+}

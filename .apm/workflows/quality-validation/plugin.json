@@ -1,0 +1,37 @@
+{
+  "name": "quality-validation",
+  "description": "Validate code quality, security, and compliance using external tool adapters.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "quality",
+    "sdlc",
+    "validation-workflow",
+    "workflows"
+  ],
+  "type": "validation",
+  "stations": 7,
+  "agents": [
+    "../../../.apm/agents/quality-validator/quality-validator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/coverage-assessment",
+    "../../../.apm/skills/dependency-audit",
+    "../../../.apm/skills/lint-analysis",
+    "../../../.apm/skills/quality-report",
+    "../../../.apm/skills/security-scan",
+    "../../../.apm/skills/static-analysis"
+  ],
+  "dependencies": [
+    "../.apm/agents/quality-validator",
+    "../.apm/skills/coverage-assessment",
+    "../.apm/skills/dependency-audit",
+    "../.apm/skills/lint-analysis",
+    "../.apm/skills/quality-report",
+    "../.apm/skills/security-scan",
+    "../.apm/skills/static-analysis"
+  ]
+}

@@ -1,5 +1,162 @@
 {
-  "name": "SSG AI SDLC Foundation",
+  "name": "ssg-ai-backbone",
+  "version": "0.0.34",
+  "displayName": "AI SDLC Foundation",
+  "description": "Sopra Steria Group AI SDLC Foundation — cross-provider collection of agents, skills, workflows, prompts, and foundational knowledge for specification-driven delivery, quality validation, security governance, brand compliance, and full-lifecycle SDLC support. Designed for reuse as an MCP server across projects with dynamic workflows covering the entire software development lifecycle.",
+  "publisher": "sopra-steria-group",
+  "categories": [
+    "SDLC",
+    "AI Agents",
+    "Workflows",
+    "Quality & Governance",
+    "Security",
+    "Specification"
+  ],
+  "tags": [
+    "ai-agents",
+    "sdlc",
+    "copilot",
+    "claude-code",
+    "specification-driven",
+    "quality-validation",
+    "security-governance",
+    "brand-compliance",
+    "mcp",
+    "workflows",
+    "architecture",
+    "testing",
+    "modernization",
+    "code-review"
+  ],
+  "targets": [
+    "github-copilot",
+    "claude-code",
+    "cli"
+  ],
+  "installModes": [
+    "standard",
+    "expandable"
+  ],
+  "assets": {
+    "agents": 31,
+    "skills": 127,
+    "workflows": 20,
+    "prompts": 16,
+    "instructions": 10,
+    "templates": 6,
+    "contexts": 11,
+    "hooks": 14,
+    "knowledgeFiles": 24
+  },
+  "exports": {
+    "agents": ".apm/agents",
+    "skills": ".apm/skills",
+    "prompts": ".apm/prompts",
+    "instructions": ".apm/instructions",
+    "contexts": ".apm/contexts",
+    "workflows": ".apm/workflows",
+    "knowledge": ".apm/knowledge",
+    "hooks": ".apm/hooks",
+    "templates": ".apm/templates"
+  },
+  "agents": [
+    "analysis-agent",
+    "architecture-governance",
+    "bmad-orchestrator",
+    "branding",
+    "bug-fixer",
+    "hub-orchestrator",
+    "implementer",
+    "modernization-agent",
+    "modernization-orchestrator",
+    "pr-validator",
+    "quality-validator",
+    "refactor-assessor",
+    "refactor-implementer",
+    "refactor-orchestrator",
+    "refactor-parity-checker",
+    "refactor-planner",
+    "repository-analyzer",
+    "reverse-backlog",
+    "reverse-user-story",
+    "sdlc-ba-analyst",
+    "sdlc-ba-reviewer",
+    "sdlc-coordinator",
+    "sdlc-steer-manager",
+    "sdlc-steer-reviewer",
+    "sdlc-tech-architect",
+    "sdlc-tech-reviewer",
+    "sdlc-test-executor",
+    "security-reviewer",
+    "spec-orchestrator",
+    "station-orchestrator",
+    "workflow-orchestrator"
+  ],
+  "workflows": [
+    "bmad",
+    "bug-fixing",
+    "compliance-check",
+    "delivery-retrospective",
+    "feature-implementation",
+    "idea-to-spec",
+    "implementation-loop",
+    "incident-resolution",
+    "maturity-assessment",
+    "modernization",
+    "pr-validation",
+    "quality-validation",
+    "release-readiness",
+    "sdlc-ba",
+    "sdlc-full",
+    "sdlc-steer",
+    "sdlc-tech",
+    "sdlc-test",
+    "spec-kit",
+    "spec-to-execution"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://innersource.soprasteria.com/ai-backbone/ai-sdlc-foundation"
+  },
+  "registry": {
+    "type": "gitlab-generic",
+    "packageName": "ssg-ai-backbone",
+    "bundles": [
+      "ssg-ai-backbone-copilot.tar.gz",
+      "ssg-ai-backbone-claude.tar.gz",
+      "ssg-ai-backbone-cli.tar.gz",
+      "ssg-ai-backbone-all.tar.gz"
+    ]
+  },
+  "icon": "docs/assets/ai-backbone.png",
+  "license": "UNLICENSED",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "links": {
+    "quickStart": "docs/consumer/quick-start.md",
+    "consumerGuide": "docs/consumer/apm-consumer-guide.md",
+    "contributing": "docs/contributor/contributing.md",
+    "architecture": "docs/contributor/architecture.md",
+    "changelog": "CHANGELOG.md"
+  },
+  "schemas": {
+    "agents": ".apm/knowledge/governance/schemas/agent-manifest.schema.json",
+    "skills": ".apm/knowledge/governance/schemas/skill-manifest.schema.json"
+  },
+  "ciGates": {
+    "path": "ci-gates",
+    "stations": [
+      "A0-intake",
+      "A1-policy",
+      "A2-security-static",
+      "A3-prompt-injection",
+      "A4-red-team",
+      "A5-sandbox-simulation",
+      "A6-policy-gate",
+      "A7-gitlab-update"
+    ]
+  },
+  "dependencies": [],
+  "generatedAt": "2026-04-23T12:25:53Z",
   "plugins": [
     {
       "name": "ssg-ai-backbone",
@@ -27,7 +184,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/analysis-agent"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/analysis-agent"
+      }
     },
     {
       "name": "architecture-governance",
@@ -36,7 +197,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/architecture-governance"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/architecture-governance"
+      }
     },
     {
       "name": "bmad-orchestrator",
@@ -45,7 +210,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/bmad-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/bmad-orchestrator"
+      }
     },
     {
       "name": "branding",
@@ -54,7 +223,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/branding"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/branding"
+      }
     },
     {
       "name": "bug-fixer",
@@ -63,7 +236,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/bug-fixer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/bug-fixer"
+      }
     },
     {
       "name": "hub-orchestrator",
@@ -72,7 +249,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/hub-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/hub-orchestrator"
+      }
     },
     {
       "name": "implementer",
@@ -81,7 +262,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/implementer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/implementer"
+      }
     },
     {
       "name": "modernization-agent",
@@ -90,7 +275,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/modernization-agent"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/modernization-agent"
+      }
     },
     {
       "name": "modernization-orchestrator",
@@ -99,7 +288,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/modernization-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/modernization-orchestrator"
+      }
     },
     {
       "name": "pr-validator",
@@ -108,7 +301,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/pr-validator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/pr-validator"
+      }
     },
     {
       "name": "quality-validator",
@@ -117,7 +314,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/quality-validator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/quality-validator"
+      }
     },
     {
       "name": "refactor-assessor",
@@ -126,7 +327,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/refactor-assessor"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/refactor-assessor"
+      }
     },
     {
       "name": "refactor-implementer",
@@ -135,7 +340,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/refactor-implementer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/refactor-implementer"
+      }
     },
     {
       "name": "refactor-orchestrator",
@@ -144,7 +353,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/refactor-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/refactor-orchestrator"
+      }
     },
     {
       "name": "refactor-parity-checker",
@@ -153,7 +366,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/refactor-parity-checker"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/refactor-parity-checker"
+      }
     },
     {
       "name": "refactor-planner",
@@ -162,7 +379,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/refactor-planner"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/refactor-planner"
+      }
     },
     {
       "name": "repository-analyzer",
@@ -171,7 +392,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/repository-analyzer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/repository-analyzer"
+      }
     },
     {
       "name": "reverse-backlog",
@@ -180,7 +405,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/reverse-backlog"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/reverse-backlog"
+      }
     },
     {
       "name": "reverse-user-story",
@@ -189,7 +418,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/reverse-user-story"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/reverse-user-story"
+      }
     },
     {
       "name": "sdlc-ba-analyst",
@@ -198,7 +431,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-ba-analyst"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-ba-analyst"
+      }
     },
     {
       "name": "sdlc-ba-reviewer",
@@ -207,7 +444,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-ba-reviewer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-ba-reviewer"
+      }
     },
     {
       "name": "sdlc-coordinator",
@@ -216,7 +457,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-coordinator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-coordinator"
+      }
     },
     {
       "name": "sdlc-steer-manager",
@@ -225,7 +470,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-steer-manager"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-steer-manager"
+      }
     },
     {
       "name": "sdlc-steer-reviewer",
@@ -234,7 +483,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-steer-reviewer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-steer-reviewer"
+      }
     },
     {
       "name": "sdlc-tech-architect",
@@ -243,7 +496,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-tech-architect"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-tech-architect"
+      }
     },
     {
       "name": "sdlc-tech-reviewer",
@@ -252,7 +509,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-tech-reviewer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-tech-reviewer"
+      }
     },
     {
       "name": "sdlc-test-executor",
@@ -261,7 +522,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/sdlc-test-executor"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/sdlc-test-executor"
+      }
     },
     {
       "name": "security-reviewer",
@@ -270,7 +535,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/security-reviewer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/security-reviewer"
+      }
     },
     {
       "name": "spec-orchestrator",
@@ -279,7 +548,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/spec-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/spec-orchestrator"
+      }
     },
     {
       "name": "station-orchestrator",
@@ -288,7 +561,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/station-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/station-orchestrator"
+      }
     },
     {
       "name": "workflow-orchestrator",
@@ -297,7 +574,11 @@
         "agents",
         "sdlc"
       ],
-      "source": "./.apm/agents/workflow-orchestrator"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/agents/workflow-orchestrator"
+      }
     },
     {
       "name": "adaptive-decision",
@@ -306,7 +587,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/adaptive-decision"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/adaptive-decision"
+      }
     },
     {
       "name": "adr-generation",
@@ -315,7 +600,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/adr-generation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/adr-generation"
+      }
     },
     {
       "name": "agent-policy-guard",
@@ -324,7 +613,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/agent-policy-guard"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/agent-policy-guard"
+      }
     },
     {
       "name": "agent-policy-validation",
@@ -333,7 +626,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/agent-policy-validation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/agent-policy-validation"
+      }
     },
     {
       "name": "ai-backbone-pr-checks",
@@ -342,16 +639,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/ai-backbone-pr-checks"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/ai-backbone-pr-checks"
+      }
     },
     {
       "name": "api-design-principles",
-      "description": "Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing...",
+      "description": "Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing API standards.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/api-design-principles"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/api-design-principles"
+      }
     },
     {
       "name": "api-documentation",
@@ -360,7 +665,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/api-documentation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/api-documentation"
+      }
     },
     {
       "name": "api-patterns",
@@ -369,7 +678,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/api-patterns"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/api-patterns"
+      }
     },
     {
       "name": "api-security-best-practices",
@@ -378,7 +691,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/api-security-best-practices"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/api-security-best-practices"
+      }
     },
     {
       "name": "architecture-guardrails",
@@ -387,7 +704,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/architecture-guardrails"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/architecture-guardrails"
+      }
     },
     {
       "name": "assets-and-templates",
@@ -396,7 +717,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/assets-and-templates"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/assets-and-templates"
+      }
     },
     {
       "name": "atlassian-ops",
@@ -405,25 +730,37 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/atlassian-ops"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/atlassian-ops"
+      }
     },
     {
       "name": "audit-checklist",
-      "description": "Generic structured checklist for auditing applications, documents, presentations, and communication assets against brand guidelines and accessibility standards. Extend with client-specific brand sk...",
+      "description": "Generic structured checklist for auditing applications, documents, presentations, and communication assets against brand guidelines and accessibility standards. Extend with client-specific brand skills for concrete rules.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/audit-checklist"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/audit-checklist"
+      }
     },
     {
       "name": "audit-tracing",
-      "description": "Emit structured audit traces for every workflow station execution with correlation IDs, input/output hashes, sensitivity tags, risk scores, model metadata, and redaction status. Supports local JSON...",
+      "description": "Emit structured audit traces for every workflow station execution with correlation IDs, input/output hashes, sensitivity tags, risk scores, model metadata, and redaction status. Supports local JSONL persistence and optional OTLP export.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/audit-tracing"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/audit-tracing"
+      }
     },
     {
       "name": "aws-resource-query",
@@ -432,7 +769,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/aws-resource-query"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/aws-resource-query"
+      }
     },
     {
       "name": "azdo-ops",
@@ -441,7 +782,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/azdo-ops"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/azdo-ops"
+      }
     },
     {
       "name": "azure-resource-query",
@@ -450,7 +795,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/azure-resource-query"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/azure-resource-query"
+      }
     },
     {
       "name": "brand-accessibility",
@@ -459,25 +808,37 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brand-accessibility"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brand-accessibility"
+      }
     },
     {
       "name": "brand-app",
-      "description": "Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for o...",
+      "description": "Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<client>/",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brand-app"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brand-app"
+      }
     },
     {
       "name": "brand-assets",
-      "description": "Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for ...",
+      "description": "Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<client>",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brand-assets"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brand-assets"
+      }
     },
     {
       "name": "brand-audit",
@@ -486,16 +847,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brand-audit"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brand-audit"
+      }
     },
     {
       "name": "brand-core",
-      "description": "Reusable core rules of a visual identity: logo, colors, typography, icons, imagery, and layout. Foundation for every brand audit or refactor. Default brand: Sopra Steria. Extensible for other clien...",
+      "description": "Reusable core rules of a visual identity: logo, colors, typography, icons, imagery, and layout. Foundation for every brand audit or refactor. Default brand: Sopra Steria. Extensible for other client brands via .apm/knowledge/brand/<client>/.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brand-core"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brand-core"
+      }
     },
     {
       "name": "brand-document",
@@ -504,7 +873,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brand-document"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brand-document"
+      }
     },
     {
       "name": "brownfield-context",
@@ -513,7 +886,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/brownfield-context"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/brownfield-context"
+      }
     },
     {
       "name": "bug-reproduction",
@@ -522,7 +899,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/bug-reproduction"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/bug-reproduction"
+      }
     },
     {
       "name": "bug-triage",
@@ -531,7 +912,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/bug-triage"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/bug-triage"
+      }
     },
     {
       "name": "cc-skill-backend-patterns",
@@ -540,7 +925,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/cc-skill-backend-patterns"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/cc-skill-backend-patterns"
+      }
     },
     {
       "name": "cc-skill-coding-standards",
@@ -549,7 +938,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/cc-skill-coding-standards"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/cc-skill-coding-standards"
+      }
     },
     {
       "name": "cc-skill-frontend-patterns",
@@ -558,7 +951,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/cc-skill-frontend-patterns"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/cc-skill-frontend-patterns"
+      }
     },
     {
       "name": "code-implementation",
@@ -567,7 +964,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/code-implementation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/code-implementation"
+      }
     },
     {
       "name": "code-refactoring",
@@ -576,25 +977,37 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/code-refactoring"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/code-refactoring"
+      }
     },
     {
       "name": "code-refactoring-refactor-clean",
-      "description": "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its...",
+      "description": "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its readability, maintainability, and adherence to best ",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/code-refactoring-refactor-clean"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/code-refactoring-refactor-clean"
+      }
     },
     {
       "name": "code-refactoring-tech-debt",
-      "description": "You are a technical debt expert specializing in identifying, quantifying, and prioritizing technical debt in software projects. Analyze the codebase to uncover debt, assess its impact, and create a...",
+      "description": "You are a technical debt expert specializing in identifying, quantifying, and prioritizing technical debt in software projects. Analyze the codebase to uncover debt, assess its impact, and create actionable remediation plans.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/code-refactoring-tech-debt"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/code-refactoring-tech-debt"
+      }
     },
     {
       "name": "context7-docs",
@@ -603,7 +1016,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/context7-docs"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/context7-docs"
+      }
     },
     {
       "name": "coverage-assessment",
@@ -612,7 +1029,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/coverage-assessment"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/coverage-assessment"
+      }
     },
     {
       "name": "data-anonymisation",
@@ -621,7 +1042,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/data-anonymisation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/data-anonymisation"
+      }
     },
     {
       "name": "delivery-metrics",
@@ -630,7 +1055,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/delivery-metrics"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/delivery-metrics"
+      }
     },
     {
       "name": "dependency-audit",
@@ -639,7 +1068,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/dependency-audit"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/dependency-audit"
+      }
     },
     {
       "name": "docs-architect",
@@ -648,16 +1081,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/docs-architect"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/docs-architect"
+      }
     },
     {
       "name": "docx",
-      "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produ...",
+      "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produce professional documents with formatting like tables",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/docx"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/docx"
+      }
     },
     {
       "name": "domain-driven-design",
@@ -666,7 +1107,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/domain-driven-design"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/domain-driven-design"
+      }
     },
     {
       "name": "dotnet-architect",
@@ -675,7 +1120,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/dotnet-architect"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/dotnet-architect"
+      }
     },
     {
       "name": "dotnet-backend",
@@ -684,7 +1133,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/dotnet-backend"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/dotnet-backend"
+      }
     },
     {
       "name": "dotnet-backend-patterns",
@@ -693,7 +1146,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/dotnet-backend-patterns"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/dotnet-backend-patterns"
+      }
     },
     {
       "name": "drift-detection",
@@ -702,7 +1159,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/drift-detection"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/drift-detection"
+      }
     },
     {
       "name": "figma-design-sync",
@@ -711,7 +1172,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/figma-design-sync"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/figma-design-sync"
+      }
     },
     {
       "name": "fix-planning",
@@ -720,16 +1185,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/fix-planning"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/fix-planning"
+      }
     },
     {
       "name": "frontend-dev-guidelines",
-      "description": "Opinionated frontend development standards for modern React + TypeScript applications. Covers Suspense-first data fetching, lazy loading, feature-based architecture, MUI v7 styling, TanStack Router...",
+      "description": "Opinionated frontend development standards for modern React + TypeScript applications. Covers Suspense-first data fetching, lazy loading, feature-based architecture, MUI v7 styling, TanStack Router, and testing conventions.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/frontend-dev-guidelines"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/frontend-dev-guidelines"
+      }
     },
     {
       "name": "frontend-developer",
@@ -738,7 +1211,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/frontend-developer"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/frontend-developer"
+      }
     },
     {
       "name": "frontend-security-coder",
@@ -747,16 +1224,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/frontend-security-coder"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/frontend-security-coder"
+      }
     },
     {
       "name": "frontend-ui-dark-ts",
-      "description": "Build dark-themed React applications using Tailwind CSS with custom theming, glassmorphism effects, and Framer Motion animations. Use when creating dashboards, admin panels, or data-rich interfaces...",
+      "description": "Build dark-themed React applications using Tailwind CSS with custom theming, glassmorphism effects, and Framer Motion animations. Use when creating dashboards, admin panels, or data-rich interfaces with dark UI patterns.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/frontend-ui-dark-ts"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/frontend-ui-dark-ts"
+      }
     },
     {
       "name": "github-ops",
@@ -765,7 +1250,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/github-ops"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/github-ops"
+      }
     },
     {
       "name": "gitlab-ops",
@@ -774,7 +1263,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/gitlab-ops"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/gitlab-ops"
+      }
     },
     {
       "name": "governance-rules",
@@ -783,7 +1276,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/governance-rules"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/governance-rules"
+      }
     },
     {
       "name": "hub-classification",
@@ -792,7 +1289,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/hub-classification"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/hub-classification"
+      }
     },
     {
       "name": "incident-analysis",
@@ -801,16 +1302,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/incident-analysis"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/incident-analysis"
+      }
     },
     {
       "name": "injection-detection",
-      "description": "Deterministic scan of agent and skill definitions for jailbreak phrases, missing refusal constraints, unconstrained data-access boundaries, exfiltration vectors, and instruction-override patterns (...",
+      "description": "Deterministic scan of agent and skill definitions for jailbreak phrases, missing refusal constraints, unconstrained data-access boundaries, exfiltration vectors, and instruction-override patterns (PI-01 through PI-06).",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/injection-detection"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/injection-detection"
+      }
     },
     {
       "name": "intent-capture",
@@ -819,7 +1328,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/intent-capture"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/intent-capture"
+      }
     },
     {
       "name": "iteration-scoring",
@@ -828,7 +1341,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/iteration-scoring"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/iteration-scoring"
+      }
     },
     {
       "name": "knowledge-update",
@@ -837,7 +1354,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/knowledge-update"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/knowledge-update"
+      }
     },
     {
       "name": "lint-analysis",
@@ -846,7 +1367,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/lint-analysis"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/lint-analysis"
+      }
     },
     {
       "name": "m365-data-query",
@@ -855,7 +1380,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/m365-data-query"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/m365-data-query"
+      }
     },
     {
       "name": "mcp-configuration",
@@ -864,7 +1393,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/mcp-configuration"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/mcp-configuration"
+      }
     },
     {
       "name": "mcp-fallback",
@@ -873,7 +1406,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/mcp-fallback"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/mcp-fallback"
+      }
     },
     {
       "name": "mslearn-docs-lookup",
@@ -882,7 +1419,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/mslearn-docs-lookup"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/mslearn-docs-lookup"
+      }
     },
     {
       "name": "nfr-review",
@@ -891,7 +1432,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/nfr-review"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/nfr-review"
+      }
     },
     {
       "name": "observability-readiness",
@@ -900,16 +1445,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/observability-readiness"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/observability-readiness"
+      }
     },
     {
       "name": "office-common",
-      "description": "Shared OOXML utilities for packing, unpacking, validating, and converting Office documents (.docx, .pptx, .xlsx). Provides LibreOffice integration, XML schema validation, tracked-change helpers, an...",
+      "description": "Shared OOXML utilities for packing, unpacking, validating, and converting Office documents (.docx, .pptx, .xlsx). Provides LibreOffice integration, XML schema validation, tracked-change helpers, and redlining support used by the docx, pptx, and xlsx ",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/office-common"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/office-common"
+      }
     },
     {
       "name": "parity-validation",
@@ -918,16 +1471,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/parity-validation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/parity-validation"
+      }
     },
     {
       "name": "pdf",
-      "description": "Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, r...",
+      "description": "Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, ",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/pdf"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/pdf"
+      }
     },
     {
       "name": "plan-writing",
@@ -936,16 +1497,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/plan-writing"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/plan-writing"
+      }
     },
     {
       "name": "planning-with-files",
-      "description": "Implements Manus-style file-based planning for complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when starting complex multi-step tasks, research projects, or any task requirin...",
+      "description": "Implements Manus-style file-based planning for complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when starting complex multi-step tasks, research projects, or any task requiring structured progress tracking.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/planning-with-files"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/planning-with-files"
+      }
     },
     {
       "name": "playwright-browser-automation",
@@ -954,7 +1523,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/playwright-browser-automation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/playwright-browser-automation"
+      }
     },
     {
       "name": "policy-gate",
@@ -963,25 +1536,37 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/policy-gate"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/policy-gate"
+      }
     },
     {
       "name": "pptx",
-      "description": "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text fro...",
+      "description": "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will ",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/pptx"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/pptx"
+      }
     },
     {
       "name": "pr-checks",
-      "description": "Generic PR/MR validation checks: frontmatter validation, naming conventions, broken link detection, YAML workflow linting, and test gap advisories. Delegates to ai-backbone-pr-checks for repository...",
+      "description": "Generic PR/MR validation checks: frontmatter validation, naming conventions, broken link detection, YAML workflow linting, and test gap advisories. Delegates to ai-backbone-pr-checks for repository-specific implementations.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/pr-checks"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/pr-checks"
+      }
     },
     {
       "name": "quality-report",
@@ -990,34 +1575,50 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/quality-report"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/quality-report"
+      }
     },
     {
       "name": "react-best-practices",
-      "description": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance pat...",
+      "description": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns and best practices.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-best-practices"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-best-practices"
+      }
     },
     {
       "name": "react-flow-architect",
-      "description": "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when creating or refactoring R...",
+      "description": "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when creating or refactoring ReactFlow graph applications.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-flow-architect"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-flow-architect"
+      }
     },
     {
       "name": "react-flow-node-ts",
-      "description": "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing no...",
+      "description": "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing node-based interfaces.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-flow-node-ts"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-flow-node-ts"
+      }
     },
     {
       "name": "react-modernization",
@@ -1026,16 +1627,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-modernization"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-modernization"
+      }
     },
     {
       "name": "react-native-architecture",
-      "description": "Build production React Native apps with Expo, navigation, native modules, offline sync, and cross-platform patterns. Use when developing mobile apps, implementing native integrations, or architecti...",
+      "description": "Build production React Native apps with Expo, navigation, native modules, offline sync, and cross-platform patterns. Use when developing mobile apps, implementing native integrations, or architecting cross-platform solutions.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-native-architecture"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-native-architecture"
+      }
     },
     {
       "name": "react-patterns",
@@ -1044,7 +1653,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-patterns"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-patterns"
+      }
     },
     {
       "name": "react-state-management",
@@ -1053,7 +1666,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-state-management"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-state-management"
+      }
     },
     {
       "name": "react-ui-patterns",
@@ -1062,16 +1679,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/react-ui-patterns"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/react-ui-patterns"
+      }
     },
     {
       "name": "red-team-simulation",
-      "description": "Generate adversarial exploit prompts and tool-misuse scenarios against agent definitions to assess resilience. Covers goal hijacking, tool misuse, context poisoning, privilege escalation, and denia...",
+      "description": "Generate adversarial exploit prompts and tool-misuse scenarios against agent definitions to assess resilience. Covers goal hijacking, tool misuse, context poisoning, privilege escalation, and denial-of-service (RT-01 through RT-05).",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/red-team-simulation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/red-team-simulation"
+      }
     },
     {
       "name": "repo-analysis",
@@ -1080,7 +1705,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/repo-analysis"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/repo-analysis"
+      }
     },
     {
       "name": "risk-scoring",
@@ -1089,7 +1718,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/risk-scoring"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/risk-scoring"
+      }
     },
     {
       "name": "root-cause-analysis",
@@ -1098,16 +1731,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/root-cause-analysis"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/root-cause-analysis"
+      }
     },
     {
       "name": "sandbox-execution",
-      "description": "Simulate agent definitions against structured malicious inputs, prompt injection payloads, and exfiltration/privilege-escalation attempts in a read-only sandbox. Assess resistance to each attack sc...",
+      "description": "Simulate agent definitions against structured malicious inputs, prompt injection payloads, and exfiltration/privilege-escalation attempts in a read-only sandbox. Assess resistance to each attack scenario (4-A through 4-F).",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sandbox-execution"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sandbox-execution"
+      }
     },
     {
       "name": "sdlc-ba-audit",
@@ -1116,7 +1757,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-ba-audit"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-ba-audit"
+      }
     },
     {
       "name": "sdlc-ba-functional-design",
@@ -1125,7 +1770,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-ba-functional-design"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-ba-functional-design"
+      }
     },
     {
       "name": "sdlc-ba-scoping",
@@ -1134,7 +1783,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-ba-scoping"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-ba-scoping"
+      }
     },
     {
       "name": "sdlc-ba-specification",
@@ -1143,7 +1796,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-ba-specification"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-ba-specification"
+      }
     },
     {
       "name": "sdlc-change-impact",
@@ -1152,7 +1809,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-change-impact"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-change-impact"
+      }
     },
     {
       "name": "sdlc-confluence-sync",
@@ -1161,7 +1822,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-confluence-sync"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-confluence-sync"
+      }
     },
     {
       "name": "sdlc-deliverable-validation",
@@ -1170,7 +1835,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-deliverable-validation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-deliverable-validation"
+      }
     },
     {
       "name": "sdlc-review-arbitration",
@@ -1179,7 +1848,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-review-arbitration"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-review-arbitration"
+      }
     },
     {
       "name": "sdlc-scaffold",
@@ -1188,7 +1861,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-scaffold"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-scaffold"
+      }
     },
     {
       "name": "sdlc-steer-governance",
@@ -1197,7 +1874,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-steer-governance"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-steer-governance"
+      }
     },
     {
       "name": "sdlc-steer-init",
@@ -1206,7 +1887,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-steer-init"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-steer-init"
+      }
     },
     {
       "name": "sdlc-steer-planning",
@@ -1215,7 +1900,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-steer-planning"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-steer-planning"
+      }
     },
     {
       "name": "sdlc-steer-sprint",
@@ -1224,7 +1913,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-steer-sprint"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-steer-sprint"
+      }
     },
     {
       "name": "sdlc-tech-architecture",
@@ -1233,7 +1926,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-tech-architecture"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-tech-architecture"
+      }
     },
     {
       "name": "sdlc-tech-audit",
@@ -1242,7 +1939,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-tech-audit"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-tech-audit"
+      }
     },
     {
       "name": "sdlc-tech-design",
@@ -1251,7 +1952,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-tech-design"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-tech-design"
+      }
     },
     {
       "name": "sdlc-tech-implementation",
@@ -1260,7 +1965,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-tech-implementation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-tech-implementation"
+      }
     },
     {
       "name": "sdlc-tech-quality",
@@ -1269,7 +1978,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-tech-quality"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-tech-quality"
+      }
     },
     {
       "name": "sdlc-test-campaign",
@@ -1278,7 +1991,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-test-campaign"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-test-campaign"
+      }
     },
     {
       "name": "sdlc-test-performance",
@@ -1287,7 +2004,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/sdlc-test-performance"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/sdlc-test-performance"
+      }
     },
     {
       "name": "secret-scan",
@@ -1296,7 +2017,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/secret-scan"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/secret-scan"
+      }
     },
     {
       "name": "security-scan",
@@ -1305,7 +2030,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/security-scan"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/security-scan"
+      }
     },
     {
       "name": "semgrep-analysis",
@@ -1314,16 +2043,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/semgrep-analysis"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/semgrep-analysis"
+      }
     },
     {
       "name": "soprasteria-agent-policy-guard",
-      "description": "Shift-left policy guard that enforces the A1-A6 station gate rules when creating or modifying agent and skill definitions. Validates frontmatter, tool allowlists, security hardening, and prompt inj...",
+      "description": "Shift-left policy guard that enforces the A1-A6 station gate rules when creating or modifying agent and skill definitions. Validates frontmatter, tool allowlists, security hardening, and prompt injection resistance before code reaches the CI pipeline",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/soprasteria-agent-policy-guard"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/soprasteria-agent-policy-guard"
+      }
     },
     {
       "name": "soprasteria-dep",
@@ -1332,7 +2069,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/soprasteria-dep"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/soprasteria-dep"
+      }
     },
     {
       "name": "spec-clarify",
@@ -1341,7 +2082,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/spec-clarify"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/spec-clarify"
+      }
     },
     {
       "name": "spec-constitution",
@@ -1350,7 +2095,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/spec-constitution"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/spec-constitution"
+      }
     },
     {
       "name": "spec-feature",
@@ -1359,7 +2108,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/spec-feature"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/spec-feature"
+      }
     },
     {
       "name": "spec-plan",
@@ -1368,7 +2121,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/spec-plan"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/spec-plan"
+      }
     },
     {
       "name": "spec-quality-gate",
@@ -1377,7 +2134,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/spec-quality-gate"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/spec-quality-gate"
+      }
     },
     {
       "name": "spec-tasks",
@@ -1386,7 +2147,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/spec-tasks"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/spec-tasks"
+      }
     },
     {
       "name": "static-analysis",
@@ -1395,7 +2160,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/static-analysis"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/static-analysis"
+      }
     },
     {
       "name": "test-strategy",
@@ -1404,7 +2173,11 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/test-strategy"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/test-strategy"
+      }
     },
     {
       "name": "test-validation",
@@ -1413,16 +2186,24 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/test-validation"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/test-validation"
+      }
     },
     {
       "name": "web-accessibility",
-      "description": "Validate web applications against WCAG 2.1 AA covering contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Generic skill — extend with client-specific brand color contrast t...",
+      "description": "Validate web applications against WCAG 2.1 AA covering contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Generic skill — extend with client-specific brand color contrast tables.",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/web-accessibility"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/web-accessibility"
+      }
     },
     {
       "name": "workflow-engine",
@@ -1431,16 +2212,639 @@
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/workflow-engine"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/workflow-engine"
+      }
     },
     {
       "name": "xlsx",
-      "description": "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .csv, or .tsv file (e.g., ...",
+      "description": "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, chart",
       "tags": [
         "skills",
         "sdlc"
       ],
-      "source": "./.apm/skills/xlsx"
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/skills/xlsx"
+      }
+    },
+    {
+      "name": "bmad",
+      "description": "Build-Measure-Analyze-Decide feedback loop for hypothesis-driven delivery.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/bmad"
+      }
+    },
+    {
+      "name": "bug-fixing",
+      "description": "Structured bug resolution from triage through root-cause analysis, fix, regression testing, and quality validation.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/bug-fixing"
+      }
+    },
+    {
+      "name": "compliance-check",
+      "description": "Validate compliance, privacy, and AI governance requirements including PII scanning, prompt injection detection, and risk scoring.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "validation-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/compliance-check"
+      }
+    },
+    {
+      "name": "delivery-retrospective",
+      "description": "AI-native continuous improvement cycle analyzing delivery metrics, defects, bottlenecks, and producing actionable improvements.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "validation-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/delivery-retrospective"
+      }
+    },
+    {
+      "name": "feature-implementation",
+      "description": "End-to-end feature delivery from constitution through specification, planning, implementation, and quality validation (brownfield and greenfield).",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/feature-implementation"
+      }
+    },
+    {
+      "name": "idea-to-spec",
+      "description": "Transform a raw idea into a validated, unambiguous specification with NFRs and architecture sketch.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/idea-to-spec"
+      }
+    },
+    {
+      "name": "implementation-loop",
+      "description": "Agent-assisted development loop from task selection through code generation, review, testing, and commit readiness.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/implementation-loop"
+      }
+    },
+    {
+      "name": "incident-resolution",
+      "description": "Structured incident diagnosis and resolution from analysis through fix, regression testing, and knowledge capture.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/incident-resolution"
+      }
+    },
+    {
+      "name": "maturity-assessment",
+      "description": "Assess SDLC maturity across dimensions and produce a scored report with improvement roadmap.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "assessment-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/maturity-assessment"
+      }
+    },
+    {
+      "name": "modernization",
+      "description": "Guided modernization from baseline assessment through target definition, migration planning, implementation, and quality assurance.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "modernization-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/modernization"
+      }
+    },
+    {
+      "name": "pr-validation",
+      "description": "Multi-stage merge request validation pipeline with deterministic checks and AI-powered security stations.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "validation-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/pr-validation"
+      }
+    },
+    {
+      "name": "quality-validation",
+      "description": "Validate code quality, security, and compliance using external tool adapters.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "validation-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/quality-validation"
+      }
+    },
+    {
+      "name": "release-readiness",
+      "description": "Validate that a feature meets all release criteria across spec completeness, testing, security, observability, and deployment.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "validation-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/release-readiness"
+      }
+    },
+    {
+      "name": "sdlc-ba",
+      "description": "Full business analysis pipeline from brownfield audit through scoping, specification, and per-feature functional design with fan-out/fan-in orchestration.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/sdlc-ba"
+      }
+    },
+    {
+      "name": "sdlc-full",
+      "description": "Composite SDLC pipeline orchestrating all four domains — BA specification, Tech architecture, Test campaigns, and Steer governance — with inter-domain quality gates and sprint-iterative execution.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/sdlc-full"
+      }
+    },
+    {
+      "name": "sdlc-steer",
+      "description": "Project steering pipeline from initialization through sprint planning, recurring sprint tracking, and governance decisions (COPIL + Go/No-Go).",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/sdlc-steer"
+      }
+    },
+    {
+      "name": "sdlc-tech",
+      "description": "Full technical architecture and design pipeline from brownfield audit through architecture, incremental design, sprint-iterative implementation, and continuous quality monitoring.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/sdlc-tech"
+      }
+    },
+    {
+      "name": "sdlc-test",
+      "description": "Qualification test pipeline executing E2E/UAT campaigns and performance tests, producing structured reports with Go/No-Go quality gate data.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/sdlc-test"
+      }
+    },
+    {
+      "name": "spec-kit",
+      "description": "Specification-only flow — produce a complete spec package without implementation (brownfield and greenfield).",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/spec-kit"
+      }
+    },
+    {
+      "name": "spec-to-execution",
+      "description": "Transform a validated specification into an executable plan with risk analysis, rollback strategy, and decomposed tasks.",
+      "tags": [
+        "workflows",
+        "sdlc",
+        "delivery-workflow"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/workflows/spec-to-execution"
+      }
+    },
+    {
+      "name": "convert-md-to-docx-and-pdf",
+      "description": "Convert Markdown files to Sopra Steria branded DOCX and PDF outputs using Pandoc.",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/convert-md-to-docx-and-pdf"
+      }
+    },
+    {
+      "name": "create-one-pager",
+      "description": "Create a concise branded one-pager in Markdown following Sopra Steria brand guidelines.",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/create-one-pager"
+      }
+    },
+    {
+      "name": "soprasteria-brand-audit",
+      "description": "Assess an application, document, slide deck, page, mockup, or codebase against Sopra Steria branding and produce a structured compliance report.",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/soprasteria-brand-audit"
+      }
+    },
+    {
+      "name": "soprasteria-brand-refactor",
+      "description": "Refactor an application, document, presentation, or template into Sopra Steria brand style with audit, strategy, implementation, and validation.",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/soprasteria-brand-refactor"
+      }
+    },
+    {
+      "name": "workflow-bmad",
+      "description": "Run Build → Measure → Analyze → Decide feedback loop (4 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-bmad"
+      }
+    },
+    {
+      "name": "workflow-bug-fixing",
+      "description": "Run structured bug diagnosis and resolution workflow (7 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-bug-fixing"
+      }
+    },
+    {
+      "name": "workflow-feature",
+      "description": "Run end-to-end feature implementation workflow (9 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-feature"
+      }
+    },
+    {
+      "name": "workflow-maturity-assessment",
+      "description": "Run SDLC maturity assessment workflow (6 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-maturity-assessment"
+      }
+    },
+    {
+      "name": "workflow-modernization",
+      "description": "Run guided modernization workflow (10 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-modernization"
+      }
+    },
+    {
+      "name": "workflow-pr-validation",
+      "description": "Run PR validation pipeline — A0-A7 stations (11 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-pr-validation"
+      }
+    },
+    {
+      "name": "workflow-quality",
+      "description": "Run code quality validation workflow (7 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-quality"
+      }
+    },
+    {
+      "name": "workflow-spec-kit",
+      "description": "Run specification-only workflow (8 stations).",
+      "tags": [
+        "prompts",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/prompts/workflow-spec-kit"
+      }
+    },
+    {
+      "name": "file-output",
+      "description": "Mandate that document-producing agents write deliverables to disk as actual files, not just chat output.",
+      "tags": [
+        "instructions",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/instructions/file-output"
+      }
+    },
+    {
+      "name": "mcp-integration",
+      "description": "Shared behavioral rules for all agents when MCP (Model Context Protocol) tools are available or unavailable.",
+      "tags": [
+        "instructions",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/instructions/mcp-integration"
+      }
+    },
+    {
+      "name": "output-metadata",
+      "description": "Mandate structured YAML frontmatter metadata on every file produced by agents and workflows under outputs/.",
+      "tags": [
+        "instructions",
+        "sdlc"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/instructions/output-metadata"
+      }
+    },
+    {
+      "name": "pre-input-validation-ba",
+      "description": "- When verifying mandatory input IDs (Phase 0a), match against the BA namespace prefixes above.",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "pre-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/pre/input-validation/ba"
+      }
+    },
+    {
+      "name": "pre-input-validation-base",
+      "description": "Executed **before any production** by the agent. Verifies that all declared inputs are present, valid, and semantically sufficient. Produces either a GO/WARN decision (continue) or a STOP decision (blocking report instead of deliverable).",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "pre-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/pre/input-validation/base"
+      }
+    },
+    {
+      "name": "pre-input-validation-steer",
+      "description": "Steer agents consume BA and Tech deliverables but NEVER modify them. The pre-hook verifies presence and readability only — no status gate needed on upstream deliverables beyond confirming they exist and are parseable.",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "pre-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/pre/input-validation/steer"
+      }
+    },
+    {
+      "name": "pre-input-validation-tech",
+      "description": "Tech agents consume validated BA deliverables as inputs. The pre-hook must additionally verify:",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "pre-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/pre/input-validation/tech"
+      }
+    },
+    {
+      "name": "pre-input-validation-test",
+      "description": "Test agents NEVER bypass entry criteria. Unlike BA/Tech/Steer agents that allow WARN mode on some inputs, Test agents operate in **strict BLOCK mode**:",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "pre-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/pre/input-validation/test"
+      }
+    },
+    {
+      "name": "pre-verify-source-manifest",
+      "description": "Cryptographic integrity check for `steer-review-report.md` before the Go/No-Go station consumes it. This is an **external, non-LLM** verification step — it runs as a script, not as an agent instruction.",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "pre-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/pre/verify-source-manifest"
+      }
+    },
+    {
+      "name": "post-adr-completeness",
+      "description": "Executed **after** the `tech-adrs` station produces its ADR outputs. Verifies that the mandatory ADR categories are complete, the 3-environment pattern is respected, and DEP integration fields are populated when applicable.",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "post-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/post/adr-completeness"
+      }
+    },
+    {
+      "name": "post-confluence-push",
+      "description": "Executed **after the quality control hook**, as the last step before returning to the coordinator. Pushes the produced deliverable to Confluence by delegating to the `sdlc-confluence-sync` skill's publish tooling. All front matter updates (`confluenc",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "post-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/post/confluence-push"
+      }
+    },
+    {
+      "name": "post-quality-control",
+      "description": "Executed **after the agent has produced its deliverable**, before returning to the coordinator. The agent MUST run this complete checklist and correct any non-conforming items before considering the deliverable complete. All modifications to the deli",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "post-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/post/quality-control"
+      }
+    },
+    {
+      "name": "post-sprint-fidelity-check",
+      "description": "Verify that the implementation plan (IMP-001) is consistent with the sprint planning (PLAN-001). Detect missing items, silent sprint reallocations, and filtered infrastructure enablers.",
+      "tags": [
+        "hooks",
+        "sdlc",
+        "post-hook"
+      ],
+      "source": {
+        "type": "git-subdir",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "subdir": ".apm/hooks/post/sprint-fidelity-check"
+      }
     }
   ]
 }

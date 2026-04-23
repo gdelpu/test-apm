@@ -1,0 +1,38 @@
+{
+  "name": "bug-fixing",
+  "description": "Structured bug resolution from triage through root-cause analysis, fix implementation, regression testing, and quality validation.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 7,
+  "agents": [
+    "../../../.apm/agents/implementer/implementer.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md",
+    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/code-implementation",
+    "../../../.apm/skills/repo-analysis",
+    "../../../.apm/skills/spec-clarify",
+    "../../../.apm/skills/spec-quality-gate",
+    "../../../.apm/skills/workflow-engine"
+  ],
+  "dependencies": [
+    "../.apm/agents/implementer",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/agents/workflow-orchestrator",
+    "../.apm/skills/code-implementation",
+    "../.apm/skills/repo-analysis",
+    "../.apm/skills/spec-clarify",
+    "../.apm/skills/spec-quality-gate",
+    "../.apm/skills/workflow-engine"
+  ]
+}

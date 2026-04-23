@@ -1,13 +1,18 @@
 {
   "name": "react-flow-architect",
-  "description": "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when creating or refactoring R...",
+  "description": "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when creating or refactoring ReactFlow graph applications.",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
-    "skills",
-    "sdlc"
+    "graph-applications",
+    "interactive-graphs",
+    "react",
+    "reactflow",
+    "sdlc",
+    "skills"
   ],
   "skills": "./"
 }

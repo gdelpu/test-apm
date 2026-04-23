@@ -1,0 +1,17 @@
+{
+  "name": "file-output",
+  "description": "Mandate that document-producing agents write deliverables to disk as actual files, not just chat output.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "instructions",
+    "sdlc"
+  ],
+  "applyTo": "**",
+  "instructions": [
+    "../file-output.md"
+  ]
+}

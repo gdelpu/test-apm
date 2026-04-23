@@ -5,9 +5,14 @@
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
-    "skills",
-    "sdlc"
+    "architecture-discovery",
+    "codebase-exploration",
+    "repo-analysis",
+    "repository-analysis",
+    "sdlc",
+    "skills"
   ],
   "skills": "./"
 }

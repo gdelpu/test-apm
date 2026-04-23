@@ -1,0 +1,17 @@
+{
+  "name": "post-sprint-fidelity-check",
+  "description": "Verify that the implementation plan (IMP-001) is consistent with the sprint planning (PLAN-001). Detect missing items, silent sprint reallocations, and filtered infrastructure enablers.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "hooks",
+    "post-hook",
+    "sdlc"
+  ],
+  "hookType": "post",
+  "severity": "blocker",
+  "hooks": ".apm/hooks/post/sprint-fidelity-check.md"
+}

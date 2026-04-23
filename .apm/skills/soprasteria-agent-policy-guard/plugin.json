@@ -1,13 +1,19 @@
 {
   "name": "soprasteria-agent-policy-guard",
-  "description": "Shift-left policy guard that enforces the A1-A6 station gate rules when creating or modifying agent and skill definitions. Validates frontmatter, tool allowlists, security hardening, and prompt inj...",
+  "description": "Shift-left policy guard that enforces the A1-A6 station gate rules when creating or modifying agent and skill definitions. Validates frontmatter, tool allowlists, security hardening, and prompt injection resistance before code reaches the CI pipel...",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "agent",
+    "create-agent",
+    "modify-agent",
+    "new-agent",
+    "sdlc",
     "skills",
-    "sdlc"
+    "update-agent"
   ],
   "skills": "./"
 }

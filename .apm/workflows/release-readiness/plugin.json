@@ -1,0 +1,44 @@
+{
+  "name": "release-readiness",
+  "description": "Validate that a feature meets all release criteria across spec completeness, testing, security, observability, and deployment.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "sdlc",
+    "validation-workflow",
+    "workflows"
+  ],
+  "type": "validation",
+  "stations": 6,
+  "agents": [
+    "../../../.apm/agents/architecture-governance/architecture-governance.md",
+    "../../../.apm/agents/quality-validator/quality-validator.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/coverage-assessment",
+    "../../../.apm/skills/dependency-audit",
+    "../../../.apm/skills/nfr-review",
+    "../../../.apm/skills/observability-readiness",
+    "../../../.apm/skills/quality-report",
+    "../../../.apm/skills/security-scan",
+    "../../../.apm/skills/spec-quality-gate",
+    "../../../.apm/skills/test-strategy"
+  ],
+  "dependencies": [
+    "../.apm/agents/architecture-governance",
+    "../.apm/agents/quality-validator",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/coverage-assessment",
+    "../.apm/skills/dependency-audit",
+    "../.apm/skills/nfr-review",
+    "../.apm/skills/observability-readiness",
+    "../.apm/skills/quality-report",
+    "../.apm/skills/security-scan",
+    "../.apm/skills/spec-quality-gate",
+    "../.apm/skills/test-strategy"
+  ]
+}

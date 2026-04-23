@@ -1,13 +1,19 @@
 {
   "name": "api-design-principles",
-  "description": "Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing...",
+  "description": "Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing API standards.",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
-    "skills",
-    "sdlc"
+    "api",
+    "api-architecture",
+    "api-design",
+    "graphql",
+    "rest-api",
+    "sdlc",
+    "skills"
   ],
   "skills": "./"
 }

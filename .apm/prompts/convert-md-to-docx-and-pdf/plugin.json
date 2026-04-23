@@ -1,0 +1,17 @@
+{
+  "name": "convert-md-to-docx-and-pdf",
+  "description": "Convert Markdown files to Sopra Steria branded DOCX and PDF outputs using Pandoc.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "prompts",
+    "sdlc"
+  ],
+  "commands": [
+    "../convert-md-to-docx-and-pdf.prompt.md",
+    "../convert-md-to-docx-and-pdf.md"
+  ]
+}

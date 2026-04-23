@@ -1,0 +1,19 @@
+{
+  "name": "workflow-spec-kit",
+  "description": "Run specification-only workflow (8 stations).",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "agent-mode",
+    "prompts",
+    "sdlc",
+    "spec",
+    "workflow"
+  ],
+  "commands": [
+    "../workflow-spec-kit.prompt.md"
+  ]
+}

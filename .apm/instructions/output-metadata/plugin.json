@@ -1,0 +1,17 @@
+{
+  "name": "output-metadata",
+  "description": "Mandate structured YAML frontmatter metadata on every file produced by agents and workflows under outputs/.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "instructions",
+    "sdlc"
+  ],
+  "applyTo": "outputs/**",
+  "instructions": [
+    "../output-metadata.md"
+  ]
+}

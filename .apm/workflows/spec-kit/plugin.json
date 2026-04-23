@@ -1,0 +1,45 @@
+{
+  "name": "spec-kit",
+  "description": "Specification-only pipeline producing a complete spec package without implementation or code validation. Supports both brownfield (existing system) and greenfield (new) projects.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "spec",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 9,
+  "agents": [
+    "../../../.apm/agents/architecture-governance/architecture-governance.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/architecture-guardrails",
+    "../../../.apm/skills/brownfield-context",
+    "../../../.apm/skills/spec-clarify",
+    "../../../.apm/skills/spec-constitution",
+    "../../../.apm/skills/spec-feature",
+    "../../../.apm/skills/spec-plan",
+    "../../../.apm/skills/spec-quality-gate",
+    "../../../.apm/skills/spec-tasks",
+    "../../../.apm/skills/test-strategy"
+  ],
+  "dependencies": [
+    "../.apm/agents/architecture-governance",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/architecture-guardrails",
+    "../.apm/skills/brownfield-context",
+    "../.apm/skills/spec-clarify",
+    "../.apm/skills/spec-constitution",
+    "../.apm/skills/spec-feature",
+    "../.apm/skills/spec-plan",
+    "../.apm/skills/spec-quality-gate",
+    "../.apm/skills/spec-tasks",
+    "../.apm/skills/test-strategy"
+  ]
+}

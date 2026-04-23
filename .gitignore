@@ -47,3 +47,6 @@ diff.txt
 
 */__pycache__/
 *.pyc
+
+# APM dependencies
+apm_modules/

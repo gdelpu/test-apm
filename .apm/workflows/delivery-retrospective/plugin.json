@@ -1,0 +1,36 @@
+{
+  "name": "delivery-retrospective",
+  "description": "AI-native continuous improvement cycle analyzing delivery metrics, defects, bottlenecks, and producing actionable improvements.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "sdlc",
+    "validation-workflow",
+    "workflows"
+  ],
+  "type": "validation",
+  "stations": 5,
+  "agents": [
+    "../../../.apm/agents/architecture-governance/architecture-governance.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/adr-generation",
+    "../../../.apm/skills/architecture-guardrails",
+    "../../../.apm/skills/delivery-metrics",
+    "../../../.apm/skills/knowledge-update",
+    "../../../.apm/skills/quality-report"
+  ],
+  "dependencies": [
+    "../.apm/agents/architecture-governance",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/adr-generation",
+    "../.apm/skills/architecture-guardrails",
+    "../.apm/skills/delivery-metrics",
+    "../.apm/skills/knowledge-update",
+    "../.apm/skills/quality-report"
+  ]
+}

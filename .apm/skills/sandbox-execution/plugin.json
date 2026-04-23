@@ -1,13 +1,18 @@
 {
   "name": "sandbox-execution",
-  "description": "Simulate agent definitions against structured malicious inputs, prompt injection payloads, and exfiltration/privilege-escalation attempts in a read-only sandbox. Assess resistance to each attack sc...",
+  "description": "Simulate agent definitions against structured malicious inputs, prompt injection payloads, and exfiltration/privilege-escalation attempts in a read-only sandbox. Assess resistance to each attack scenario (4-A through 4-F).",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
-    "skills",
-    "sdlc"
+    "agent-simulation",
+    "attack-simulation",
+    "malicious-input-test",
+    "sandbox-simulation",
+    "sdlc",
+    "skills"
   ],
   "skills": "./"
 }

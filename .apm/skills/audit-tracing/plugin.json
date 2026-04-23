@@ -1,13 +1,18 @@
 {
   "name": "audit-tracing",
-  "description": "Emit structured audit traces for every workflow station execution with correlation IDs, input/output hashes, sensitivity tags, risk scores, model metadata, and redaction status. Supports local JSON...",
+  "description": "Emit structured audit traces for every workflow station execution with correlation IDs, input/output hashes, sensitivity tags, risk scores, model metadata, and redaction status. Supports local JSONL persistence and optional OTLP export.",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "audit-trace",
+    "audit-trail",
+    "correlation-id",
+    "sdlc",
     "skills",
-    "sdlc"
+    "structured-trace"
   ],
   "skills": "./"
 }

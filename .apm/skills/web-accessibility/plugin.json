@@ -1,13 +1,18 @@
 {
   "name": "web-accessibility",
-  "description": "Validate web applications against WCAG 2.1 AA covering contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Generic skill — extend with client-specific brand color contrast t...",
+  "description": "Validate web applications against WCAG 2.1 AA covering contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Generic skill — extend with client-specific brand color contrast tables.",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
+    "contrast-check",
+    "keyboard-navigation",
+    "sdlc",
     "skills",
-    "sdlc"
+    "wcag",
+    "web-accessibility"
   ],
   "skills": "./"
 }

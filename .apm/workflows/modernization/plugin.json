@@ -1,0 +1,53 @@
+{
+  "name": "modernization",
+  "description": "Guided modernization from baseline assessment through staged migration, implementation, parity validation, and quality assurance.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "modernization",
+    "modernization-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "modernization",
+  "stations": 11,
+  "agents": [
+    "../../../.apm/agents/architecture-governance/architecture-governance.md",
+    "../../../.apm/agents/modernization-agent/modernization-agent.md",
+    "../../../.apm/agents/refactor-implementer/refactor-implementer.md",
+    "../../../.apm/agents/refactor-parity-checker/refactor-parity-checker.md",
+    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/adr-generation",
+    "../../../.apm/skills/architecture-guardrails",
+    "../../../.apm/skills/code-implementation",
+    "../../../.apm/skills/parity-validation",
+    "../../../.apm/skills/repo-analysis",
+    "../../../.apm/skills/spec-clarify",
+    "../../../.apm/skills/spec-feature",
+    "../../../.apm/skills/spec-plan",
+    "../../../.apm/skills/spec-tasks",
+    "../../../.apm/skills/workflow-engine"
+  ],
+  "dependencies": [
+    "../.apm/agents/architecture-governance",
+    "../.apm/agents/modernization-agent",
+    "../.apm/agents/refactor-implementer",
+    "../.apm/agents/refactor-parity-checker",
+    "../.apm/agents/workflow-orchestrator",
+    "../.apm/skills/adr-generation",
+    "../.apm/skills/architecture-guardrails",
+    "../.apm/skills/code-implementation",
+    "../.apm/skills/parity-validation",
+    "../.apm/skills/repo-analysis",
+    "../.apm/skills/spec-clarify",
+    "../.apm/skills/spec-feature",
+    "../.apm/skills/spec-plan",
+    "../.apm/skills/spec-tasks",
+    "../.apm/skills/workflow-engine"
+  ]
+}

@@ -1,13 +1,18 @@
 {
   "name": "red-team-simulation",
-  "description": "Generate adversarial exploit prompts and tool-misuse scenarios against agent definitions to assess resilience. Covers goal hijacking, tool misuse, context poisoning, privilege escalation, and denia...",
+  "description": "Generate adversarial exploit prompts and tool-misuse scenarios against agent definitions to assess resilience. Covers goal hijacking, tool misuse, context poisoning, privilege escalation, and denial-of-service (RT-01 through RT-05).",
   "version": "0.0.34",
   "author": "Sopra Steria Group",
   "license": "UNLICENSED",
   "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
   "tags": [
-    "skills",
-    "sdlc"
+    "adversarial-testing",
+    "attack-simulation",
+    "exploit-simulation",
+    "red-team",
+    "sdlc",
+    "skills"
   ],
   "skills": "./"
 }

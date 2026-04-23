@@ -1,0 +1,17 @@
+{
+  "name": "pre-verify-source-manifest",
+  "description": "Cryptographic integrity check for `steer-review-report.md` before the Go/No-Go station consumes it. This is an **external, non-LLM** verification step — it runs as a script, not as an agent instruction.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "hooks",
+    "pre-hook",
+    "sdlc"
+  ],
+  "hookType": "pre",
+  "severity": "warning",
+  "hooks": ".apm/hooks/pre/verify-source-manifest.md"
+}

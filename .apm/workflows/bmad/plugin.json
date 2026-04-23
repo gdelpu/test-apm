@@ -1,0 +1,36 @@
+{
+  "name": "bmad",
+  "description": "Build → Measure → Analyze → Decide feedback loop. Drives hypothesis-driven delivery with continuous quality feedback and adaptive decision-making.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "delivery-workflow",
+    "sdlc",
+    "workflows"
+  ],
+  "type": "delivery",
+  "stations": 4,
+  "agents": [
+    "../../../.apm/agents/implementer/implementer.md",
+    "../../../.apm/agents/quality-validator/quality-validator.md",
+    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
+  ],
+  "skills": [
+    "../../../.apm/skills/adr-generation",
+    "../../../.apm/skills/code-implementation",
+    "../../../.apm/skills/coverage-assessment",
+    "../../../.apm/skills/spec-clarify"
+  ],
+  "dependencies": [
+    "../.apm/agents/implementer",
+    "../.apm/agents/quality-validator",
+    "../.apm/agents/spec-orchestrator",
+    "../.apm/skills/adr-generation",
+    "../.apm/skills/code-implementation",
+    "../.apm/skills/coverage-assessment",
+    "../.apm/skills/spec-clarify"
+  ]
+}

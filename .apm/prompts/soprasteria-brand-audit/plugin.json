@@ -1,0 +1,18 @@
+{
+  "name": "soprasteria-brand-audit",
+  "description": "Assess an application, document, slide deck, page, mockup, or codebase against Sopra Steria branding and produce a structured compliance report.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
+  "tags": [
+    "brand",
+    "prompts",
+    "sdlc"
+  ],
+  "commands": [
+    "../soprasteria-brand-audit.prompt.md",
+    "../soprasteria-brand-audit.md"
+  ]
+}
