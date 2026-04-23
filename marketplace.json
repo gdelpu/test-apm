@@ -1,0 +1,1446 @@
+{
+  "name": "SSG AI SDLC Foundation",
+  "plugins": [
+    {
+      "name": "ssg-ai-backbone",
+      "description": "Complete AI SDLC Foundation — all agents, skills, workflows, prompts, instructions and foundational knowledge for specification-driven delivery, quality validation, security governance, and full-lifecycle SDLC support.",
+      "version": "0.0.34",
+      "tags": [
+        "ai-agents",
+        "sdlc",
+        "copilot",
+        "claude-code",
+        "full-stack",
+        "workflows",
+        "specification-driven",
+        "security-governance"
+      ],
+      "source": {
+        "type": "url",
+        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git"
+      }
+    },
+    {
+      "name": "analysis-agent",
+      "description": "Diagnose production incidents by analyzing logs, traces, and identifying root causes.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/analysis-agent"
+    },
+    {
+      "name": "architecture-governance",
+      "description": "Review specifications and plans against architecture principles and guardrails.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/architecture-governance"
+    },
+    {
+      "name": "bmad-orchestrator",
+      "description": "Drive BMAD feedback loop with quality scoring and adaptive decision-making.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/bmad-orchestrator"
+    },
+    {
+      "name": "branding",
+      "description": "Audit, refactor, and generate brand-compliant applications, documents, and presentations. Default brand: Sopra Steria.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/branding"
+    },
+    {
+      "name": "bug-fixer",
+      "description": "Drive structured bug diagnosis and resolution with regression testing.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/bug-fixer"
+    },
+    {
+      "name": "hub-orchestrator",
+      "description": "Central triage agent — discovers available workflows and agents, classifies user intent, and dispatches execution.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/hub-orchestrator"
+    },
+    {
+      "name": "implementer",
+      "description": "Execute implementation tasks by reading task breakdowns and producing code.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/implementer"
+    },
+    {
+      "name": "modernization-agent",
+      "description": "Guide modernization initiatives through baseline assessment and migration planning.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/modernization-agent"
+    },
+    {
+      "name": "modernization-orchestrator",
+      "description": "Coordinate modernization sub-agents for assessment, planning, and validation.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/modernization-orchestrator"
+    },
+    {
+      "name": "pr-validator",
+      "description": "Run deterministic merge request validation checks including frontmatter, naming conventions, YAML lint, and test gap detection.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/pr-validator"
+    },
+    {
+      "name": "quality-validator",
+      "description": "Execute quality and security validation using external tool adapters.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/quality-validator"
+    },
+    {
+      "name": "refactor-assessor",
+      "description": "Comprehensive codebase assessment producing structured as-is documentation for refactoring.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/refactor-assessor"
+    },
+    {
+      "name": "refactor-implementer",
+      "description": "Execute individual migration tasks from the approved plan using the appropriate skill for each task.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/refactor-implementer"
+    },
+    {
+      "name": "refactor-orchestrator",
+      "description": "Foundation orchestrator that gathers decisions, creates ADRs, plans, and delegates refactoring to sub-agents.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/refactor-orchestrator"
+    },
+    {
+      "name": "refactor-parity-checker",
+      "description": "Verify refactored application matches original behavior with systematic comparison.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/refactor-parity-checker"
+    },
+    {
+      "name": "refactor-planner",
+      "description": "Analyse ADRs and as-is assessment to produce a detailed, phased migration plan with dependency ordering.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/refactor-planner"
+    },
+    {
+      "name": "repository-analyzer",
+      "description": "Generate high-level architectural and functional overview from repository analysis.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/repository-analyzer"
+    },
+    {
+      "name": "reverse-backlog",
+      "description": "Extract business capabilities and generate structured product backlog from codebase.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/reverse-backlog"
+    },
+    {
+      "name": "reverse-user-story",
+      "description": "Generate detailed user stories with acceptance criteria from existing codebase.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/reverse-user-story"
+    },
+    {
+      "name": "sdlc-ba-analyst",
+      "description": "Transform business needs into complete functional specification through structured pipeline.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-ba-analyst"
+    },
+    {
+      "name": "sdlc-ba-reviewer",
+      "description": "Independent reviewer for BA deliverables — validates quality, coherence, and traceability with conflict escalation to human.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-ba-reviewer"
+    },
+    {
+      "name": "sdlc-coordinator",
+      "description": "Orchestrate the full SDLC harness with DAG resolution and wave scheduling.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-coordinator"
+    },
+    {
+      "name": "sdlc-steer-manager",
+      "description": "Provide project steering, sprint tracking, and release governance decisions.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-steer-manager"
+    },
+    {
+      "name": "sdlc-steer-reviewer",
+      "description": "Independent reviewer for Steer deliverables — validates cross-domain accuracy of governance documents and Go/No-Go decisions with conflict escalation to human.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-steer-reviewer"
+    },
+    {
+      "name": "sdlc-tech-architect",
+      "description": "Produce technical architecture and design dossier with ADRs and implementation plans.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-tech-architect"
+    },
+    {
+      "name": "sdlc-tech-reviewer",
+      "description": "Independent reviewer for Tech deliverables — validates architecture, design, and BA-Tech traceability with conflict escalation to human.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-tech-reviewer"
+    },
+    {
+      "name": "sdlc-test-executor",
+      "description": "Execute qualification campaigns and produce structured test reports.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/sdlc-test-executor"
+    },
+    {
+      "name": "security-reviewer",
+      "description": "Review AI artifacts for prompt injection, data exfiltration, and LLM security risks.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/security-reviewer"
+    },
+    {
+      "name": "spec-orchestrator",
+      "description": "Lead structured specification-driven flow for software changes and initiatives.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/spec-orchestrator"
+    },
+    {
+      "name": "station-orchestrator",
+      "description": "Orchestrate sequential AI station execution within the PR validation pipeline (A0–A7).",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/station-orchestrator"
+    },
+    {
+      "name": "workflow-orchestrator",
+      "description": "Orchestrate station-based workflow pipelines by delegating work to station agents.",
+      "tags": [
+        "agents",
+        "sdlc"
+      ],
+      "source": "./.apm/agents/workflow-orchestrator"
+    },
+    {
+      "name": "adaptive-decision",
+      "description": "Make data-driven pivot-or-persevere decisions in BMAD loops by evaluating experiment results against success criteria.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/adaptive-decision"
+    },
+    {
+      "name": "adr-generation",
+      "description": "Generate Architecture Decision Records (ADRs) capturing architecturally significant decisions with rationale, alternatives, and consequences.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/adr-generation"
+    },
+    {
+      "name": "agent-policy-guard",
+      "description": "Validate agent and skill manifest frontmatter against JSON Schema and enforce tool allowlists, safety field requirements, and structural policy rules (P-01 through P-06).",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/agent-policy-guard"
+    },
+    {
+      "name": "agent-policy-validation",
+      "description": "Combined policy validation skill that orchestrates agent-policy-guard (A1) structural checks and prompt-hardening checks (A3 PI-02/PI-04) into a single validation pass for agent and skill definitions.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/agent-policy-validation"
+    },
+    {
+      "name": "ai-backbone-pr-checks",
+      "description": "Deterministic merge request validation for Copilot assets: frontmatter, workflow YAML quality, and repository-specific test-gap advisories. Runs on GitLab CI.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/ai-backbone-pr-checks"
+    },
+    {
+      "name": "api-design-principles",
+      "description": "Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/api-design-principles"
+    },
+    {
+      "name": "api-documentation",
+      "description": "API documentation workflow for generating OpenAPI specs, creating developer guides, and maintaining comprehensive API documentation.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/api-documentation"
+    },
+    {
+      "name": "api-patterns",
+      "description": "API design principles and decision-making. REST vs GraphQL vs tRPC selection, response formats, versioning, pagination.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/api-patterns"
+    },
+    {
+      "name": "api-security-best-practices",
+      "description": "Implement secure API design patterns including authentication, authorization, input validation, rate limiting, and protection against common API vulnerabilities",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/api-security-best-practices"
+    },
+    {
+      "name": "architecture-guardrails",
+      "description": "Apply architecture guardrails relevant to the chosen or existing architecture style and stack.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/architecture-guardrails"
+    },
+    {
+      "name": "assets-and-templates",
+      "description": "Guidance for discovering, classifying, and using official brand logos, templates, and supporting assets. Generic skill — extend with client-specific asset inventories.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/assets-and-templates"
+    },
+    {
+      "name": "atlassian-ops",
+      "description": "Interact with Atlassian suite via MCP — Jira issue CRUD, Confluence page management, and Bitbucket integration. Formalises the existing jira-mcp pattern.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/atlassian-ops"
+    },
+    {
+      "name": "audit-checklist",
+      "description": "Generic structured checklist for auditing applications, documents, presentations, and communication assets against brand guidelines and accessibility standards. Extend with client-specific brand sk...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/audit-checklist"
+    },
+    {
+      "name": "audit-tracing",
+      "description": "Emit structured audit traces for every workflow station execution with correlation IDs, input/output hashes, sensitivity tags, risk scores, model metadata, and redaction status. Supports local JSON...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/audit-tracing"
+    },
+    {
+      "name": "aws-resource-query",
+      "description": "Query and inspect AWS resources via AWS MCP server — validate CloudFormation/CDK against live state, check service quotas and health.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/aws-resource-query"
+    },
+    {
+      "name": "azdo-ops",
+      "description": "Interact with Azure DevOps via MCP — manage work items, boards, pipelines, and artifact feeds. Supports both local and remote MCP endpoints.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/azdo-ops"
+    },
+    {
+      "name": "azure-resource-query",
+      "description": "Query and manage Azure resources via Azure MCP server — validate IaC against live state, check service health, pull infrastructure topology.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/azure-resource-query"
+    },
+    {
+      "name": "brand-accessibility",
+      "description": "Validate web applications against WCAG 2.1 AA when applying or auditing branding. Covers contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Default brand: Sopra Steria.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brand-accessibility"
+    },
+    {
+      "name": "brand-app",
+      "description": "Adapt applications, websites, portals, design systems, and front-end codebases to a target brand identity while preserving usability and accessibility. Default brand: Sopra Steria. Extensible for o...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brand-app"
+    },
+    {
+      "name": "brand-assets",
+      "description": "Locate and use official branding resources (logos, templates, icons, guidelines) when auditing or refactoring applications, documents, or presentations. Default brand: Sopra Steria. Extensible for ...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brand-assets"
+    },
+    {
+      "name": "brand-audit",
+      "description": "Structured checklist for auditing apps, slide decks, documents, and communication assets against brand and accessibility standards. Default brand: Sopra Steria.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brand-audit"
+    },
+    {
+      "name": "brand-core",
+      "description": "Reusable core rules of a visual identity: logo, colors, typography, icons, imagery, and layout. Foundation for every brand audit or refactor. Default brand: Sopra Steria. Extensible for other clien...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brand-core"
+    },
+    {
+      "name": "brand-document",
+      "description": "Adapt PowerPoint, Word, PDF, proposal, dossier, memo, brochure, and similar assets to a target brand identity. Converts Markdown to branded DOCX and PDF via Pandoc. Default brand: Sopra Steria.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brand-document"
+    },
+    {
+      "name": "brownfield-context",
+      "description": "Analyze an existing codebase to extract architectural context, patterns, constraints, and domain knowledge for brownfield projects.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/brownfield-context"
+    },
+    {
+      "name": "bug-reproduction",
+      "description": "Create reliable reproduction scenarios for bugs with documented steps, environment conditions, and expected vs actual behavior.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/bug-reproduction"
+    },
+    {
+      "name": "bug-triage",
+      "description": "Classify and prioritize bug reports by assigning severity, priority, affected components, and reproduction feasibility.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/bug-triage"
+    },
+    {
+      "name": "cc-skill-backend-patterns",
+      "description": "Backend architecture patterns, API design, database optimization, and server-side best practices for Node.js, Express, and Next.js API routes.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/cc-skill-backend-patterns"
+    },
+    {
+      "name": "cc-skill-coding-standards",
+      "description": "Universal coding standards, best practices, and patterns for TypeScript, JavaScript, React, and Node.js development.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/cc-skill-coding-standards"
+    },
+    {
+      "name": "cc-skill-frontend-patterns",
+      "description": "Frontend development patterns for React, Next.js, state management, performance optimization, and UI best practices.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/cc-skill-frontend-patterns"
+    },
+    {
+      "name": "code-implementation",
+      "description": "Execute implementation tasks from a task breakdown, producing or modifying code while following project conventions.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/code-implementation"
+    },
+    {
+      "name": "code-refactoring",
+      "description": "Execute safe, incremental refactoring of existing code to improve structure, readability, or maintainability without changing external behavior.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/code-refactoring"
+    },
+    {
+      "name": "code-refactoring-refactor-clean",
+      "description": "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/code-refactoring-refactor-clean"
+    },
+    {
+      "name": "code-refactoring-tech-debt",
+      "description": "You are a technical debt expert specializing in identifying, quantifying, and prioritizing technical debt in software projects. Analyze the codebase to uncover debt, assess its impact, and create a...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/code-refactoring-tech-debt"
+    },
+    {
+      "name": "context7-docs",
+      "description": "Fetch up-to-date, version-specific library documentation via Context7 MCP — resolve library IDs and query current docs for any framework or package.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/context7-docs"
+    },
+    {
+      "name": "coverage-assessment",
+      "description": "Measure test coverage and evaluate whether it meets configured thresholds.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/coverage-assessment"
+    },
+    {
+      "name": "data-anonymisation",
+      "description": "Detect and redact PII and sensitive data in content before model submission (pre-hook) and in model outputs (post-hook) using configurable regex patterns and redaction modes.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/data-anonymisation"
+    },
+    {
+      "name": "delivery-metrics",
+      "description": "Collect and analyze delivery metrics including cycle time, defect rates, throughput, and bottleneck identification for retrospectives.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/delivery-metrics"
+    },
+    {
+      "name": "dependency-audit",
+      "description": "Scan project dependencies for known vulnerabilities (CVEs).",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/dependency-audit"
+    },
+    {
+      "name": "docs-architect",
+      "description": "Creates comprehensive technical documentation from existing codebases. Analyzes architecture, design patterns, and implementation details to produce long-form technical manuals and ebooks.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/docs-architect"
+    },
+    {
+      "name": "docx",
+      "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produ...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/docx"
+    },
+    {
+      "name": "domain-driven-design",
+      "description": "Plan and route Domain-Driven Design work from strategic modeling to tactical implementation and evented architecture patterns.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/domain-driven-design"
+    },
+    {
+      "name": "dotnet-architect",
+      "description": "Expert .NET backend architect specializing in C#, ASP.NET Core, Entity Framework, Dapper, and enterprise application patterns.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/dotnet-architect"
+    },
+    {
+      "name": "dotnet-backend",
+      "description": "Build ASP.NET Core 8+ backend services with EF Core, auth, background jobs, and production API patterns.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/dotnet-backend"
+    },
+    {
+      "name": "dotnet-backend-patterns",
+      "description": "Master C#/.NET backend development patterns for building robust APIs, MCP servers, and enterprise applications. Covers async/await, dependency injection, Entity Framework Core, Dapper, configuratio...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/dotnet-backend-patterns"
+    },
+    {
+      "name": "drift-detection",
+      "description": "Detect specification drift by comparing current implementation state against the approved specification and plan.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/drift-detection"
+    },
+    {
+      "name": "figma-design-sync",
+      "description": "Interact with Figma via MCP — read designs, extract component specs, validate against design system tokens. Formalises the existing optional Figma integration.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/figma-design-sync"
+    },
+    {
+      "name": "fix-planning",
+      "description": "Plan a minimal, targeted fix for a bug or incident with blast radius assessment, rollback path, and task breakdown.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/fix-planning"
+    },
+    {
+      "name": "frontend-dev-guidelines",
+      "description": "Opinionated frontend development standards for modern React + TypeScript applications. Covers Suspense-first data fetching, lazy loading, feature-based architecture, MUI v7 styling, TanStack Router...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/frontend-dev-guidelines"
+    },
+    {
+      "name": "frontend-developer",
+      "description": "Build React components, implement responsive layouts, and handle client-side state management. Masters React 19, Next.js 15, and modern frontend architecture.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/frontend-developer"
+    },
+    {
+      "name": "frontend-security-coder",
+      "description": "Expert in secure frontend coding practices specializing in XSS prevention, output sanitization, and client-side security patterns.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/frontend-security-coder"
+    },
+    {
+      "name": "frontend-ui-dark-ts",
+      "description": "Build dark-themed React applications using Tailwind CSS with custom theming, glassmorphism effects, and Framer Motion animations. Use when creating dashboards, admin panels, or data-rich interfaces...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/frontend-ui-dark-ts"
+    },
+    {
+      "name": "github-ops",
+      "description": "Interact with GitHub via MCP — manage issues, PRs, code search, Actions status, and releases.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/github-ops"
+    },
+    {
+      "name": "gitlab-ops",
+      "description": "Interact with GitLab via MCP — manage merge requests, pipeline status, container registry, and wiki integration.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/gitlab-ops"
+    },
+    {
+      "name": "governance-rules",
+      "description": "Evaluate compliance against organizational governance policies including PII protection, prompt security, data classification, and regulatory requirements.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/governance-rules"
+    },
+    {
+      "name": "hub-classification",
+      "description": "Classify user intent against available workflows and agents, then recommend the best match for dispatch.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/hub-classification"
+    },
+    {
+      "name": "incident-analysis",
+      "description": "Analyze production incidents by reconstructing timelines, identifying affected services, classifying severity, and collecting evidence from logs and traces.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/incident-analysis"
+    },
+    {
+      "name": "injection-detection",
+      "description": "Deterministic scan of agent and skill definitions for jailbreak phrases, missing refusal constraints, unconstrained data-access boundaries, exfiltration vectors, and instruction-override patterns (...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/injection-detection"
+    },
+    {
+      "name": "intent-capture",
+      "description": "Capture and structure a raw idea or business goal into a clear intent document with constraints, target users, and success criteria.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/intent-capture"
+    },
+    {
+      "name": "iteration-scoring",
+      "description": "Score BMAD iteration outcomes using quantitative metrics and qualitative assessment to track progress across build-measure-analyze-decide cycles.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/iteration-scoring"
+    },
+    {
+      "name": "knowledge-update",
+      "description": "Capture lessons learned from incidents or retrospectives as ADRs, playbook entries, or monitoring improvements for institutional knowledge.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/knowledge-update"
+    },
+    {
+      "name": "lint-analysis",
+      "description": "Run language-specific linters to detect code style violations, syntax errors, and potential bugs.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/lint-analysis"
+    },
+    {
+      "name": "m365-data-query",
+      "description": "Query Microsoft 365 data via Work-iq MCP — emails, meetings, Teams messages, OneDrive documents, and people directory.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/m365-data-query"
+    },
+    {
+      "name": "mcp-configuration",
+      "description": "Configure MCP servers for a consumer repository — auto-detect platform, recommend profiles, interview for fine-tuning, generate configuration, and verify connectivity.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/mcp-configuration"
+    },
+    {
+      "name": "mcp-fallback",
+      "description": "Canonical reference for fallback behavior when MCP servers are unavailable — documents what happens per category and server.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/mcp-fallback"
+    },
+    {
+      "name": "mslearn-docs-lookup",
+      "description": "Query Microsoft Learn documentation via MCP — fetch up-to-date .NET, Azure, M365, and PowerShell API references and guides.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/mslearn-docs-lookup"
+    },
+    {
+      "name": "nfr-review",
+      "description": "Review and define non-functional requirements (NFRs) covering security, performance, resilience, observability, and accessibility with measurable targets.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/nfr-review"
+    },
+    {
+      "name": "observability-readiness",
+      "description": "Assess observability readiness by verifying logging, metrics, tracing, and alerting coverage against release requirements.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/observability-readiness"
+    },
+    {
+      "name": "office-common",
+      "description": "Shared OOXML utilities for packing, unpacking, validating, and converting Office documents (.docx, .pptx, .xlsx). Provides LibreOffice integration, XML schema validation, tracked-change helpers, an...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/office-common"
+    },
+    {
+      "name": "parity-validation",
+      "description": "Validate behavioral and API parity between old and new system implementations during modernization or refactoring.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/parity-validation"
+    },
+    {
+      "name": "pdf",
+      "description": "Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, r...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/pdf"
+    },
+    {
+      "name": "plan-writing",
+      "description": "Structured task planning with clear breakdowns, dependencies, and verification criteria. Use when implementing features, refactoring, or any multi-step work.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/plan-writing"
+    },
+    {
+      "name": "planning-with-files",
+      "description": "Implements Manus-style file-based planning for complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when starting complex multi-step tasks, research projects, or any task requirin...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/planning-with-files"
+    },
+    {
+      "name": "playwright-browser-automation",
+      "description": "Browser automation via Playwright MCP — navigate, interact, inspect accessibility snapshots, record tests, and capture screenshots.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/playwright-browser-automation"
+    },
+    {
+      "name": "policy-gate",
+      "description": "Aggregate all upstream station reports and decide whether to APPROVE, BLOCK, or escalate a PR for human REVIEW. Applies rules G-BLOCK, G-REVIEW, and G-APPROVE with justified reasoning.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/policy-gate"
+    },
+    {
+      "name": "pptx",
+      "description": "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text fro...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/pptx"
+    },
+    {
+      "name": "pr-checks",
+      "description": "Generic PR/MR validation checks: frontmatter validation, naming conventions, broken link detection, YAML workflow linting, and test gap advisories. Delegates to ai-backbone-pr-checks for repository...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/pr-checks"
+    },
+    {
+      "name": "quality-report",
+      "description": "Aggregate results from all quality validation stations into a single, comprehensive quality report.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/quality-report"
+    },
+    {
+      "name": "react-best-practices",
+      "description": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance pat...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-best-practices"
+    },
+    {
+      "name": "react-flow-architect",
+      "description": "Expert ReactFlow architect for building interactive graph applications with hierarchical node-edge systems, performance optimization, and auto-layout integration. Use when creating or refactoring R...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-flow-architect"
+    },
+    {
+      "name": "react-flow-node-ts",
+      "description": "Create React Flow node components with TypeScript types, handles, and Zustand integration. Use when building custom nodes for React Flow canvas, creating visual workflow editors, or implementing no...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-flow-node-ts"
+    },
+    {
+      "name": "react-modernization",
+      "description": "Upgrade React applications to latest versions, migrate from class components to hooks, and adopt concurrent features. Use when modernizing React codebases, migrating to React Hooks, or upgrading to...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-modernization"
+    },
+    {
+      "name": "react-native-architecture",
+      "description": "Build production React Native apps with Expo, navigation, native modules, offline sync, and cross-platform patterns. Use when developing mobile apps, implementing native integrations, or architecti...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-native-architecture"
+    },
+    {
+      "name": "react-patterns",
+      "description": "Modern React patterns and principles. Hooks, composition, performance, TypeScript best practices.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-patterns"
+    },
+    {
+      "name": "react-state-management",
+      "description": "Master modern React state management with Redux Toolkit, Zustand, Jotai, and React Query. Use when setting up global state, managing server state, or choosing between state management solutions.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-state-management"
+    },
+    {
+      "name": "react-ui-patterns",
+      "description": "Modern React UI patterns for loading states, error handling, and data fetching. Use when building UI components, handling async data, or managing UI states.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/react-ui-patterns"
+    },
+    {
+      "name": "red-team-simulation",
+      "description": "Generate adversarial exploit prompts and tool-misuse scenarios against agent definitions to assess resilience. Covers goal hijacking, tool misuse, context poisoning, privilege escalation, and denia...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/red-team-simulation"
+    },
+    {
+      "name": "repo-analysis",
+      "description": "Explore and analyze a code repository to understand its structure, services, components, dependencies, and architectural patterns. Produces high-level documentation for downstream workflows.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/repo-analysis"
+    },
+    {
+      "name": "risk-scoring",
+      "description": "Compute an overall risk score by aggregating findings from PII scans, security reviews, and policy validations with weighted risk factors.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/risk-scoring"
+    },
+    {
+      "name": "root-cause-analysis",
+      "description": "Systematically investigate failures to identify root causes with evidence, contributing factors, and prevention recommendations.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/root-cause-analysis"
+    },
+    {
+      "name": "sandbox-execution",
+      "description": "Simulate agent definitions against structured malicious inputs, prompt injection payloads, and exfiltration/privilege-escalation attempts in a read-only sandbox. Assess resistance to each attack sc...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sandbox-execution"
+    },
+    {
+      "name": "sdlc-ba-audit",
+      "description": "Perform a functional snapshot of an existing system (brownfield audit) and produce an evolution delta matrix qualifying what is new, evolving, preserved, or deprecated.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-ba-audit"
+    },
+    {
+      "name": "sdlc-ba-functional-design",
+      "description": "Produce per-feature functional design deliverables: user stories, user journeys, screen specifications, notifications, test scenarios, test data, and the cross-feature E2E test plan.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-ba-functional-design"
+    },
+    {
+      "name": "sdlc-ba-scoping",
+      "description": "Define the product scope through vision statement, business glossary (DDD ubiquitous language), actor/role identification, and functional requirements catalogue.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-ba-scoping"
+    },
+    {
+      "name": "sdlc-ba-specification",
+      "description": "Build the domain model, decompose into epics and features, and consolidate business rules — transforming scoping deliverables into a structured specification ready for functional design.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-ba-specification"
+    },
+    {
+      "name": "sdlc-change-impact",
+      "description": "Analyze the impact of a change request across all SDLC deliverables and produce an ordered amendment sequence that surgically updates affected documents.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-change-impact"
+    },
+    {
+      "name": "sdlc-confluence-sync",
+      "description": "Synchronize SDLC deliverables with Confluence: push markdown to Confluence pages, pull status labels and review comments, and manage the review cycle.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-confluence-sync"
+    },
+    {
+      "name": "sdlc-deliverable-validation",
+      "description": "Audit any SDLC deliverable for quality: template conformance, completeness, placeholder removal, traceability integrity, and production confidence scoring.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-deliverable-validation"
+    },
+    {
+      "name": "sdlc-review-arbitration",
+      "description": "Conflict escalation protocol for independent review — structures human arbitration when reviewer and producer disagree.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-review-arbitration"
+    },
+    {
+      "name": "sdlc-scaffold",
+      "description": "Create the standard docs/ directory structure for an SDLC project — both the base scaffold and per-feature scaffolds after fan-out discovery.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-scaffold"
+    },
+    {
+      "name": "sdlc-steer-governance",
+      "description": "Prepare steering committee (COPIL) presentation packs and produce Go/No-Go release decisions by aggregating quality, security, test, and risk data.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-steer-governance"
+    },
+    {
+      "name": "sdlc-steer-init",
+      "description": "Initialize the project steering framework with team composition, capacity allocation, budget structure, and KPI baselines.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-steer-init"
+    },
+    {
+      "name": "sdlc-steer-planning",
+      "description": "Create the sprint plan, project roadmap, and initial risk register — establishing the execution framework for all downstream domain pipelines.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-steer-planning"
+    },
+    {
+      "name": "sdlc-steer-sprint",
+      "description": "Track sprint progress, monitor system health metrics, and assess evolving risks — producing recurring reports for steering committee preparation.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-steer-sprint"
+    },
+    {
+      "name": "sdlc-tech-architecture",
+      "description": "Define the system architecture through C4 context diagrams, architecture decision records (ADRs), technology stack extraction, and enabler identification.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-tech-architecture"
+    },
+    {
+      "name": "sdlc-tech-audit",
+      "description": "Perform a technical stack assessment and gap analysis for brownfield projects, identifying compliance gaps, migration paths, and estimated effort.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-tech-audit"
+    },
+    {
+      "name": "sdlc-tech-design",
+      "description": "Produce the technical design dossier: data model with DDL and migrations, OpenAPI-compliant API contracts, test strategy, and the implementation plan.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-tech-design"
+    },
+    {
+      "name": "sdlc-tech-implementation",
+      "description": "Execute the implementation plan wave-by-wave per sprint, producing code with full T0-T2 context injection, BA-traced tests, and wave gate validation.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-tech-implementation"
+    },
+    {
+      "name": "sdlc-tech-quality",
+      "description": "Continuously monitor specification-to-code alignment through drift detection, automated code review, and E2E Playwright script generation.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-tech-quality"
+    },
+    {
+      "name": "sdlc-test-campaign",
+      "description": "Launch E2E/UAT test campaigns by executing Playwright scripts, logging anomalies, and producing qualification reports with Go/No-Go quality gate data.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-test-campaign"
+    },
+    {
+      "name": "sdlc-test-performance",
+      "description": "Execute performance tests (k6/Artillery), collect results, and analyze against defined thresholds with baseline comparison to detect regressions.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/sdlc-test-performance"
+    },
+    {
+      "name": "secret-scan",
+      "description": "Scan PR diffs and repository files for hardcoded secrets, API keys, tokens, credentials, vulnerable dependencies, and dangerous shell/code patterns (S-01 through S-04).",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/secret-scan"
+    },
+    {
+      "name": "security-scan",
+      "description": "Run security scanning tools (SAST and/or DAST) to detect vulnerabilities in source code and running applications.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/security-scan"
+    },
+    {
+      "name": "semgrep-analysis",
+      "description": "Run SemGrep SAST rules via MCP — scan code for vulnerabilities, query rule registry, and get fix suggestions.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/semgrep-analysis"
+    },
+    {
+      "name": "soprasteria-agent-policy-guard",
+      "description": "Shift-left policy guard that enforces the A1-A6 station gate rules when creating or modifying agent and skill definitions. Validates frontmatter, tool allowlists, security hardening, and prompt inj...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/soprasteria-agent-policy-guard"
+    },
+    {
+      "name": "soprasteria-dep",
+      "description": "DevSecOps Engineering Platform (DEP) skills for CI/CD pipeline setup, workstation configuration, infrastructure-as-code provisioning, and environment & pipeline provisioning via Project Booster.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/soprasteria-dep"
+    },
+    {
+      "name": "spec-clarify",
+      "description": "Turn ambiguity into explicit decisions, assumptions, or open questions.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/spec-clarify"
+    },
+    {
+      "name": "spec-constitution",
+      "description": "Create or refine the project constitution so the team and the agent work from clear delivery principles.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/spec-constitution"
+    },
+    {
+      "name": "spec-feature",
+      "description": "Produce a functional feature specification that explains what should be built, for whom, why, and how success will be judged.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/spec-feature"
+    },
+    {
+      "name": "spec-plan",
+      "description": "Produce an implementation plan that explains how the feature will be delivered.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/spec-plan"
+    },
+    {
+      "name": "spec-quality-gate",
+      "description": "Confirm that the specification package is complete, coherent, and safe enough for implementation.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/spec-quality-gate"
+    },
+    {
+      "name": "spec-tasks",
+      "description": "Break down the implementation plan into reviewable, sequenced tasks.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/spec-tasks"
+    },
+    {
+      "name": "static-analysis",
+      "description": "Run static analysis tools to detect code quality issues, bugs, code smells, and security vulnerabilities.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/static-analysis"
+    },
+    {
+      "name": "test-strategy",
+      "description": "Define a risk-aligned test strategy covering scope, approach, coverage expectations, and test types for a feature or project.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/test-strategy"
+    },
+    {
+      "name": "test-validation",
+      "description": "Test skill with intentional validation issues",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/test-validation"
+    },
+    {
+      "name": "web-accessibility",
+      "description": "Validate web applications against WCAG 2.1 AA covering contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Generic skill — extend with client-specific brand color contrast t...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/web-accessibility"
+    },
+    {
+      "name": "workflow-engine",
+      "description": "Invoke a nested workflow pipeline (quality-validation or pr-validation) from within a parent delivery workflow.",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/workflow-engine"
+    },
+    {
+      "name": "xlsx",
+      "description": "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .csv, or .tsv file (e.g., ...",
+      "tags": [
+        "skills",
+        "sdlc"
+      ],
+      "source": "./.apm/skills/xlsx"
+    }
+  ]
+}
