@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-tech-quality",
+  "description": "Continuously monitor specification-to-code alignment through drift detection, automated code review, and E2E Playwright script generation.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

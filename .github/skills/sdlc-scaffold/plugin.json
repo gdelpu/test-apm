@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-scaffold",
+  "description": "Create the standard docs/ directory structure for an SDLC project — both the base scaffold and per-feature scaffolds after fan-out discovery.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "spec-quality-gate",
+  "description": "Confirm that the specification package is complete, coherent, and safe enough for implementation.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

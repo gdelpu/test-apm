@@ -1,0 +1,13 @@
+{
+  "name": "spec-clarify",
+  "description": "Turn ambiguity into explicit decisions, assumptions, or open questions.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

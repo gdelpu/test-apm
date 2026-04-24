@@ -116,7 +116,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://innersource.soprasteria.com/ai-backbone/ai-sdlc-foundation"
+    "url": "https://github.com/gdelpu/test-apm"
   },
   "registry": {
     "type": "gitlab-generic",
@@ -156,7 +156,7 @@
     ]
   },
   "dependencies": [],
-  "generatedAt": "2026-04-23T12:25:53Z",
+  "generatedAt": "2026-04-24T06:44:48Z",
   "plugins": [
     {
       "name": "ssg-ai-backbone",
@@ -174,7 +174,7 @@
       ],
       "source": {
         "type": "url",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git"
+        "url": "https://github.com/gdelpu/test-apm.git"
       }
     },
     {
@@ -186,7 +186,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/analysis-agent"
       }
     },
@@ -199,7 +199,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/architecture-governance"
       }
     },
@@ -212,7 +212,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/bmad-orchestrator"
       }
     },
@@ -225,7 +225,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/branding"
       }
     },
@@ -238,7 +238,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/bug-fixer"
       }
     },
@@ -251,7 +251,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/hub-orchestrator"
       }
     },
@@ -264,7 +264,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/implementer"
       }
     },
@@ -277,7 +277,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/modernization-agent"
       }
     },
@@ -290,7 +290,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/modernization-orchestrator"
       }
     },
@@ -303,7 +303,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/pr-validator"
       }
     },
@@ -316,7 +316,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/quality-validator"
       }
     },
@@ -329,7 +329,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/refactor-assessor"
       }
     },
@@ -342,7 +342,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/refactor-implementer"
       }
     },
@@ -355,7 +355,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/refactor-orchestrator"
       }
     },
@@ -368,7 +368,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/refactor-parity-checker"
       }
     },
@@ -381,7 +381,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/refactor-planner"
       }
     },
@@ -394,7 +394,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/repository-analyzer"
       }
     },
@@ -407,7 +407,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/reverse-backlog"
       }
     },
@@ -420,7 +420,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/reverse-user-story"
       }
     },
@@ -433,7 +433,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-ba-analyst"
       }
     },
@@ -446,7 +446,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-ba-reviewer"
       }
     },
@@ -459,7 +459,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-coordinator"
       }
     },
@@ -472,7 +472,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-steer-manager"
       }
     },
@@ -485,7 +485,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-steer-reviewer"
       }
     },
@@ -498,7 +498,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-tech-architect"
       }
     },
@@ -511,7 +511,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-tech-reviewer"
       }
     },
@@ -524,7 +524,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/sdlc-test-executor"
       }
     },
@@ -537,7 +537,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/security-reviewer"
       }
     },
@@ -550,7 +550,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/spec-orchestrator"
       }
     },
@@ -563,7 +563,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/station-orchestrator"
       }
     },
@@ -576,7 +576,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/agents/workflow-orchestrator"
       }
     },
@@ -589,7 +589,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/adaptive-decision"
       }
     },
@@ -602,7 +602,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/adr-generation"
       }
     },
@@ -615,7 +615,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/agent-policy-guard"
       }
     },
@@ -628,7 +628,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/agent-policy-validation"
       }
     },
@@ -641,7 +641,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/ai-backbone-pr-checks"
       }
     },
@@ -654,7 +654,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/api-design-principles"
       }
     },
@@ -667,7 +667,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/api-documentation"
       }
     },
@@ -680,7 +680,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/api-patterns"
       }
     },
@@ -693,7 +693,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/api-security-best-practices"
       }
     },
@@ -706,7 +706,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/architecture-guardrails"
       }
     },
@@ -719,7 +719,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/assets-and-templates"
       }
     },
@@ -732,7 +732,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/atlassian-ops"
       }
     },
@@ -745,7 +745,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/audit-checklist"
       }
     },
@@ -758,7 +758,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/audit-tracing"
       }
     },
@@ -771,7 +771,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/aws-resource-query"
       }
     },
@@ -784,7 +784,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/azdo-ops"
       }
     },
@@ -797,7 +797,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/azure-resource-query"
       }
     },
@@ -810,7 +810,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brand-accessibility"
       }
     },
@@ -823,7 +823,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brand-app"
       }
     },
@@ -836,7 +836,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brand-assets"
       }
     },
@@ -849,7 +849,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brand-audit"
       }
     },
@@ -862,7 +862,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brand-core"
       }
     },
@@ -875,7 +875,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brand-document"
       }
     },
@@ -888,7 +888,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/brownfield-context"
       }
     },
@@ -901,7 +901,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/bug-reproduction"
       }
     },
@@ -914,7 +914,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/bug-triage"
       }
     },
@@ -927,7 +927,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/cc-skill-backend-patterns"
       }
     },
@@ -940,7 +940,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/cc-skill-coding-standards"
       }
     },
@@ -953,7 +953,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/cc-skill-frontend-patterns"
       }
     },
@@ -966,7 +966,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/code-implementation"
       }
     },
@@ -979,7 +979,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/code-refactoring"
       }
     },
@@ -992,7 +992,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/code-refactoring-refactor-clean"
       }
     },
@@ -1005,7 +1005,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/code-refactoring-tech-debt"
       }
     },
@@ -1018,7 +1018,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/context7-docs"
       }
     },
@@ -1031,7 +1031,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/coverage-assessment"
       }
     },
@@ -1044,7 +1044,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/data-anonymisation"
       }
     },
@@ -1057,7 +1057,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/delivery-metrics"
       }
     },
@@ -1070,7 +1070,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/dependency-audit"
       }
     },
@@ -1083,7 +1083,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/docs-architect"
       }
     },
@@ -1096,7 +1096,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/docx"
       }
     },
@@ -1109,7 +1109,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/domain-driven-design"
       }
     },
@@ -1122,7 +1122,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/dotnet-architect"
       }
     },
@@ -1135,7 +1135,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/dotnet-backend"
       }
     },
@@ -1148,7 +1148,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/dotnet-backend-patterns"
       }
     },
@@ -1161,7 +1161,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/drift-detection"
       }
     },
@@ -1174,7 +1174,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/figma-design-sync"
       }
     },
@@ -1187,7 +1187,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/fix-planning"
       }
     },
@@ -1200,7 +1200,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/frontend-dev-guidelines"
       }
     },
@@ -1213,7 +1213,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/frontend-developer"
       }
     },
@@ -1226,7 +1226,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/frontend-security-coder"
       }
     },
@@ -1239,7 +1239,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/frontend-ui-dark-ts"
       }
     },
@@ -1252,7 +1252,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/github-ops"
       }
     },
@@ -1265,7 +1265,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/gitlab-ops"
       }
     },
@@ -1278,7 +1278,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/governance-rules"
       }
     },
@@ -1291,7 +1291,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/hub-classification"
       }
     },
@@ -1304,7 +1304,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/incident-analysis"
       }
     },
@@ -1317,7 +1317,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/injection-detection"
       }
     },
@@ -1330,7 +1330,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/intent-capture"
       }
     },
@@ -1343,7 +1343,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/iteration-scoring"
       }
     },
@@ -1356,7 +1356,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/knowledge-update"
       }
     },
@@ -1369,7 +1369,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/lint-analysis"
       }
     },
@@ -1382,7 +1382,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/m365-data-query"
       }
     },
@@ -1395,7 +1395,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/mcp-configuration"
       }
     },
@@ -1408,7 +1408,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/mcp-fallback"
       }
     },
@@ -1421,7 +1421,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/mslearn-docs-lookup"
       }
     },
@@ -1434,7 +1434,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/nfr-review"
       }
     },
@@ -1447,7 +1447,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/observability-readiness"
       }
     },
@@ -1460,7 +1460,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/office-common"
       }
     },
@@ -1473,7 +1473,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/parity-validation"
       }
     },
@@ -1486,7 +1486,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/pdf"
       }
     },
@@ -1499,7 +1499,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/plan-writing"
       }
     },
@@ -1512,7 +1512,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/planning-with-files"
       }
     },
@@ -1525,7 +1525,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/playwright-browser-automation"
       }
     },
@@ -1538,7 +1538,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/policy-gate"
       }
     },
@@ -1551,7 +1551,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/pptx"
       }
     },
@@ -1564,7 +1564,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/pr-checks"
       }
     },
@@ -1577,7 +1577,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/quality-report"
       }
     },
@@ -1590,7 +1590,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-best-practices"
       }
     },
@@ -1603,7 +1603,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-flow-architect"
       }
     },
@@ -1616,7 +1616,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-flow-node-ts"
       }
     },
@@ -1629,7 +1629,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-modernization"
       }
     },
@@ -1642,7 +1642,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-native-architecture"
       }
     },
@@ -1655,7 +1655,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-patterns"
       }
     },
@@ -1668,7 +1668,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-state-management"
       }
     },
@@ -1681,7 +1681,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/react-ui-patterns"
       }
     },
@@ -1694,7 +1694,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/red-team-simulation"
       }
     },
@@ -1707,7 +1707,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/repo-analysis"
       }
     },
@@ -1720,7 +1720,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/risk-scoring"
       }
     },
@@ -1733,7 +1733,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/root-cause-analysis"
       }
     },
@@ -1746,7 +1746,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sandbox-execution"
       }
     },
@@ -1759,7 +1759,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-ba-audit"
       }
     },
@@ -1772,7 +1772,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-ba-functional-design"
       }
     },
@@ -1785,7 +1785,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-ba-scoping"
       }
     },
@@ -1798,7 +1798,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-ba-specification"
       }
     },
@@ -1811,7 +1811,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-change-impact"
       }
     },
@@ -1824,7 +1824,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-confluence-sync"
       }
     },
@@ -1837,7 +1837,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-deliverable-validation"
       }
     },
@@ -1850,7 +1850,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-review-arbitration"
       }
     },
@@ -1863,7 +1863,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-scaffold"
       }
     },
@@ -1876,7 +1876,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-steer-governance"
       }
     },
@@ -1889,7 +1889,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-steer-init"
       }
     },
@@ -1902,7 +1902,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-steer-planning"
       }
     },
@@ -1915,7 +1915,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-steer-sprint"
       }
     },
@@ -1928,7 +1928,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-tech-architecture"
       }
     },
@@ -1941,7 +1941,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-tech-audit"
       }
     },
@@ -1954,7 +1954,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-tech-design"
       }
     },
@@ -1967,7 +1967,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-tech-implementation"
       }
     },
@@ -1980,7 +1980,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-tech-quality"
       }
     },
@@ -1993,7 +1993,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-test-campaign"
       }
     },
@@ -2006,7 +2006,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/sdlc-test-performance"
       }
     },
@@ -2019,7 +2019,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/secret-scan"
       }
     },
@@ -2032,7 +2032,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/security-scan"
       }
     },
@@ -2045,7 +2045,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/semgrep-analysis"
       }
     },
@@ -2058,7 +2058,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/soprasteria-agent-policy-guard"
       }
     },
@@ -2071,7 +2071,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/soprasteria-dep"
       }
     },
@@ -2084,7 +2084,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/spec-clarify"
       }
     },
@@ -2097,7 +2097,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/spec-constitution"
       }
     },
@@ -2110,7 +2110,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/spec-feature"
       }
     },
@@ -2123,7 +2123,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/spec-plan"
       }
     },
@@ -2136,7 +2136,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/spec-quality-gate"
       }
     },
@@ -2149,7 +2149,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/spec-tasks"
       }
     },
@@ -2162,7 +2162,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/static-analysis"
       }
     },
@@ -2175,7 +2175,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/test-strategy"
       }
     },
@@ -2188,7 +2188,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/test-validation"
       }
     },
@@ -2201,7 +2201,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/web-accessibility"
       }
     },
@@ -2214,7 +2214,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/workflow-engine"
       }
     },
@@ -2227,7 +2227,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/skills/xlsx"
       }
     },
@@ -2241,7 +2241,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/bmad"
       }
     },
@@ -2255,7 +2255,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/bug-fixing"
       }
     },
@@ -2269,7 +2269,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/compliance-check"
       }
     },
@@ -2283,7 +2283,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/delivery-retrospective"
       }
     },
@@ -2297,7 +2297,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/feature-implementation"
       }
     },
@@ -2311,7 +2311,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/idea-to-spec"
       }
     },
@@ -2325,7 +2325,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/implementation-loop"
       }
     },
@@ -2339,7 +2339,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/incident-resolution"
       }
     },
@@ -2353,7 +2353,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/maturity-assessment"
       }
     },
@@ -2367,7 +2367,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/modernization"
       }
     },
@@ -2381,7 +2381,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/pr-validation"
       }
     },
@@ -2395,7 +2395,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/quality-validation"
       }
     },
@@ -2409,7 +2409,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/release-readiness"
       }
     },
@@ -2423,7 +2423,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/sdlc-ba"
       }
     },
@@ -2437,7 +2437,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/sdlc-full"
       }
     },
@@ -2451,7 +2451,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/sdlc-steer"
       }
     },
@@ -2465,7 +2465,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/sdlc-tech"
       }
     },
@@ -2479,7 +2479,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/sdlc-test"
       }
     },
@@ -2493,7 +2493,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/spec-kit"
       }
     },
@@ -2507,7 +2507,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/workflows/spec-to-execution"
       }
     },
@@ -2520,7 +2520,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/convert-md-to-docx-and-pdf"
       }
     },
@@ -2533,7 +2533,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/create-one-pager"
       }
     },
@@ -2546,7 +2546,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/soprasteria-brand-audit"
       }
     },
@@ -2559,7 +2559,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/soprasteria-brand-refactor"
       }
     },
@@ -2572,7 +2572,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-bmad"
       }
     },
@@ -2585,7 +2585,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-bug-fixing"
       }
     },
@@ -2598,7 +2598,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-feature"
       }
     },
@@ -2611,7 +2611,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-maturity-assessment"
       }
     },
@@ -2624,7 +2624,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-modernization"
       }
     },
@@ -2637,7 +2637,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-pr-validation"
       }
     },
@@ -2650,7 +2650,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-quality"
       }
     },
@@ -2663,7 +2663,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/prompts/workflow-spec-kit"
       }
     },
@@ -2676,7 +2676,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/instructions/file-output"
       }
     },
@@ -2689,7 +2689,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/instructions/mcp-integration"
       }
     },
@@ -2702,7 +2702,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/instructions/output-metadata"
       }
     },
@@ -2716,7 +2716,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/pre/input-validation/ba"
       }
     },
@@ -2730,7 +2730,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/pre/input-validation/base"
       }
     },
@@ -2744,7 +2744,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/pre/input-validation/steer"
       }
     },
@@ -2758,7 +2758,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/pre/input-validation/tech"
       }
     },
@@ -2772,7 +2772,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/pre/input-validation/test"
       }
     },
@@ -2786,7 +2786,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/pre/verify-source-manifest"
       }
     },
@@ -2800,7 +2800,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/post/adr-completeness"
       }
     },
@@ -2814,7 +2814,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/post/confluence-push"
       }
     },
@@ -2828,7 +2828,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/post/quality-control"
       }
     },
@@ -2842,7 +2842,7 @@
       ],
       "source": {
         "type": "git-subdir",
-        "url": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation.git",
+        "repo": "gdelpu/test-apm",
         "subdir": ".apm/hooks/post/sprint-fidelity-check"
       }
     }

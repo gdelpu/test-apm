@@ -1,0 +1,13 @@
+{
+  "name": "context7-docs",
+  "description": "Fetch up-to-date, version-specific library documentation via Context7 MCP — resolve library IDs and query current docs for any framework or package.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

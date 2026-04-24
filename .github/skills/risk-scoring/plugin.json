@@ -1,0 +1,13 @@
+{
+  "name": "risk-scoring",
+  "description": "Compute an overall risk score by aggregating findings from PII scans, security reviews, and policy validations with weighted risk factors.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

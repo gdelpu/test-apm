@@ -1,0 +1,13 @@
+{
+  "name": "react-patterns",
+  "description": "Modern React patterns and principles. Hooks, composition, performance, TypeScript best practices.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

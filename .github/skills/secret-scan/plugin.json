@@ -1,0 +1,13 @@
+{
+  "name": "secret-scan",
+  "description": "Scan PR diffs and repository files for hardcoded secrets, API keys, tokens, credentials, vulnerable dependencies, and dangerous shell/code patterns (S-01 through S-04).",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "spec-constitution",
+  "description": "Create or refine the project constitution so the team and the agent work from clear delivery principles.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

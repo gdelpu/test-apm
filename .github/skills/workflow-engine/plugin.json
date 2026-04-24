@@ -1,0 +1,13 @@
+{
+  "name": "workflow-engine",
+  "description": "Invoke a nested workflow pipeline (quality-validation or pr-validation) from within a parent delivery workflow.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

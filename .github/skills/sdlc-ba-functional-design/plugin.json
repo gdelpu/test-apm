@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-ba-functional-design",
+  "description": "Produce per-feature functional design deliverables: user stories, user journeys, screen specifications, notifications, test scenarios, test data, and the cross-feature E2E test plan.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

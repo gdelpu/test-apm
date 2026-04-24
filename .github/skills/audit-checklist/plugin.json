@@ -1,0 +1,13 @@
+{
+  "name": "audit-checklist",
+  "description": "Generic structured checklist for auditing applications, documents, presentations, and communication assets against brand guidelines and accessibility standards. Extend with client-specific brand sk...",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

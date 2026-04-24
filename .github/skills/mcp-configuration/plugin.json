@@ -1,0 +1,13 @@
+{
+  "name": "mcp-configuration",
+  "description": "Configure MCP servers for a consumer repository — auto-detect platform, recommend profiles, interview for fine-tuning, generate configuration, and verify connectivity.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

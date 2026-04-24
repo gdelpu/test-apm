@@ -1,0 +1,9 @@
+name: scenario-2-still-bad-workflow
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - run: echo "still missing permissions and uses @main"

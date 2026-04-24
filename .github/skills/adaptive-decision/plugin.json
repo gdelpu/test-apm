@@ -1,0 +1,13 @@
+{
+  "name": "adaptive-decision",
+  "description": "Make data-driven pivot-or-persevere decisions in BMAD loops by evaluating experiment results against success criteria.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

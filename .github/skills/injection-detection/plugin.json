@@ -1,0 +1,13 @@
+{
+  "name": "injection-detection",
+  "description": "Deterministic scan of agent and skill definitions for jailbreak phrases, missing refusal constraints, unconstrained data-access boundaries, exfiltration vectors, and instruction-override patterns (...",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

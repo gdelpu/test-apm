@@ -1,0 +1,13 @@
+{
+  "name": "bug-reproduction",
+  "description": "Create reliable reproduction scenarios for bugs with documented steps, environment conditions, and expected vs actual behavior.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

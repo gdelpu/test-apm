@@ -1,0 +1,13 @@
+{
+  "name": "agent-policy-validation",
+  "description": "Combined policy validation skill that orchestrates agent-policy-guard (A1) structural checks and prompt-hardening checks (A3 PI-02/PI-04) into a single validation pass for agent and skill definitions.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

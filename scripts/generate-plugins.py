@@ -27,22 +27,22 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 APM_DIR = REPO_ROOT / ".apm"
 
 GITLAB_REPO_URL = (
-    "https://innersource.soprasteria.com/ssg-ia/ai.backbone/"
-    "cognitive-hub/internals/ai-sdlc-foundation.git"
+    "https://github.com/gdelpu/test-apm.git"
 )
+GITLAB_REPO_SLUG = "gdelpu/test-apm"
 
 COMMON_FIELDS = {
     "version": "0.0.34",
     "author": "Sopra Steria Group",
     "license": "UNLICENSED",
-    "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+    "repository": GITLAB_REPO_URL,
     "homepage": "https://steria.sharepoint.com/sites/aibackbone/SitePages/Home.aspx",
 }
 
 
 def git_subdir_source(subdir: str) -> dict:
     """Build a git-subdir marketplace source pointing at the GitLab monorepo."""
-    return {"type": "git-subdir", "url": GITLAB_REPO_URL, "subdir": subdir}
+    return {"type": "git-subdir", "repo": GITLAB_REPO_SLUG, "subdir": subdir}
 
 # ---------------------------------------------------------------------------
 # Helpers

@@ -1,0 +1,13 @@
+{
+  "name": "nfr-review",
+  "description": "Review and define non-functional requirements (NFRs) covering security, performance, resilience, observability, and accessibility with measurable targets.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

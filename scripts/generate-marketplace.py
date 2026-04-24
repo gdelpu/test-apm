@@ -28,11 +28,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 APM_YML = REPO_ROOT / "apm.yml"
 APM_DIR = REPO_ROOT / ".apm"
 
+REPO_URL = "https://github.com/gdelpu/test-apm"
+
 # GitLab monorepo URL — plugins live here, marketplace may be on GitHub
 GITLAB_REPO_URL = (
-    "https://innersource.soprasteria.com/ssg-ia/ai.backbone/"
-    "cognitive-hub/internals/ai-sdlc-foundation.git"
+    "https://github.com/gdelpu/test-apm.git"
 )
+GITLAB_REPO_SLUG = "gdelpu/test-apm"
 
 
 def count_files(directory: Path, pattern: str = "*.md") -> int:
@@ -108,7 +110,7 @@ def _parse_frontmatter(path: Path) -> dict:
 
 def _git_subdir(subdir: str) -> dict:
     """APM git-subdir source object pointing at the GitLab monorepo."""
-    return {"type": "git-subdir", "url": GITLAB_REPO_URL, "subdir": subdir}
+    return {"type": "git-subdir", "repo": GITLAB_REPO_SLUG, "subdir": subdir}
 
 
 def _plugin_entry(name: str, description: str, tags: list, subdir: str) -> dict:
@@ -262,7 +264,7 @@ def generate_marketplace(apm: dict) -> dict:
         # Distribution
         "repository": {
             "type": "git",
-            "url": "https://innersource.soprasteria.com/ai-backbone/ai-sdlc-foundation",
+            "url": REPO_URL,
         },
         "registry": {
             "type": "gitlab-generic",

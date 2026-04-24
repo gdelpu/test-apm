@@ -1,0 +1,13 @@
+{
+  "name": "brand-accessibility",
+  "description": "Validate web applications against WCAG 2.1 AA when applying or auditing branding. Covers contrast, keyboard navigation, ARIA, semantic HTML, and motion preferences. Default brand: Sopra Steria.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

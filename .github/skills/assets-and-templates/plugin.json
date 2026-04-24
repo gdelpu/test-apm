@@ -1,0 +1,13 @@
+{
+  "name": "assets-and-templates",
+  "description": "Guidance for discovering, classifying, and using official brand logos, templates, and supporting assets. Generic skill — extend with client-specific asset inventories.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

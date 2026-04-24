@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-confluence-sync",
+  "description": "Synchronize SDLC deliverables with Confluence: push markdown to Confluence pages, pull status labels and review comments, and manage the review cycle.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

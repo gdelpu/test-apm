@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-ba-specification",
+  "description": "Build the domain model, decompose into epics and features, and consolidate business rules — transforming scoping deliverables into a structured specification ready for functional design.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

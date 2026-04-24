@@ -1,0 +1,13 @@
+{
+  "name": "sdlc-change-impact",
+  "description": "Analyze the impact of a change request across all SDLC deliverables and produce an ordered amendment sequence that surgically updates affected documents.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

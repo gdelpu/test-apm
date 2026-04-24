@@ -1,0 +1,11 @@
+confluence:
+  instance_url: "https://constellation-di.atlassian.net/wiki"
+  publishing:
+    publish_only_validated: false
+    update_existing_pages: true
+    add_status_banner: true
+    mermaid_render_method: "image"
+  scroll_documents:
+    enabled: false
+    version: ""
+    on_version_missing: "create"

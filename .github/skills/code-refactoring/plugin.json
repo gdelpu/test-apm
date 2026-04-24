@@ -1,0 +1,13 @@
+{
+  "name": "code-refactoring",
+  "description": "Execute safe, incremental refactoring of existing code to improve structure, readability, or maintainability without changing external behavior.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

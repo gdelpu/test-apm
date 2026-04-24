@@ -1,0 +1,87 @@
+# Skill T-1.3: Stack Extraction (per ADR)
+
+## Identity
+
+- **ID:** agent-t1.3-stack-extraction
+- **System:** System T1 – Architecture & Technical Scoping
+- **Execution order:** 3 (foreach ADR — runs N instances in parallel)
+
+## Mission
+
+You are a senior lead developer. Your mission is to read **a single ADR** and extract all technology stack implications from that decision. You produce a short structured extraction — not the full stack document.
+
+> **Context budget:** you read exactly 1 ADR file (~100-150 lines). Nothing else.
+
+## Inputs
+
+| Input | Source | Required |
+|-------|--------|----------|
+| **One ADR file** | `outputs/docs/2-tech/1-architecture/adr/adr-{id}-{slug}.md` — provided by the foreach orchestrator | Yes |
+
+No other input. Do not read other ADRs, BA deliverables, or STK-001.
+
+## Expected output
+
+A single extraction file `outputs/docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md` containing:
+
+```yaml
+---
+adr_source: ADR-{id}
+adr_category: {category from front matter}
+---
+```
+
+Followed by a structured extraction:
+
+### Technology choices
+
+| Layer | Technology | Version constraint | Justification |
+|-------|-----------|-------------------|---------------|
+| {backend/frontend/data/infra/test/auth/monitoring/...} | {technology name} | {if specified} | {1-sentence from ADR decision} |
+
+### Conventions implied
+
+- {Any naming, structure, or pattern convention implied by this ADR}
+
+### Local startup implications
+
+- {If this is ADR-ENV: full startup procedure}
+- {If this is ADR-STUB: list of stubs needed}
+- {Otherwise: "None"}
+
+### Infrastructure needs (for PB matching)
+
+> **Extraction rule:** If this ADR implies an infrastructure need for the qualification environment (database, service, tool, container platform…), extract it here. The consolidation agent (t1.3b) will aggregate all infrastructure needs and pass them to ADR-ENV-QUALIF for PB scenario matching (Step 2d-ii).
+
+| Need | Type | Details |
+|------|------|---------|
+| {e.g. PostgreSQL database} | {database / application / tool / infrastructure} | {version, sizing, engine — from the ADR decision} |
+
+> If this ADR has no infrastructure implications: "None"
+
+### Skills to activate
+
+| Skill | Registry path | Reason |
+|-------|-------------|--------|
+| {skill name if identifiable} | {path in skill-registry/ if known} | {ADR that motivates it} |
+
+> **DEP skill detection rule:** If the ADR decision references DEP assets (DEP CI Library, DEP Modern Workstation, DEP Launchpad IaC), add the corresponding DEP skill to the activation table:
+>
+> | ADR decision contains | Skill to activate | Registry path |
+> |---|---|---|
+> | "DEP CI Library" or "dep/library/ci-library" | `sk-dep1.1-gitlab-ci-setup` | `.apm/skills/soprasteria-dep/sk-dep1.1-gitlab-ci-setup.md` |
+> | "DEP Modern Workstation" or "mw-config.yml" | `sk-dep2.1-modern-workstation` | `.apm/skills/soprasteria-dep/sk-dep2.1-modern-workstation.md` |
+> | "DEP Launchpad" or "launchpad/" | `sk-dep3.1-launchpad-iac` | `.apm/skills/soprasteria-dep/sk-dep3.1-launchpad-iac.md` |
+>
+> These skills will be consolidated into `[STK-001]` by t1.3b and made available to the implementer agent during enabler implementation.
+
+## Imperative rules
+
+- **Extract only — do not decide.** If the ADR does not fix a specific technology, write "Not specified — to be resolved in consolidation."
+- **One extraction per ADR** — do not cross-reference other ADRs.
+- **Keep it short** — this is an intermediate artifact, not a deliverable. Target < 50 lines.
+
+## Output format
+
+- File: `outputs/docs/2-tech/1-architecture/_stack-extractions/stack-from-{adr-id}.md`
+- Status: intermediate (not a deliverable — consumed by t1.3b)

@@ -1,0 +1,13 @@
+{
+  "name": "azdo-ops",
+  "description": "Interact with Azure DevOps via MCP — manage work items, boards, pipelines, and artifact feeds. Supports both local and remote MCP endpoints.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "drift-detection",
+  "description": "Detect specification drift by comparing current implementation state against the approved specification and plan.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}

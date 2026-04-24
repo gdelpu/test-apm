@@ -1,0 +1,13 @@
+{
+  "name": "github-ops",
+  "description": "Interact with GitHub via MCP — manage issues, PRs, code search, Actions status, and releases.",
+  "version": "0.0.34",
+  "author": "Sopra Steria Group",
+  "license": "UNLICENSED",
+  "repository": "https://innersource.soprasteria.com/ssg-ia/ai.backbone/cognitive-hub/internals/ai-sdlc-foundation",
+  "tags": [
+    "skills",
+    "sdlc"
+  ],
+  "skills": "./"
+}
