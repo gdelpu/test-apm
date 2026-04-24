@@ -15,50 +15,42 @@
   "stations": 7,
   "dependencies": [
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/implementer"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/spec-orchestrator"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/workflow-orchestrator"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/code-implementation"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/repo-analysis"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-clarify"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-quality-gate"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/workflow-engine"
     }

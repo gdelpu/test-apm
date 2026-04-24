@@ -16,20 +16,17 @@
   "stations": 4,
   "dependencies": [
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/sdlc-test-executor"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/sdlc-test-campaign"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/sdlc-test-performance"
     }

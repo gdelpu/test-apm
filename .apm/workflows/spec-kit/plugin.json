@@ -16,68 +16,57 @@
   "stations": 9,
   "dependencies": [
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/architecture-governance"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/spec-orchestrator"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/architecture-guardrails"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/brownfield-context"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-clarify"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-constitution"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-feature"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-plan"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-quality-gate"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/spec-tasks"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/test-strategy"
     }

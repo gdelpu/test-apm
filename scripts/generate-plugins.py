@@ -208,10 +208,14 @@ def process_workflows(dry_run: bool) -> list[dict]:
         base_tags |= set(tags_from_name(name))
         tags = sorted(base_tags)
 
-        # Dependencies: git-subdir sources so the APM CLI can resolve them remotely
+        # Dependencies: use `git` field format expected by APM CLI
+        def _git_dep(subdir: str) -> dict:
+            return {"git": f"https://github.com/{GITLAB_REPO_SLUG}",
+                    "ref": GITLAB_REPO_REF, "subdir": subdir}
+
         dependencies = (
-            [git_subdir_source(f".apm/agents/{a}") for a in agent_deps] +
-            [git_subdir_source(f".apm/skills/{s}") for s in skill_deps]
+            [_git_dep(f".apm/agents/{a}") for a in agent_deps] +
+            [_git_dep(f".apm/skills/{s}") for s in skill_deps]
         )
 
         plugin = {

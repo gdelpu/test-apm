@@ -15,38 +15,32 @@
   "stations": 6,
   "dependencies": [
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/quality-validator"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/agents/workflow-orchestrator"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/governance-rules"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/quality-report"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/risk-scoring"
     },
     {
-      "type": "git-subdir",
-      "repo": "gdelpu/test-apm",
+      "git": "https://github.com/gdelpu/test-apm",
       "ref": "feature/marketplace",
       "subdir": ".apm/skills/security-scan"
     }
