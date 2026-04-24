@@ -13,22 +13,42 @@
   ],
   "type": "validation",
   "stations": 6,
-  "agents": [
-    "../../../.apm/agents/quality-validator/quality-validator.md",
-    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/governance-rules",
-    "../../../.apm/skills/quality-report",
-    "../../../.apm/skills/risk-scoring",
-    "../../../.apm/skills/security-scan"
-  ],
   "dependencies": [
-    "../.apm/agents/quality-validator",
-    "../.apm/agents/workflow-orchestrator",
-    "../.apm/skills/governance-rules",
-    "../.apm/skills/quality-report",
-    "../.apm/skills/risk-scoring",
-    "../.apm/skills/security-scan"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/quality-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/workflow-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/governance-rules"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/quality-report"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/risk-scoring"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/security-scan"
+    }
   ]
 }

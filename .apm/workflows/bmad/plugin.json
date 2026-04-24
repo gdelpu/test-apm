@@ -13,24 +13,48 @@
   ],
   "type": "delivery",
   "stations": 4,
-  "agents": [
-    "../../../.apm/agents/implementer/implementer.md",
-    "../../../.apm/agents/quality-validator/quality-validator.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/adr-generation",
-    "../../../.apm/skills/code-implementation",
-    "../../../.apm/skills/coverage-assessment",
-    "../../../.apm/skills/spec-clarify"
-  ],
   "dependencies": [
-    "../.apm/agents/implementer",
-    "../.apm/agents/quality-validator",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/adr-generation",
-    "../.apm/skills/code-implementation",
-    "../.apm/skills/coverage-assessment",
-    "../.apm/skills/spec-clarify"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/implementer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/quality-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/adr-generation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/code-implementation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/coverage-assessment"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-clarify"
+    }
   ]
 }

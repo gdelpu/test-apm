@@ -13,22 +13,42 @@
   ],
   "type": "assessment",
   "stations": 4,
-  "agents": [
-    "../../../.apm/agents/repository-analyzer/repository-analyzer.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/repo-analysis",
-    "../../../.apm/skills/spec-clarify",
-    "../../../.apm/skills/spec-feature",
-    "../../../.apm/skills/spec-plan"
-  ],
   "dependencies": [
-    "../.apm/agents/repository-analyzer",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/repo-analysis",
-    "../.apm/skills/spec-clarify",
-    "../.apm/skills/spec-feature",
-    "../.apm/skills/spec-plan"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/repository-analyzer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/repo-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-clarify"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-feature"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-plan"
+    }
   ]
 }

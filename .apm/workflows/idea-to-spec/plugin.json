@@ -14,30 +14,66 @@
   ],
   "type": "delivery",
   "stations": 7,
-  "agents": [
-    "../../../.apm/agents/architecture-governance/architecture-governance.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/architecture-guardrails",
-    "../../../.apm/skills/brownfield-context",
-    "../../../.apm/skills/intent-capture",
-    "../../../.apm/skills/nfr-review",
-    "../../../.apm/skills/repo-analysis",
-    "../../../.apm/skills/spec-clarify",
-    "../../../.apm/skills/spec-feature",
-    "../../../.apm/skills/spec-quality-gate"
-  ],
   "dependencies": [
-    "../.apm/agents/architecture-governance",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/architecture-guardrails",
-    "../.apm/skills/brownfield-context",
-    "../.apm/skills/intent-capture",
-    "../.apm/skills/nfr-review",
-    "../.apm/skills/repo-analysis",
-    "../.apm/skills/spec-clarify",
-    "../.apm/skills/spec-feature",
-    "../.apm/skills/spec-quality-gate"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/architecture-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/architecture-guardrails"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/brownfield-context"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/intent-capture"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/nfr-review"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/repo-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-clarify"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-feature"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-quality-gate"
+    }
   ]
 }

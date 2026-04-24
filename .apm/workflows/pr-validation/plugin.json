@@ -13,28 +13,60 @@
   ],
   "type": "validation",
   "stations": 11,
-  "agents": [
-    "../../../.apm/agents/pr-validator/pr-validator.md",
-    "../../../.apm/agents/station-orchestrator/station-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/ai-backbone-pr-checks",
-    "../../../.apm/skills/injection-detection",
-    "../../../.apm/skills/policy-gate",
-    "../../../.apm/skills/red-team-simulation",
-    "../../../.apm/skills/sandbox-execution",
-    "../../../.apm/skills/secret-scan",
-    "../../../.apm/skills/soprasteria-agent-policy-guard"
-  ],
   "dependencies": [
-    "../.apm/agents/pr-validator",
-    "../.apm/agents/station-orchestrator",
-    "../.apm/skills/ai-backbone-pr-checks",
-    "../.apm/skills/injection-detection",
-    "../.apm/skills/policy-gate",
-    "../.apm/skills/red-team-simulation",
-    "../.apm/skills/sandbox-execution",
-    "../.apm/skills/secret-scan",
-    "../.apm/skills/soprasteria-agent-policy-guard"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/pr-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/station-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/ai-backbone-pr-checks"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/injection-detection"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/policy-gate"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/red-team-simulation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sandbox-execution"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/secret-scan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/soprasteria-agent-policy-guard"
+    }
   ]
 }

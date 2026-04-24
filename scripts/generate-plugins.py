@@ -208,10 +208,10 @@ def process_workflows(dry_run: bool) -> list[dict]:
         base_tags |= set(tags_from_name(name))
         tags = sorted(base_tags)
 
-        # Dependencies: reference plugin dirs of agents and skills
+        # Dependencies: git-subdir sources so the APM CLI can resolve them remotely
         dependencies = (
-            [f"../.apm/agents/{a}" for a in agent_deps] +
-            [f"../.apm/skills/{s}" for s in skill_deps]
+            [git_subdir_source(f".apm/agents/{a}") for a in agent_deps] +
+            [git_subdir_source(f".apm/skills/{s}") for s in skill_deps]
         )
 
         plugin = {
@@ -221,8 +221,6 @@ def process_workflows(dry_run: bool) -> list[dict]:
             "tags": tags,
             "type": wf_type,
             "stations": num_stations,
-            "agents": [f"../../../.apm/agents/{a}/{a}.md" for a in agent_deps],
-            "skills": [f"../../../.apm/skills/{s}" for s in skill_deps],
             "dependencies": dependencies,
         }
         # Remove empty lists

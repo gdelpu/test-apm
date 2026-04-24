@@ -13,68 +13,180 @@
   ],
   "type": "delivery",
   "stations": 19,
-  "agents": [
-    "../../../.apm/agents/implementer/implementer.md",
-    "../../../.apm/agents/sdlc-ba-analyst/sdlc-ba-analyst.md",
-    "../../../.apm/agents/sdlc-ba-reviewer/sdlc-ba-reviewer.md",
-    "../../../.apm/agents/sdlc-coordinator/sdlc-coordinator.md",
-    "../../../.apm/agents/sdlc-steer-manager/sdlc-steer-manager.md",
-    "../../../.apm/agents/sdlc-steer-reviewer/sdlc-steer-reviewer.md",
-    "../../../.apm/agents/sdlc-tech-architect/sdlc-tech-architect.md",
-    "../../../.apm/agents/sdlc-tech-reviewer/sdlc-tech-reviewer.md",
-    "../../../.apm/agents/sdlc-test-executor/sdlc-test-executor.md",
-    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/sdlc-ba-audit",
-    "../../../.apm/skills/sdlc-ba-functional-design",
-    "../../../.apm/skills/sdlc-ba-scoping",
-    "../../../.apm/skills/sdlc-ba-specification",
-    "../../../.apm/skills/sdlc-deliverable-validation",
-    "../../../.apm/skills/sdlc-review-arbitration",
-    "../../../.apm/skills/sdlc-scaffold",
-    "../../../.apm/skills/sdlc-steer-governance",
-    "../../../.apm/skills/sdlc-steer-init",
-    "../../../.apm/skills/sdlc-steer-planning",
-    "../../../.apm/skills/sdlc-steer-sprint",
-    "../../../.apm/skills/sdlc-tech-architecture",
-    "../../../.apm/skills/sdlc-tech-audit",
-    "../../../.apm/skills/sdlc-tech-design",
-    "../../../.apm/skills/sdlc-tech-implementation",
-    "../../../.apm/skills/sdlc-tech-quality",
-    "../../../.apm/skills/sdlc-test-campaign",
-    "../../../.apm/skills/sdlc-test-performance",
-    "../../../.apm/skills/workflow-engine"
-  ],
   "dependencies": [
-    "../.apm/agents/implementer",
-    "../.apm/agents/sdlc-ba-analyst",
-    "../.apm/agents/sdlc-ba-reviewer",
-    "../.apm/agents/sdlc-coordinator",
-    "../.apm/agents/sdlc-steer-manager",
-    "../.apm/agents/sdlc-steer-reviewer",
-    "../.apm/agents/sdlc-tech-architect",
-    "../.apm/agents/sdlc-tech-reviewer",
-    "../.apm/agents/sdlc-test-executor",
-    "../.apm/agents/workflow-orchestrator",
-    "../.apm/skills/sdlc-ba-audit",
-    "../.apm/skills/sdlc-ba-functional-design",
-    "../.apm/skills/sdlc-ba-scoping",
-    "../.apm/skills/sdlc-ba-specification",
-    "../.apm/skills/sdlc-deliverable-validation",
-    "../.apm/skills/sdlc-review-arbitration",
-    "../.apm/skills/sdlc-scaffold",
-    "../.apm/skills/sdlc-steer-governance",
-    "../.apm/skills/sdlc-steer-init",
-    "../.apm/skills/sdlc-steer-planning",
-    "../.apm/skills/sdlc-steer-sprint",
-    "../.apm/skills/sdlc-tech-architecture",
-    "../.apm/skills/sdlc-tech-audit",
-    "../.apm/skills/sdlc-tech-design",
-    "../.apm/skills/sdlc-tech-implementation",
-    "../.apm/skills/sdlc-tech-quality",
-    "../.apm/skills/sdlc-test-campaign",
-    "../.apm/skills/sdlc-test-performance",
-    "../.apm/skills/workflow-engine"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/implementer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-ba-analyst"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-ba-reviewer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-coordinator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-steer-manager"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-steer-reviewer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-tech-architect"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-tech-reviewer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-test-executor"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/workflow-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-ba-audit"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-ba-functional-design"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-ba-scoping"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-ba-specification"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-deliverable-validation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-review-arbitration"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-scaffold"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-init"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-planning"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-sprint"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-tech-architecture"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-tech-audit"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-tech-design"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-tech-implementation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-tech-quality"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-test-campaign"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-test-performance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/workflow-engine"
+    }
   ]
 }

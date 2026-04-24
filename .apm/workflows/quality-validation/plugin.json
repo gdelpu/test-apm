@@ -14,24 +14,48 @@
   ],
   "type": "validation",
   "stations": 7,
-  "agents": [
-    "../../../.apm/agents/quality-validator/quality-validator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/coverage-assessment",
-    "../../../.apm/skills/dependency-audit",
-    "../../../.apm/skills/lint-analysis",
-    "../../../.apm/skills/quality-report",
-    "../../../.apm/skills/security-scan",
-    "../../../.apm/skills/static-analysis"
-  ],
   "dependencies": [
-    "../.apm/agents/quality-validator",
-    "../.apm/skills/coverage-assessment",
-    "../.apm/skills/dependency-audit",
-    "../.apm/skills/lint-analysis",
-    "../.apm/skills/quality-report",
-    "../.apm/skills/security-scan",
-    "../.apm/skills/static-analysis"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/quality-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/coverage-assessment"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/dependency-audit"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/lint-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/quality-report"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/security-scan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/static-analysis"
+    }
   ]
 }

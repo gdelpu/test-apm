@@ -13,42 +13,102 @@
   ],
   "type": "delivery",
   "stations": 7,
-  "agents": [
-    "../../../.apm/agents/analysis-agent/analysis-agent.md",
-    "../../../.apm/agents/implementer/implementer.md",
-    "../../../.apm/agents/quality-validator/quality-validator.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/adr-generation",
-    "../../../.apm/skills/bug-reproduction",
-    "../../../.apm/skills/code-implementation",
-    "../../../.apm/skills/coverage-assessment",
-    "../../../.apm/skills/fix-planning",
-    "../../../.apm/skills/incident-analysis",
-    "../../../.apm/skills/knowledge-update",
-    "../../../.apm/skills/lint-analysis",
-    "../../../.apm/skills/repo-analysis",
-    "../../../.apm/skills/root-cause-analysis",
-    "../../../.apm/skills/security-scan",
-    "../../../.apm/skills/test-strategy"
-  ],
   "dependencies": [
-    "../.apm/agents/analysis-agent",
-    "../.apm/agents/implementer",
-    "../.apm/agents/quality-validator",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/adr-generation",
-    "../.apm/skills/bug-reproduction",
-    "../.apm/skills/code-implementation",
-    "../.apm/skills/coverage-assessment",
-    "../.apm/skills/fix-planning",
-    "../.apm/skills/incident-analysis",
-    "../.apm/skills/knowledge-update",
-    "../.apm/skills/lint-analysis",
-    "../.apm/skills/repo-analysis",
-    "../.apm/skills/root-cause-analysis",
-    "../.apm/skills/security-scan",
-    "../.apm/skills/test-strategy"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/analysis-agent"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/implementer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/quality-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/adr-generation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/bug-reproduction"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/code-implementation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/coverage-assessment"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/fix-planning"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/incident-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/knowledge-update"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/lint-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/repo-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/root-cause-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/security-scan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/test-strategy"
+    }
   ]
 }

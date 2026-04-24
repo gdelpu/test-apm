@@ -14,16 +14,24 @@
   ],
   "type": "delivery",
   "stations": 4,
-  "agents": [
-    "../../../.apm/agents/sdlc-test-executor/sdlc-test-executor.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/sdlc-test-campaign",
-    "../../../.apm/skills/sdlc-test-performance"
-  ],
   "dependencies": [
-    "../.apm/agents/sdlc-test-executor",
-    "../.apm/skills/sdlc-test-campaign",
-    "../.apm/skills/sdlc-test-performance"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-test-executor"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-test-campaign"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-test-performance"
+    }
   ]
 }

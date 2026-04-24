@@ -13,20 +13,36 @@
   ],
   "type": "delivery",
   "stations": 6,
-  "agents": [
-    "../../../.apm/agents/implementer/implementer.md",
-    "../../../.apm/agents/quality-validator/quality-validator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/code-implementation",
-    "../../../.apm/skills/coverage-assessment",
-    "../../../.apm/skills/lint-analysis"
-  ],
   "dependencies": [
-    "../.apm/agents/implementer",
-    "../.apm/agents/quality-validator",
-    "../.apm/skills/code-implementation",
-    "../.apm/skills/coverage-assessment",
-    "../.apm/skills/lint-analysis"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/implementer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/quality-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/code-implementation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/coverage-assessment"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/lint-analysis"
+    }
   ]
 }

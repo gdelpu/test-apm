@@ -13,38 +13,90 @@
   ],
   "type": "delivery",
   "stations": 11,
-  "agents": [
-    "../../../.apm/agents/architecture-governance/architecture-governance.md",
-    "../../../.apm/agents/implementer/implementer.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md",
-    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/architecture-guardrails",
-    "../../../.apm/skills/brownfield-context",
-    "../../../.apm/skills/code-implementation",
-    "../../../.apm/skills/spec-clarify",
-    "../../../.apm/skills/spec-constitution",
-    "../../../.apm/skills/spec-feature",
-    "../../../.apm/skills/spec-plan",
-    "../../../.apm/skills/spec-quality-gate",
-    "../../../.apm/skills/spec-tasks",
-    "../../../.apm/skills/workflow-engine"
-  ],
   "dependencies": [
-    "../.apm/agents/architecture-governance",
-    "../.apm/agents/implementer",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/agents/workflow-orchestrator",
-    "../.apm/skills/architecture-guardrails",
-    "../.apm/skills/brownfield-context",
-    "../.apm/skills/code-implementation",
-    "../.apm/skills/spec-clarify",
-    "../.apm/skills/spec-constitution",
-    "../.apm/skills/spec-feature",
-    "../.apm/skills/spec-plan",
-    "../.apm/skills/spec-quality-gate",
-    "../.apm/skills/spec-tasks",
-    "../.apm/skills/workflow-engine"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/architecture-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/implementer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/workflow-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/architecture-guardrails"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/brownfield-context"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/code-implementation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-clarify"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-constitution"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-feature"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-plan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-quality-gate"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-tasks"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/workflow-engine"
+    }
   ]
 }

@@ -13,24 +13,48 @@
   ],
   "type": "validation",
   "stations": 5,
-  "agents": [
-    "../../../.apm/agents/architecture-governance/architecture-governance.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/adr-generation",
-    "../../../.apm/skills/architecture-guardrails",
-    "../../../.apm/skills/delivery-metrics",
-    "../../../.apm/skills/knowledge-update",
-    "../../../.apm/skills/quality-report"
-  ],
   "dependencies": [
-    "../.apm/agents/architecture-governance",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/adr-generation",
-    "../.apm/skills/architecture-guardrails",
-    "../.apm/skills/delivery-metrics",
-    "../.apm/skills/knowledge-update",
-    "../.apm/skills/quality-report"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/architecture-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/adr-generation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/architecture-guardrails"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/delivery-metrics"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/knowledge-update"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/quality-report"
+    }
   ]
 }

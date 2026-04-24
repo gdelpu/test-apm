@@ -14,26 +14,54 @@
   ],
   "type": "delivery",
   "stations": 6,
-  "agents": [
-    "../../../.apm/agents/architecture-governance/architecture-governance.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/architecture-guardrails",
-    "../../../.apm/skills/nfr-review",
-    "../../../.apm/skills/spec-plan",
-    "../../../.apm/skills/spec-quality-gate",
-    "../../../.apm/skills/spec-tasks",
-    "../../../.apm/skills/test-strategy"
-  ],
   "dependencies": [
-    "../.apm/agents/architecture-governance",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/architecture-guardrails",
-    "../.apm/skills/nfr-review",
-    "../.apm/skills/spec-plan",
-    "../.apm/skills/spec-quality-gate",
-    "../.apm/skills/spec-tasks",
-    "../.apm/skills/test-strategy"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/architecture-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/architecture-guardrails"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/nfr-review"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-plan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-quality-gate"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-tasks"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/test-strategy"
+    }
   ]
 }

@@ -13,26 +13,54 @@
   ],
   "type": "delivery",
   "stations": 11,
-  "agents": [
-    "../../../.apm/agents/sdlc-steer-manager/sdlc-steer-manager.md",
-    "../../../.apm/agents/sdlc-steer-reviewer/sdlc-steer-reviewer.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/sdlc-deliverable-validation",
-    "../../../.apm/skills/sdlc-review-arbitration",
-    "../../../.apm/skills/sdlc-steer-governance",
-    "../../../.apm/skills/sdlc-steer-init",
-    "../../../.apm/skills/sdlc-steer-planning",
-    "../../../.apm/skills/sdlc-steer-sprint"
-  ],
   "dependencies": [
-    "../.apm/agents/sdlc-steer-manager",
-    "../.apm/agents/sdlc-steer-reviewer",
-    "../.apm/skills/sdlc-deliverable-validation",
-    "../.apm/skills/sdlc-review-arbitration",
-    "../.apm/skills/sdlc-steer-governance",
-    "../.apm/skills/sdlc-steer-init",
-    "../.apm/skills/sdlc-steer-planning",
-    "../.apm/skills/sdlc-steer-sprint"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-steer-manager"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/sdlc-steer-reviewer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-deliverable-validation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-review-arbitration"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-init"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-planning"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/sdlc-steer-sprint"
+    }
   ]
 }

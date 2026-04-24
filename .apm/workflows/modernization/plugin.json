@@ -14,40 +14,96 @@
   ],
   "type": "modernization",
   "stations": 11,
-  "agents": [
-    "../../../.apm/agents/architecture-governance/architecture-governance.md",
-    "../../../.apm/agents/modernization-agent/modernization-agent.md",
-    "../../../.apm/agents/refactor-implementer/refactor-implementer.md",
-    "../../../.apm/agents/refactor-parity-checker/refactor-parity-checker.md",
-    "../../../.apm/agents/workflow-orchestrator/workflow-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/adr-generation",
-    "../../../.apm/skills/architecture-guardrails",
-    "../../../.apm/skills/code-implementation",
-    "../../../.apm/skills/parity-validation",
-    "../../../.apm/skills/repo-analysis",
-    "../../../.apm/skills/spec-clarify",
-    "../../../.apm/skills/spec-feature",
-    "../../../.apm/skills/spec-plan",
-    "../../../.apm/skills/spec-tasks",
-    "../../../.apm/skills/workflow-engine"
-  ],
   "dependencies": [
-    "../.apm/agents/architecture-governance",
-    "../.apm/agents/modernization-agent",
-    "../.apm/agents/refactor-implementer",
-    "../.apm/agents/refactor-parity-checker",
-    "../.apm/agents/workflow-orchestrator",
-    "../.apm/skills/adr-generation",
-    "../.apm/skills/architecture-guardrails",
-    "../.apm/skills/code-implementation",
-    "../.apm/skills/parity-validation",
-    "../.apm/skills/repo-analysis",
-    "../.apm/skills/spec-clarify",
-    "../.apm/skills/spec-feature",
-    "../.apm/skills/spec-plan",
-    "../.apm/skills/spec-tasks",
-    "../.apm/skills/workflow-engine"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/architecture-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/modernization-agent"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/refactor-implementer"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/refactor-parity-checker"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/workflow-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/adr-generation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/architecture-guardrails"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/code-implementation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/parity-validation"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/repo-analysis"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-clarify"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-feature"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-plan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-tasks"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/workflow-engine"
+    }
   ]
 }

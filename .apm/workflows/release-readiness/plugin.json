@@ -13,32 +13,72 @@
   ],
   "type": "validation",
   "stations": 6,
-  "agents": [
-    "../../../.apm/agents/architecture-governance/architecture-governance.md",
-    "../../../.apm/agents/quality-validator/quality-validator.md",
-    "../../../.apm/agents/spec-orchestrator/spec-orchestrator.md"
-  ],
-  "skills": [
-    "../../../.apm/skills/coverage-assessment",
-    "../../../.apm/skills/dependency-audit",
-    "../../../.apm/skills/nfr-review",
-    "../../../.apm/skills/observability-readiness",
-    "../../../.apm/skills/quality-report",
-    "../../../.apm/skills/security-scan",
-    "../../../.apm/skills/spec-quality-gate",
-    "../../../.apm/skills/test-strategy"
-  ],
   "dependencies": [
-    "../.apm/agents/architecture-governance",
-    "../.apm/agents/quality-validator",
-    "../.apm/agents/spec-orchestrator",
-    "../.apm/skills/coverage-assessment",
-    "../.apm/skills/dependency-audit",
-    "../.apm/skills/nfr-review",
-    "../.apm/skills/observability-readiness",
-    "../.apm/skills/quality-report",
-    "../.apm/skills/security-scan",
-    "../.apm/skills/spec-quality-gate",
-    "../.apm/skills/test-strategy"
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/architecture-governance"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/quality-validator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/agents/spec-orchestrator"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/coverage-assessment"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/dependency-audit"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/nfr-review"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/observability-readiness"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/quality-report"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/security-scan"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/spec-quality-gate"
+    },
+    {
+      "type": "git-subdir",
+      "repo": "gdelpu/test-apm",
+      "ref": "feature/marketplace",
+      "subdir": ".apm/skills/test-strategy"
+    }
   ]
 }
