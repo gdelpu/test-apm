@@ -35,6 +35,7 @@ GITLAB_REPO_URL = (
     "https://github.com/gdelpu/test-apm.git"
 )
 GITLAB_REPO_SLUG = "gdelpu/test-apm"
+GITLAB_REPO_REF = "feature/marketplace"
 
 
 def count_files(directory: Path, pattern: str = "*.md") -> int:
@@ -110,7 +111,7 @@ def _parse_frontmatter(path: Path) -> dict:
 
 def _git_subdir(subdir: str) -> dict:
     """APM git-subdir source object pointing at the GitLab monorepo."""
-    return {"type": "git-subdir", "repo": GITLAB_REPO_SLUG, "subdir": subdir}
+    return {"type": "git-subdir", "repo": GITLAB_REPO_SLUG, "ref": GITLAB_REPO_REF, "subdir": subdir}
 
 
 def _plugin_entry(name: str, description: str, tags: list, subdir: str) -> dict:

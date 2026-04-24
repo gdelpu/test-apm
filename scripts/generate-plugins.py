@@ -30,6 +30,7 @@ GITLAB_REPO_URL = (
     "https://github.com/gdelpu/test-apm.git"
 )
 GITLAB_REPO_SLUG = "gdelpu/test-apm"
+GITLAB_REPO_REF = "feature/marketplace"
 
 COMMON_FIELDS = {
     "version": "0.0.34",
@@ -42,7 +43,7 @@ COMMON_FIELDS = {
 
 def git_subdir_source(subdir: str) -> dict:
     """Build a git-subdir marketplace source pointing at the GitLab monorepo."""
-    return {"type": "git-subdir", "repo": GITLAB_REPO_SLUG, "subdir": subdir}
+    return {"type": "git-subdir", "repo": GITLAB_REPO_SLUG, "ref": GITLAB_REPO_REF, "subdir": subdir}
 
 # ---------------------------------------------------------------------------
 # Helpers
